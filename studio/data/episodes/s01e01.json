@@ -256,8 +256,12 @@
      "imgFrom": null,
      "vid": "",
      "note": "Заменён холодным открытием (сцена 0).",
-     "characters": [],
-     "location": null,
+     "characters": [
+      "ROY",
+      "ARDAN",
+      "BELFI"
+     ],
+     "location": "council",
      "status": "todo",
      "versions": [],
      "selected": null,
@@ -278,9 +282,18 @@
      "vid": "static camera, the glass trembles, sand grains hit and slide down",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.2/v001.png",
+       "at": "2026-10-16 18:57:32",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of a thin old window glass, red sand hitting it from outside, dim room inside, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "дребезг стекла."
     },
@@ -298,9 +311,18 @@
      "vid": "slow push-in toward the red mark, dust drifts in the light",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.3/v001.png",
+       "at": "2026-10-16 19:03:15",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "top-down shot of an old worn parchment map on a stone table, frayed edges, smudged mountain ridges, red dust in the folds, a red mark almost blending with the desert color, several hands of officers resting on the table edge, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "скрип песка под сапогами, голоса на фоне."
     },
@@ -320,9 +342,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.4/v001.png",
+       "at": "2026-10-16 19:04:44",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of Liam sitting in a heavy chair, his eyes raised from the map toward the officers, one hand at his collar, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "тишина зала, ветер за окнами."
     },
