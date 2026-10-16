@@ -235,3 +235,12 @@ img.plan { width: 100%; border-radius: 8px; cursor: zoom-in; background: #f5f0e8
 .field > label.radio { display: flex; justify-content: flex-start; gap: 8px; align-items: start; padding: 8px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 6px; cursor: pointer; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--text, inherit); }
 .field > label.radio.on { border-color: var(--accent); }
 .field > label.radio input { margin-top: 3px; }
+
+/* отправка в GitHub */
+.gitpage { max-width: 820px; }
+.gitinfo { display: flex; flex-direction: column; gap: 4px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; }
+.gitpage .warn { color: var(--accent2); margin: 6px 0; }
+.gitlog { white-space: pre-wrap; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 13px; }
+.gitlog.st-done { border-color: var(--ok); }
+.gitlog.st-failed { border-color: var(--accent); }
+.gitlog.st-desktop { border-color: var(--review); }

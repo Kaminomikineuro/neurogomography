@@ -7,6 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { spawn, execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createGitSender } from './git-send.mjs';
 
 const STUDIO = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.dirname(STUDIO);
@@ -19,7 +20,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-18.1';
+const VERSION = '2026-10-18.2';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -667,7 +668,11 @@ function openInOS(p) {
   c.unref();
 }
 
+const gitSend = createGitSender(ROOT, (t) => logInbox(t));
 const routes = {
+  'GET /api/git/status': () => ({ ...gitSend.status(), job: gitSend.job() }),
+  'GET /api/git/job': () => gitSend.job(),
+  'POST /api/git/send': (q, b) => gitSend.start(b.maxMB),
   'GET /api/state': () => {
     runMigrations();
     const cfg = config();
@@ -875,6 +880,7 @@ server.on('error', async (e) => {
   setTimeout(() => process.exit(1), 15000);
 });
 server.listen(port, '127.0.0.1', () => {
+  if (gitSend.fixPostBuffer()) console.log('Настроила Git для больших отправок (http.postBuffer).');
   runMigrations();
   restoreJobs();
   pump();

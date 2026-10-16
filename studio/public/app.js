@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-18.1';
+const UI_VERSION = '2026-10-18.2';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -251,6 +251,54 @@ function renderStyle() {
 }
 
 // ---------- очередь ----------
+// ---------- отправка в GitHub порциями ----------
+const mb = (b) => (b / 1048576 >= 10 ? Math.round(b / 1048576) : (b / 1048576).toFixed(1)) + ' МБ';
+async function renderGit() {
+  const main = $('#main');
+  main.replaceChildren(h('div', { class: 'muted' }, 'Проверяю, что не отправлено…'));
+  let st;
+  try { st = await GET('/api/git/status'); } catch (e) { st = { error: e.message }; }
+  if (S.view !== 'git') return;
+  const job = st.job || { status: 'idle', log: [] };
+  const size = lsGet('gitPortion', '80');
+  const run = async () => {
+    await flushDrafts();
+    await POST('/api/git/send', { maxMB: +$('#gitPortion').value });
+    lsSet('gitPortion', $('#gitPortion').value);
+    pollGit();
+  };
+  const info = st.error ? h('div', { class: 'warn' }, 'Ошибка: ' + st.error)
+    : !st.git ? h('div', { class: 'warn' }, 'Не нашла Git. Он есть внутри GitHub Desktop — установи GitHub Desktop и перезапусти студию.')
+    : h('div', { class: 'gitinfo' },
+      h('div', {}, 'Ветка: ', h('b', {}, st.branch)),
+      h('div', {}, 'Закоммичено, но не отправлено: ', h('b', {}, `${st.ahead} коммитов, ${mb(st.unpushedBytes)}`)),
+      h('div', {}, 'Изменено, ещё не закоммичено: ', h('b', {}, `${st.changed} файлов, ${mb(st.changedBytes)}`)),
+      st.behind ? h('div', { class: 'warn' }, `На GitHub есть ${st.behind} новых коммитов — сначала нажми Fetch/Pull в GitHub Desktop.`) : null,
+      [...(st.bigUnpushed || []), ...(st.huge || [])].length ? h('div', { class: 'warn' }, 'Файлы больше 100 МБ (GitHub их не примет, студия спрячет их от Git): ',
+        [...st.bigUnpushed, ...st.huge].map((f) => `${f.path} (${mb(f.size)})`).join(', ')) : null);
+  main.replaceChildren(h('div', { class: 'gitpage' },
+    h('h2', {}, 'Отправка в GitHub порциями'),
+    h('p', { class: 'muted' }, 'Большой Push GitHub обрывает («Remote disconnected»). Здесь студия сама раскладывает изменения на небольшие порции и отправляет их по одной. Если связь оборвётся — повторит. Файлы больше 100 МБ GitHub не принимает: студия спрячет их от Git (они останутся в папке), картинки уменьши через «Иллюстрации».'),
+    info,
+    h('div', { class: 'actions' },
+      h('label', {}, 'Порция: ', h('select', { id: 'gitPortion' }, ...['30', '50', '80', '150'].map((v) => h('option', { value: v, selected: v === size }, v + ' МБ')))),
+      h('button', { class: 'primary', onclick: run, disabled: !st.git || job.status === 'running' }, job.status === 'running' ? 'Отправляю…' : 'Отправить порциями'),
+      h('button', { onclick: renderGit }, 'Обновить')),
+    h('p', { class: 'muted' }, 'Пока идёт отправка, не нажимай ничего в GitHub Desktop. Если обрывается даже на 80 МБ — выбери 30.'),
+    job.log?.length ? h('pre', { class: 'gitlog st-' + job.status }, job.log.join('\n')) : null));
+  if (job.status === 'running') pollGit();
+}
+function pollGit() {
+  clearTimeout(pollGit.t);
+  pollGit.t = setTimeout(async () => {
+    if (S.view !== 'git') return;
+    const job = await GET('/api/git/job').catch(() => null);
+    const pre = $('.gitlog');
+    if (job && pre && job.status === 'running') { pre.textContent = job.log.join('\n'); pollGit(); }
+    else renderGit();
+  }, 2000);
+}
+
 function renderQueue() {
   const list = S.jobs;
   $('#main').replaceChildren(h('div', { class: 'jobs' },
@@ -899,6 +947,7 @@ function render(keepScroll) {
   else if (S.view === 'canon') renderCanon();
   else if (S.view === 'lib') renderLib();
   else if (S.view === 'montage') renderMontage();
+  else if (S.view === 'git') renderGit();
   if (keepScroll) window.scrollTo(0, y);
 }
 
