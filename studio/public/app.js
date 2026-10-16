@@ -41,9 +41,17 @@ const gen = () => $('#genSel').value;
 const sameRef = (a, b) => a && b && JSON.stringify(a) === JSON.stringify(b);
 const lsGet = (k, d) => { try { return localStorage.getItem(k) ?? d; } catch { return d; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+// правки «Что поменять?» живут в браузере, пока их не отправили: не слетают ни при переключении, ни при перезапуске
+try { S.notes = JSON.parse(lsGet('notes', '{}')) || {}; } catch { S.notes = {}; }
+function setNote(key, v) {
+  if (v && v.trim()) S.notes[key] = v; else delete S.notes[key];
+  lsSet('notes', JSON.stringify(S.notes));
+}
+const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
+const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-17.2';
+const UI_VERSION = '2026-10-18.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -84,14 +92,18 @@ function shotCard(s, ref) {
   const f = selFile(s);
   const run = runningFor(ref);
   const dot = run ? 'running' : s.status;
-  return h('div', { class: 'card' + (s.cut ? ' cut' : '') + (sameRef(S.sel, ref) ? ' sel' : ''), onclick: () => select(ref) },
+  const picked = S.pick?.has(s.id);
+  const click = S.pick ? () => togglePick([s.id]) : () => select(ref);
+  return h('div', { class: 'card' + (s.cut ? ' cut' : '') + (sameRef(S.sel, ref) ? ' sel' : '') + (S.pick ? ' picking' : '') + (picked ? ' picked' : ''), onclick: click },
+    S.pick ? h('span', { class: 'check' }, picked ? '✓' : '') : null,
     h('div', { class: 'thumb', style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null }, f ? '' : (s.imgFrom ? `картинка = кадр ${s.imgFrom}` : !s.img ? 'только видео' : 'ещё не нарисован')),
     run ? h('span', { class: 'spin' }, run.status === 'queued' ? 'в очереди' : 'рисует…') : null,
     h('div', { class: 'meta' }, h('span', { class: 'dot st-' + dot, title: STATUS[s.status] || '' }), h('b', {}, s.id),
       h('span', { class: 't' }, `${s.dur || '?'} с`), s.tool ? h('span', { class: 'badge' }, s.tool) : null,
       s.cut ? h('span', { class: 'badge warn' }, 'вырезан') : s.optional ? h('span', { class: 'badge warn' }, 'можно вырезать') : null,
       s.videos?.length ? h('span', { class: 'badge vid' + (s.videoStatus === 'approved' ? ' ok' : '') }, '▶ видео') : null,
-      s.versions?.length > 1 ? h('span', { class: 'badge' }, 'v' + s.versions.length) : null),
+      s.versions?.length > 1 ? h('span', { class: 'badge' }, 'v' + s.versions.length) : null,
+      noteOf(s.id) ? h('span', { class: 'badge note', title: 'Есть неотправленная правка: ' + noteOf(s.id) }, '✎') : null),
     h('div', { class: 'desc' }, s.frame || s.vid || ''));
 }
 function renderBoard() {
@@ -107,6 +119,8 @@ function renderBoard() {
     h('div', { class: 'chips' }, ...[['all', 'Все'], ['todo', 'Нужно сделать'], ['review', 'На проверке'], ['approved', 'Утверждено']].map(([k, t]) =>
       h('button', { class: 'chip' + (S.filter === k ? ' on' : ''), onclick: () => { S.filter = k; render(); } }, `${t} ${k === 'all' ? c.all : c[k] || 0}`))),
     prog, h('span', { class: 'muted' }, `≈ ${Math.round(total / 6) / 10} мин`), h('span', { class: 'grow' }),
+    h('button', { class: S.pick ? 'primary' : '', onclick: () => (S.pick ? closePanel() : startPick()), title: 'Отметь кадры или целые сцены и перерисуй их одной кнопкой — с общей правкой или со своей у каждого' },
+      S.pick ? 'Выйти из выбора' : '☑ Перерисовать скопом'),
     h('button', { onclick: drawMissing, title: 'Отправить в очередь все кадры без картинки (только видимые по фильтру сцены)' }, 'Нарисовать все недостающие'),
     h('button', { class: 'primary', onclick: doExport }, 'Пакет для видео'));
   const side = h('div', { class: 'scenes' }, ...S.ep.scenes.map((sc) => {
@@ -120,7 +134,11 @@ function renderBoard() {
       if (!shots.length) return null;
       const loc = S.state.project.locations.find((l) => l.id === sc.location);
       return h('section', { class: 'scene', id: 'sc' + sc.n },
-        h('h2', {}, `Сцена ${sc.n}. ${sc.title}`),
+        h('h2', {}, `Сцена ${sc.n}. ${sc.title}`, S.pick ? (() => {
+          const ids = shots.filter((s) => !s.cut).map((s) => s.id);
+          const all = ids.length && ids.every((id) => S.pick.has(id));
+          return h('button', { class: 'pickscene' + (all ? ' on' : ''), onclick: () => togglePick(ids, !all) }, all ? '✓ сцена выбрана' : 'выбрать всю сцену');
+        })() : null),
         sceneBar(sc),
         h('div', { class: 'sub' }, `~${sc.dur} с · ${sc.shots.length} кадров` + (loc ? ` · локация: ${loc.name}` : '') + (sc.note ? ' · ' + sc.note : '')),
         h('div', { class: 'grid' }, ...shots.map((s) => shotCard(s, { kind: 'shot', ep: S.ep.id, id: s.id }))));
@@ -369,6 +387,7 @@ function renderCanon() {
 // ---------- панель кадра ----------
 async function select(ref) {
   await flushDrafts();
+  if (ref.kind !== 'batch') S.pick = null;
   S.sel = ref;
   document.body.classList.add('with-panel');
   $('#panel').classList.remove('hidden');
@@ -378,6 +397,7 @@ async function select(ref) {
 function closePanel() {
   flushDrafts();
   S.sel = null;
+  S.pick = null;
   document.body.classList.remove('with-panel');
   $('#panel').classList.add('hidden');
   render(true);
@@ -385,6 +405,81 @@ function closePanel() {
 async function save(ref, patch) {
   await POST('/api/update', { ref, patch });
   if (ref.kind === 'shot' || ref.kind === 'scene') await loadEp(); else await loadState();
+}
+
+// ---------- перерисовка скопом ----------
+const BATCH_MODES = {
+  basis: ['Заново, с опорой на текущую', 'Кодекс рисует кадр заново по новой постановке (общий план, схема, локация), а старую картинку берёт как черновик: лица, позы, ракурс. Подходит, когда поменялись место, фон или расстановка.'],
+  edit: ['Поправить текущую', 'Меняет в текущей картинке только то, что написано в правке. Фон и расстановку не перестраивает. Правка обязательна: общая или своя.'],
+  fresh: ['С нуля', 'Старая картинка не учитывается совсем. Только новая постановка и промпт.'],
+};
+function startPick() {
+  S.pick = new Set();
+  select({ kind: 'batch' });
+}
+function togglePick(ids, on) {
+  for (const id of ids) {
+    const want = on ?? !S.pick.has(id);
+    if (want) S.pick.add(id); else S.pick.delete(id);
+  }
+  render(true);
+  if (!typing()) renderBatch(); else S.panelStale = true;
+}
+function renderBatch() {
+  const panel = $('#panel');
+  const mode = lsGet('batchMode', 'basis');
+  const ids = S.ep.scenes.flatMap((sc) => sc.shots).filter((s) => S.pick?.has(s.id));
+  const common = h('textarea', { rows: 3, placeholder: 'Необязательно. Например: «по новой постановке: полёт — в небе над пустыней, ангара нет». Добавится ко всем выбранным кадрам.',
+    oninput: (e) => lsSet('batchNote', e.target.value) }, lsGet('batchNote', ''));
+  const list = h('div', { class: 'picklist' }, ...ids.map((s) => {
+    const f = selFile(s);
+    const k = dkey(shotRef(s.id), 'note');
+    return h('div', { class: 'pickrow' },
+      h('div', { class: 'thumb', style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null, onclick: () => f && zoom(f) }, f ? '' : 'нет'),
+      h('div', { class: 'grow' },
+        h('div', {}, h('b', {}, s.id), ' ', h('span', { class: 'muted' }, (s.frame || '').slice(0, 90)),
+          h('button', { class: 'ghost x', title: 'Убрать из выбора', onclick: () => togglePick([s.id], false) }, '✕')),
+        h('input', { placeholder: 'своя правка для этого кадра (необязательно)', value: S.notes[k] || '', oninput: (e) => setNote(k, e.target.value) })));
+  }));
+  const send = async () => {
+    const m = lsGet('batchMode', 'basis');
+    const c = common.value.trim();
+    const items = ids.map((s) => {
+      const own = noteOf(s.id).trim();
+      const note = [own, c].filter(Boolean).join('. ');
+      const has = !!selFile(s);
+      return { ref: shotRef(s.id), opts: { note, edit: m === 'edit' && has, basis: m === 'basis' && has } };
+    });
+    if (!items.length) return toast('Сначала отметь кадры: нажимай на карточки или «выбрать всю сцену»');
+    if (m === 'edit') {
+      const empty = items.filter((x) => x.opts.edit && !x.opts.note).map((x) => x.ref.id);
+      if (empty.length) return toast('Для «Поправить текущую» нужна правка. Нет правки у кадров: ' + empty.join(', ') + '. Напиши общую правку или свою.', 9000);
+    }
+    if (!confirm(`Отправить в очередь ${items.length} кадров (${BATCH_MODES[m][0].toLowerCase()})? Кодекс будет рисовать по одному. Старые версии останутся, лучшую выберешь потом.`)) return;
+    await flushDrafts();
+    await POST('/api/generate', { refs: items, opts: { generator: gen() } });
+    for (const s of ids) setNote(dkey(shotRef(s.id), 'note'), '');
+    lsSet('batchNote', '');
+    toast(`В очереди: ${items.length}. Прогресс — во вкладке «Очередь» и на карточках.`, 6000);
+    closePanel();
+    pollJobs(true);
+  };
+  const visible = () => S.ep.scenes.flatMap((sc) => sc.shots).filter((s) => !s.cut && (S.filter === 'all' || s.status === S.filter));
+  panel.replaceChildren(
+    h('div', { class: 'head' }, h('div', {}, h('h3', {}, 'Перерисовать скопом'),
+      h('div', { class: 'sub' }, 'Нажимай на карточки кадров слева или на «выбрать всю сцену» у заголовка. Потом выбери, как перерисовать, и отправь всё одной кнопкой.')),
+      h('button', { class: 'ghost x', onclick: closePanel }, '✕')),
+    h('div', { class: 'actions' },
+      h('button', { onclick: () => togglePick(visible().filter((s) => selFile(s)).map((s) => s.id), true) }, 'Все нарисованные'),
+      h('button', { onclick: () => togglePick([...(S.pick || [])], false) }, 'Снять всё')),
+    h('div', { class: 'field' }, h('label', {}, 'Как перерисовать'),
+      ...Object.entries(BATCH_MODES).map(([k, [t, d]]) => h('label', { class: 'radio' + (mode === k ? ' on' : '') },
+        h('input', { type: 'radio', name: 'bmode', checked: mode === k, onchange: () => { lsSet('batchMode', k); renderBatch(); } }),
+        h('span', {}, h('b', {}, t), h('div', { class: 'muted' }, d))))),
+    h('div', { class: 'field' }, h('label', {}, 'Общая правка для всех выбранных'), common),
+    h('div', { class: 'field' }, h('label', {}, `Выбрано кадров: ${ids.length}`), ids.length ? list : h('div', { class: 'muted' }, 'Пока ничего не выбрано.')),
+    h('div', { class: 'actions' }, h('button', { class: 'primary', onclick: send, disabled: !ids.length }, `Отправить ${ids.length} в очередь`)),
+    h('div', { class: 'muted', style: { marginTop: '8px' } }, 'Подсказка: свою правку кадру можно написать и в его панели, в поле «Что поменять?» — она тоже попадёт сюда (значок ✎ на карточке).'));
 }
 
 // ---------- постановка сцены (полоса над кадрами сцены) ----------
@@ -438,6 +533,7 @@ async function renderPanel() {
   const ref = S.sel;
   const panel = $('#panel');
   if (!ref) return;
+  if (ref.kind === 'batch') return renderBatch();
   if (ref.kind === 'shot' && ref.ep !== S.ep.id) { $('#epSel').value = ref.ep; await loadEp(); }
   const it = itemOf(ref) || { versions: [], selected: null };
   const shotInfo = ref.kind === 'shot' ? findShot(ref.id) : null;
@@ -455,7 +551,7 @@ async function renderPanel() {
   else { title = it.name; sub = ref.kind === 'character' ? 'Лист персонажа' : 'Фон локации'; }
 
   const noteKey = dkey(ref, 'note');
-  const note = h('textarea', { rows: 3, oninput: (e) => { S.notes ||= {}; S.notes[noteKey] = e.target.value; },
+  const note = h('textarea', { rows: 3, oninput: (e) => setNote(noteKey, e.target.value),
     placeholder: f ? 'Например: «волосы длиннее, взгляд ниже, убрать второго офицера». Остальное останется как есть.' : 'Пожелания к первой версии (необязательно)' }, S.notes?.[noteKey] || '');
   const gen1 = async (edit) => {
     const opts = { generator: gen(), note: note.value.trim(), edit: edit && !!f };
@@ -463,7 +559,7 @@ async function renderPanel() {
     await flushDrafts();
     await POST('/api/generate', { ref, opts });
     note.value = '';
-    if (S.notes) delete S.notes[noteKey];
+    setNote(noteKey, '');
     toast(opts.generator === 'manual' ? 'Задание создано — смотри «Очередь»' : 'Отправлено художнику');
     pollJobs(true);
   };

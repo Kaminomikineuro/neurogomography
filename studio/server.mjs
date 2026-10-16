@@ -19,7 +19,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-17.2';
+const VERSION = '2026-10-18.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -193,13 +193,21 @@ function buildPrompt(ref, opts = {}) {
     const prev = shots.slice(0, Math.max(0, i)).reverse().find((x) => selectedFile(x) && (x.location || sc.location) === (s.location || sc.location));
     if (sameSet && selectedFile(sc) && !opts.edit) addRef(selectedFile(sc), 'SCENE MASTER SHOT — the whole scene with everyone in place. This shot is the SAME place and the SAME moment seen from a different camera angle/framing: keep the layout, who stands where, the props and the light direction');
     if (prev && !opts.edit) addRef(selectedFile(prev), `PREVIOUS SHOT (${prev.id}: ${prev.frame || ''}) — this shot comes right after it: keep continuity of positions, poses, clothes, light and screen direction`);
-    if (sc.plan && sameSet) addRef(sc.plan, 'top-down FLOOR PLAN of the scene (blocking diagram): who stands where and where the camera is. Use it only to understand the spatial arrangement — never draw the diagram itself');
+    // план сверху годится для всего места (поле битвы, поле с курганом, поле под разломом), но не для неба
+    const family = (id) => String(id || '').split('-')[0];
+    if (sc.plan && family(s.location || sc.location) === family(sc.location)) addRef(sc.plan, 'top-down FLOOR PLAN of the scene (blocking diagram): who stands where and where the camera is. Use it only to understand the spatial arrangement — never draw the diagram itself');
     const ctx = [`This shot (${s.id}, ${s.camera || 'camera not set'}): ${s.frame || ''}`];
     if (s.continuity) ctx.push(`Continuity: ${s.continuity}`);
     if (i > 0) ctx.push(`Previous shot (${shots[i - 1].id}): ${shots[i - 1].frame || shots[i - 1].vid || ''}`);
     if (i >= 0 && i < shots.length - 1) ctx.push(`Next shot (${shots[i + 1].id}): ${shots[i + 1].frame || shots[i + 1].vid || ''}`);
     lines.push(ctx.join('\n'));
   } else if (sceneCtx?.plan) addRef(sceneCtx.plan, 'top-down FLOOR PLAN of the scene (blocking diagram): place everyone exactly as shown. Never draw the diagram itself');
+  // «заново с опорой на текущую»: старый кадр — только черновик поз и лиц, место и расстановку строим по постановке
+  const draftFile = opts.basis && !opts.edit && selectedFile(item);
+  if (draftFile) {
+    addRef(draftFile, 'EARLIER DRAFT of this same shot — reuse only what fits: character poses, expressions, framing idea. It may have the WRONG place, background or positions: rebuild those from the scene master, floor plan, staging and description');
+    lines.push('This is a redraw of an earlier draft of the shot (attached). Keep its good parts (faces, poses, framing) only where they agree with the staging and the description; fix the location, background, positions and light to match the scene.');
+  }
   if (loc) {
     const env = loc.prompt.replace(/,?\s*(no people|no characters|empty scene[^,]*)/gi, '');
     if (size === 'close') lines.push(`Background: only a soft, out-of-focus hint of the surroundings (${env.split(',')[0]}); this is a close shot, do not show the wide view of the location.`);
@@ -671,8 +679,9 @@ const routes = {
   'GET /api/episode': (q) => readJSON(epPath(q.get('id'))),
   'POST /api/preview': (q, b) => buildPrompt(b.ref, b.opts || {}),
   'POST /api/generate': (q, b) => {
+    // refs: [ref] или [{ ref, opts }] — у каждого кадра может быть своя правка (перерисовка скопом)
     const refs = b.refs || [b.ref];
-    return refs.map((ref) => enqueue(ref, b.opts || {}));
+    return refs.map((r) => (r.ref ? enqueue(r.ref, { ...(b.opts || {}), ...(r.opts || {}) }) : enqueue(r, b.opts || {})));
   },
   'GET /api/jobs': () => jobs.map(({ log, prompt, ...j }) => ({ ...j, logTail: log.slice(-1500) })),
   'GET /api/job': (q) => jobs.find((j) => j.id === q.get('id')) || null,
