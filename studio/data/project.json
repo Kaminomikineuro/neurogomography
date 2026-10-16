@@ -477,9 +477,9 @@
   },
   {
    "id": "battlefield",
-   "name": "Поле битвы у кургана",
+   "name": "Поле битвы (без кургана)",
    "palette": "PAL-DESERT",
-   "prompt": "vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, no people, anime stylized, no gore detail",
+   "prompt": "vast open battlefield square in a red stone desert between low red ridges, flat cracked red rock ground littered with broken weapons, scattered fallen bodies small and in shadow, scorched patches, brown and silver stains, red dust in the air, NO mound, no people standing, anime stylized, no gore detail",
    "versions": [
     {
      "file": "studio/media/locations/battlefield/v001.png",
@@ -496,7 +496,8 @@
      "file": "Аниме/Иллюстрации книги/art (2).jpg",
      "note": "момент передачи меча Лиаму на том самом кургане"
     }
-   ]
+   ],
+   "needsRedraw": true
   },
   {
    "id": "battlefield-rift",
@@ -542,6 +543,22 @@
      "note": "сцена из иллюстрации книги)"
     }
    ]
+  },
+  {
+   "id": "battlefield-mound",
+   "versions": [],
+   "selected": null,
+   "name": "Курган на поле битвы",
+   "palette": "PAL-DESERT",
+   "prompt": "the same red stone battlefield square with a huge dark mound of the fallen and old bones in the middle distance, a flat rocky top, its slopes in deep shadow, bodies only as dark silhouettes, low red ridges around, no people standing, anime stylized, no gore detail"
+  },
+  {
+   "id": "sky-desert",
+   "versions": [],
+   "selected": null,
+   "name": "Небо над красной пустыней",
+   "palette": "PAL-DESERT",
+   "prompt": "high in the air above an endless cracked red rocky wasteland seen far below, layered red ridges, rust-red sky with dazzling white clouds, blazing red sun, wind streaks, no buildings, no hangar"
   }
  ],
  "rules": [
@@ -636,5 +653,9 @@
   "Пульс Повелителя в 13.4: по канону его нет — сверить строку в главе.",
   "VO рассказчика («Он там», «Молодой Лорд летит на собственную смерть»…) — голосом Лиама или убрать?",
   "Подземные хищники-воронки и зыбучие пески — берём в канон?"
+ ],
+ "appliedMigrations": [
+  "2026-10-17-postanovka",
+  "2026-10-18-prigovor"
  ]
 }

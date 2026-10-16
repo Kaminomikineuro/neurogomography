@@ -295,7 +295,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "дребезг стекла."
+     "linesFrom": "дребезг стекла.",
+     "continuity": "one of the tall narrow windows behind Liam's chair at the right head of the table; the dim council room is out of focus behind the glass"
     },
     {
      "id": "1.3",
@@ -324,7 +325,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "скрип песка под сапогами, голоса на фоне."
+     "linesFrom": "скрип песка под сапогами, голоса на фоне.",
+     "continuity": "top-down on the map in the middle of the table: Liam's side (windows, light) is at the RIGHT edge of the frame; officers' hands rest on the left end and on both long sides"
     },
     {
      "id": "1.4",
@@ -363,7 +365,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "тишина зала, ветер за окнами."
+     "linesFrom": "тишина зала, ветер за окнами.",
+     "continuity": "Liam sits at the RIGHT head of the table, the windows behind him give red rim light; he looks to frame-LEFT toward the officers"
     },
     {
      "id": "1.5",
@@ -401,7 +404,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Рой: «Бастиан отбил западный удар. Потери — около сорока»."
+     "linesFrom": "Рой: «Бастиан отбил западный удар. Потери — около сорока».",
+     "continuity": "camera from Liam's end of the table: Roy stands on the NEAR long side of the table over the map, light from the windows on frame-right; Belfi is out of focus at the far left end of the table"
     },
     {
      "id": "1.5a",
@@ -447,7 +451,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Рой (за кадром): «Альянс отступает, но разведка говорит, что это отвлечение»."
+     "linesFrom": "Рой (за кадром): «Альянс отступает, но разведка говорит, что это отвлечение».",
+     "continuity": "Belfi stands at the far LEFT end of the table, facing the windows: the red window light from the far end of the room falls on his face"
     },
     {
      "id": "1.6",
@@ -485,7 +490,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Ардан: «Потому что восток уже горит. Пока мы здесь стоим»."
+     "linesFrom": "Ардан: «Потому что восток уже горит. Пока мы здесь стоим».",
+     "continuity": "Ardan stands on the FAR long side of the table; she looks to frame-LEFT toward Belfi at the end of the table; window light from frame-right"
     },
     {
      "id": "1.7",
@@ -516,7 +522,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "тишина, ветер."
+     "linesFrom": "тишина, ветер.",
+     "continuity": "seen from Liam's end of the table: Belfi at the far LEFT end, fists on the stone; the window light from behind the camera falls on him"
     },
     {
      "id": "1.8",
@@ -609,7 +616,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "стук пальцев, потом тишина."
+     "linesFrom": "стук пальцев, потом тишина.",
+     "continuity": "Liam's hand on the carved stone armrest of his chair at the RIGHT head of the table, window light from behind"
     },
     {
      "id": "1.11",
@@ -647,7 +655,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Лиам: «Я возьму первый отряд»."
+     "linesFrom": "Лиам: «Я возьму первый отряд».",
+     "continuity": "Liam rises from his chair at the RIGHT head of the table; the tall windows and the red light are behind him; he faces frame-LEFT toward the officers"
     },
     {
      "id": "1.12",
@@ -716,7 +725,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Лиам: «Ваши люди нужны здесь»."
+     "linesFrom": "Лиам: «Ваши люди нужны здесь».",
+     "continuity": "two-shot along the table: Liam standing at the RIGHT head in the foreground, Belfi at the far LEFT end; the map between them"
     },
     {
      "id": "1.14",
@@ -731,7 +741,10 @@
      "imgFrom": null,
      "vid": "camera tracks slowly as he walks to the door without looking back",
      "characters": [
-      "LIAM"
+      "LIAM",
+      "ROY",
+      "ARDAN",
+      "BELFI"
      ],
      "location": null,
      "status": "review",
@@ -766,7 +779,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Лиам: «Рой, когда будут готовы птицы?» — Рой (за кадром): «Полчаса». — Лиам: «Через двадцать минут я буду у ангара»."
+     "linesFrom": "Лиам: «Рой, когда будут готовы птицы?» — Рой (за кадром): «Полчаса». — Лиам: «Через двадцать минут я буду у ангара».",
+     "continuity": "Liam walks from the head of the table toward the heavy door in the near-LEFT wall, passing behind Roy; the officers stay at the table behind him"
     },
     {
      "id": "1.15",
@@ -780,7 +794,11 @@
      "img": "wide shot of the council room after someone left, three officers frozen around the map table, a closed door, PAL-COUNCIL, STYLE",
      "imgFrom": null,
      "vid": "static camera, only dust moves in the light",
-     "characters": [],
+     "characters": [
+      "ROY",
+      "ARDAN",
+      "BELFI"
+     ],
      "location": null,
      "status": "review",
      "versions": [
@@ -795,9 +813,13 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "звенящая тишина, дребезг окна."
+     "linesFrom": "звенящая тишина, дребезг окна.",
+     "continuity": "wide shot from the door side: the door at frame-left has just closed; Roy, Ardan and Belfi frozen at their places around the table; Liam's chair at the right head is empty, the windows behind it"
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scene1_council.png",
+   "staging": "Зал совета, вырубленный в красной скале. Длинный тяжёлый каменный стол стоит слева направо, на нём старая карта. СПРАВА во главе стола в резном каменном кресле сидит Лиам; за его спиной высокие узкие окна, о стёкла бьёт красный песок, красноватый свет падает на стол справа (контровой свет на Лиаме). СЛЕВА у дальнего конца стола стоит ссутулившийся генерал Бельфи, упираясь кулаками в камень. У ДАЛЬНЕЙ стороны стола стоит командир Ардан и косится на Бельфи. У БЛИЖНЕЙ стороны стола посередине стоит капитан Рой и докладывает над картой. Тяжёлая дверь — в ближней стене слева. Все офицеры в одной комнате одновременно; когда камера смотрит на одного, другие видны размытыми на своих местах.",
+   "masterPrompt": "wide master shot of a dim stone council room carved in red rock, a long heavy stone table runs from left to right with an old parchment map in the middle; at the RIGHT head of the table young white-haired [LIAM] sits in a heavy carved stone chair with tall narrow windows behind him, red sand beating on the glass and red-tinted light streaming over his shoulders across the table; at the far LEFT end old stooped [BELFI] stands leaning on the table with both fists; on the far side of the table stern female [ARDAN] stands and looks sideways at Belfi; on the near side young [ROY] stands reporting over the map; a heavy stone door in the near-left wall; dust in the light beams, PAL-COUNCIL"
   },
   {
    "n": 2,
@@ -834,7 +856,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "гарканье птиц, ветер, шорох перьев."
+     "linesFrom": "гарканье птиц, ветер, шорох перьев.",
+     "continuity": "the hangar opening to the sky is on frame-RIGHT; birds stand along the back wall"
     },
     {
      "id": "2.2",
@@ -849,7 +872,8 @@
      "imgFrom": null,
      "vid": "knights tighten straps, Liam walks in from the right",
      "characters": [
-      "LIAM"
+      "LIAM",
+      "RUKH"
      ],
      "location": null,
      "status": "review",
@@ -865,7 +889,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "Liam enters from frame-LEFT through the arch; knights by the birds along the back wall"
     },
     {
      "id": "2.3",
@@ -897,7 +922,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "inside the hangar, the opening to the sky on frame-right; Liam mounts the bird that stands nearest to the opening"
     },
     {
      "id": "2.4",
@@ -917,7 +943,8 @@
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": "мощный хлопок крыльев."
+     "linesFrom": "мощный хлопок крыльев.",
+     "continuity": "the bird runs toward the opening on frame-RIGHT and launches out into the red sky"
     },
     {
      "id": "2.5",
@@ -934,7 +961,7 @@
      "characters": [
       "RUKH"
      ],
-     "location": null,
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -948,7 +975,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "ветер, хлопки крыльев. Начинается музыка."
+     "linesFrom": "ветер, хлопки крыльев. Начинается музыка.",
+     "continuity": "open sky high above the red desert — no hangar, no walls; the wedge of riders flies from left to right, Liam's bird leads at the tip"
     },
     {
      "id": "2.6",
@@ -963,9 +991,10 @@
      "imgFrom": null,
      "vid": "hair and collar flutter violently, he narrows his eyes",
      "characters": [
-      "LIAM"
+      "LIAM",
+      "RUKH"
      ],
-     "location": "desert",
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -987,7 +1016,8 @@
      ],
      "selected": 1,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "in the air, no buildings; Liam rides at the tip of the wedge flying to frame-right, the red sun ahead on the right"
     },
     {
      "id": "2.7",
@@ -1002,7 +1032,7 @@
      "imgFrom": null,
      "vid": "slow push-in toward the dark stain",
      "characters": [],
-     "location": "desert",
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1024,7 +1054,8 @@
      ],
      "selected": 1,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "Liam's point of view from the air, looking forward and down: far ahead a dark stain on the rust sand"
     },
     {
      "id": "2.8",
@@ -1039,7 +1070,7 @@
      "imgFrom": null,
      "vid": "camera glides forward above them, small figures move toward the edges",
      "characters": [],
-     "location": "desert",
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1060,7 +1091,8 @@
        "optional": true
       }
      ],
-     "linesFrom": "VO (из нарратива, на усмотрение): «Он там»."
+     "linesFrom": "VO (из нарратива, на усмотрение): «Он там».",
+     "continuity": "seen from the air above: the edge of a battlefield far below"
     },
     {
      "id": "2.9",
@@ -1078,7 +1110,7 @@
       "LIAM",
       "RUKH"
      ],
-     "location": "desert",
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1107,7 +1139,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Лиам: «Забираете выживших и отходите к Бастиану!»"
+     "linesFrom": "Лиам: «Забираете выживших и отходите к Бастиану!»",
+     "continuity": "in the air, no buildings; Liam turns back over his LEFT shoulder to shout to the riders following behind him on frame-left"
     },
     {
      "id": "2.10",
@@ -1122,7 +1155,7 @@
      "imgFrom": "2.6",
      "vid": "he faces forward, expression calm and settled, slow push-in",
      "characters": [],
-     "location": "desert",
+     "location": "sky-desert",
      "status": "todo",
      "versions": [],
      "selected": null,
@@ -1134,15 +1167,19 @@
        "optional": true
       }
      ],
-     "linesFrom": "VO (из нарратива, на усмотрение): «Молодой Лорд летит на собственную смерть»."
+     "linesFrom": "VO (из нарратива, на усмотрение): «Молодой Лорд летит на собственную смерть».",
+     "continuity": "in the air; Liam faces forward (frame-right) again, calm"
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scene2_hangar.png",
+   "staging": "Ангар (кадры 2.1–2.4): большой зал, вырубленный в скале крепости. Справа — широкий проём прямо в красное небо, через него птицы взлетают. Вдоль дальней стены в ряд стоят осёдланные птицы Рух, рыцари проверяют подпруги и кормят птиц. Лиам входит слева через арку из крепости. Полёт (2.5–2.10): клин из десятка птиц Рух летит над пустыней слева направо (так во всех кадрах полёта), Лиам — во главе клина; красное солнце высоко впереди справа. Ангара в небе НЕТ.",
+   "masterPrompt": "wide master shot of a huge hangar carved into a red rock fortress, a wide opening on the RIGHT side straight into the rust-red sky, a row of saddled giant [RUKH] birds standing along the back wall, drayk knights in dark armor checking saddle straps and tossing dried meat into a beak, an arch on the LEFT leading into the fortress through which young white-haired [LIAM] enters, red dust in the air, PAL-DESERT"
   },
   {
    "n": 3,
    "title": "Курган",
    "dur": 42,
-   "location": "battlefield",
+   "location": "battlefield-mound",
    "shots": [
     {
      "id": "3.1",
@@ -1171,7 +1208,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "горячий ветер, тишина поля."
+     "linesFrom": "горячий ветер, тишина поля.",
+     "continuity": "the birds descend from the RIGHT; the mound is ahead on the left side of the square"
     },
     {
      "id": "3.2",
@@ -1186,7 +1224,7 @@
      "imgFrom": null,
      "vid": "slow tilt up the mound to the figure at the top",
      "characters": [],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1200,7 +1238,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "camera at the foot of the mound looking up; harsh midday sun high above the top gives the figure a dark silhouette"
     },
     {
      "id": "3.3",
@@ -1218,7 +1257,7 @@
       "LORD",
       "LORD SWORD"
      ],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1232,7 +1271,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "ветер, капли."
+     "linesFrom": "ветер, капли.",
+     "continuity": "on the flat top of the mound, low angle; the Lord faces frame-RIGHT toward the sky where the riders come from"
     },
     {
      "id": "3.4",
@@ -1247,7 +1287,7 @@
      "imgFrom": null,
      "vid": "the head lifts, the hairpins flash",
      "characters": [],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1291,7 +1331,7 @@
      "characters": [
       "LORD"
      ],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1305,7 +1345,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "удар низкой ноты."
+     "linesFrom": "удар низкой ноты.",
+     "continuity": "the Lord on the mound looks UP and to the right, straight into the camera (Liam's point of view from the sky)"
     },
     {
      "id": "3.6",
@@ -1323,7 +1364,7 @@
       "LIAM",
       "RUKH"
      ],
-     "location": null,
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1338,7 +1379,8 @@
      "selected": 0,
      "lines": [],
      "linesFrom": "крик птицы.",
-     "refs": []
+     "refs": [],
+     "continuity": "high in the air above the battlefield (seen far below); the riders fly from right to left toward the mound"
     },
     {
      "id": "3.7",
@@ -1355,7 +1397,7 @@
      "characters": [
       "LIAM"
      ],
-     "location": null,
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1382,7 +1424,8 @@
       {
        "file": "Аниме/Иллюстрации книги/лиам на пт (2).jpg"
       }
-     ]
+     ],
+     "continuity": "in the air, the sky behind him; the Lord is far below on the left"
     },
     {
      "id": "3.8",
@@ -1397,7 +1440,7 @@
      "imgFrom": null,
      "vid": "static camera, only dust and banners move",
      "characters": [],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1411,7 +1454,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "wide: the mound in the middle with the Lord on top; human survivors frozen on the left edge, drayks on the right edge, all looking up at the sky"
     },
     {
      "id": "3.9",
@@ -1420,16 +1464,16 @@
      "tool": "Kling",
      "cut": false,
      "optional": false,
-     "frame": "Лиам срывается со спины летящей птицы и пикирует вниз.",
+     "frame": "Лиам срывается со спины летящей птицы ногами вперёд и падает вниз; через секунду наклоняется вперёд, в позу с рефа «лиам прыгает». Высоко, за ним только небо.",
      "sound": "",
-     "img": "[LIAM] leaping off a flying [RUKH], diving headfirst toward the ground, cloak streaming, PAL-DESERT, STYLE",
+     "img": "[LIAM] dropping off a flying [RUKH] FEET FIRST, body upright, legs down, cloak and white hair whipping upward, high in the sky, only rust-red sky and white clouds behind him, ground not visible, PAL-DESERT, STYLE",
      "imgFrom": null,
-     "vid": "he jumps off and dives, camera follows the fall",
+     "vid": "he drops off the bird feet first and falls, within a second leaning forward into a flying pose, camera follows the fall, only sky around",
      "characters": [
       "LIAM",
       "RUKH"
      ],
-     "location": null,
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1454,9 +1498,11 @@
      "linesFrom": "",
      "refs": [
       {
-       "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg"
+       "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg",
+       "note": "this is his pose a SECOND LATER (shot 3.10); in this shot he still drops feet first — match only his look and the sky"
       }
-     ]
+     ],
+     "continuity": "high in the air, far from the ground: Liam drops off his bird FEET FIRST (body upright, legs down), the bird above/behind him; only sky in the background, no ground; within a second he will lean forward into the pose of the attached reference"
     },
     {
      "id": "3.10",
@@ -1467,14 +1513,14 @@
      "optional": false,
      "frame": "ещё в воздухе метает меч. Смазанный кадр броска.",
      "sound": "",
-     "img": "[LIAM] mid-air hurling [LIAM SWORD] downward, motion blur, speed lines, STYLE",
+     "img": "[LIAM] high in the sky a second later, body leaning forward almost horizontal, one arm flung forward right after hurling [LIAM SWORD] down, motion blur, speed lines, only red sky and clouds around, ground far below or not visible, STYLE",
      "imgFrom": null,
      "vid": "fast throwing motion, the sword leaves his hand",
      "characters": [
       "LIAM",
       "LIAM SWORD"
      ],
-     "location": null,
+     "location": "sky-desert",
      "status": "review",
      "versions": [
       {
@@ -1496,7 +1542,14 @@
      ],
      "selected": 1,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "about a second after the jump: Liam leans forward almost horizontal like in the reference «лиам прыгает» — arm thrown forward after the throw, legs trailing; only sky around, ground far below or out of frame",
+     "refs": [
+      {
+       "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg",
+       "note": "match this flying pose"
+      }
+     ]
     },
     {
      "id": "3.11",
@@ -1513,7 +1566,7 @@
      "characters": [
       "LIAM SWORD"
      ],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1527,7 +1580,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "удар металла о камень."
+     "linesFrom": "удар металла о камень.",
+     "continuity": "on the flat top of the mound right at the Lord's boots: the sword strikes the stone"
     },
     {
      "id": "3.12",
@@ -1542,12 +1596,13 @@
      "imgFrom": "3.8",
      "vid": "static camera, dust hangs motionless in the air",
      "characters": [],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": "полная тишина."
+     "linesFrom": "полная тишина.",
+     "continuity": "same view as 3.8: everyone frozen, dust hanging in the air"
     },
     {
      "id": "3.13",
@@ -1564,7 +1619,7 @@
      "characters": [
       "LORD"
      ],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1578,7 +1633,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "on the mound top: the Lord looks down at the sword at his feet, then up to the right where Liam is coming down"
     },
     {
      "id": "3.14",
@@ -1593,14 +1649,17 @@
      "imgFrom": "3.13",
      "vid": "he tilts his head slightly and gives one slow nod",
      "characters": [],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
      "linesFrom": ""
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+   "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.",
+   "masterPrompt": "wide master shot of a red stone battlefield square paved with fallen bodies in shadow; a huge dark mound of the fallen on the LEFT side; on its flat top the tall black-haired [LORD] stands calmly with a black sword; high in the sky on the RIGHT a wedge of giant riding birds approaches; frozen survivors at both edges of the square; harsh midday red sun high above, PAL-DESERT, anime stylized, no gore detail"
   },
   {
    "n": 4,
@@ -1623,7 +1682,7 @@
      "characters": [
       "LIAM"
      ],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1637,7 +1696,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "Liam lands FEET FIRST in a crouch on frame-RIGHT of the mound, one hand on the stones, cloak settling; his sword stands in the cracked stone near the Lord"
     },
     {
      "id": "4.2",
@@ -1655,7 +1715,7 @@
       "LORD",
       "LIAM SWORD"
      ],
-     "location": null,
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1669,7 +1729,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the Lord walks down the right slope of the mound toward Liam, holding Liam's ruby-hilted sword"
     },
     {
      "id": "4.3",
@@ -1702,7 +1763,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "two-shot in profile at the foot of the mound: the Lord on the LEFT holds the sword out hilt-first to Liam on the RIGHT"
     },
     {
      "id": "4.4",
@@ -1734,7 +1796,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "ветер, музыка затихает."
+     "linesFrom": "ветер, музыка затихает.",
+     "continuity": "the Lord on the LEFT, Liam on the RIGHT, very close; no mound in this close framing"
     },
     {
      "id": "4.5",
@@ -1806,7 +1869,10 @@
      "img": "two figures in the foreground slightly out of focus, behind them drayks carrying wounded toward a ridge and human cavalry starting a chase, PAL-DESERT, STYLE",
      "imgFrom": null,
      "vid": "rack focus from the two figures to the chaos behind, riders gallop away to the left",
-     "characters": [],
+     "characters": [
+      "LORD",
+      "LIAM"
+     ],
      "location": null,
      "status": "review",
      "versions": [
@@ -1821,7 +1887,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "крики командиров, лязг, топот, гарканье птиц."
+     "linesFrom": "крики командиров, лязг, топот, гарканье птиц.",
+     "continuity": "the two figures in the foreground (the Lord left, Liam right); behind them human cavalry gallops away to the LEFT, drayks carry the wounded to the ridge on the RIGHT"
     },
     {
      "id": "4.8",
@@ -1835,8 +1902,11 @@
      "img": "extreme wide shot, an empty red battlefield, two tiny figures facing each other, red sun, PAL-DESERT, STYLE",
      "imgFrom": null,
      "vid": "static camera, distant dust settles",
-     "characters": [],
-     "location": null,
+     "characters": [
+      "LORD",
+      "LIAM"
+     ],
+     "location": "battlefield-mound",
      "status": "review",
      "versions": [
       {
@@ -1850,7 +1920,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "удаляющийся топот → ветер."
+     "linesFrom": "удаляющийся топот → ветер.",
+     "continuity": "extreme wide: the mound on the far left, two tiny figures facing each other in front of it (the Lord left, Liam right)"
     },
     {
      "id": "4.9",
@@ -1919,7 +1990,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Лиам: «Ваше Величество Повелитель драконов»."
+     "linesFrom": "Лиам: «Ваше Величество Повелитель драконов».",
+     "continuity": "Liam on the right side faces frame-LEFT toward the Lord"
     },
     {
      "id": "4.11",
@@ -1943,7 +2015,10 @@
      "lines": [],
      "linesFrom": "тихий смешок."
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+   "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.",
+   "masterPrompt": "wide master shot of a red stone battlefield: the dark mound of the fallen on the far LEFT; in front of its foot [LORD] stands on the LEFT and white-haired [LIAM] on the RIGHT facing each other, Liam half a head shorter; far on the left human cavalry rides away, on the right drayks carry the wounded toward a low ridge; harsh midday light, PAL-DESERT, anime stylized, no gore detail"
   },
   {
    "n": 5,
@@ -1981,7 +2056,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "звон стали."
+     "linesFrom": "звон стали.",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.2",
@@ -2012,7 +2088,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.3",
@@ -2026,13 +2103,17 @@
      "img": "",
      "imgFrom": null,
      "vid": "Liam lunges low under the opponent's arm, the Lord steps back half a step calmly",
-     "characters": [],
+     "characters": [
+      "LIAM",
+      "LORD"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.4",
@@ -2055,7 +2136,8 @@
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.5",
@@ -2086,7 +2168,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.6",
@@ -2117,7 +2200,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.7",
@@ -2155,7 +2239,8 @@
        "src": "short"
       }
      ],
-     "linesFrom": "VO Лиама: «Мало»."
+     "linesFrom": "VO Лиама: «Мало».",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.8",
@@ -2187,7 +2272,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.9",
@@ -2202,14 +2288,16 @@
      "imgFrom": null,
      "vid": "Shot 1: overhead strike, parried. Shot 2: side strike without wind-up, parried. Shot 3: low strike at the knee, @Image1 (Lord) turns his torso away and catches the next thrust with the sword guard. Fast cuts",
      "characters": [
-      "LORD"
+      "LORD",
+      "LIAM"
      ],
      "location": null,
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.10",
@@ -2240,7 +2328,8 @@
        "src": "short"
       }
      ],
-     "linesFrom": "Повелитель (мягко): «Неплохо»."
+     "linesFrom": "Повелитель (мягко): «Неплохо».",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.11",
@@ -2254,13 +2343,17 @@
      "img": "",
      "imgFrom": null,
      "vid": "Liam swings again, slower and shorter, breathing hard, arms trembling",
-     "characters": [],
+     "characters": [
+      "LIAM",
+      "LORD"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.12",
@@ -2292,7 +2385,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "хруст, звон, тишина."
+     "linesFrom": "хруст, звон, тишина.",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     },
     {
      "id": "5.13",
@@ -2307,6 +2401,7 @@
      "imgFrom": null,
      "vid": "the black blade dissolves into dark haze from tip to hilt",
      "characters": [
+      "LORD",
       "LORD SWORD"
      ],
      "location": null,
@@ -2323,9 +2418,13 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+   "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.",
+   "masterPrompt": "wide shot of the duel on an open red stone battlefield: [LORD] on the LEFT and [LIAM] on the RIGHT crossing swords, red dust, harsh high midday sun, the mound of the fallen far in the background on the left, PAL-DESERT, anime stylized, no gore detail"
   },
   {
    "n": 6,
@@ -2349,7 +2448,7 @@
       "LIAM",
       "LORD"
      ],
-     "location": null,
+     "location": "battlefield",
      "status": "review",
      "versions": [
       {
@@ -2363,7 +2462,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "still before the rift: Liam on the RIGHT looks past the Lord toward the horizon on the LEFT (west, where Bastian is); the Lord steps closer from the left"
     },
     {
      "id": "6.2",
@@ -2380,7 +2480,7 @@
      "characters": [
       "LORD"
      ],
-     "location": null,
+     "location": "battlefield",
      "status": "review",
      "versions": [
       {
@@ -2406,7 +2506,8 @@
        "mode": "vo"
       }
      ],
-     "linesFrom": "VO (из нарратива, на усмотрение): «Точный удар в темное начало». Затем: «Все закончится здесь»."
+     "linesFrom": "VO (из нарратива, на усмотрение): «Точный удар в темное начало». Затем: «Все закончится здесь».",
+     "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord on the LEFT raises his hand toward Liam on the RIGHT"
     },
     {
      "id": "6.3",
@@ -2421,7 +2522,7 @@
      "imgFrom": null,
      "vid": "the fingers twitch slightly, almost hesitating",
      "characters": [],
-     "location": null,
+     "location": "battlefield",
      "status": "review",
      "versions": [
       {
@@ -2435,7 +2536,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; only the hand fills the frame; background a soft red blur"
     },
     {
      "id": "6.4",
@@ -2452,7 +2554,7 @@
      "characters": [
       "LIAM"
      ],
-     "location": null,
+     "location": "battlefield",
      "status": "review",
      "versions": [
       {
@@ -2466,7 +2568,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "низкий гул."
+     "linesFrom": "низкий гул.",
+     "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord's fingers (from the LEFT) touch Liam's chest; Liam faces left"
     },
     {
      "id": "6.5",
@@ -2481,12 +2584,13 @@
      "imgFrom": null,
      "vid": "strong camera shake, rocks jump, dust falls from ridges",
      "characters": [],
-     "location": null,
+     "location": "battlefield",
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": "грохот."
+     "linesFrom": "грохот.",
+     "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the ground shakes, dust jumps off the stones; the Lord on the LEFT, Liam on the RIGHT, the mound far left"
     },
     {
      "id": "6.6",
@@ -2500,13 +2604,16 @@
      "img": "",
      "imgFrom": null,
      "vid": "he snaps his head up, the glow under his hand vanishes",
-     "characters": [],
-     "location": null,
+     "characters": [
+      "LORD"
+     ],
+     "location": "battlefield",
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord jerks his head up and looks to the sky on frame-RIGHT; the glow under his fingers dies"
     },
     {
      "id": "6.7",
@@ -2521,7 +2628,7 @@
      "imgFrom": null,
      "vid": "the ground shakes, cracks widen, sand pours in",
      "characters": [],
-     "location": null,
+     "location": "battlefield",
      "status": "review",
      "versions": [
       {
@@ -2535,7 +2642,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "рёв отовсюду сразу."
+     "linesFrom": "рёв отовсюду сразу.",
+     "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; cracks run through red ground, sand pours into them"
     },
     {
      "id": "6.8",
@@ -2550,7 +2658,7 @@
      "imgFrom": null,
      "vid": "time-lapse, clouds swirl and close over the sun",
      "characters": [],
-     "location": null,
+     "location": "battlefield",
      "status": "review",
      "versions": [
       {
@@ -2564,7 +2672,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "camera tilts up from the battlefield to the sky: black storm clouds roll in fast from the RIGHT (east) and start to swallow the red sun; still NO tear in the air"
     },
     {
      "id": "6.9",
@@ -2593,7 +2702,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "влажный разрыв."
+     "linesFrom": "влажный разрыв.",
+     "continuity": "FIRST appearance of the rift: the air tears open on frame-RIGHT above the battlefield, behind where Liam stands; black clouds overhead, red sun gone"
     },
     {
      "id": "6.10",
@@ -2622,7 +2732,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "6.11",
@@ -2642,7 +2753,8 @@
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "6.12",
@@ -2673,7 +2785,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "Liam is ripped off his feet and pulled BACKWARD to frame-RIGHT toward the black tear"
     },
     {
      "id": "6.13",
@@ -2704,7 +2817,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "рёв разлома, хруст."
+     "linesFrom": "рёв разлома, хруст.",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "6.14",
@@ -2735,7 +2849,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the Lord on the LEFT frowns at the rift on frame-RIGHT; his hair and coat are pulled to the right"
     },
     {
      "id": "6.15",
@@ -2764,9 +2879,13 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "скрип."
+     "linesFrom": "скрип.",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+   "staging": "ПРИГОВОР (6.1–6.8) идёт ДО разлома: небо ещё ясное, красное солнце, никакой черноты в воздухе. В 6.5–6.7 только трясётся земля, в 6.8 набегают чёрные тучи. Разлом впервые появляется в 6.9, и только с этого кадра он в фоне. Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.",
+   "masterPrompt": "wide shot of the red stone battlefield under black storm clouds swallowing the red sun: a giant black tear in the air on the RIGHT like a maw; [LIAM] on the right being pulled toward it, [LORD] standing firm on the LEFT, frost on the red sand, PAL-RIFT, anime stylized, no gore detail"
   },
   {
    "n": 7,
@@ -2803,7 +2922,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.2",
@@ -2817,13 +2937,16 @@
      "img": "",
      "imgFrom": null,
      "vid": "fingers crawl near his collar and hair, his face twists in disgust",
-     "characters": [],
+     "characters": [
+      "LIAM"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.3",
@@ -2854,7 +2977,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": "взрыв."
+     "linesFrom": "взрыв.",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.4",
@@ -2868,13 +2992,16 @@
      "img": "",
      "imgFrom": null,
      "vid": "he flies to the left, hits the stones and rolls",
-     "characters": [],
+     "characters": [
+      "LIAM"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the energy blast throws Liam far to frame-LEFT, away from the rift; he rolls over the stones"
     },
     {
      "id": "7.5",
@@ -2912,7 +3039,8 @@
        "src": "short"
       }
      ],
-     "linesFrom": "VO Лиама: «Сломал»."
+     "linesFrom": "VO Лиама: «Сломал».",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.6",
@@ -2926,13 +3054,17 @@
      "img": "",
      "imgFrom": null,
      "vid": "he pushes himself up on shaking arms and grabs a sword lying nearby",
-     "characters": [],
+     "characters": [
+      "LIAM",
+      "LIAM SWORD"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.7",
@@ -2963,7 +3095,8 @@
      ],
      "selected": 0,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.8",
@@ -3002,7 +3135,8 @@
        "src": "book"
       }
      ],
-     "linesFrom": "Лиам (сипло): «У вас что, появился некромант?»"
+     "linesFrom": "Лиам (сипло): «У вас что, появился некромант?»",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.9",
@@ -3016,7 +3150,9 @@
      "img": "",
      "imgFrom": "6.14",
      "vid": "he mutters through his teeth without looking away from the rift",
-     "characters": [],
+     "characters": [
+      "LORD"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
@@ -3030,7 +3166,8 @@
        "src": "short"
       }
      ],
-     "linesFrom": "Повелитель (сквозь зубы, игнорируя вопрос): «Опять оно…»"
+     "linesFrom": "Повелитель (сквозь зубы, игнорируя вопрос): «Опять оно…»",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.10",
@@ -3050,7 +3187,8 @@
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.11",
@@ -3070,7 +3208,8 @@
      "versions": [],
      "selected": null,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     },
     {
      "id": "7.12",
@@ -3110,9 +3249,13 @@
        "src": "short"
       }
      ],
-     "linesFrom": "Лиам (кричит): «Это Грань?»"
+     "linesFrom": "Лиам (кричит): «Это Грань?»",
+     "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
     }
-   ]
+   ],
+   "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+   "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.",
+   "masterPrompt": "extreme wide shot of the battlefield under black clouds: the black rift on the RIGHT pulsing, dark silhouettes of the dead rising everywhere like broken puppets, [LORD] motionless in the center-left, [LIAM] on the right gripping a sword, PAL-RIFT, anime stylized, bodies in silhouette"
   }
  ]
 }
