@@ -20,7 +20,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-18.2';
+const VERSION = '2026-10-19.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -75,6 +75,14 @@ function open(ref) {
     if (!item) throw new Error('Не найдено: ' + ref.id);
     return { item, project: pr, save: () => writeJSON(p, pr), dir: path.join(MEDIA, ref.kind === 'character' ? 'characters' : 'locations', safe(ref.id)) };
   }
+  if (ref.kind === 'comicart') {
+    // фигура героя для страницы комикса: рисуется на белом фоне, студия вырезает её сама
+    const p = comicPath(ref.ep);
+    const comic = readJSON(p);
+    const item = comic?.arts?.[ref.id];
+    if (!item) throw new Error('Нет фигуры комикса ' + ref.id);
+    return { item, save: () => writeJSON(p, comic), dir: path.join(MEDIA, safe(ref.ep), 'comic', safe(ref.id)) };
+  }
   if (ref.kind === 'lab') {
     const lab = readJSON(labPath, { items: {} });
     const item = (lab.items[ref.id] ||= { versions: [], selected: null });
@@ -83,6 +91,8 @@ function open(ref) {
   }
   throw new Error('Неизвестный тип ' + ref.kind);
 }
+
+const comicPath = (ep) => path.join(DATA, 'comics', safe(ep) + '.json');
 
 function findShot(epId, shotId) {
   try { return open({ kind: 'shot', ep: epId, id: shotId }); } catch { return null; }
@@ -147,6 +157,11 @@ function buildPrompt(ref, opts = {}) {
     for (const s of item.shots) if (!s.cut && (s.location || item.location) === item.location) (s.characters || []).forEach((c) => ids.add(c));
     charIds = [...ids].filter((id) => chars[id] && !['Предметы'].includes(chars[id].group));
     sceneCtx = item;
+  } else if (ref.kind === 'comicart') {
+    raw = (item.prompt || 'full-body figure') + ', STYLE';
+    charIds = item.characters || [];
+    const so = item.fromShot && findShot(ref.ep, item.fromShot);
+    if (so && selectedFile(so.item)) ownRefs.push([selectedFile(so.item), 'the same moment from the anime: copy the pose, outfit and expression, but draw ONLY the figure, full body, on a pure white background, no scenery']);
   } else if (ref.kind === 'character') {
     raw = item.sheetPrompt || `anime character model sheet of ${item.token}, front, side and back views, expressions, plain white background, labeled ${item.id}`;
     raw += ', STYLE';
@@ -221,6 +236,7 @@ function buildPrompt(ref, opts = {}) {
   if (loc && !selectedFile(loc) && size !== 'close') warnings.push(`Нет референса локации «${loc.name}». Сначала сделай фон во вкладке «Локации».`);
 
   if (ref.kind === 'shot' || ref.kind === 'lab') lines.push('Format: ' + pr.format + '.');
+  if (ref.kind === 'comicart') lines.push('Format: vertical 2:3 portrait, the whole figure from head to toe fits inside the frame with a margin, pure flat white background (#FFFFFF) everywhere around the figure, no ground, no cast shadow, no frame, no text; a clean dark outline around the whole silhouette so it can be cut out.');
   lines.push('Avoid: ' + pr.negative + '.');
   if (opts.note) {
     lines.push(opts.edit
@@ -371,6 +387,7 @@ function nextOut(dir, ext = '.png', prefix = 'v') {
 
 function label(ref) {
   if (ref.kind === 'scene') return `${ref.ep} · сцена ${ref.id} (мастер-план)`;
+  if (ref.kind === 'comicart') return `${ref.ep} · комикс, фигура ${ref.id}`;
   return ref.kind === 'shot' ? `${ref.ep} · кадр ${ref.id}` : ref.kind === 'lab' ? `проба ${ref.id.replace(/\|/g, ' · ')}` : `${ref.kind === 'character' ? 'персонаж' : 'локация'} ${ref.id}`;
 }
 
@@ -682,6 +699,33 @@ const routes = {
   },
   'POST /api/shutdown': () => { setTimeout(() => { saveJobs(); process.exit(0); }, 200); return { ok: true }; },
   'GET /api/episode': (q) => readJSON(epPath(q.get('id'))),
+  // ---- комикс ----
+  'GET /api/comic': (q) => ({
+    comic: readJSON(comicPath(q.get('ep'))),
+    hints: readJSON(path.join(STUDIO, 'canon', 'comic', safe(q.get('ep')) + '.json'), {}),
+  }),
+  'POST /api/comic/save': (q, b) => {
+    // фигуры (их версии пишет художник) берём с диска, чтобы сохранение страниц их не затёрло
+    const p = comicPath(b.ep);
+    const old = readJSON(p, {});
+    const comic = b.comic;
+    comic.arts ||= {};
+    for (const [id, a] of Object.entries(old.arts || {})) if (comic.arts[id]) Object.assign(comic.arts[id], { versions: a.versions || [], selected: a.selected ?? null });
+    fs.mkdirSync(path.dirname(p), { recursive: true });
+    writeJSON(p, comic);
+    if (!old.pages && comic.pages?.length) logInbox(`${b.ep} — собран комикс: ${comic.pages.length} стр.`);
+    return { ok: true, arts: comic.arts };
+  },
+  'POST /api/comic/art': (q, b) => {
+    const p = comicPath(b.ep);
+    const comic = readJSON(p, { pages: [], arts: {} });
+    comic.arts ||= {};
+    const a = (comic.arts[b.id] ||= { versions: [], selected: null });
+    Object.assign(a, { prompt: b.prompt, characters: b.characters || [], fromShot: b.fromShot || null });
+    fs.mkdirSync(path.dirname(p), { recursive: true });
+    writeJSON(p, comic);
+    return a;
+  },
   'POST /api/preview': (q, b) => buildPrompt(b.ref, b.opts || {}),
   'POST /api/generate': (q, b) => {
     // refs: [ref] или [{ ref, opts }] — у каждого кадра может быть своя правка (перерисовка скопом)
@@ -791,6 +835,39 @@ const server = http.createServer(async (req, res) => {
       fs.writeFileSync(out, buf);
       logInbox(`Иллюстрация добавлена в библиотеку: ${rel(out)}`);
       return send(res, 200, { file: rel(out) });
+    }
+    if (key === 'POST /api/shrink') {
+      // уменьшенная браузером копия большой картинки: оригинал уезжает в «<репозиторий> — оригиналы» рядом с репозиторием
+      const relPath = url.searchParams.get('path') || '';
+      const src = abs(relPath);
+      if (!src.startsWith(ROOT + path.sep) || !fs.existsSync(src) || src.startsWith(STUDIO + path.sep)) throw new Error('Нельзя уменьшить этот файл');
+      const buf = await body(req);
+      const origRoot = path.join(path.dirname(ROOT), path.basename(ROOT) + ' — оригиналы');
+      const orig = path.join(origRoot, path.relative(ROOT, src));
+      fs.mkdirSync(path.dirname(orig), { recursive: true });
+      fs.copyFileSync(src, orig);
+      let out = src.replace(/\.\w+$/, '.jpg');
+      if (out !== src) for (let i = 2; fs.existsSync(out); i++) out = src.replace(/\.\w+$/, ` (${i}).jpg`);
+      fs.writeFileSync(out, buf);
+      if (out !== src) fs.rmSync(src);
+      // если картинка уже стоит референсом, переписываем ссылку
+      const from = rel(src), to = rel(out);
+      if (from !== to) for (const f of [path.join(DATA, 'project.json'), labPath, ...listEpisodes().map((e) => epPath(e.id))]) {
+        if (!fs.existsSync(f)) continue;
+        const t = fs.readFileSync(f, 'utf8');
+        if (t.includes(JSON.stringify(from).slice(1, -1))) fs.writeFileSync(f, t.split(JSON.stringify(from).slice(1, -1)).join(JSON.stringify(to).slice(1, -1)));
+      }
+      return send(res, 200, { file: to, orig });
+    }
+    if (key === 'POST /api/comic/export') {
+      // страница комикса, собранная в браузере; лежит в export/ и в Git не попадает
+      const ep = safe(url.searchParams.get('ep') || 'episode');
+      const name = safe(url.searchParams.get('name') || 'page');
+      const dir = path.join(EXPORT, ep, 'комикс');
+      fs.mkdirSync(dir, { recursive: true });
+      const out = path.join(dir, name + '.png');
+      await saveStream(req, out, 200e6);
+      return send(res, 200, { file: rel(out), dir: rel(dir) });
     }
     if (key === 'POST /api/montage/save') {
       // черновой монтаж серии, собранный в браузере; лежит в export/ и в Git не попадает

@@ -118,6 +118,8 @@ export function createGitSender(ROOT, logInbox = () => {}) {
       git: bin, branch, upstream, ahead: ahead.length, behind, unpushedBytes, bigUnpushed,
       changed: changed.length, changedBytes: changed.reduce((a, f) => a + f.size, 0),
       huge: changed.filter((f) => f.size > HUGE).map(({ path: p, size }) => ({ path: p, size })),
+      // большие картинки, которые студия может уменьшить (оригиналы уходят в папку рядом с репозиторием)
+      bigImages: changed.filter((f) => !f.deleted && f.size > 6 * MB && /\.(png|jpe?g|webp)$/i.test(f.path) && !f.path.startsWith('studio/')).map(({ path: p, size }) => ({ path: p, size })),
     };
   }
 

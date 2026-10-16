@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-18.2';
+const UI_VERSION = '2026-10-19.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -274,6 +274,10 @@ async function renderGit() {
       h('div', {}, 'Закоммичено, но не отправлено: ', h('b', {}, `${st.ahead} коммитов, ${mb(st.unpushedBytes)}`)),
       h('div', {}, 'Изменено, ещё не закоммичено: ', h('b', {}, `${st.changed} файлов, ${mb(st.changedBytes)}`)),
       st.behind ? h('div', { class: 'warn' }, `На GitHub есть ${st.behind} новых коммитов — сначала нажми Fetch/Pull в GitHub Desktop.`) : null,
+      st.bigImages?.length ? h('div', { class: 'bigimg' },
+        h('div', {}, h('b', {}, `Большие картинки: ${st.bigImages.length} шт., ${mb(st.bigImages.reduce((a, f) => a + f.size, 0))}. `),
+          'Каждая такая картинка навсегда утяжеляет репозиторий. Студия может уменьшить их до 2048 px (примерно 1–3 МБ каждая), а оригиналы сложит в папку «', h('b', {}, 'neurogomography — оригиналы'), '» рядом с репозиторием — там они в безопасности, но в GitHub не идут.'),
+        h('button', { class: 'primary', onclick: () => shrinkBig(st.bigImages) }, 'Уменьшить все и сохранить оригиналы')) : null,
       [...(st.bigUnpushed || []), ...(st.huge || [])].length ? h('div', { class: 'warn' }, 'Файлы больше 100 МБ (GitHub их не примет, студия спрячет их от Git): ',
         [...st.bigUnpushed, ...st.huge].map((f) => `${f.path} (${mb(f.size)})`).join(', ')) : null);
   main.replaceChildren(h('div', { class: 'gitpage' },
@@ -287,6 +291,20 @@ async function renderGit() {
     h('p', { class: 'muted' }, 'Пока идёт отправка, не нажимай ничего в GitHub Desktop. Если обрывается даже на 80 МБ — выбери 30.'),
     job.log?.length ? h('pre', { class: 'gitlog st-' + job.status }, job.log.join('\n')) : null));
   if (job.status === 'running') pollGit();
+}
+async function shrinkBig(list) {
+  let n = 0;
+  for (const f of list) {
+    try {
+      const blob = await (await fetch(fileUrl(f.path))).blob();
+      const small = await shrink(new File([blob], f.path.split('/').pop(), { type: blob.type }), 2048);
+      const r = await fetch('/api/shrink?path=' + encodeURIComponent(f.path), { method: 'POST', body: small }).then((x) => x.json());
+      if (r.error) throw new Error(r.error);
+      toast(`Уменьшаю: ${++n} из ${list.length}`, 60000);
+    } catch (e) { toast(`Не получилось с ${f.path}: ${e.message}`, 8000); }
+  }
+  toast(`Готово: уменьшено ${n} из ${list.length}. Оригиналы — в папке «… — оригиналы» рядом с репозиторием.`, 9000);
+  renderGit();
 }
 function pollGit() {
   clearTimeout(pollGit.t);
@@ -921,6 +939,7 @@ async function pollJobs(force) {
         toast(fails.length ? `Ошибка: ${fails.map((j) => j.label).join(', ')} — смотри «Очередь»` : `Готово: ${finished.map((j) => j.label).join(', ')}`, 5000);
       }
       render(true);
+      if (S.view === 'comic' && finished.some((j) => j.ref?.kind === 'comicart')) refreshArts();
       if (finished.some((j) => sameRef(j.ref, S.sel)) || force) {
         if (typing()) S.panelStale = true; else renderPanel();
       }
@@ -948,6 +967,7 @@ function render(keepScroll) {
   else if (S.view === 'lib') renderLib();
   else if (S.view === 'montage') renderMontage();
   else if (S.view === 'git') renderGit();
+  else if (S.view === 'comic') { if (!keepScroll || !CM.data) renderComic(); }
   if (keepScroll) window.scrollTo(0, y);
 }
 
@@ -1010,7 +1030,7 @@ window.addEventListener('beforeunload', () => { for (const f of Object.values(S.
 
 document.addEventListener('DOMContentLoaded', async () => {
   $('#tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.view = b.dataset.view; render(); window.scrollTo(0, 0); } });
-  $('#epSel').addEventListener('change', async (e) => { lsSet('ep', e.target.value); await loadEp(); closePanel(); });
+  $('#epSel').addEventListener('change', async (e) => { lsSet('ep', e.target.value); await loadEp(); CM.data = null; closePanel(); });
   $('#lightbox').addEventListener('click', () => $('#lightbox').classList.add('hidden'));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (!$('#lightbox').classList.contains('hidden')) $('#lightbox').classList.add('hidden'); else if (S.sel) closePanel(); } });
   fitPanel();
