@@ -1,6 +1,6 @@
 {
  "id": "2026-10-18-prigovor",
- "title": "Приговор отдельно от разлома: кадры 6.1–6.8 на поле без разлома",
+ "title": "Приговор отдельно от разлома (6.1–6.8 без разлома); прыжок Лиама ногами вперёд (3.9–4.1)",
  "ops": [
   {
    "op": "scene",
@@ -95,6 +95,46 @@
    "id": "6.9",
    "set": {
     "continuity": "FIRST appearance of the rift: the air tears open on frame-RIGHT above the battlefield, behind where Liam stands; black clouds overhead, red sun gone"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.9",
+   "set": {
+    "img": "[LIAM] dropping off a flying [RUKH] FEET FIRST, body upright, legs down, cloak and white hair whipping upward, high in the sky, only rust-red sky and white clouds behind him, ground not visible, PAL-DESERT, STYLE",
+    "continuity": "high in the air, far from the ground: Liam drops off his bird FEET FIRST (body upright, legs down), the bird above/behind him; only sky in the background, no ground; within a second he will lean forward into the pose of the attached reference",
+    "frame": "Лиам срывается со спины летящей птицы ногами вперёд и падает вниз; через секунду наклоняется вперёд, в позу с рефа «лиам прыгает». Высоко, за ним только небо.",
+    "vid": "he drops off the bird feet first and falls, within a second leaning forward into a flying pose, camera follows the fall, only sky around",
+    "refs": [
+     {
+      "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg",
+      "note": "this is his pose a SECOND LATER (shot 3.10); in this shot he still drops feet first — match only his look and the sky"
+     }
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.10",
+   "set": {
+    "img": "[LIAM] high in the sky a second later, body leaning forward almost horizontal, one arm flung forward right after hurling [LIAM SWORD] down, motion blur, speed lines, only red sky and clouds around, ground far below or not visible, STYLE",
+    "continuity": "about a second after the jump: Liam leans forward almost horizontal like in the reference «лиам прыгает» — arm thrown forward after the throw, legs trailing; only sky around, ground far below or out of frame",
+    "refs": [
+     {
+      "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg",
+      "note": "match this flying pose"
+     }
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.1",
+   "set": {
+    "continuity": "Liam lands FEET FIRST in a crouch on frame-RIGHT of the mound, one hand on the stones, cloak settling; his sword stands in the cracked stone near the Lord"
    }
   }
  ]
