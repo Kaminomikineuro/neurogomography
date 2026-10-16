@@ -140,10 +140,10 @@
    "name": "Бастиан Эльтар",
    "group": "Главные",
    "token": "Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, tall and rather large build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk military commander's armor and long cloak",
-   "sheetPrompt": "anime character model sheet of Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, adult man, tall and rather large powerful build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk commander's armor in dark red and black with a long cloak, no tattoo on the forehead, front view, side view, back view, back view on horseback, head close-ups: stern frown, rare warm smile, booming laugh, plain white background, labeled BASTIAN",
+   "sheetPrompt": "anime character model sheet of Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, adult man, tall and rather large powerful build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk commander's armor in dark red and black with a long cloak, no visible tattoo or marks on the face, front view, side view, back view, back view on horseback, head close-ups: stern frown, rare warm smile, booming laugh, plain white background, labeled BASTIAN",
    "versions": [],
    "selected": null,
-   "canon": "Т2 гл.2: «высоким и довольно крупным мужчиной с правильными резкими чертами и темными волосами, спадающими ниже плеч… хмурил густые черные брови». Дядя Лиама, младший брат Циана, главнокомандующий. Золотая татуировка Владыки на лбу появляется только после Т2 гл.2 — для неё будет отдельная карта «Бастиан-Владыка»."
+   "canon": "Т2 гл.2: «высоким и довольно крупным мужчиной с правильными резкими чертами и темными волосами, спадающими ниже плеч… хмурил густые черные брови». Дядя Лиама, младший брат Циана, главнокомандующий. Татуировка Владыки (с Т2 гл.2) спрятана — в кадре её не видно никогда (решение автора 16.10.2026)."
   },
   {
    "id": "RUKH",
@@ -508,13 +508,21 @@
    ],
    "unless": "no gore",
    "msg": "Модерация: добавь «anime stylized, no gore detail, bodies in shadow»."
+  },
+  {
+   "id": "bastian-tattoo",
+   "when": [
+    "\\[BASTIAN\\]|Bastian",
+    "tattoo|forehead mark"
+   ],
+   "unless": "no visible tattoo|hidden",
+   "msg": "Татуировка Бастиана спрятана — в кадре её не видно."
   }
  ],
  "questions": [
   "Глаза Повелителя: в главе «обсидиановые», в досье — «иссиня-чёрные, НЕ обсидиановые». Что берём для референса?",
   "Пульс Повелителя в 13.4: по канону его нет — сверить строку в главе.",
   "VO рассказчика («Он там», «Молодой Лорд летит на собственную смерть»…) — голосом Лиама или убрать?",
-  "Бастиан-Владыка (с Т2 гл.2): золотая татуировка на лбу — сделать вторую карту, когда дойдём до гл.2.",
   "Подземные хищники-воронки и зыбучие пески — берём в канон?"
  ]
 }
