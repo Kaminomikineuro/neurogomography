@@ -339,7 +339,7 @@
        "who": "ROY",
        "text": "Бастиан отбил западный удар. Потери — около сорока. Альянс отступает, но разведка говорит, что это отвлечение",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -367,7 +367,7 @@
        "who": "ARDAN",
        "text": "Потому что восток уже горит. Пока мы здесь стоим",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -417,14 +417,14 @@
        "who": "ARDAN",
        "text": "Нужно бросить туда все, что есть",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       },
       {
        "who": "ROY",
        "text": "Все, что есть",
        "mode": "lips",
        "manner": "без интонации",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -450,7 +450,7 @@
        "who": "BELFI",
        "text": "Ближайшие силы — штаб. Мои драйки",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -497,7 +497,7 @@
        "who": "LIAM",
        "text": "Я возьму первый отряд",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -526,7 +526,7 @@
        "who": "ARDAN",
        "text": "Это не ваше дело, Молодой Лорд… Вы не сможете…",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -555,7 +555,7 @@
        "who": "LIAM",
        "text": "Ваши люди нужны здесь",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -583,7 +583,7 @@
        "who": "LIAM",
        "text": "Рой, когда будут готовы птицы?",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       },
       {
        "who": "ROY",
@@ -595,7 +595,7 @@
        "who": "LIAM",
        "text": "Через двадцать минут я буду у ангара",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },
@@ -820,7 +820,7 @@
        "who": "LIAM",
        "text": "Забираете выживших и отходите к Бастиану!",
        "mode": "lips",
-       "src": "absent"
+       "src": "book"
       }
      ]
     },

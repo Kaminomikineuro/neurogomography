@@ -28,6 +28,10 @@ def book_match(text):
         return 'short', None  # «Да», «Ага», «Мало» — по книге не проверить, слишком коротко
     if n in nbook:
         return 'book', None
+    # реплику в книге часто разрывают авторские слова («— …, — сказал он. — …»): сверяем по предложениям
+    sents = [norm(x) for x in re.split(r'(?<=[.!?…])\s+', text) if len(norm(x)) > 2]
+    if sents and all(x in nbook for x in sents):
+        return 'book', None
     best, frag = 0, None
     for i in range(len(pieces)):
         for k in range(1, 5):
@@ -76,8 +80,7 @@ def parse(sound, chars):
 
 def main():
     rep = ['# Реплики серий 1–2 (Т2, гл. 1)', '',
-           'Сверка с `studio/canon/book/Т2-01 Это Грань.txt` (печатная версия из репозитория).',
-           '⚠ В этой версии «белое солнце» и нет сцены совета с репликами — похоже, раскадровка делалась по более новому тексту.', '',
+           'Сверка с `studio/canon/book/Т2-01 Это Грань.txt` — актуальный Том 2 (docx от автора, 16.10.2026).', '',
            'Режим: **губы** — герой в кадре говорит (нужен липсинк), **за кадром** — голос без губ, **VO** — мысли/рассказчик.', '',
            '| Кадр | с | Кто | Режим | Реплика | Длит. речи | Книга |', '|---|---|---|---|---|---|---|']
     for ep in ('s01e01', 's01e02'):
@@ -90,11 +93,15 @@ def main():
                     for l in s['lines']:
                         if (s['id'], l['who']) in OFFSCREEN and l['mode'] == 'lips':
                             l['mode'] = 'offscreen'
-                        if l['who'] != 'NARRATOR':
-                            src, frag = book_match(l['text'])
-                            l['src'] = src
-                            if frag:
-                                l['book'] = frag
+                # сверку с книгой обновляем всегда, кроме реплик, исправленных вручную
+                for l in s['lines']:
+                    if l['who'] == 'NARRATOR' or l.get('src') == 'edited':
+                        continue
+                    src, frag = book_match(l['text'])
+                    l['src'] = src
+                    l.pop('book', None)
+                    if frag:
+                        l['book'] = frag
                 for l in s['lines']:
                     secs = len(l['text']) / CPS
                     flag = ' ⚠' if l['mode'] == 'lips' and s.get('dur') and secs > s['dur'] else ''
