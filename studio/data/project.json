@@ -117,6 +117,14 @@
      "at": "2026-10-16 14:26:03",
      "by": "загружено вручную",
      "note": ""
+    },
+    {
+     "file": "studio/media/characters/DRAGON/v003.png",
+     "at": "2026-10-16 14:50:14",
+     "by": "codex",
+     "note": "Правка: нужно в стиле аниме - плоский, заливка чуть проще - классический современный аниме стиль, как и остальные референсы",
+     "style": "tv",
+     "prompt": "anime creature model sheet of a colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils, side view, front view, wings spread, head close-up, scale detail, human figure for scale, plain white background, labeled DRAGON, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION: edit the CURRENT VERSION image. Change only this: Правка: нужно в стиле аниме - плоский, заливка чуть проще - классический современный аниме стиль, как и остальные референсы. Keep everything else — composition, characters, palette and style — the same."
     }
    ],
    "selected": 0,
@@ -190,8 +198,17 @@
    "group": "Второстепенные",
    "token": "captain Roy, young drayk captain, uncertain and dutiful, plain drayk officer uniform",
    "sheetPrompt": "anime character model sheet of a young drayk captain, uncertain and dutiful expression, plain drayk officer uniform in dark red and brown, front, side, back views, two expressions, plain white background, labeled ROY",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/ROY/v001.png",
+     "at": "2026-10-16 14:52:53",
+     "by": "codex",
+     "note": "",
+     "style": "tv",
+     "prompt": "anime character model sheet of a young drayk captain, uncertain and dutiful expression, plain drayk officer uniform in dark red and brown, front, side, back views, two expressions, plain white background, labeled ROY, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+    }
+   ],
+   "selected": 0
   },
   {
    "id": "ARDAN",
