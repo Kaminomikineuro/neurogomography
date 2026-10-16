@@ -436,7 +436,9 @@ function serveFile(res, file) {
 
 function openInOS(p) {
   const cmd = process.platform === 'win32' ? 'explorer' : process.platform === 'darwin' ? 'open' : 'xdg-open';
-  spawn(cmd, [p], { detached: true, stdio: 'ignore' }).unref();
+  const c = spawn(cmd, [p], { detached: true, stdio: 'ignore' });
+  c.on('error', () => console.log('  Открой в браузере: ' + p));
+  c.unref();
 }
 
 const routes = {
