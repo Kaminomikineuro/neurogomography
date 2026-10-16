@@ -98,7 +98,7 @@ def parse_storyboard():
         if re.match(r'^## \d\. ', line) or line.startswith('# СЕРИЯ'):
             flush(); cur = None if not line.startswith('# СЕРИЯ') else cur
             continue
-        m = re.match(r'^\*\*(\d+\.\d+)\*\*(.*)$', line)
+        m = re.match(r'^\*\*(\d+\.\d+[a-z]?)\*\*(.*)$', line)
         if m and cur is not None:
             flush()
             sid, head = m.group(1), m.group(1) + m.group(2)
@@ -147,7 +147,7 @@ def merge(old, new):
             o = keep.get(s['id'])
             if not o:
                 continue
-            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs', 'videos', 'videoSelected', 'videoStatus', 'tool', 'dur'):
+            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs', 'videos', 'videoSelected', 'videoStatus', 'tool', 'cut', 'lines', 'linesFrom'):
                 if k in o:
                     s[k] = o[k]
     return new

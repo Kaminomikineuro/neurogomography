@@ -201,6 +201,8 @@ function videoPrompt(s, pr) {
   } else if (ls.length) {
     parts.push('No one speaks on screen in this shot (the voice is off-screen or inner thoughts) — keep all mouths closed.');
   }
+  const said = ls.filter((l) => !l.optional).reduce((a, l) => a + l.text.length / CPS, 0);
+  if (s.dur && said > s.dur + 0.3 && ls.length > 1) warnings.push(`Все реплики кадра вместе звучат ~${said.toFixed(1)} с, а кадр ${s.dur} с. Удлини кадр или перенеси часть реплики в соседний кадр (голос за кадром).`);
   for (const l of lips) {
     const secs = l.text.length / CPS;
     if (s.dur && secs > s.dur + 0.3) warnings.push(`Реплика «${l.text.slice(0, 40)}…» звучит ~${secs.toFixed(1)} с, а кадр ${s.dur} с — губы не успеют. Удлини кадр или сократи реплику.`);

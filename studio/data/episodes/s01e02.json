@@ -9,7 +9,7 @@
   {
    "n": 8,
    "title": "Спина к спине",
-   "dur": 62,
+   "dur": 105,
    "location": "battlefield-rift",
    "shots": [
     {
@@ -18,6 +18,7 @@
      "camera": "Восьмёрка",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "вопрос заставил Повелителя обернуться. Нечитаемый взгляд.",
      "sound": "Повелитель (пугающе серьёзно): «Знаешь, что это?» — Лиам: «Догадываюсь».",
      "img": "",
@@ -31,7 +32,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LORD",
@@ -46,7 +46,8 @@
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Повелитель (пугающе серьёзно): «Знаешь, что это?» — Лиам: «Догадываюсь»."
     },
     {
      "id": "8.2",
@@ -54,6 +55,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "мертвецы сплошной волной бросаются на двух живых.",
      "sound": "",
      "img": "",
@@ -64,8 +66,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "8.3",
@@ -73,8 +75,9 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
-     "frame": "Лиам отшатывается, срубает руки, отпинывает безногого мертвеца. Каждое движение отдаётся в боку.",
-     "sound": "Лиам: «В Эльтарионе… есть легенда! Как после смерти возлюбленной король пытался вернуть ее к жизни!»",
+     "optional": false,
+     "frame": "Лиам отшатывается, срубает руки, отпинывает безногого мертвеца. Каждое движение отдаётся в боку. Кричит сквозь сцепленные зубы.",
+     "sound": "Лиам: «В Эльтарионе… есть легенда!»",
      "img": "",
      "imgFrom": null,
      "vid": "he slashes away reaching hands and kicks a crawling figure, wincing at each move",
@@ -83,24 +86,54 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
-       "text": "В Эльтарионе… есть легенда! Как после смерти возлюбленной король пытался вернуть ее к жизни!",
+       "text": "В Эльтарионе… есть легенда!",
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам: «В Эльтарионе… есть легенда!»"
+    },
+    {
+     "id": "8.3a",
+     "dur": 5,
+     "camera": "Сверхкрупный",
+     "tool": "Pixverse",
+     "cut": false,
+     "optional": false,
+     "frame": "глаза Лиама крупно. В зрачках отражается чёрная пасть разлома, по краям мелькают силуэты мертвецов. Голос продолжает рассказ за кадром — легенда «оживает» в его взгляде.",
+     "sound": "Лиам (за кадром): «Как после смерти возлюбленной король пытался вернуть ее к жизни!»",
+     "img": "extreme close-up of [LIAM] violet-green eyes, the black maw of the rift reflected in his pupils, dark silhouettes flickering at the edges, frost on his lashes, white hair strands, PAL-RIFT, STYLE",
+     "imgFrom": null,
+     "vid": "static extreme close-up, the reflection of the rift pulses in his eyes, he narrows them, white hair whips across the frame",
+     "characters": [
+      "LIAM"
+     ],
+     "location": null,
+     "status": "todo",
+     "versions": [],
+     "selected": null,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Как после смерти возлюбленной король пытался вернуть ее к жизни!",
+       "mode": "offscreen",
+       "src": "book"
+      }
+     ],
+     "linesFrom": "Лиам (за кадром): «Как после смерти возлюбленной король пытался вернуть ее к жизни!»"
     },
     {
      "id": "8.4",
-     "dur": 4,
+     "dur": 8,
      "camera": "Вставка: страница книги Завета",
      "tool": "Pixverse",
      "cut": false,
-     "frame": "старинная иллюстрация — пасть разлома, король. Стиль старой рукописи, отличается от основного.",
-     "sound": "Лиам: «И открыл проход в мир мертвых! Проделал дыру в Грани! В книге Завета эта пасть выглядит точно так же!»",
+     "optional": false,
+     "frame": "старинная иллюстрация — пасть разлома, король. Стиль старой рукописи, отличается от основного. Долгая медленная панорама под рассказ.",
+     "sound": "Лиам (за кадром): «И открыл проход в мир мертвых! Проделал дыру в Грани! В книге Завета эта пасть выглядит точно так же!»",
      "img": "an ancient illuminated manuscript page, faded painting of a king before a giant black maw in the air, old pigments, cracked parchment, flat medieval illustration style",
      "imgFrom": null,
      "vid": "slow pan across the page, dust motes in light",
@@ -109,7 +142,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -117,7 +149,8 @@
        "mode": "offscreen",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам (за кадром): «И открыл проход в мир мертвых! Проделал дыру в Грани! В книге Завета эта пасть выглядит точно так же!»"
     },
     {
      "id": "8.5",
@@ -125,6 +158,7 @@
      "camera": "Вспышка",
      "tool": "",
      "cut": false,
+     "optional": true,
      "frame": "на долю секунды размытая чёрная пасть глазами ребёнка. Без деталей, без лиц. Работает на гл. 2.",
      "sound": "",
      "img": "",
@@ -135,8 +169,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": true,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "8.6",
@@ -144,6 +178,7 @@
      "camera": "Средний, сопровождение",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "Повелитель в центре мясорубки скользит между трупами, выверенными взмахами рубит по несколько за раз. Голос будничный.",
      "sound": "Повелитель (ровно): «И чем же закончилась легенда?»",
      "img": "",
@@ -156,7 +191,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LORD",
@@ -165,14 +199,16 @@
        "manner": "ровно",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Повелитель (ровно): «И чем же закончилась легенда?»"
     },
     {
      "id": "8.7",
-     "dur": 3,
+     "dur": 4,
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам засматривается на этот танец и едва не пропускает удар.",
      "sound": "VO Лиама: «Разве можно так красиво сражаться? Это нечестно».",
      "img": "",
@@ -183,7 +219,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -191,16 +226,18 @@
        "mode": "vo",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "VO Лиама: «Разве можно так красиво сражаться? Это нечестно»."
     },
     {
      "id": "8.8",
-     "dur": 4,
+     "dur": 6,
      "camera": "Вставка: книга Завета",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "вторая иллюстрация — из мира мёртвых выходит Бог Смерти.",
-     "sound": "Лиам: «Из мира мертвых вышел Бог Смерти. Сказал, что мертвым не место среди живых, а король нарушил законы мироздания. Если тот так хотел воссоединиться с возлюбленной, ему следовало отправиться к ней самому».",
+     "sound": "Лиам (за кадром): «Из мира мертвых вышел Бог Смерти. Сказал, что мертвым не место среди живых»",
      "img": "an ancient illuminated manuscript page, faded painting of a tall robed figure emerging from a black maw before a kneeling king, flat medieval illustration style",
      "imgFrom": null,
      "vid": "slow push-in on the robed figure",
@@ -209,15 +246,102 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
-       "text": "Из мира мертвых вышел Бог Смерти. Сказал, что мертвым не место среди живых, а король нарушил законы мироздания. Если тот так хотел воссоединиться с возлюбленной, ему следовало отправиться к ней самому",
+       "text": "Из мира мертвых вышел Бог Смерти. Сказал, что мертвым не место среди живых",
        "mode": "offscreen",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам (за кадром): «Из мира мертвых вышел Бог Смерти. Сказал, что мертвым не место среди живых»"
+    },
+    {
+     "id": "8.8a",
+     "dur": 3,
+     "camera": "Сверхкрупный",
+     "tool": "Pixverse",
+     "cut": false,
+     "optional": false,
+     "frame": "глаза Повелителя. Тот, кого называют Богом Смерти, слышит легенду о себе прямо посреди боя. В обсидиановых глазах на миг мелькает что-то нечитаемое — и тут же гаснет. Ключевой акцент сцены.",
+     "sound": "Лиам (за кадром): «а король нарушил законы мироздания».",
+     "img": "extreme close-up of [LORD] obsidian-black eyes in the middle of a fight, a barely readable flicker of recognition, strands of long black hair, dark figures blurred behind, PAL-RIFT, STYLE",
+     "imgFrom": null,
+     "vid": "static extreme close-up, the eyes narrow slightly for a moment, then return to cold calm, hair moves in the wind",
+     "characters": [
+      "LORD"
+     ],
+     "location": null,
+     "status": "todo",
+     "versions": [],
+     "selected": null,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "а король нарушил законы мироздания",
+       "mode": "offscreen",
+       "src": "book"
+      }
+     ],
+     "linesFrom": "Лиам (за кадром): «а король нарушил законы мироздания»."
+    },
+    {
+     "id": "8.8b",
+     "dur": 4,
+     "camera": "Крупный",
+     "tool": "Pixverse",
+     "cut": false,
+     "optional": false,
+     "frame": "Лиам с трудом отводит удар и договаривает сквозь сбитое дыхание.",
+     "sound": "Лиам: «Если тот так хотел воссоединиться с возлюбленной,»",
+     "img": "close-up of [LIAM] parrying a heavy blow with effort, breathing hard, speaking, frost in his hair, PAL-RIFT, STYLE",
+     "imgFrom": null,
+     "vid": "he blocks a strike, speaks between breaths, slight camera shake on impact",
+     "characters": [
+      "LIAM"
+     ],
+     "location": null,
+     "status": "todo",
+     "versions": [],
+     "selected": null,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Если тот так хотел воссоединиться с возлюбленной,",
+       "mode": "lips",
+       "src": "book"
+      }
+     ],
+     "linesFrom": "Лиам: «Если тот так хотел воссоединиться с возлюбленной,»"
+    },
+    {
+     "id": "8.8c",
+     "dur": 3,
+     "camera": "Крупный",
+     "tool": "Pixverse",
+     "cut": false,
+     "optional": false,
+     "frame": "Повелитель в профиль, не глядя рубит очередную фигуру. Одна бровь едва заметно ползёт вверх.",
+     "sound": "Лиам (за кадром): «ему следовало отправиться к ней самому».",
+     "img": "close-up of [LORD] in profile cutting through dark figures without looking, one eyebrow slightly raised, PAL-RIFT, STYLE",
+     "imgFrom": null,
+     "vid": "he swings his sword without turning his head, one eyebrow slowly rises",
+     "characters": [
+      "LORD"
+     ],
+     "location": null,
+     "status": "todo",
+     "versions": [],
+     "selected": null,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "ему следовало отправиться к ней самому",
+       "mode": "offscreen",
+       "src": "book"
+      }
+     ],
+     "linesFrom": "Лиам (за кадром): «ему следовало отправиться к ней самому»."
     },
     {
      "id": "8.9",
@@ -225,8 +349,9 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "Лиам уворачивается от ржавого копья, тяжело опирается на меч.",
-     "sound": "Лиам: «Но это всего лишь легенда! Вряд ли мы сейчас дождемся внезапного появления разгневанного боженьки, так что нам нужен план получше!»",
+     "sound": "Лиам: «Но это всего лишь легенда!»",
      "img": "",
      "imgFrom": null,
      "vid": "he dodges a rusty spear thrust and leans heavily on his sword, panting",
@@ -235,15 +360,73 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
-       "text": "Но это всего лишь легенда! Вряд ли мы сейчас дождемся внезапного появления разгневанного боженьки, так что нам нужен план получше!",
+       "text": "Но это всего лишь легенда!",
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам: «Но это всего лишь легенда!»"
+    },
+    {
+     "id": "8.9a",
+     "dur": 6,
+     "camera": "Крупный",
+     "tool": "Pixverse",
+     "cut": false,
+     "optional": false,
+     "frame": "Лиам, тяжело дыша, опирается на меч. Кривая усмешка — он шутит на грани сил.",
+     "sound": "Лиам: «Вряд ли мы сейчас дождемся внезапного появления разгневанного боженьки,»",
+     "img": "close-up of [LIAM] leaning on his sword, panting, a crooked sarcastic half-smile, sweat and frost on his face, PAL-RIFT, STYLE",
+     "imgFrom": null,
+     "vid": "he speaks between heavy breaths with a wry half-smile, shoulders rise and fall",
+     "characters": [
+      "LIAM"
+     ],
+     "location": null,
+     "status": "todo",
+     "versions": [],
+     "selected": null,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Вряд ли мы сейчас дождемся внезапного появления разгневанного боженьки,",
+       "mode": "lips",
+       "src": "book"
+      }
+     ],
+     "linesFrom": "Лиам: «Вряд ли мы сейчас дождемся внезапного появления разгневанного боженьки,»"
+    },
+    {
+     "id": "8.9b",
+     "dur": 3,
+     "camera": "Сверхкрупный",
+     "tool": "Pixverse",
+     "cut": false,
+     "optional": false,
+     "frame": "глаза Повелителя скользят к Лиаму — «разгневанный боженька» слышит, как о нём шутят. Сухая искра веселья.",
+     "sound": "Лиам (за кадром): «так что нам нужен план получше!»",
+     "img": "extreme close-up of [LORD] obsidian-black eyes glancing sideways at someone, a hint of dry amusement, PAL-RIFT, STYLE",
+     "imgFrom": null,
+     "vid": "the eyes slide sideways toward the speaker and hold, one slow blink",
+     "characters": [
+      "LORD"
+     ],
+     "location": null,
+     "status": "todo",
+     "versions": [],
+     "selected": null,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "так что нам нужен план получше!",
+       "mode": "offscreen",
+       "src": "book"
+      }
+     ],
+     "linesFrom": "Лиам (за кадром): «так что нам нужен план получше!»"
     },
     {
      "id": "8.10",
@@ -251,6 +434,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "",
      "sound": "Повелитель: «Мхм».",
      "img": "",
@@ -261,7 +445,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LORD",
@@ -269,7 +452,8 @@
        "mode": "lips",
        "src": "short"
       }
-     ]
+     ],
+     "linesFrom": "Повелитель: «Мхм»."
     },
     {
      "id": "8.11",
@@ -277,6 +461,7 @@
      "camera": "Облёт спина к спине",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "двое, ещё недавно враги, двигаются спина к спине, прикрывая слепые зоны.",
      "sound": "",
      "img": "",
@@ -290,8 +475,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "8.12",
@@ -299,6 +484,7 @@
      "camera": "Деталь",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам замечает: задержка перед движением, тяжёлый вдох, напряжённые пальцы на рукояти.",
      "sound": "",
      "img": "close-up of [LORD] hand gripping a black sword hilt, knuckles tense, STYLE",
@@ -311,8 +497,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "8.13",
@@ -320,6 +506,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "",
      "sound": "Повелитель (впервые жёстко): «Мне нужно добраться до разлома».",
      "img": "",
@@ -330,7 +517,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LORD",
@@ -339,14 +525,16 @@
        "manner": "впервые жёстко",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Повелитель (впервые жёстко): «Мне нужно добраться до разлома»."
     },
     {
      "id": "8.14",
-     "dur": 6,
+     "dur": 7,
      "camera": "Быстрая восьмёрка",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "",
      "sound": "Лиам: «Вы уже закрывали такие разломы?» — «Да». — «И сколько времени нужно на эту пасть?» — «Не больше семи минут».",
      "img": "",
@@ -360,7 +548,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -386,14 +573,16 @@
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам: «Вы уже закрывали такие разломы?» — «Да». — «И сколько времени нужно на эту пасть?» — «Не больше семи минут»."
     },
     {
      "id": "8.15",
-     "dur": 4,
+     "dur": 5,
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "",
      "sound": "Лиам: «Но даже если закрыть брешь, эти мертвецы никуда не денутся». — Повелитель: «Ага». Один взмах сносит три силуэта.",
      "img": "",
@@ -404,7 +593,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -418,14 +606,16 @@
        "mode": "lips",
        "src": "short"
       }
-     ]
+     ],
+     "linesFrom": "Лиам: «Но даже если закрыть брешь, эти мертвецы никуда не денутся». — Повелитель: «Ага». Один взмах сносит три силуэта."
     },
     {
      "id": "8.16",
-     "dur": 3,
+     "dur": 4,
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "",
      "sound": "Лиам: «Тогда почему бы нам не загнать их всех обратно?»",
      "img": "",
@@ -436,7 +626,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -444,7 +633,8 @@
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам: «Тогда почему бы нам не загнать их всех обратно?»"
     },
     {
      "id": "8.17",
@@ -452,6 +642,7 @@
      "camera": "Сверхкрупный двойной",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "тихий смешок прямо над ухом. Они спина к спине, плечи касаются.",
      "sound": "Повелитель: «И как ты собираешься это сделать, чертенок?»",
      "img": "extreme close two-shot, [LORD] speaking near [LIAM] ear, shoulders touching, back to back, PAL-RIFT, STYLE",
@@ -465,7 +656,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LORD",
@@ -473,7 +663,8 @@
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Повелитель: «И как ты собираешься это сделать, чертенок?»"
     },
     {
      "id": "8.18",
@@ -481,6 +672,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам бросает взгляд на профиль мужчины.",
      "sound": "Лиам: «Прошу меня простить».",
      "img": "",
@@ -491,7 +683,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -499,7 +690,8 @@
        "mode": "lips",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Лиам: «Прошу меня простить»."
     },
     {
      "id": "8.19",
@@ -507,6 +699,7 @@
      "camera": "Замедление в верхней точке",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "Лиам хватает его за плечо и отталкивается от руки, как от трамплина. Повелитель лишь поднимает бровь.",
      "sound": "",
      "img": "[LIAM] vaulting high into the air off [LORD] arm and shoulder, Lord raising one eyebrow, PAL-RIFT, STYLE",
@@ -520,8 +713,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "8.20",
@@ -529,6 +722,7 @@
      "camera": "Общий",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "клинок Повелителя чёрной молнией по кругу отсекает руки, потянувшиеся следом.",
      "sound": "",
      "img": "",
@@ -539,8 +733,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "8.21",
@@ -548,6 +742,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "Лиам тяжело приземляется на высокий плоский валун.",
      "sound": "глухой стон.",
      "img": "",
@@ -558,15 +753,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "глухой стон."
     }
    ]
   },
   {
    "n": 9,
    "title": "Приказ Лорда",
-   "dur": 40,
+   "dur": 39,
    "location": "battlefield-rift",
    "shots": [
     {
@@ -575,6 +770,7 @@
      "camera": "Взгляд с валуна, сверхобщий",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "внизу копошится море мёртвых. Их тысячи.",
      "sound": "",
      "img": "high POV from a boulder over a sea of dark moving figures stretching to the black rift, PAL-RIFT, STYLE",
@@ -585,8 +781,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.2",
@@ -594,6 +790,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам закрывает глаза, сглатывает кровь, выравнивает дыхание.",
      "sound": "",
      "img": "close-up of [LIAM] with eyes closed, a trace of silver blood at the lip, steadying his breath, PAL-RIFT, STYLE",
@@ -606,8 +803,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.3",
@@ -615,6 +812,7 @@
      "camera": "Сверхкрупный",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "веки поднимаются. **Правая** радужка вспыхивает пульсирующим фиолетовым.",
      "sound": "начало песни.",
      "img": "extreme close-up of [LIAM] face, right iris glowing bright pulsing violet, left eye normal, PAL-RIFT, STYLE",
@@ -627,8 +825,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "начало песни."
     },
     {
      "id": "9.4",
@@ -636,6 +834,7 @@
      "camera": "Средний, медленный наезд",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "Лиам поёт — глубокая, вибрирующая песня.",
      "sound": "",
      "img": "",
@@ -648,8 +847,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.5",
@@ -657,6 +856,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "мертвецы замирают и все как один со скрипом поворачивают головы к валуну.",
      "sound": "",
      "img": "",
@@ -667,8 +867,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.6",
@@ -676,6 +876,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": true,
      "frame": "Лиам перебирает тональность и находит отклик — по воздуху проходит волна.",
      "sound": "",
      "img": "",
@@ -686,8 +887,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": true,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.7",
@@ -695,6 +896,7 @@
      "camera": "Сверхобщий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "трупы, как завороженные лунатики, бредут к разлому. Сталкиваются, падают, поднимаются.",
      "sound": "",
      "img": "",
@@ -705,8 +907,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.8",
@@ -714,6 +916,7 @@
      "camera": "Общий у разлома",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "пасть похожа на чернильное болото. Мертвецы делают пару шагов и бесшумно тонут.",
      "sound": "",
      "img": "a black rift at ground level like a thick ink swamp, silhouettes stepping in and sinking silently, PAL-RIFT, STYLE",
@@ -724,8 +927,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.9",
@@ -733,6 +936,7 @@
      "camera": "Крупный, медленный наезд",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "**ключевой кадр серии.** Повелитель смотрит из-под полуопущенных ресниц только на Лиама — не на мертвецов, не на разлом.",
      "sound": "",
      "img": "close-up of [LORD] watching from under half-lowered lashes, gaze fixed on someone above, violet light reflected on his face, PAL-RIFT, STYLE",
@@ -745,8 +949,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.10",
@@ -754,6 +958,7 @@
      "camera": "Средний",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "последние фигуры уходят в темноту. Лиам обрывает песню, шатается, опирается на меч.",
      "sound": "",
      "img": "",
@@ -764,8 +969,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "9.11",
@@ -773,6 +978,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Повелитель резко моргает и встряхивает головой, сбрасывая невидимую паутину.",
      "sound": "",
      "img": "",
@@ -783,15 +989,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     }
    ]
   },
   {
    "n": 10,
    "title": "Чёрный дракон",
-   "dur": 42,
+   "dur": 43,
    "location": "battlefield-rift",
    "shots": [
     {
@@ -800,6 +1006,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "в несколько неуловимых движений он у самого края расщелины.",
      "sound": "",
      "img": "",
@@ -810,8 +1017,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.2",
@@ -819,6 +1026,7 @@
      "camera": "Деталь",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "чёрный клинок рассыпается дымом.",
      "sound": "",
      "img": "",
@@ -829,8 +1037,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.3",
@@ -838,6 +1046,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "тело растворяется, брызгая густым чёрным туманом. Тьма разрастается, застилая горизонт.",
      "sound": "",
      "img": "",
@@ -848,8 +1057,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.4",
@@ -857,6 +1066,7 @@
      "camera": "Нижний ракурс, раскрытие",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "туман сгущается в колоссального крылатого дракона на четырёх лапах.",
      "sound": "низкий рокот.",
      "img": "low angle reveal of [DRAGON] condensing from black mist, wings covering half the sky, PAL-RIFT, STYLE",
@@ -869,8 +1079,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "низкий рокот."
     },
     {
      "id": "10.5",
@@ -878,6 +1088,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам забывает про боль и затаивает дыхание.",
      "sound": "",
      "img": "",
@@ -888,8 +1099,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.6",
@@ -897,6 +1108,7 @@
      "camera": "Деталь",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "чешуя поглощает свет и местами растворяется в тумане.",
      "sound": "",
      "img": "extreme close-up of black dragon scales absorbing light, edges dissolving into mist, STYLE",
@@ -907,8 +1119,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.7",
@@ -916,6 +1128,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "дракон вонзает туманные когти в саму ткань пространства. Чернота натягивается, будто живая.",
      "sound": "",
      "img": "",
@@ -928,8 +1141,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.8",
@@ -937,6 +1150,7 @@
      "camera": "Общий, тряска",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "рёв поднимает песок стеной, камни трескаются, остатки стен поста осыпаются. Лиам пригибается, закрывает лицо.",
      "sound": "рёв дракона.",
      "img": "",
@@ -947,8 +1161,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "рёв дракона."
     },
     {
      "id": "10.9",
@@ -956,6 +1170,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "из разлома выплёскивается волна ледяного мрака и бьёт дракона в грудь, он отступает на полшага.",
      "sound": "",
      "img": "",
@@ -966,8 +1181,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.10",
@@ -975,6 +1190,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": true,
      "frame": "Лиам хмурится, глядя туда, где только что лежали тела. Здесь трупов было гораздо больше, чем нужно для такой дыры.",
      "sound": "",
      "img": "",
@@ -985,8 +1201,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": true,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.11",
@@ -994,6 +1210,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "края бреши сходятся.",
      "sound": "",
      "img": "",
@@ -1004,8 +1221,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "10.12",
@@ -1013,6 +1230,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "поток чёрного пламени спаивает края пространства.",
      "sound": "тяжёлый хтонический выдох.",
      "img": "[DRAGON] exhaling a stream of black fire onto a closing seam in the air, PAL-RIFT, STYLE",
@@ -1025,8 +1243,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "тяжёлый хтонический выдох."
     },
     {
      "id": "10.13",
@@ -1034,6 +1252,7 @@
      "camera": "Общий, статика",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "тишина. Голова опущена, крылья бессильно лежат на земле. Каждый выдох поднимает красную пыль. Тучи расходятся, снова красное солнце.",
      "sound": "только хриплое дыхание зверя.",
      "img": "[DRAGON] lying exhausted on red sand, head lowered, wings limp on the ground, clouds parting, red sun returning, PAL-DESERT, STYLE",
@@ -1046,15 +1265,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "только хриплое дыхание зверя."
     }
    ]
   },
   {
    "n": 11,
    "title": "Взгляд и обморок",
-   "dur": 45,
+   "dur": 42,
    "location": "battlefield",
    "shots": [
     {
@@ -1063,6 +1282,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "опираясь на меч, Лиам осторожно шагает ближе и обходит огромную лапу.",
      "sound": "",
      "img": "",
@@ -1073,8 +1293,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "11.2",
@@ -1082,6 +1302,7 @@
      "camera": "Крупный",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "дракон опускает голову. Два гигантских жёлтых глаза, зрачки сужаются.",
      "sound": "",
      "img": "huge yellow dragon eye with a vertical pupil narrowing, a tiny white-haired figure reflected in it, STYLE",
@@ -1092,8 +1313,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "11.3",
@@ -1101,6 +1322,7 @@
      "camera": "Восьмёрка с паузами",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "смотрят друг на друга. Один — с подозрением загнанного зверя, другой — с неуместным восхищением.",
      "sound": "",
      "img": "",
@@ -1113,8 +1335,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "11.4",
@@ -1122,6 +1344,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "туман с шипением сжимается, на песке снова человек. Стоит ровно, по бледному подбородку течёт **тёмно-бордовая** кровь, пальцы едва держат рукоять.",
      "sound": "шипение.",
      "img": "[LORD] standing rigidly on red sand after transforming back, dark burgundy blood running down his pale chin, hand barely holding [LORD SWORD], PAL-DESERT, STYLE",
@@ -1135,8 +1358,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "шипение."
     },
     {
      "id": "11.5",
@@ -1144,6 +1367,7 @@
      "camera": "Деталь → крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "рука Лиама на рукояти меча. Не поднимается.",
      "sound": "VO (из нарратива, на усмотрение): «Бастиан бы так и поступил».",
      "img": "",
@@ -1154,7 +1378,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "NARRATOR",
@@ -1162,7 +1385,8 @@
        "mode": "vo",
        "optional": true
       }
-     ]
+     ],
+     "linesFrom": "VO (из нарратива, на усмотрение): «Бастиан бы так и поступил»."
     },
     {
      "id": "11.6",
@@ -1170,6 +1394,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "Повелитель пошатывается и заваливается набок. Лиам рывком подхватывает его под руку.",
      "sound": "",
      "img": "",
@@ -1180,8 +1405,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "11.7",
@@ -1189,6 +1414,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "мутные приоткрытые глаза.",
      "sound": "Повелитель (шёпотом, с недоумением): «Что ты творишь?..»",
      "img": "",
@@ -1199,7 +1425,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LORD",
@@ -1208,14 +1433,16 @@
        "manner": "шёпотом, с недоумением",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "Повелитель (шёпотом, с недоумением): «Что ты творишь?..»"
     },
     {
      "id": "11.8",
-     "dur": 3,
+     "dur": 4,
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "",
      "sound": "VO Лиама: «Все настолько плохо?» … «И что мне теперь с ним делать?»",
      "img": "",
@@ -1226,7 +1453,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -1240,7 +1466,8 @@
        "mode": "vo",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "VO Лиама: «Все настолько плохо?» … «И что мне теперь с ним делать?»"
     },
     {
      "id": "11.9",
@@ -1248,6 +1475,7 @@
      "camera": "Общий",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "на горизонте пыль, топот лошадей.",
      "sound": "",
      "img": "",
@@ -1258,8 +1486,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "11.10",
@@ -1267,6 +1495,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам смотрит на бледное лицо мужчины.",
      "sound": "VO Лиама: «Да чтоб тебя!..» Затем короткий пронзительный свист.",
      "img": "",
@@ -1277,7 +1506,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -1285,7 +1513,8 @@
        "mode": "vo",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "VO Лиама: «Да чтоб тебя!..» Затем короткий пронзительный свист."
     },
     {
      "id": "11.11",
@@ -1293,6 +1522,7 @@
      "camera": "Общий",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "с неба пикирует птица Рух.",
      "sound": "",
      "img": "",
@@ -1305,8 +1535,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "11.12",
@@ -1314,6 +1544,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "Лиам затаскивает бесчувственного дракона в седло, запрыгивает следом, птица уходит в облака.",
      "sound": "",
      "img": "",
@@ -1324,8 +1555,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     }
    ]
   },
@@ -1341,6 +1572,7 @@
      "camera": "Общий",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "войско драйков во главе с Бастианом врывается на площадь. Бастиан — со спины или силуэтом.",
      "sound": "",
      "img": "",
@@ -1353,9 +1585,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "note": "Бастиан в этой сцене только со спины или силуэтом — лицо не показываем. Лист персонажа — для фигуры, волос, доспеха и плаща.",
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "12.2",
@@ -1363,6 +1594,7 @@
      "camera": "Сверхобщий, статика",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "бескрайняя каменная равнина, пропитанная бурой и серебряной кровью. Ни одного трупа. Неправильная пустота.",
      "sound": "",
      "img": "extreme wide shot of an endless empty red stone plain stained brown and silver, not a single body, eerie emptiness, PAL-DESERT, STYLE",
@@ -1373,8 +1605,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "12.3",
@@ -1382,6 +1614,7 @@
      "camera": "Средний",
      "tool": "Pixverse",
      "cut": false,
+     "optional": true,
      "frame": "Бастиан со спины, неподвижен.",
      "sound": "",
      "img": "",
@@ -1394,9 +1627,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "note": "Бастиан в этой сцене только со спины или силуэтом — лицо не показываем. Лист персонажа — для фигуры, волос, доспеха и плаща.",
-     "optional": true,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     }
    ]
   },
@@ -1412,6 +1644,7 @@
      "camera": "Общий, воздух",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "птица пересекает границу красных песков, впереди скалы и густой лес. Палитра переходит из красной в зелёную.",
      "sound": "",
      "img": "aerial wide shot, a [RUKH] flying from red desert toward cliffs with a dense green forest beyond, color shifting from red to green, STYLE",
@@ -1424,8 +1657,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.2",
@@ -1433,6 +1666,7 @@
      "camera": "Общий",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "птица мягко садится в тенистой чаще у прохладного озера.",
      "sound": "",
      "img": "a shady forest clearing by a cool lake, a [RUKH] landing softly, PAL-FOREST, STYLE",
@@ -1445,8 +1679,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.3",
@@ -1454,6 +1688,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "Лиам соскальзывает на землю и едва удерживается на ногах.",
      "sound": "",
      "img": "",
@@ -1464,8 +1699,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.4",
@@ -1473,6 +1708,7 @@
      "camera": "Средний",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "стаскивает Повелителя, прислоняет к широкому стволу, прижимает пальцы к его шее. *(см. флаг №1 в конце)*",
      "sound": "",
      "img": "[LIAM] kneeling beside [LORD] who sits unconscious against a wide tree trunk, Liam's fingers at his neck, PAL-FOREST, STYLE",
@@ -1486,8 +1722,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.5",
@@ -1495,6 +1731,7 @@
      "camera": "Абстрактная вставка",
      "tool": "Seedance",
      "cut": false,
+     "optional": false,
      "frame": "взгляд внутрь тела энергией: никаких меридианов, огромные хаотичные потоки сталкиваются и закручиваются, как буря.",
      "sound": "",
      "img": "abstract inner view of a body's energy, no channels, huge chaotic dark currents colliding and swirling like a storm, glowing, STYLE",
@@ -1505,8 +1742,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.6",
@@ -1514,6 +1751,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам вздрагивает от потрясения.",
      "sound": "",
      "img": "",
@@ -1524,8 +1762,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.7",
@@ -1533,6 +1771,7 @@
      "camera": "Средний, прошло время",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "тени сдвинулись (полчаса). Лиам вливает ци, лоб в испарине, свечение потоков немного успокаивается.",
      "sound": "",
      "img": "",
@@ -1543,8 +1782,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.8",
@@ -1552,6 +1791,7 @@
      "camera": "Средний",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам обессиленно откидывается спиной на соседнее дерево.",
      "sound": "",
      "img": "",
@@ -1562,15 +1802,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.9",
-     "dur": 5,
+     "dur": 6,
      "camera": "Крупный, долгий план",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "лицо Повелителя без сознания. Нет давящей ауры, напряжение между бровями разгладилось. Мягкий свет сквозь листву.",
      "sound": "VO (из нарратива, на усмотрение): «Просто молодой мужчина, который слишком долго делал вид, что ему не больно».",
      "img": "close-up of [LORD] asleep against a tree, peaceful face, smooth brow, dappled light through leaves, a dried trace of blood at the chin, PAL-FOREST, STYLE",
@@ -1583,7 +1824,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "NARRATOR",
@@ -1591,7 +1831,8 @@
        "mode": "vo",
        "optional": true
       }
-     ]
+     ],
+     "linesFrom": "VO (из нарратива, на усмотрение): «Просто молодой мужчина, который слишком долго делал вид, что ему не больно»."
     },
     {
      "id": "13.10",
@@ -1599,6 +1840,7 @@
      "camera": "Средний",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам кладёт меч Повелителя так, чтобы тот сразу увидел его, проснувшись.",
      "sound": "",
      "img": "",
@@ -1609,8 +1851,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.11",
@@ -1618,6 +1860,7 @@
      "camera": "Общий",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "по периметру поляны встаёт плотный защитный барьер.",
      "sound": "",
      "img": "",
@@ -1628,8 +1871,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.12",
@@ -1637,6 +1880,7 @@
      "camera": "Крупный",
      "tool": "Kling",
      "cut": false,
+     "optional": false,
      "frame": "Лиам медлит. На кончиках пальцев сгусток тёмной энергии, из него соткан кривоватый, угловатый дракончик размером с кошку.",
      "sound": "",
      "img": "close-up of [LIAM] fingertips weaving a small crooked angular dragon out of dark energy, cat-sized, PAL-FOREST, STYLE",
@@ -1649,8 +1893,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.13",
@@ -1658,6 +1902,7 @@
      "camera": "Средний",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "дракончик спрыгивает, забирается Повелителю на колени, сворачивается клубком — серьёзный страж.",
      "sound": "",
      "img": "a small black energy dragon curled up on the lap of the sleeping [LORD], alert like a guard, PAL-FOREST, STYLE",
@@ -1670,8 +1915,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": ""
     },
     {
      "id": "13.14",
@@ -1679,6 +1924,7 @@
      "camera": "Крупный",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам смотрит на эту картину на секунду дольше, чем следовало.",
      "sound": "VO Лиама: «Ну и что это было?..»",
      "img": "",
@@ -1689,7 +1935,6 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
      "lines": [
       {
        "who": "LIAM",
@@ -1697,7 +1942,8 @@
        "mode": "vo",
        "src": "book"
       }
-     ]
+     ],
+     "linesFrom": "VO Лиама: «Ну и что это было?..»"
     },
     {
      "id": "13.15",
@@ -1705,6 +1951,7 @@
      "camera": "Общий",
      "tool": "Pixverse",
      "cut": false,
+     "optional": false,
      "frame": "Лиам хромает к птице. Затемнение.",
      "sound": "лес, озеро. Финальная музыка.",
      "img": "",
@@ -1715,8 +1962,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false,
-     "lines": []
+     "lines": [],
+     "linesFrom": "лес, озеро. Финальная музыка."
     }
    ]
   }

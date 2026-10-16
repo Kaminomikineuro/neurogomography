@@ -68,6 +68,9 @@ def parse(sound, chars):
             others = [c for c in chars if c in NAMES.values() and c != prev]
             who, mode = (others[0] if others else prev), 'lips'
         manner = re.search(r'\(([^)]*)\)', who_raw)
+        if manner and 'за кадром' in manner.group(1):
+            mode = 'offscreen'
+            manner = None
         line = {'who': who, 'text': text, 'mode': mode}
         if manner and not who_raw.startswith('VO'):
             line['manner'] = manner.group(1)
@@ -88,7 +91,11 @@ def main():
         e = json.load(open(p, encoding='utf-8'))
         for sc in e['scenes']:
             for s in sc['shots']:
+                # «Звук» в раскадровке поменялся, а руками реплики не правили — разбираем заново
+                if 'lines' in s and s.get('linesFrom') != s.get('sound') and not any(l.get('src') == 'edited' for l in s['lines']):
+                    del s['lines']
                 if 'lines' not in s:
+                    s['linesFrom'] = s.get('sound')
                     s['lines'] = parse(s.get('sound') or '', s.get('characters') or [])
                     for l in s['lines']:
                         if (s['id'], l['who']) in OFFSCREEN and l['mode'] == 'lips':
