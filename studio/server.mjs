@@ -15,6 +15,8 @@ const MEDIA = path.join(STUDIO, 'media');
 const QUEUE = path.join(STUDIO, 'queue');
 const EXPORT = path.join(STUDIO, 'export');
 const INBOX = path.join(STUDIO, 'inbox.md');
+const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги');
+const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
@@ -123,11 +125,15 @@ function buildPrompt(ref, opts = {}) {
     }
     charIds = s.characters || [];
     locId = s.location || scene?.location;
+    for (const r of s.refs || []) addRef(r.file, `reference illustration for this shot${r.note ? ' (' + r.note + ')' : ''} — follow its composition and mood, redraw in the requested style`);
   } else if (ref.kind === 'character') {
     raw = item.sheetPrompt || `anime character model sheet of ${item.token}, front, side and back views, expressions, plain white background, labeled ${item.id}`;
     raw += ', STYLE';
+    for (const r of item.refs || []) addRef(r.file, `book illustration of ${charName(item)}${r.note ? ' (' + r.note + ')' : ''} — follow this design: face, hair, costume and colors. Redraw it as a clean model sheet, do not copy the composition`);
+    if (item.refs?.length) raw += '. Base the character design on the attached book illustrations';
   } else if (ref.kind === 'location') {
     raw = `wide establishing background plate, ${item.prompt}, ${item.palette || ''}, empty scene without characters, STYLE`;
+    for (const r of item.refs || []) addRef(r.file, `book illustration of this place${r.note ? ' (' + r.note + ')' : ''} — follow its architecture and mood`);
     if (item.id !== 'desert') addRef(selectedFile(locs.desert), 'world style reference — match its painting style, color and level of detail (not its content)');
   }
 
@@ -150,8 +156,11 @@ function buildPrompt(ref, opts = {}) {
     if (!c) continue;
     const f = selectedFile(c);
     addRef(f, `character sheet: ${charName(c)} — match face, hair, outfit and proportions exactly`);
-    cl.push(`- ${charName(c)}: ${c.token}${f ? ' (see reference sheet)' : ''}`);
-    if (!f) warnings.push(`Нет листа персонажа «${c.name}» — внешность может «поплыть». Сначала сделай его во вкладке «Персонажи».`);
+    const ill = !f && c.refs?.[0]?.file;
+    if (ill) addRef(ill, `book illustration of ${charName(c)} — match appearance`);
+    cl.push(`- ${charName(c)}: ${c.token}${f || ill ? ' (see reference)' : ''}`);
+    if (ill) warnings.push(`У «${c.name}» нет листа персонажа — пока беру иллюстрацию книги. Лист даст результат стабильнее.`);
+    else if (!f) warnings.push(`Нет листа персонажа «${c.name}» — внешность может «поплыть». Сначала сделай его во вкладке «Персонажи».`);
   }
   if (cl.length) lines.push('Characters:\n' + cl.join('\n'));
   if (loc && !selectedFile(loc)) warnings.push(`Нет референса локации «${loc.name}». Сначала сделай фон во вкладке «Локации».`);
@@ -465,7 +474,7 @@ const routes = {
   },
   'POST /api/update': (q, b) => {
     const o = open(b.ref);
-    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name'];
+    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs'];
     for (const [k, v] of Object.entries(b.patch || {})) if (allowed.includes(k)) o.item[k] = v;
     o.save();
     if (b.patch?.status === 'approved') logInbox(`${label(b.ref)} — утверждён (${path.basename(selectedFile(o.item) || '')})`);
@@ -492,6 +501,19 @@ const routes = {
     return b.item;
   },
   'POST /api/export': (q, b) => exportEpisode(b.ep),
+  'GET /api/library': () => {
+    // все картинки, которые можно взять референсом: иллюстрации книги + материалы аниме
+    const out = [];
+    const walk = (d) => {
+      for (const e of fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true }) : []) {
+        const p = path.join(d, e.name);
+        if (e.isDirectory()) walk(p);
+        else if (IMG_RX.test(e.name)) out.push({ file: rel(p), folder: rel(d).replace(/^Аниме\//, ''), size: fs.statSync(p).size });
+      }
+    };
+    walk(path.join(ROOT, 'Аниме'));
+    return out;
+  },
   'POST /api/open': (q, b) => { const p = abs(b.path); if (!p.startsWith(ROOT)) throw new Error('Нельзя'); openInOS(p); return { ok: true }; },
   'GET /api/check': () => new Promise((resolve) => {
     const cfg = config();
@@ -508,6 +530,17 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://x');
     const key = `${req.method} ${url.pathname}`;
+    if (key === 'POST /api/library/upload') {
+      // иллюстрация из книги: браузер уже уменьшил её, сервер только сохраняет
+      const name = path.basename(url.searchParams.get('name') || 'illustration.jpg').replace(/[\\/:*?"<>|]/g, '_');
+      const buf = await body(req);
+      fs.mkdirSync(LIBRARY, { recursive: true });
+      let out = path.join(LIBRARY, name);
+      for (let i = 2; fs.existsSync(out); i++) out = path.join(LIBRARY, name.replace(/(\.\w+)$/, ` (${i})$1`));
+      fs.writeFileSync(out, buf);
+      logInbox(`Иллюстрация добавлена в библиотеку: ${rel(out)}`);
+      return send(res, 200, { file: rel(out) });
+    }
     if (key === 'POST /api/upload') {
       const ref = JSON.parse(url.searchParams.get('ref'));
       const type = req.headers['content-type'] || '';

@@ -147,7 +147,7 @@ def merge(old, new):
             o = keep.get(s['id'])
             if not o:
                 continue
-            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked'):
+            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs'):
                 if k in o:
                     s[k] = o[k]
     return new

@@ -242,6 +242,95 @@ function renderQueue() {
 }
 
 // ---------- канон ----------
+// ---------- иллюстрации книги ----------
+// Иллюстрации на Диске весят 20–100+ МБ. Браузер уменьшает их до 2048 px,
+// чтобы они влезли в GitHub и быстро уходили художнику.
+async function shrink(file, max = 2048) {
+  const bmp = await createImageBitmap(file);
+  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  if (k === 1 && file.size < 6e6) return file;
+  const c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * k);
+  c.height = Math.round(bmp.height * k);
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, c.width, c.height);
+  ctx.drawImage(bmp, 0, 0, c.width, c.height);
+  const blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.9));
+  return new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
+}
+async function addToLibrary(files) {
+  const out = [];
+  const list = [...files].filter((f) => f.type.startsWith('image/'));
+  for (let i = 0; i < list.length; i++) {
+    toast(`Уменьшаю и сохраняю ${i + 1} из ${list.length}: ${list[i].name}`, 60000);
+    try {
+      const small = await shrink(list[i]);
+      const r = await fetch('/api/library/upload?name=' + encodeURIComponent(small.name), { method: 'POST', headers: { 'Content-Type': small.type }, body: small });
+      out.push((await r.json()).file);
+    } catch (e) { toast('Не получилось: ' + list[i].name + ' — ' + e.message, 6000); }
+  }
+  S.library = null;
+  toast(`Готово: ${out.length} в «Аниме/Иллюстрации книги». Не забудь Commit → Push в GitHub Desktop.`, 6000);
+  return out;
+}
+async function library() {
+  S.library ||= await GET('/api/library');
+  return S.library;
+}
+function dropZone(text, onFiles) {
+  const input = h('input', { type: 'file', accept: 'image/*', multiple: true, style: { display: 'none' }, onchange: (e) => onFiles(e.target.files) });
+  const z = h('div', { class: 'dropzone', onclick: () => input.click() }, text, input);
+  z.addEventListener('dragover', (e) => { e.preventDefault(); z.classList.add('drag'); });
+  z.addEventListener('dragleave', () => z.classList.remove('drag'));
+  z.addEventListener('drop', (e) => { e.preventDefault(); z.classList.remove('drag'); onFiles(e.dataTransfer.files); });
+  return z;
+}
+function zoom(file) { $('#lightbox img').src = fileUrl(file); $('#lightbox').classList.remove('hidden'); }
+async function renderLib() {
+  const lib = await library();
+  const groups = {};
+  for (const x of lib) (groups[x.folder] ||= []).push(x);
+  const order = Object.keys(groups).sort((a, b) => (b === 'Иллюстрации книги') - (a === 'Иллюстрации книги') || a.localeCompare(b));
+  $('#main').replaceChildren(h('div', {},
+    dropZone(h('div', {}, h('b', {}, 'Перетащи сюда иллюстрации из Google Диска'), h('div', { class: 'muted' }, 'Можно много сразу. Студия уменьшит их до 2048 px и положит в «Аниме/Иллюстрации книги». Потом привяжи нужные к персонажу или локации: открой карточку → «Референсы».')),
+      async (files) => { await addToLibrary(files); renderLib(); }),
+    ...order.map((g) => h('section', { class: 'scene' }, h('h2', {}, g),
+      h('div', { class: 'grid' }, ...groups[g].map((x) => h('div', { class: 'card', onclick: () => zoom(x.file) },
+        h('div', { class: 'thumb', style: { backgroundImage: `url("${fileUrl(x.file)}")` } }),
+        h('div', { class: 'meta' }, h('span', { class: 't' }, x.file.split('/').pop())))))))));
+}
+async function pickFromLibrary() {
+  const lib = await library();
+  return new Promise((resolve) => {
+    const close = (v) => { m.remove(); resolve(v); };
+    const m = h('div', { class: 'modal', onclick: (e) => e.target === m && close(null) },
+      h('div', { class: 'modal-box' },
+        h('div', { class: 'head' }, h('h3', {}, 'Выбери иллюстрацию'), h('button', { class: 'x ghost', onclick: () => close(null) }, '✕')),
+        h('div', { class: 'grid' }, ...lib.map((x) => h('div', { class: 'card', onclick: () => close(x.file) },
+          h('div', { class: 'thumb', style: { backgroundImage: `url("${fileUrl(x.file)}")` } }),
+          h('div', { class: 'meta' }, h('span', { class: 't' }, x.folder + ' / ' + x.file.split('/').pop())))))));
+    document.body.append(m);
+  });
+}
+function refsBox(ref, it) {
+  const refs = it.refs || [];
+  const setRefs = async (next) => { await save(ref, { refs: next }); renderPanel(); };
+  const add = async (files) => { if (files.length) await setRefs([...refs, ...files.map((file) => ({ file }))]); };
+  const hint = ref.kind === 'character' ? 'Иллюстрации книги с этим героем. Они уходят художнику, когда рисуется лист персонажа; пока листа нет — и в кадры.'
+    : ref.kind === 'location' ? 'Иллюстрации этого места — художник повторит архитектуру и настроение.'
+    : 'Картинка-подсказка для этого кадра: композиция, поза, настроение.';
+  return h('div', { class: 'field' }, h('label', {}, `Референсы (${refs.length})`),
+    h('div', { class: 'muted', style: { fontSize: '12.5px', marginBottom: '6px' } }, hint),
+    refs.length ? h('div', { class: 'reflist' }, ...refs.map((r, i) => h('div', { class: 'refitem' },
+      h('img', { src: fileUrl(r.file), onclick: () => zoom(r.file) }),
+      h('input', { value: r.note || '', placeholder: 'пометка: «в бою», «в детстве»…', onchange: (e) => setRefs(refs.map((x, j) => (j === i ? { ...x, note: e.target.value } : x))) }),
+      h('button', { class: 'ghost', title: 'Убрать (файл останется в библиотеке)', onclick: () => setRefs(refs.filter((_, j) => j !== i)) }, '✕')))) : null,
+    h('div', { class: 'actions' },
+      h('button', { onclick: async () => { const f = await pickFromLibrary(); if (f) add([f]); } }, '+ Из библиотеки'),
+      dropZone('+ Перетащи файл сюда', async (files) => add(await addToLibrary(files)))));
+}
+
 function renderCanon() {
   const pr = S.state.project;
   $('#main').replaceChildren(h('div', { class: 'canon' },
@@ -314,7 +403,7 @@ async function renderPanel() {
   const fileInput = h('input', { type: 'file', accept: 'image/*', style: { display: 'none' }, onchange: (e) => e.target.files[0] && upload(ref, e.target.files[0]) });
 
   const viewer = h('div', { class: 'viewer' },
-    f ? h('img', { src: fileUrl(f), onclick: () => { $('#lightbox img').src = fileUrl(f); $('#lightbox').classList.remove('hidden'); } })
+    f ? h('img', { src: fileUrl(f), onclick: () => zoom(f) })
       : h('div', { class: 'empty' }, run ? 'Рисует… картинка появится здесь сама.' : 'Ещё нет картинки.', run ? null : h('button', { class: 'primary', onclick: () => gen1(false) }, 'Нарисовать'), h('span', { class: 'muted' }, 'или перетащи сюда готовый файл')));
   viewer.addEventListener('dragover', (e) => { e.preventDefault(); viewer.classList.add('drag'); });
   viewer.addEventListener('dragleave', () => viewer.classList.remove('drag'));
@@ -342,7 +431,7 @@ async function renderPanel() {
     h('div', { class: 'refs' }, ...preview.refs.map((r, i) => h('div', {}, h('img', { src: fileUrl(r.file) }), h('span', {}, h('b', {}, `${i + 1}. `), r.role)))),
     h('pre', {}, preview.prompt));
 
-  const fields = [];
+  const fields = [ref.kind !== 'lab' ? refsBox(ref, it) : null];
   if (ref.kind === 'shot') {
     const pr = S.state.project;
     const locSel = h('select', { onchange: async (e) => { await save(ref, { location: e.target.value || null }); renderPanel(); } },
@@ -381,6 +470,7 @@ async function renderPanel() {
 }
 
 async function upload(ref, file) {
+  file = await shrink(file, 2560).catch(() => file);
   const r = await fetch('/api/upload?ref=' + encodeURIComponent(JSON.stringify(ref)), { method: 'POST', headers: { 'Content-Type': file.type || 'image/png' }, body: file });
   if (!r.ok) return toast('Не получилось загрузить');
   toast('Картинка добавлена как новая версия');
@@ -424,6 +514,7 @@ function render(keepScroll) {
   else if (S.view === 'style') renderStyle();
   else if (S.view === 'queue') renderQueue();
   else if (S.view === 'canon') renderCanon();
+  else if (S.view === 'lib') renderLib();
   if (keepScroll) window.scrollTo(0, y);
 }
 

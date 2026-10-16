@@ -151,3 +151,15 @@ pre { white-space: pre-wrap; word-break: break-word; font: 12px/1.45 ui-monospac
   .scenes { position: static; flex-direction: row; overflow-x: auto; max-height: none; }
   main { padding: 12px; }
 }
+
+.dropzone { border: 2px dashed var(--line); border-radius: var(--radius); padding: 18px; text-align: center; cursor: pointer; margin-bottom: 16px; color: var(--text); }
+.actions .dropzone { padding: 6px 12px; margin: 0; border-width: 1px; font-size: 13px; color: var(--muted); }
+.dropzone:hover, .dropzone.drag { border-color: var(--accent2); background: #2a1d1a; }
+.reflist { display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px; }
+.refitem { display: flex; gap: 8px; align-items: center; }
+.refitem img { width: 84px; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; cursor: zoom-in; background: #fff; flex: none; }
+.refitem input { flex: 1; min-width: 0; }
+.modal { position: fixed; inset: 0; background: #000b; z-index: 40; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modal-box { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; width: min(1100px, 100%); max-height: 90vh; overflow: auto; padding: 14px 16px; }
+.modal-box .head { display: flex; align-items: center; margin-bottom: 10px; }
+.modal-box .head .x { margin-left: auto; }
