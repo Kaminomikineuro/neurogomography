@@ -1,3 +1,4 @@
 studio/export/
 studio/media/**/*.log
 *.tmp
+studio/.jobs.json

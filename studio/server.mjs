@@ -228,6 +228,32 @@ function codexInstruction(p, outAbs) {
 // ---------- очередь заданий ----------
 const jobs = [];
 let running = 0;
+
+// Очередь переживает закрытие студии: пишем её на диск и при запуске продолжаем
+const JOBS_FILE = path.join(STUDIO, '.jobs.json');
+let jobsSaved = '';
+function saveJobs() {
+  const data = JSON.stringify(jobs.slice(0, 150).map(({ pid, ...j }) => ({ ...j, log: (j.log || '').slice(-4000) })));
+  if (data === jobsSaved) return;
+  jobsSaved = data;
+  try { fs.writeFileSync(JOBS_FILE, data); } catch {}
+}
+setInterval(saveJobs, 2000).unref();
+function restoreJobs() {
+  for (const j of readJSON(JOBS_FILE, [])) {
+    if (j.status === 'running' || j.status === 'queued') {
+      // студию закрыли посреди работы: если картинка успела сохраниться — забираем, иначе рисуем заново
+      if (j.status === 'running' && j.out && fs.existsSync(abs(j.out))) {
+        try { addVersion(j.ref, j.out, { by: j.generator, note: j.note, style: j.style, prompt: j.prompt }); j.status = 'done'; } catch { j.status = 'failed'; }
+      } else {
+        j.status = 'queued';
+        j.log = (j.log || '') + '\n↻ Студию перезапустили — задание продолжено.';
+        reserved.add(abs(j.out).replace(/\.\w+$/, ''));
+      }
+    }
+    jobs.push(j);
+  }
+}
 const reserved = new Set();
 
 function nextOut(dir, ext = '.png', prefix = 'v') {
@@ -701,6 +727,9 @@ server.on('error', (e) => {
   setTimeout(() => process.exit(0), 500);
 });
 server.listen(port, '127.0.0.1', () => {
+  restoreJobs();
+  pump();
+  process.on('SIGINT', () => { saveJobs(); process.exit(0); });
   console.log(`\n  Студия «Белая кровь» работает: http://localhost:${port}\n  Генератор: ${config().generator}. Закрой это окно, чтобы остановить.\n`);
   if (process.argv.includes('--open')) openInOS(`http://localhost:${port}`);
 });
