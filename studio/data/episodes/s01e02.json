@@ -1072,7 +1072,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "note": "Бастиан в этой сцене только со спины или силуэтом — лицо не показываем. Лист персонажа — для фигуры, волос, доспеха и плаща."
     },
     {
      "id": "12.2",
@@ -1102,11 +1103,14 @@
      "img": "",
      "imgFrom": null,
      "vid": "the commander sits motionless in the saddle, cloak moving in the wind",
-     "characters": [],
+     "characters": [
+      "BASTIAN"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "note": "Бастиан в этой сцене только со спины или силуэтом — лицо не показываем. Лист персонажа — для фигуры, волос, доспеха и плаща."
     }
    ]
   },

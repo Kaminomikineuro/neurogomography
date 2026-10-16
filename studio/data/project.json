@@ -136,6 +136,16 @@
    ]
   },
   {
+   "id": "BASTIAN",
+   "name": "Бастиан Эльтар",
+   "group": "Главные",
+   "token": "Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, tall and rather large build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk military commander's armor and long cloak",
+   "sheetPrompt": "anime character model sheet of Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, adult man, tall and rather large powerful build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk commander's armor in dark red and black with a long cloak, no tattoo on the forehead, front view, side view, back view, back view on horseback, head close-ups: stern frown, rare warm smile, booming laugh, plain white background, labeled BASTIAN",
+   "versions": [],
+   "selected": null,
+   "canon": "Т2 гл.2: «высоким и довольно крупным мужчиной с правильными резкими чертами и темными волосами, спадающими ниже плеч… хмурил густые черные брови». Дядя Лиама, младший брат Циана, главнокомандующий. Золотая татуировка Владыки на лбу появляется только после Т2 гл.2 — для неё будет отдельная карта «Бастиан-Владыка»."
+  },
+  {
    "id": "RUKH",
    "name": "Птица Рух",
    "group": "Звери",
@@ -195,7 +205,7 @@
   {
    "id": "ROY",
    "name": "Капитан Рой",
-   "group": "Второстепенные",
+   "group": "Эпизодические",
    "token": "captain Roy, young drayk captain, uncertain and dutiful, plain drayk officer uniform",
    "sheetPrompt": "anime character model sheet of a young drayk captain, uncertain and dutiful expression, plain drayk officer uniform in dark red and brown, front, side, back views, two expressions, plain white background, labeled ROY",
    "versions": [
@@ -213,7 +223,7 @@
   {
    "id": "ARDAN",
    "name": "Командир Ардан",
-   "group": "Второстепенные",
+   "group": "Эпизодические",
    "token": "commander Ardan, stern female drayk commander, sharp face, military bearing",
    "sheetPrompt": "anime character model sheet of a stern female drayk commander, sharp face, military bearing, drayk officer armor in dark red and brown, front, side, back views, two expressions, plain white background, labeled ARDAN",
    "versions": [],
@@ -222,18 +232,9 @@
   {
    "id": "BELFI",
    "name": "Генерал Бельфи",
-   "group": "Второстепенные",
+   "group": "Эпизодические",
    "token": "general Belfi, old stooped drayk general, tired worn face",
    "sheetPrompt": "anime character model sheet of an old stooped drayk general, tired worn face, heavy old drayk uniform, front, side, back views, two expressions, plain white background, labeled BELFI",
-   "versions": [],
-   "selected": null
-  },
-  {
-   "id": "BASTIAN",
-   "name": "Бастиан",
-   "group": "Второстепенные",
-   "token": "Bastian, drayk commander seen only from behind or in silhouette, long cloak, mounted",
-   "sheetPrompt": "anime character model sheet of a drayk cavalry commander seen from behind and in silhouette only, long cloak, armor, on horseback and standing, plain white background, labeled BASTIAN",
    "versions": [],
    "selected": null
   },
@@ -513,6 +514,7 @@
   "Глаза Повелителя: в главе «обсидиановые», в досье — «иссиня-чёрные, НЕ обсидиановые». Что берём для референса?",
   "Пульс Повелителя в 13.4: по канону его нет — сверить строку в главе.",
   "VO рассказчика («Он там», «Молодой Лорд летит на собственную смерть»…) — голосом Лиама или убрать?",
+  "Бастиан-Владыка (с Т2 гл.2): золотая татуировка на лбу — сделать вторую карту, когда дойдём до гл.2.",
   "Подземные хищники-воронки и зыбучие пески — берём в канон?"
  ]
 }

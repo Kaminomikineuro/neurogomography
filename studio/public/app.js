@@ -470,7 +470,7 @@ async function renderPanel() {
       field('VID — промпт движения для ' + (s.tool || 'видео'), s.vid, (v) => save(ref, { vid: v }), { code: true, rows: 3, copy: true }),
       field('Заметка для Claude (логика, канон, вопросы)', s.notes, (v) => save(ref, { notes: v }), { rows: 2 }));
   } else if (ref.kind === 'character') {
-    fields.push(
+    fields.push(ro('Канон из книги', it.canon),
       field('Токен — как описывать героя в кадрах', it.token, async (v) => { await save(ref, { token: v }); renderPanel(); }, { code: true, rows: 3 }),
       field('Промпт листа персонажа', it.sheetPrompt, async (v) => { await save(ref, { sheetPrompt: v }); renderPanel(); }, { code: true, rows: 4 }));
   } else if (ref.kind === 'location') {

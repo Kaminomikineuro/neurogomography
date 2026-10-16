@@ -500,7 +500,7 @@ const routes = {
   },
   'POST /api/update': (q, b) => {
     const o = open(b.ref);
-    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs'];
+    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group'];
     for (const [k, v] of Object.entries(b.patch || {})) if (allowed.includes(k)) o.item[k] = v;
     o.save();
     if (b.patch?.status === 'approved') logInbox(`${label(b.ref)} — утверждён (${path.basename(selectedFile(o.item) || '')})`);
