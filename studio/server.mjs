@@ -173,7 +173,40 @@ function buildPrompt(ref, opts = {}) {
       : `Additional direction: ${opts.note}`);
   }
   warnings.unshift(...checkRules(pr, raw + ' ' + (opts.note || '')));
-  return { prompt: lines.join('\n\n'), refs: refs.slice(0, 6), warnings, style: style.id };
+  const out = { prompt: lines.join('\n\n'), refs: refs.slice(0, 6), warnings, style: style.id };
+  if (ref.kind === 'shot') {
+    const v = videoPrompt(item, pr);
+    out.video = v.text;
+    warnings.push(...v.warnings);
+  }
+  return out;
+}
+
+// ---------- видео-промпт с липсинком ----------
+// Видео делаем без звука, голос накладываем потом, поэтому модели нужно точно знать,
+// кто в кадре говорит, какой текст и сколько секунд — иначе губы не совпадут.
+const CPS = 13; // русская речь ≈ 13 знаков в секунду
+function videoPrompt(s, pr) {
+  const chars = Object.fromEntries(pr.characters.map((c) => [c.id, c]));
+  const nameOf = (id) => (chars[id] ? charName(chars[id]) : id === 'NARRATOR' ? 'narrator' : id);
+  const ruName = (id) => chars[id]?.name || (id === 'NARRATOR' ? 'Рассказчик' : id);
+  const ls = s.lines || [];
+  const warnings = [];
+  const parts = [s.vid || ''];
+  const lips = ls.filter((l) => l.mode === 'lips');
+  if (lips.length) {
+    parts.push('Dialogue — silent clip, the voice will be added later, so animate only lips, jaw and facial expression in sync with the words:\n' +
+      lips.map((l) => `- ${nameOf(l.who)} says in Russian${l.manner ? ` (${l.manner})` : ''}: «${l.text}» — about ${Math.max(0.5, Math.round(l.text.length / CPS * 10) / 10)} s`).join('\n') +
+      '\nCharacters who are not speaking keep their mouths closed.');
+  } else if (ls.length) {
+    parts.push('No one speaks on screen in this shot (the voice is off-screen or inner thoughts) — keep all mouths closed.');
+  }
+  for (const l of lips) {
+    const secs = l.text.length / CPS;
+    if (s.dur && secs > s.dur + 0.3) warnings.push(`Реплика «${l.text.slice(0, 40)}…» звучит ~${secs.toFixed(1)} с, а кадр ${s.dur} с — губы не успеют. Удлини кадр или сократи реплику.`);
+    if (!(s.characters || []).includes(l.who) && chars[l.who]) warnings.push(`Говорит ${ruName(l.who)}, но его нет в «В кадре». Отметь героя или поставь режим «за кадром».`);
+  }
+  return { text: parts.filter(Boolean).join('\n\n'), warnings };
 }
 
 function codexInstruction(p, outAbs) {
@@ -414,7 +447,7 @@ function exportEpisode(epId) {
         `Сцена ${sc.n}: ${sc.title}`, '',
         `Стартовый кадр: ${key ? 'keyframe' + path.extname(key) + (keyFrom !== s.id ? ` (взят из кадра ${keyFrom})` : '') : 'НЕТ — сначала нарисуй ключевой кадр'}`,
         imgs.length ? 'Референсы:\n' + imgs.join('\n') : '', '',
-        'VIDEO PROMPT:', s.vid || '', '',
+        'VIDEO PROMPT:', videoPrompt(s, pr).text, '',
         'NEGATIVE:', pr.negative, '',
         `Кадр: ${s.frame || ''}`, `Звук: ${s.sound || ''}`,
       ].join('\n'));
@@ -539,7 +572,7 @@ const routes = {
   },
   'POST /api/update': (q, b) => {
     const o = open(b.ref);
-    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus'];
+    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus', 'lines'];
     for (const [k, v] of Object.entries(b.patch || {})) if (allowed.includes(k)) o.item[k] = v;
     o.save();
     if (b.patch?.status === 'approved') logInbox(`${label(b.ref)} — утверждён (${path.basename(selectedFile(o.item) || '')})`);
@@ -605,6 +638,17 @@ const server = http.createServer(async (req, res) => {
       for (let i = 2; fs.existsSync(out); i++) out = path.join(LIBRARY, name.replace(/(\.\w+)$/, ` (${i})$1`));
       fs.writeFileSync(out, buf);
       logInbox(`Иллюстрация добавлена в библиотеку: ${rel(out)}`);
+      return send(res, 200, { file: rel(out) });
+    }
+    if (key === 'POST /api/montage/save') {
+      // черновой монтаж серии, собранный в браузере; лежит в export/ и в Git не попадает
+      const ep = safe(url.searchParams.get('ep') || 'episode');
+      const ext = url.searchParams.get('ext') === '.mp4' ? '.mp4' : '.webm';
+      const dir = path.join(EXPORT, ep);
+      fs.mkdirSync(dir, { recursive: true });
+      const out = path.join(dir, `Черновой монтаж ${now().replace(/:/g, '-')}${ext}`);
+      await saveStream(req, out, 4e9);
+      logInbox(`${ep} — собран черновой монтаж ${path.basename(out)}`);
       return send(res, 200, { file: rel(out) });
     }
     if (key === 'POST /api/video/upload') {

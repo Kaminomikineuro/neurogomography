@@ -31,7 +31,22 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LORD",
+       "text": "Знаешь, что это?",
+       "mode": "lips",
+       "manner": "пугающе серьёзно",
+       "src": "book"
+      },
+      {
+       "who": "LIAM",
+       "text": "Догадываюсь",
+       "mode": "lips",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.2",
@@ -49,7 +64,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "8.3",
@@ -67,7 +83,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "В Эльтарионе… есть легенда! Как после смерти возлюбленной король пытался вернуть ее к жизни!",
+       "mode": "lips",
+       "src": "changed",
+       "book": "В Эльтарионе есть легенда о том, как после смерти возлюбленной король всеми силами пытался вернуть ее к жизни, и в результате открыл проход в мир мертвых."
+      }
+     ]
     },
     {
      "id": "8.4",
@@ -85,7 +110,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "И открыл проход в мир мертвых! Проделал дыру в Грани! В книге Завета эта пасть выглядит точно так же!",
+       "mode": "offscreen",
+       "src": "absent"
+      }
+     ]
     },
     {
      "id": "8.5",
@@ -103,7 +136,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": true
+     "optional": true,
+     "lines": []
     },
     {
      "id": "8.6",
@@ -123,7 +157,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LORD",
+       "text": "И чем же закончилась легенда?",
+       "mode": "lips",
+       "manner": "ровно",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.7",
@@ -141,7 +184,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Разве можно так красиво сражаться? Это нечестно",
+       "mode": "vo",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.8",
@@ -159,7 +210,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Из мира мертвых вышел Бог Смерти. Сказал, что мертвым не место среди живых, а король нарушил законы мироздания. Если тот так хотел воссоединиться с возлюбленной, ему следовало отправиться к ней самому",
+       "mode": "offscreen",
+       "src": "changed",
+       "book": "Кхм, он сказал, что мертвым не место в мире живых, и король нарушает законы мироздания. Коли он хочет быть со своей любимой, то пусть отправляется за ней."
+      }
+     ]
     },
     {
      "id": "8.9",
@@ -177,7 +237,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Но это всего лишь легенда! Вряд ли мы сейчас дождемся внезапного появления разгневанного боженьки, так что нам нужен план получше!",
+       "mode": "lips",
+       "src": "changed",
+       "book": "Ну, это всего лишь легенда, и вряд ли мы сейчас сможем рассчитывать на внезапное появление разгневанного боженьки, так что нужен план получше."
+      }
+     ]
     },
     {
      "id": "8.10",
@@ -195,7 +264,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LORD",
+       "text": "Мхм",
+       "mode": "lips",
+       "src": "short"
+      }
+     ]
     },
     {
      "id": "8.11",
@@ -216,7 +293,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "8.12",
@@ -236,7 +314,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "8.13",
@@ -254,7 +333,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LORD",
+       "text": "Мне нужно добраться до разлома",
+       "mode": "lips",
+       "manner": "впервые жёстко",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.14",
@@ -275,7 +363,35 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Вы уже закрывали такие разломы?",
+       "mode": "lips",
+       "src": "changed",
+       "book": "Вы уже закрывали подобные штуки?"
+      },
+      {
+       "who": "LORD",
+       "text": "Да",
+       "mode": "lips",
+       "src": "short"
+      },
+      {
+       "who": "LIAM",
+       "text": "И сколько времени нужно на эту пасть?",
+       "mode": "lips",
+       "src": "changed",
+       "book": "Тогда сколько времени нужно на эту?"
+      },
+      {
+       "who": "LORD",
+       "text": "Не больше семи минут",
+       "mode": "lips",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.15",
@@ -293,7 +409,22 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Но даже если закрыть брешь, эти мертвецы никуда не денутся",
+       "mode": "lips",
+       "src": "changed",
+       "book": "Но даже если закрыть разлом, эти мертвецы ведь никуда не денутся?"
+      },
+      {
+       "who": "LORD",
+       "text": "Ага",
+       "mode": "lips",
+       "src": "short"
+      }
+     ]
     },
     {
      "id": "8.16",
@@ -311,7 +442,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Тогда почему бы нам не загнать их всех обратно?",
+       "mode": "lips",
+       "src": "changed",
+       "book": "Тогда почему бы нам не запихать их всех обратно?"
+      }
+     ]
     },
     {
      "id": "8.17",
@@ -332,7 +472,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LORD",
+       "text": "И как ты собираешься это сделать, чертенок?",
+       "mode": "lips",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.18",
@@ -350,7 +498,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Прошу меня простить",
+       "mode": "lips",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "8.19",
@@ -371,7 +527,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "8.20",
@@ -389,7 +546,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "8.21",
@@ -407,7 +565,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     }
    ]
   },
@@ -433,7 +592,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.2",
@@ -453,7 +613,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.3",
@@ -473,7 +634,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.4",
@@ -493,7 +655,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.5",
@@ -511,7 +674,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.6",
@@ -529,7 +693,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": true
+     "optional": true,
+     "lines": []
     },
     {
      "id": "9.7",
@@ -547,7 +712,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.8",
@@ -565,7 +731,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.9",
@@ -585,7 +752,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.10",
@@ -603,7 +771,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "9.11",
@@ -621,7 +790,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     }
    ]
   },
@@ -647,7 +817,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.2",
@@ -665,7 +836,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.3",
@@ -683,7 +855,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.4",
@@ -703,7 +876,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.5",
@@ -721,7 +895,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.6",
@@ -739,7 +914,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.7",
@@ -759,7 +935,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.8",
@@ -777,7 +954,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.9",
@@ -795,7 +973,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.10",
@@ -813,7 +992,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": true
+     "optional": true,
+     "lines": []
     },
     {
      "id": "10.11",
@@ -831,7 +1011,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.12",
@@ -851,7 +1032,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "10.13",
@@ -871,7 +1053,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     }
    ]
   },
@@ -897,7 +1080,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.2",
@@ -915,7 +1099,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.3",
@@ -935,7 +1120,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.4",
@@ -956,7 +1142,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.5",
@@ -974,7 +1161,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "NARRATOR",
+       "text": "Бастиан бы так и поступил",
+       "mode": "vo",
+       "optional": true
+      }
+     ]
     },
     {
      "id": "11.6",
@@ -992,7 +1187,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.7",
@@ -1010,7 +1206,16 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LORD",
+       "text": "Что ты творишь?..",
+       "mode": "lips",
+       "manner": "шёпотом, с недоумением",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "11.8",
@@ -1028,7 +1233,21 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Все настолько плохо?",
+       "mode": "vo",
+       "src": "book"
+      },
+      {
+       "who": "LIAM",
+       "text": "И что мне теперь с ним делать?",
+       "mode": "vo",
+       "src": "book"
+      }
+     ]
     },
     {
      "id": "11.9",
@@ -1046,7 +1265,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.10",
@@ -1064,7 +1284,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Да чтоб тебя!..",
+       "mode": "vo",
+       "src": "absent"
+      }
+     ]
     },
     {
      "id": "11.11",
@@ -1084,7 +1312,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "11.12",
@@ -1102,7 +1331,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     }
    ]
   },
@@ -1131,7 +1361,8 @@
      "versions": [],
      "selected": null,
      "note": "Бастиан в этой сцене только со спины или силуэтом — лицо не показываем. Лист персонажа — для фигуры, волос, доспеха и плаща.",
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "12.2",
@@ -1149,7 +1380,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "12.3",
@@ -1170,7 +1402,8 @@
      "versions": [],
      "selected": null,
      "note": "Бастиан в этой сцене только со спины или силуэтом — лицо не показываем. Лист персонажа — для фигуры, волос, доспеха и плаща.",
-     "optional": true
+     "optional": true,
+     "lines": []
     }
    ]
   },
@@ -1198,7 +1431,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.2",
@@ -1218,7 +1452,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.3",
@@ -1236,7 +1471,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.4",
@@ -1257,7 +1493,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.5",
@@ -1275,7 +1512,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.6",
@@ -1293,7 +1531,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.7",
@@ -1311,7 +1550,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.8",
@@ -1329,7 +1569,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.9",
@@ -1349,7 +1590,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "NARRATOR",
+       "text": "Просто молодой мужчина, который слишком долго делал вид, что ему не больно",
+       "mode": "vo",
+       "optional": true
+      }
+     ]
     },
     {
      "id": "13.10",
@@ -1367,7 +1616,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.11",
@@ -1385,7 +1635,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.12",
@@ -1405,7 +1656,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.13",
@@ -1425,7 +1677,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     },
     {
      "id": "13.14",
@@ -1443,7 +1696,15 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": [
+      {
+       "who": "LIAM",
+       "text": "Ну и что это было?..",
+       "mode": "vo",
+       "src": "absent"
+      }
+     ]
     },
     {
      "id": "13.15",
@@ -1461,7 +1722,8 @@
      "status": "todo",
      "versions": [],
      "selected": null,
-     "optional": false
+     "optional": false,
+     "lines": []
     }
    ]
   }

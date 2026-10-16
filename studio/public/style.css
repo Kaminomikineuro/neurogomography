@@ -196,3 +196,15 @@ pre { white-space: pre-wrap; word-break: break-word; font: 12px/1.45 ui-monospac
 .playhead { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--accent); left: 0; pointer-events: none; }
 .legend { margin-top: 8px; font-size: 12.5px; display: flex; align-items: center; gap: 6px; }
 .legend .seg { display: inline-block; width: 14px; height: 10px; }
+
+.line { background: var(--bg); border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; }
+.line .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
+.line .row select { padding: 3px 6px; font-size: 12.5px; }
+.line .row .ghost { margin-left: auto; padding: 2px 8px; }
+.line textarea { min-height: 40px; }
+.bookline { font-size: 12.5px; margin-top: 4px; }
+.badge.ok { color: var(--ok); border-color: #355d37; }
+.screen .subs { white-space: pre-line; }
+.render canvas { width: 100%; border-radius: 8px; background: #000; display: block; margin: 8px 0; }
+.rbar { height: 6px; background: var(--card); border-radius: 9px; overflow: hidden; margin-bottom: 8px; }
+.rbar i { display: block; height: 100%; width: 0; background: var(--accent); }

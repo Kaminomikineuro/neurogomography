@@ -464,7 +464,7 @@ async function renderPanel() {
       } }, c.name);
     }));
     fields.push(
-      ro('Кадр', s.frame), ro('Звук', s.sound), s.note ? ro('Примечание', s.note) : null,
+      ro('Кадр', s.frame), ro('Звук', s.sound), linesBox(ref, s), s.note ? ro('Примечание', s.note) : null,
       h('div', { class: 'field' }, h('label', {}, 'Локация'), locSel),
       h('div', { class: 'field' }, h('label', {}, 'В кадре'), chars),
       s.imgFrom ? ro('Картинка', `Берётся из кадра ${s.imgFrom}. Можно нарисовать отдельную — она заменит.`) : null,
@@ -485,7 +485,7 @@ async function renderPanel() {
 
   panel.replaceChildren(...[
     h('div', { class: 'head' }, h('div', {}, h('h3', {}, title), h('div', { class: 'sub' }, sub)), h('button', { class: 'x ghost', onclick: closePanel }, '✕')),
-    viewer, versions, actions, editBox, ref.kind === 'shot' ? videoBox(ref, s, shotInfo.scene) : null, warns, sent, ...fields].filter(Boolean));
+    viewer, versions, actions, editBox, ref.kind === 'shot' ? videoBox(ref, s, shotInfo.scene, preview) : null, warns, sent, ...fields].filter(Boolean));
 }
 
 // ---------- видео кадра ----------
@@ -514,7 +514,7 @@ function uploadVideo(ref, file) {
   });
 }
 
-function videoBox(ref, s, scene) {
+function videoBox(ref, s, scene, preview) {
   const v = selVideo(s);
   const key = keyframeOf(s, scene);
   const input = h('input', { type: 'file', accept: 'video/*', style: { display: 'none' }, onchange: (e) => e.target.files[0] && uploadVideo(ref, e.target.files[0]) });
@@ -532,7 +532,7 @@ function videoBox(ref, s, scene) {
     h('div', { class: 'actions' },
       v ? h('button', { class: s.videoStatus === 'approved' ? 'ok' : '', onclick: async () => { await save(ref, { videoStatus: s.videoStatus === 'approved' ? null : 'approved' }); renderPanel(); render(true); } }, s.videoStatus === 'approved' ? '✓ Видео утверждено' : 'Утвердить видео') : null,
       h('button', { onclick: () => input.click() }, v ? 'Загрузить ещё вариант' : 'Загрузить видео'), input),
-    pixverseHelp(s, key));
+    toolHelp(s, key, preview));
   box.addEventListener('dragover', (e) => { e.preventDefault(); box.classList.add('drag'); });
   box.addEventListener('dragleave', () => box.classList.remove('drag'));
   box.addEventListener('drop', (e) => {
@@ -543,27 +543,64 @@ function videoBox(ref, s, scene) {
   return box;
 }
 
-// Подсказка для Pixverse: всё, что нужно скопировать и загрузить, в одном месте
-function pixverseHelp(s, key) {
-  const shots = (s.vid || '').split(/(?=Shot \d+:)/).map((x) => x.trim()).filter(Boolean);
-  const multi = shots.length > 1 && /^Shot \d+:/.test(shots[0]);
-  const clean = (t) => t.replace(/^Shot \d+:\s*/, '').replace(/@Image\d \(([^)]+)\)/g, '$1').trim();
-  const neg = S.state.project.negative;
-  const dur = s.dur || 5;
-  return h('details', { open: !selVideo(s) }, h('summary', {}, 'Как сделать в Pixverse'),
+// Подсказка: как оживить кадр в инструменте из раскадровки. Промпт не меняем — он уже под этот инструмент.
+const TOOL_URL = { Pixverse: 'https://app.pixverse.ai/', Kling: 'https://app.klingai.com/', Seedance: 'https://app.pixverse.ai/' };
+const VID_ROLE = [[/lord|повелит/i, 'LORD'], [/liam|лиам/i, 'LIAM'], [/dragon/i, 'DRAGON'], [/commander/i, 'ARDAN'], [/captain/i, 'ROY'], [/black sword/i, 'LORD SWORD']];
+function toolHelp(s, key, preview) {
+  const tool = s.tool || 'Pixverse';
+  const chars = S.state.project.characters;
+  const refs = [...(s.vid || '').matchAll(/@Image(\d) \(([^)]+)\)/g)].map((m) => {
+    const id = VID_ROLE.find(([rx]) => rx.test(m[2]))?.[1];
+    const c = chars.find((x) => x.id === id);
+    return { n: m[1], role: m[2], c, file: selFile(c) };
+  });
+  const full = preview?.video || s.vid || '';
+  const dl = (file, name) => h('a', { href: fileUrl(file), download: name + (file.match(/\.\w+$/)?.[0] || '.png') }, 'скачать');
+  return h('details', { open: !selVideo(s) }, h('summary', {}, `Как сделать в ${tool}`),
     h('ol', { class: 'steps' },
-      h('li', {}, 'Открой ', h('a', { href: 'https://app.pixverse.ai/', target: '_blank' }, 'Pixverse'), ' → Image to Video.'),
-      h('li', {}, key ? h('span', {}, 'Загрузи картинку кадра: ', h('a', { href: fileUrl(key), download: `кадр_${s.id}${key.match(/\.\w+$/)?.[0] || '.png'}` }, 'скачать'), key !== selFile(s) ? h('span', { class: 'muted' }, ' (своей картинки нет — взята из соседнего кадра сцены)') : null)
-        : h('span', { class: 'muted' }, 'Сначала нарисуй картинку кадра — без неё оживлять нечего.')),
-      h('li', {}, multi ? h('span', {}, 'Это многокадровый промпт для Seedance. В Pixverse сделай ', h('b', {}, `${shots.length} отдельных клипа`), ' — по одному на каждый:') : 'Вставь промпт движения:',
-        ...(multi ? shots : [s.vid || '']).map((t, i) => h('div', { class: 'copyrow' }, h('code', {}, clean(t)), h('button', { class: 'ghost', onclick: () => copy(clean(t)) }, multi ? `копировать ${i + 1}` : 'копировать')))),
-      h('li', {}, 'Negative prompt: ', h('button', { class: 'ghost', onclick: () => copy(neg) }, 'копировать')),
-      h('li', {}, `Длительность: по раскадровке ${dur} с. Ставь ${dur <= 5 ? 5 : 8} с — в «Монтаже» лишнее обрежется само.`),
-      h('li', {}, 'Экономия кредитов: сначала пробуй в низком качестве (360p/540p), финал — в 720p/1080p.'),
+      h('li', {}, 'Открой ', h('a', { href: TOOL_URL[tool] || TOOL_URL.Pixverse, target: '_blank' }, tool),
+        tool === 'Seedance' ? ' — в Pixverse выбери модель Seedance.' : tool === 'Kling' ? ' (если Kling есть в Pixverse — можно там).' : ' → Image to Video.'),
+      h('li', {}, key ? h('span', {}, 'Стартовый кадр: ', dl(key, `кадр_${s.id}`), key !== selFile(s) ? h('span', { class: 'muted' }, ' — своей картинки нет, взят соседний кадр сцены') : null)
+        : refs.length ? h('span', { class: 'muted' }, 'Стартовый кадр не нужен — модель строит сцену по референсам ниже.') : h('span', { class: 'muted' }, 'Сначала нарисуй картинку кадра.')),
+      refs.length ? h('li', {}, 'Референсы — загружай в этом порядке:', ...refs.map((r) => h('div', { class: 'copyrow' }, h('code', {}, `@Image${r.n} — ${r.c ? r.c.name : r.role}`), r.file ? dl(r.file, `Image${r.n}_${r.c.id}`) : h('span', { class: 'muted' }, 'нет листа')))) : null,
+      h('li', {}, 'Промпт целиком (с репликами для губ):', h('div', { class: 'copyrow' }, h('code', {}, full), h('button', { class: 'ghost', onclick: () => copy(full) }, 'копировать'))),
+      h('li', {}, 'Negative prompt: ', h('button', { class: 'ghost', onclick: () => copy(S.state.project.negative) }, 'копировать')),
+      h('li', {}, `Длительность по раскадровке: ${s.dur || '?'} с. Ролик длиннее — не страшно, «Монтаж» обрежет по кадру.`),
+      h('li', {}, 'Звук в генерации выключай — голос наложим отдельно.'),
       h('li', {}, 'Готовое видео скачай и перетащи в этот блок.')));
 }
 
+// ---------- реплики кадра ----------
+const MODES = { lips: 'губы в кадре', offscreen: 'голос за кадром', vo: 'мысли / рассказчик' };
+function linesBox(ref, s) {
+  const ls = s.lines || [];
+  const set = async (next) => { await save(ref, { lines: next }); renderPanel(); };
+  const who = S.state.project.characters.filter((c) => !['Звери', 'Предметы'].includes(c.group));
+  const srcBadge = { book: ['✓ как в книге', 'ok'], changed: ['≈ отличается от книги', 'warn'], absent: ['нет в тексте главы', 'warn'], short: ['коротко', ''] };
+  return h('div', { class: 'field' }, h('label', {}, `Реплики (${ls.length})`),
+    h('div', { class: 'muted', style: { fontSize: '12.5px', marginBottom: '6px' } }, 'Видео без звука: реплики с режимом «губы в кадре» уходят в видео-промпт, чтобы губы двигались под текст. Голос наложим потом.'),
+    ...ls.map((l, i) => {
+      const upd = (patch) => set(ls.map((x, j) => (j === i ? { ...x, ...patch } : x)));
+      const b = srcBadge[l.src];
+      return h('div', { class: 'line' },
+        h('div', { class: 'row' },
+          h('select', { onchange: (e) => upd({ who: e.target.value }) }, ...who.map((c) => h('option', { value: c.id, selected: l.who === c.id }, c.name)), h('option', { value: 'NARRATOR', selected: l.who === 'NARRATOR' }, 'Рассказчик')),
+          h('select', { onchange: (e) => upd({ mode: e.target.value }) }, ...Object.entries(MODES).map(([k, t]) => h('option', { value: k, selected: l.mode === k }, t))),
+          b ? h('span', { class: 'badge ' + b[1] }, b[0]) : null,
+          h('span', { class: 'muted' }, `~${(l.text.length / 13).toFixed(1)} с`),
+          h('button', { class: 'ghost', title: 'Удалить реплику', onclick: () => set(ls.filter((_, j) => j !== i)) }, '✕')),
+        h('textarea', { rows: 2, onchange: (e) => upd({ text: e.target.value.trim(), src: 'edited' }) }, l.text),
+        l.book ? h('div', { class: 'bookline' }, h('span', { class: 'muted' }, 'В книге: '), l.book, ' ', h('button', { class: 'ghost', onclick: () => upd({ text: l.book.replace(/^Кхм,\s*/, ''), src: 'book' }) }, 'взять из книги')) : null);
+    }),
+    h('button', { onclick: () => set([...ls, { who: (s.characters || [])[0] || 'LIAM', mode: 'lips', text: '…' }]) }, '+ Реплика'));
+}
+
 // ---------- монтаж (аниматик серии) ----------
+// Субтитры: только реплики (звуки не пишем), мысли — в скобках
+function subText(s) {
+  const nm = (id) => S.state.project.characters.find((c) => c.id === id)?.name.split(' ')[0] || (id === 'NARRATOR' ? '' : id);
+  return (s.lines || []).filter((l) => !l.optional).map((l) => l.mode === 'vo' ? (l.who === 'NARRATOR' ? `(${l.text})` : `(${nm(l.who)}, мысленно) ${l.text}`) : `${nm(l.who)}: ${l.text}`).join('\n');
+}
 function montageItems() {
   const out = [];
   for (const sc of S.ep.scenes) for (const s of sc.shots) {
@@ -601,7 +638,7 @@ function renderMontage() {
     if (!x) { playing = false; playBtn.textContent = '▶ Смотреть'; return; }
     segs.forEach((g, j) => g.classList.toggle('cur', j === i));
     tag.textContent = `Сцена ${x.scene.n} · кадр ${x.s.id} · ${x.dur} с`;
-    sub.textContent = subsOn.checked ? (x.s.sound || '') : '';
+    sub.textContent = subsOn.checked ? subText(x.s) : '';
     sub.style.display = sub.textContent ? '' : 'none';
     video.style.display = x.video ? '' : 'none';
     img.style.display = !x.video && x.img ? '' : 'none';
@@ -643,7 +680,8 @@ function renderMontage() {
     screen,
     h('div', { class: 'bar', style: { marginTop: '10px' } },
       h('button', { onclick: () => { cur = Math.max(0, cur - 1); show(cur); } }, '⏮'), playBtn, h('button', { onclick: () => { cur = Math.min(items.length - 1, cur + 1); show(cur); } }, '⏭'),
-      time, h('span', { class: 'grow' }), h('label', { class: 'muted' }, subsOn, ' реплики и звук субтитрами'),
+      time, h('span', { class: 'grow' }), h('label', { class: 'muted' }, subsOn, ' реплики субтитрами'),
+      h('button', { class: 'primary', title: 'Склеить всю серию в один видеофайл', onclick: () => { playing = false; stopTimers(); video.pause(); playBtn.textContent = '▶ Смотреть'; buildEpisodeVideo(items, subsOn.checked); } }, '⬇ Собрать видео серии'),
       h('button', { class: 'ghost', onclick: () => select({ kind: 'shot', ep: S.ep.id, id: items[cur].s.id }) }, 'Открыть кадр')),
     line,
     h('div', { class: 'legend muted' }, h('i', { class: 'seg v' }), ' видео ', h('i', { class: 'seg i' }), ' картинка ', h('i', { class: 'seg e' }), ' пусто · клик по полосе — перейти к кадру')));
@@ -729,3 +767,86 @@ document.addEventListener('DOMContentLoaded', async () => {
   pollJobs();
   setInterval(pollJobs, 2500);
 });
+
+// ---------- сборка серии в один видеофайл ----------
+// Рисуем кадры на холст и записываем его прямо в браузере — без ffmpeg и установки программ.
+// Запись идёт в реальном времени: серия 5 минут собирается ~5 минут.
+async function buildEpisodeVideo(items, withSubs) {
+  const W = 1280, H = 720, FPS = 30;
+  const mime = ['video/mp4;codecs=avc1.42E01E', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m));
+  if (!mime) return toast('Этот браузер не умеет записывать видео. Открой студию в Chrome.', 6000);
+  const total = items.reduce((a, x) => a + x.dur, 0);
+  const canvas = h('canvas', { width: W, height: H });
+  const ctx = canvas.getContext('2d');
+  const info = h('div', {}, 'Готовлю картинки…');
+  const bar = h('i', {});
+  let cancelled = false;
+  const overlay = h('div', { class: 'modal' }, h('div', { class: 'modal-box render' },
+    h('h3', {}, 'Собираю видео серии'), canvas, h('div', { class: 'rbar' }, bar), info,
+    h('p', { class: 'muted' }, 'Не сворачивай и не переключай вкладку — браузер тогда ставит запись на паузу.'),
+    h('button', { onclick: () => { cancelled = true; } }, 'Отменить')));
+  document.body.append(overlay);
+
+  const load = (f) => new Promise((r) => { const im = new Image(); im.onload = () => r(im); im.onerror = () => r(null); im.src = fileUrl(f); });
+  const imgs = {};
+  for (const x of items) if (!x.video && x.img && !imgs[x.img]) imgs[x.img] = await load(x.img);
+  const fit = (w, h0, k = 1) => { const s = Math.min(W / w, H / h0) * k; return [(W - w * s) / 2, (H - h0 * s) / 2, w * s, h0 * s]; };
+  const drawSubs = (text) => {
+    if (!withSubs || !text) return;
+    ctx.font = '600 30px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+    text.split('\n').slice(-2).reverse().forEach((t, i) => {
+      const y = H - 50 - i * 40;
+      ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.strokeText(t, W / 2, y, W - 120);
+      ctx.fillStyle = '#fff'; ctx.fillText(t, W / 2, y, W - 120);
+    });
+  };
+  const frame = () => new Promise((r) => requestAnimationFrame(r));
+  const rec = new MediaRecorder(canvas.captureStream(FPS), { mimeType: mime, videoBitsPerSecond: 8e6 });
+  const chunks = [];
+  rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+  const done = new Promise((r) => (rec.onstop = r));
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  rec.start(1000);
+  let elapsed = 0;
+  for (const x of items) {
+    if (cancelled) break;
+    const sub = subText(x.s);
+    info.textContent = `Кадр ${x.s.id} · ${fmt(elapsed)} / ${fmt(total)}`;
+    let v = null;
+    if (x.video) {
+      v = h('video', { muted: true, playsinline: true, preload: 'auto' });
+      v.muted = true; v.src = fileUrl(x.video);
+      await new Promise((r) => { v.oncanplay = r; v.onerror = r; });
+      await v.play().catch(() => {});
+    }
+    const t0 = performance.now();
+    for (;;) {
+      const t = (performance.now() - t0) / 1000;
+      if (t >= x.dur || cancelled || (v && v.ended)) break;
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+      if (v && v.videoWidth) ctx.drawImage(v, ...fit(v.videoWidth, v.videoHeight));
+      else if (imgs[x.img]) { const im = imgs[x.img]; ctx.drawImage(im, ...fit(im.naturalWidth, im.naturalHeight, 1 + 0.08 * t / x.dur)); }
+      else if (!v) {
+        ctx.fillStyle = '#120f10'; ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#a8999a'; ctx.font = '600 40px system-ui, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(`Кадр ${x.s.id}`, W / 2, H / 2 - 20);
+        ctx.font = '24px system-ui, sans-serif'; ctx.fillText((x.s.frame || '').slice(0, 90), W / 2, H / 2 + 30, W - 160);
+      }
+      drawSubs(sub);
+      bar.style.width = ((elapsed + t) / total * 100) + '%';
+      await frame();
+    }
+    if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
+    elapsed += x.dur;
+  }
+  rec.stop();
+  await done;
+  if (cancelled) { overlay.remove(); return toast('Сборка отменена'); }
+  const ext = mime.startsWith('video/mp4') ? '.mp4' : '.webm';
+  const blob = new Blob(chunks, { type: mime.split(';')[0] });
+  info.textContent = `Сохраняю (${(blob.size / 1e6).toFixed(1)} МБ)…`;
+  const r = await fetch(`/api/montage/save?ep=${encodeURIComponent(S.ep.id)}&ext=${ext}`, { method: 'POST', headers: { 'Content-Type': blob.type }, body: blob }).then((x) => x.json()).catch(() => ({}));
+  overlay.remove();
+  if (r.file) { toast('Готово: ' + r.file, 8000); POST('/api/open', { path: r.file.replace(/\/[^/]+$/, '') }).catch(() => {}); }
+  else { const a = h('a', { href: URL.createObjectURL(blob), download: `${S.ep.id}_монтаж${ext}` }); a.click(); toast('Видео скачано в «Загрузки»', 6000); }
+}
