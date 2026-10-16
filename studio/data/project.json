@@ -111,8 +111,21 @@
    "group": "Главные",
    "token": "colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils",
    "sheetPrompt": "anime creature model sheet of a colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils, side view, front view, wings spread, head close-up, scale detail, human figure for scale, plain white background, labeled DRAGON",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/DRAGON/v001.png",
+     "at": "2026-10-16 14:26:03",
+     "by": "загружено вручную",
+     "note": ""
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/Мрак.png",
+     "note": "референс в стиле книги"
+    }
+   ]
   },
   {
    "id": "RUKH",
