@@ -83,7 +83,8 @@ function shotCard(s, ref) {
     run ? h('span', { class: 'spin' }, run.status === 'queued' ? 'в очереди' : 'рисует…') : null,
     h('div', { class: 'meta' }, h('span', { class: 'dot st-' + dot, title: STATUS[s.status] || '' }), h('b', {}, s.id),
       h('span', { class: 't' }, `${s.dur || '?'} с`), s.tool ? h('span', { class: 'badge' }, s.tool) : null,
-      s.cut ? h('span', { class: 'badge warn' }, 'можно вырезать') : null,
+      s.cut ? h('span', { class: 'badge warn' }, 'вырезан') : s.optional ? h('span', { class: 'badge warn' }, 'можно вырезать') : null,
+      s.videos?.length ? h('span', { class: 'badge vid' + (s.videoStatus === 'approved' ? ' ok' : '') }, '▶ видео') : null,
       s.versions?.length > 1 ? h('span', { class: 'badge' }, 'v' + s.versions.length) : null),
     h('div', { class: 'desc' }, s.frame || s.vid || ''));
 }
@@ -436,6 +437,7 @@ async function renderPanel() {
     h('button', { onclick: () => gen1(false), disabled: !!run }, f ? 'Нарисовать заново' : 'Нарисовать'),
     h('button', { onclick: () => fileInput.click() }, 'Загрузить файл'), fileInput,
     h('button', { class: 'ghost', onclick: () => copy(preview.prompt) }, 'Копировать промпт'),
+    ref.kind === 'shot' ? h('button', { class: 'ghost', title: 'Вырезанный кадр не попадает в пакет для видео и монтаж', onclick: async () => { await save(ref, { cut: !s.cut }); renderPanel(); render(true); } }, s.cut ? 'Вернуть кадр' : 'Вырезать кадр') : null,
     run ? h('span', { class: 'pill bad' }, run.status === 'queued' ? 'в очереди' : 'рисует…') : null);
 
   const editBox = h('div', { class: 'edit' }, h('label', {}, f ? 'Что поменять?' : 'Пожелания'), note,
@@ -483,7 +485,169 @@ async function renderPanel() {
 
   panel.replaceChildren(...[
     h('div', { class: 'head' }, h('div', {}, h('h3', {}, title), h('div', { class: 'sub' }, sub)), h('button', { class: 'x ghost', onclick: closePanel }, '✕')),
-    viewer, versions, actions, editBox, warns, sent, ...fields].filter(Boolean));
+    viewer, versions, actions, editBox, ref.kind === 'shot' ? videoBox(ref, s, shotInfo.scene) : null, warns, sent, ...fields].filter(Boolean));
+}
+
+// ---------- видео кадра ----------
+// Ключевая картинка для оживления: своя, из кадра-источника или последняя нарисованная в сцене
+function keyframeOf(s, scene) {
+  let f = selFile(s);
+  if (!f && s.imgFrom) f = selFile(findShot(s.imgFrom)?.shot);
+  if (!f && scene) f = selFile(scene.shots.slice(0, scene.shots.indexOf(s)).reverse().find((x) => selFile(x)));
+  return f;
+}
+const selVideo = (s) => (s && s.videoSelected != null && s.videos?.[s.videoSelected] ? s.videos[s.videoSelected].file : null);
+
+function uploadVideo(ref, file) {
+  return new Promise((resolve) => {
+    const x = new XMLHttpRequest();
+    x.open('POST', '/api/video/upload?ref=' + encodeURIComponent(JSON.stringify(ref)) + '&name=' + encodeURIComponent(file.name));
+    x.setRequestHeader('Content-Type', file.type || 'video/mp4');
+    x.upload.onprogress = (e) => e.lengthComputable && toast(`Загружаю видео… ${Math.round(e.loaded / e.total * 100)}%`, 60000);
+    x.onload = async () => {
+      if (x.status !== 200) toast('Не получилось: ' + (JSON.parse(x.responseText || '{}').error || x.status), 6000);
+      else toast('Видео добавлено');
+      await loadEp(); render(true); renderPanel(); resolve();
+    };
+    x.onerror = () => { toast('Не получилось загрузить видео', 6000); resolve(); };
+    x.send(file);
+  });
+}
+
+function videoBox(ref, s, scene) {
+  const v = selVideo(s);
+  const key = keyframeOf(s, scene);
+  const input = h('input', { type: 'file', accept: 'video/*', style: { display: 'none' }, onchange: (e) => e.target.files[0] && uploadVideo(ref, e.target.files[0]) });
+  const box = h('div', { class: 'edit videobox' },
+    h('label', {}, 'Видео', s.videoStatus === 'approved' ? h('span', { class: 'pill good', style: { marginLeft: '8px' } }, 'утверждено') : null),
+    v ? h('video', { src: fileUrl(v), controls: true, loop: true, preload: 'metadata' }) : h('div', { class: 'muted', style: { marginBottom: '8px' } }, 'Видео ещё нет. Сделай его в Pixverse по подсказке ниже и перетащи файл сюда.'),
+    s.videos?.length ? h('div', { class: 'versions' }, ...s.videos.map((x, i) => h('button', { class: (i === s.videoSelected ? 'on ' : '') + 'vthumb', title: x.name || '', onclick: async () => { await save(ref, { videoSelected: i, videoStatus: null }); renderPanel(); } },
+      h('span', {}, `▶ видео ${i + 1}`),
+      h('i', { class: 'del', title: 'Удалить это видео', onclick: async (e) => {
+        e.stopPropagation();
+        if (!confirm(`Удалить видео ${i + 1}? Файл удалится с диска.`)) return;
+        await POST('/api/version/delete', { ref, index: i, slot: 'video' });
+        await loadEp(); renderPanel(); render(true);
+      } }, '✕')))) : null,
+    h('div', { class: 'actions' },
+      v ? h('button', { class: s.videoStatus === 'approved' ? 'ok' : '', onclick: async () => { await save(ref, { videoStatus: s.videoStatus === 'approved' ? null : 'approved' }); renderPanel(); render(true); } }, s.videoStatus === 'approved' ? '✓ Видео утверждено' : 'Утвердить видео') : null,
+      h('button', { onclick: () => input.click() }, v ? 'Загрузить ещё вариант' : 'Загрузить видео'), input),
+    pixverseHelp(s, key));
+  box.addEventListener('dragover', (e) => { e.preventDefault(); box.classList.add('drag'); });
+  box.addEventListener('dragleave', () => box.classList.remove('drag'));
+  box.addEventListener('drop', (e) => {
+    e.preventDefault(); box.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('video/')) uploadVideo(ref, file); else if (file) toast('Сюда — только видео. Картинку перетащи на картинку кадра выше.');
+  });
+  return box;
+}
+
+// Подсказка для Pixverse: всё, что нужно скопировать и загрузить, в одном месте
+function pixverseHelp(s, key) {
+  const shots = (s.vid || '').split(/(?=Shot \d+:)/).map((x) => x.trim()).filter(Boolean);
+  const multi = shots.length > 1 && /^Shot \d+:/.test(shots[0]);
+  const clean = (t) => t.replace(/^Shot \d+:\s*/, '').replace(/@Image\d \(([^)]+)\)/g, '$1').trim();
+  const neg = S.state.project.negative;
+  const dur = s.dur || 5;
+  return h('details', { open: !selVideo(s) }, h('summary', {}, 'Как сделать в Pixverse'),
+    h('ol', { class: 'steps' },
+      h('li', {}, 'Открой ', h('a', { href: 'https://app.pixverse.ai/', target: '_blank' }, 'Pixverse'), ' → Image to Video.'),
+      h('li', {}, key ? h('span', {}, 'Загрузи картинку кадра: ', h('a', { href: fileUrl(key), download: `кадр_${s.id}${key.match(/\.\w+$/)?.[0] || '.png'}` }, 'скачать'), key !== selFile(s) ? h('span', { class: 'muted' }, ' (своей картинки нет — взята из соседнего кадра сцены)') : null)
+        : h('span', { class: 'muted' }, 'Сначала нарисуй картинку кадра — без неё оживлять нечего.')),
+      h('li', {}, multi ? h('span', {}, 'Это многокадровый промпт для Seedance. В Pixverse сделай ', h('b', {}, `${shots.length} отдельных клипа`), ' — по одному на каждый:') : 'Вставь промпт движения:',
+        ...(multi ? shots : [s.vid || '']).map((t, i) => h('div', { class: 'copyrow' }, h('code', {}, clean(t)), h('button', { class: 'ghost', onclick: () => copy(clean(t)) }, multi ? `копировать ${i + 1}` : 'копировать')))),
+      h('li', {}, 'Negative prompt: ', h('button', { class: 'ghost', onclick: () => copy(neg) }, 'копировать')),
+      h('li', {}, `Длительность: по раскадровке ${dur} с. Ставь ${dur <= 5 ? 5 : 8} с — в «Монтаже» лишнее обрежется само.`),
+      h('li', {}, 'Экономия кредитов: сначала пробуй в низком качестве (360p/540p), финал — в 720p/1080p.'),
+      h('li', {}, 'Готовое видео скачай и перетащи в этот блок.')));
+}
+
+// ---------- монтаж (аниматик серии) ----------
+function montageItems() {
+  const out = [];
+  for (const sc of S.ep.scenes) for (const s of sc.shots) {
+    if (s.cut) continue;
+    out.push({ s, scene: sc, video: selVideo(s), img: keyframeOf(s, sc), dur: s.dur || 3 });
+  }
+  return out;
+}
+function fmt(t) { t = Math.max(0, Math.round(t)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; }
+
+function renderMontage() {
+  const items = montageItems();
+  const total = items.reduce((a, x) => a + x.dur, 0);
+  const starts = []; items.reduce((a, x, i) => (starts[i] = a, a + x.dur), 0);
+  const cnt = { video: items.filter((x) => x.video).length, img: items.filter((x) => !x.video && x.img).length };
+  const video = h('video', { playsinline: true, muted: false, preload: 'auto' });
+  const img = h('img', { alt: '' });
+  const blank = h('div', { class: 'blank' });
+  const sub = h('div', { class: 'subs' });
+  const tag = h('div', { class: 'tag' });
+  const screen = h('div', { class: 'screen' }, blank, img, video, tag, sub);
+  const playBtn = h('button', { class: 'primary' }, '▶ Смотреть');
+  const time = h('span', { class: 'muted' }, `0:00 / ${fmt(total)}`);
+  const subsOn = h('input', { type: 'checkbox', checked: lsGet('subs', '1') === '1', onchange: (e) => { lsSet('subs', e.target.checked ? '1' : '0'); show(cur); } });
+  const segs = items.map((x, i) => h('div', { class: 'seg ' + (x.video ? 'v' : x.img ? 'i' : 'e') + (i && x.scene !== items[i - 1].scene ? ' scene' : ''), style: { flexGrow: x.dur }, title: `${x.s.id} · ${x.dur} с · ${x.video ? 'видео' : x.img ? 'картинка' : 'пусто'}`, onclick: () => { cur = i; show(i); } }));
+  const line = h('div', { class: 'timeline' }, ...segs);
+  const head = h('div', { class: 'playhead' });
+  line.append(head);
+  let cur = 0, playing = false, t0 = 0, timer = null, raf = null;
+
+  function stopTimers() { clearTimeout(timer); cancelAnimationFrame(raf); }
+  function show(i) {
+    stopTimers();
+    const x = items[i];
+    if (!x) { playing = false; playBtn.textContent = '▶ Смотреть'; return; }
+    segs.forEach((g, j) => g.classList.toggle('cur', j === i));
+    tag.textContent = `Сцена ${x.scene.n} · кадр ${x.s.id} · ${x.dur} с`;
+    sub.textContent = subsOn.checked ? (x.s.sound || '') : '';
+    sub.style.display = sub.textContent ? '' : 'none';
+    video.style.display = x.video ? '' : 'none';
+    img.style.display = !x.video && x.img ? '' : 'none';
+    blank.textContent = !x.video && !x.img ? `${x.s.id}\n${x.s.frame || ''}` : '';
+    video.pause();
+    if (x.video) {
+      if (video.dataset.file !== x.video) { video.dataset.file = x.video; video.src = fileUrl(x.video); }
+      video.currentTime = 0;
+      if (playing) video.play().catch(() => {});
+    } else if (x.img) {
+      img.src = fileUrl(x.img);
+      img.classList.remove('kb'); void img.offsetWidth; img.classList.add('kb');
+      img.style.animationDuration = x.dur + 's';
+      img.style.animationPlayState = playing ? 'running' : 'paused';
+    }
+    t0 = performance.now();
+    if (playing) tick();
+    else head.style.left = (starts[i] / total * 100) + '%';
+  }
+  function tick() {
+    const x = items[cur];
+    const el = x.video ? video.currentTime : (performance.now() - t0) / 1000;
+    head.style.left = Math.min(100, (starts[cur] + Math.min(el, x.dur)) / total * 100) + '%';
+    time.textContent = `${fmt(starts[cur] + el)} / ${fmt(total)}`;
+    // ролик Pixverse длиннее кадра — обрезаем по хронометражу раскадровки
+    if (el >= x.dur || (x.video && video.ended)) { cur++; return show(cur); }
+    raf = requestAnimationFrame(tick);
+  }
+  playBtn.onclick = () => {
+    playing = !playing;
+    playBtn.textContent = playing ? '⏸ Пауза' : '▶ Смотреть';
+    if (playing && cur >= items.length) cur = 0;
+    show(cur);
+  };
+  S.montage = { stop: () => { playing = false; stopTimers(); video.pause(); } };
+  $('#main').replaceChildren(h('div', { class: 'montage' },
+    h('div', { class: 'bar' },
+      h('span', { class: 'muted' }, `Черновой монтаж: ${items.length} кадров, ${fmt(total)}. Видео — ${cnt.video}, картинки вместо видео — ${cnt.img}, пусто — ${items.length - cnt.video - cnt.img}.`)),
+    screen,
+    h('div', { class: 'bar', style: { marginTop: '10px' } },
+      h('button', { onclick: () => { cur = Math.max(0, cur - 1); show(cur); } }, '⏮'), playBtn, h('button', { onclick: () => { cur = Math.min(items.length - 1, cur + 1); show(cur); } }, '⏭'),
+      time, h('span', { class: 'grow' }), h('label', { class: 'muted' }, subsOn, ' реплики и звук субтитрами'),
+      h('button', { class: 'ghost', onclick: () => select({ kind: 'shot', ep: S.ep.id, id: items[cur].s.id }) }, 'Открыть кадр')),
+    line,
+    h('div', { class: 'legend muted' }, h('i', { class: 'seg v' }), ' видео ', h('i', { class: 'seg i' }), ' картинка ', h('i', { class: 'seg e' }), ' пусто · клик по полосе — перейти к кадру')));
+  show(0);
 }
 
 async function upload(ref, file) {
@@ -523,6 +687,9 @@ function fitPanel() {
 }
 
 function render(keepScroll) {
+  // автообновление не должно сбивать воспроизведение монтажа
+  if (keepScroll && S.view === 'montage' && S.montage) return;
+  if (S.montage) { S.montage.stop(); S.montage = null; }
   const y = window.scrollY;
   document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.view === S.view));
   if (S.view === 'board') renderBoard();
@@ -532,6 +699,7 @@ function render(keepScroll) {
   else if (S.view === 'queue') renderQueue();
   else if (S.view === 'canon') renderCanon();
   else if (S.view === 'lib') renderLib();
+  else if (S.view === 'montage') renderMontage();
   if (keepScroll) window.scrollTo(0, y);
 }
 

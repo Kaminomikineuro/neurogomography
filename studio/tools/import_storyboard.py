@@ -32,7 +32,7 @@ def code(s):
 
 def parse_shot_block(sid, head, body):
     parts = [p.strip() for p in head.split('·')]
-    shot = {'id': sid, 'dur': None, 'camera': '', 'tool': '', 'cut': '[можно вырезать]' in head or '[на усмотрение]' in head,
+    shot = {'id': sid, 'dur': None, 'camera': '', 'tool': '', 'cut': False, 'optional': '[можно вырезать]' in head or '[на усмотрение]' in head,
             'frame': '', 'sound': '', 'img': '', 'imgFrom': None, 'vid': ''}
     for p in parts[1:]:
         p2 = re.sub(r'\*\*\[.*?\]\*\*', '', p).strip()
@@ -147,7 +147,7 @@ def merge(old, new):
             o = keep.get(s['id'])
             if not o:
                 continue
-            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs'):
+            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs', 'videos', 'videoSelected', 'videoStatus', 'tool', 'dur'):
                 if k in o:
                     s[k] = o[k]
     return new

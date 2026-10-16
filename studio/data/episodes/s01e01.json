@@ -35,7 +35,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "F1",
@@ -61,7 +62,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "F2",
@@ -87,7 +89,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "E2",
@@ -111,7 +114,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "E3",
@@ -135,7 +139,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "F3",
@@ -161,7 +166,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "E4",
@@ -185,7 +191,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     },
     {
      "id": "E5",
@@ -209,7 +216,8 @@
        "at": "2026-10-16"
       }
      ],
-     "selected": 0
+     "selected": 0,
+     "optional": false
     }
    ]
   },
@@ -235,7 +243,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.2",
@@ -252,7 +261,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.3",
@@ -269,7 +279,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.4",
@@ -288,7 +299,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.5",
@@ -308,7 +320,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.6",
@@ -327,7 +340,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.7",
@@ -346,7 +360,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.8",
@@ -366,7 +381,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.9",
@@ -383,7 +399,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.10",
@@ -400,7 +417,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.11",
@@ -419,7 +437,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.12",
@@ -439,7 +458,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.13",
@@ -459,7 +479,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.14",
@@ -478,7 +499,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "1.15",
@@ -495,7 +517,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   },
@@ -522,7 +545,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.2",
@@ -541,7 +565,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.3",
@@ -561,7 +586,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.4",
@@ -578,7 +604,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.5",
@@ -597,7 +624,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.6",
@@ -616,7 +644,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.7",
@@ -633,7 +662,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.8",
@@ -650,7 +680,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.9",
@@ -669,7 +700,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "2.10",
@@ -686,7 +718,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   },
@@ -711,7 +744,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.2",
@@ -728,7 +762,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.3",
@@ -748,7 +783,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.4",
@@ -765,7 +801,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.5",
@@ -784,7 +821,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.6",
@@ -804,7 +842,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.7",
@@ -823,7 +862,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.8",
@@ -840,7 +880,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.9",
@@ -860,7 +901,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.10",
@@ -880,7 +922,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.11",
@@ -899,7 +942,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.12",
@@ -916,7 +960,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.13",
@@ -935,7 +980,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "3.14",
@@ -952,7 +998,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   },
@@ -979,7 +1026,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.2",
@@ -999,7 +1047,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.3",
@@ -1020,7 +1069,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.4",
@@ -1040,7 +1090,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.5",
@@ -1057,7 +1108,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.6",
@@ -1074,7 +1126,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.7",
@@ -1091,7 +1144,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.8",
@@ -1108,7 +1162,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.9",
@@ -1128,7 +1183,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.10",
@@ -1147,7 +1203,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "4.11",
@@ -1166,7 +1223,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   },
@@ -1194,7 +1252,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.2",
@@ -1213,7 +1272,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.3",
@@ -1230,7 +1290,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.4",
@@ -1250,7 +1311,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.5",
@@ -1269,7 +1331,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.6",
@@ -1288,7 +1351,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.7",
@@ -1307,7 +1371,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.8",
@@ -1327,7 +1392,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.9",
@@ -1346,7 +1412,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.10",
@@ -1366,7 +1433,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.11",
@@ -1383,7 +1451,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.12",
@@ -1403,7 +1472,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "5.13",
@@ -1422,7 +1492,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   },
@@ -1450,7 +1521,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.2",
@@ -1469,7 +1541,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.3",
@@ -1486,7 +1559,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.4",
@@ -1505,7 +1579,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.5",
@@ -1522,7 +1597,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.6",
@@ -1539,7 +1615,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.7",
@@ -1556,7 +1633,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.8",
@@ -1573,7 +1651,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.9",
@@ -1590,7 +1669,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.10",
@@ -1607,7 +1687,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.11",
@@ -1624,7 +1705,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.12",
@@ -1643,7 +1725,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.13",
@@ -1662,7 +1745,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.14",
@@ -1681,7 +1765,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "6.15",
@@ -1698,7 +1783,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   },
@@ -1725,7 +1811,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.2",
@@ -1742,7 +1829,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.3",
@@ -1761,7 +1849,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.4",
@@ -1778,7 +1867,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.5",
@@ -1797,7 +1887,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.6",
@@ -1814,7 +1905,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.7",
@@ -1833,7 +1925,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.8",
@@ -1852,7 +1945,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.9",
@@ -1869,7 +1963,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.10",
@@ -1886,14 +1981,15 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     },
     {
      "id": "7.11",
      "dur": 3,
      "camera": "Средний",
      "tool": "Kling",
-     "cut": true,
+     "cut": false,
      "frame": "мертвец шагает, наступает на собственную сломанную ногу, падает — и снова начинает подниматься.",
      "sound": "",
      "img": "",
@@ -1903,7 +1999,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": true
     },
     {
      "id": "7.12",
@@ -1923,7 +2020,8 @@
      "location": null,
      "status": "todo",
      "versions": [],
-     "selected": null
+     "selected": null,
+     "optional": false
     }
    ]
   }

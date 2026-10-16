@@ -195,12 +195,13 @@ const jobs = [];
 let running = 0;
 const reserved = new Set();
 
-function nextOut(dir, ext = '.png') {
+function nextOut(dir, ext = '.png', prefix = 'v') {
   fs.mkdirSync(dir, { recursive: true });
-  const used = fs.readdirSync(dir).map((f) => /^v(\d+)\./.exec(f)?.[1]).filter(Boolean).map(Number);
+  const rx = new RegExp(`^${prefix}(\\d+)\\.`);
+  const used = fs.readdirSync(dir).map((f) => rx.exec(f)?.[1]).filter(Boolean).map(Number);
   let n = Math.max(0, ...used) + 1;
-  while (reserved.has(path.join(dir, `v${String(n).padStart(3, '0')}`))) n++;
-  const base = path.join(dir, `v${String(n).padStart(3, '0')}`);
+  while (reserved.has(path.join(dir, `${prefix}${String(n).padStart(3, '0')}`))) n++;
+  const base = path.join(dir, `${prefix}${String(n).padStart(3, '0')}`);
   reserved.add(base);
   return base + ext;
 }
@@ -384,7 +385,7 @@ function exportEpisode(epId) {
   const outDir = path.join(EXPORT, safe(epId));
   fs.rmSync(outDir, { recursive: true, force: true });
   const rows = [];
-  let n = 0, t = 0, missing = 0;
+  let n = 0, t = 0, missing = 0, videos = 0;
   for (const sc of ep.scenes) {
     for (const s of sc.shots) {
       if (s.cut) continue;
@@ -400,6 +401,8 @@ function exportEpisode(epId) {
       }
       if (key) fs.copyFileSync(abs(key), path.join(dir, 'keyframe' + path.extname(key)));
       else missing++;
+      const video = selectedVideo(s);
+      if (video) { fs.copyFileSync(abs(video), path.join(dir, 'video' + path.extname(video))); videos++; }
       const imgs = [];
       for (const m of (s.vid || '').matchAll(/@Image(\d) \(([^)]+)\)/g)) {
         const id = VID_ROLE.find(([rx]) => rx.test(m[2]))?.[1];
@@ -416,18 +419,40 @@ function exportEpisode(epId) {
         `Кадр: ${s.frame || ''}`, `Звук: ${s.sound || ''}`,
       ].join('\n'));
       t += s.dur || 0;
-      rows.push(`| ${n} | ${s.id} | ${s.dur || ''} | ${s.tool || ''} | ${key ? '✓' : '—'} | ${(s.sound || '').replace(/\|/g, '/')} |`);
+      rows.push(`| ${n} | ${s.id} | ${s.dur || ''} | ${s.tool || ''} | ${key ? '✓' : '—'} | ${video ? '✓' : '—'} | ${(s.sound || '').replace(/\|/g, '/')} |`);
     }
   }
   fs.writeFileSync(path.join(outDir, 'Монтажный лист.md'), [
-    `# ${ep.title}`, '', `Кадров: ${n} · хронометраж ≈ ${Math.round(t / 60 * 10) / 10} мин · без ключевого кадра: ${missing}`, '',
-    '| № | Кадр | с | Инструмент | Картинка | Звук |', '|---|---|---|---|---|---|', ...rows, '',
+    `# ${ep.title}`, '', `Кадров: ${n} · хронометраж ≈ ${Math.round(t / 60 * 10) / 10} мин · без ключевого кадра: ${missing} · с видео: ${videos}`, '',
+    '| № | Кадр | с | Инструмент | Картинка | Видео | Звук |', '|---|---|---|---|---|---|---|', ...rows, '',
   ].join('\n'));
-  return { dir: rel(outDir), shots: n, missing };
+  return { dir: rel(outDir), shots: n, missing, videos };
 }
 
 // ---------- HTTP ----------
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.md': 'text/plain; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.log': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.md': 'text/plain; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.log': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime' };
+const VIDEO_EXT = { 'video/mp4': '.mp4', 'video/webm': '.webm', 'video/quicktime': '.mov' };
+const selectedVideo = (s) => (s && s.videoSelected != null && s.videos?.[s.videoSelected] ? s.videos[s.videoSelected].file : null);
+
+// видео пишем на диск потоком, чтобы не держать сотни мегабайт в памяти
+async function saveStream(req, out, limit = 600e6) {
+  const tmp = out + '.part';
+  const ws = fs.createWriteStream(tmp);
+  let size = 0;
+  try {
+    for await (const c of req) {
+      size += c.length;
+      if (size > limit) throw new Error('Видео больше 600 МБ — сожми его перед загрузкой');
+      if (!ws.write(c)) await new Promise((r) => ws.once('drain', r));
+    }
+    await new Promise((r, j) => ws.end((e) => (e ? j(e) : r())));
+    fs.renameSync(tmp, out);
+  } catch (e) {
+    ws.destroy();
+    fs.rmSync(tmp, { force: true });
+    throw e;
+  }
+}
 
 function send(res, code, data, type = 'application/json; charset=utf-8') {
   res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' });
@@ -441,9 +466,20 @@ async function body(req, limit = 60e6) {
   return Buffer.concat(chunks);
 }
 
-function serveFile(res, file) {
+function serveFile(res, file, req) {
   if (!file.startsWith(ROOT + path.sep) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) return send(res, 404, 'Нет файла', 'text/plain; charset=utf-8');
-  res.writeHead(200, { 'Content-Type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+  const type = MIME[path.extname(file).toLowerCase()] || 'application/octet-stream';
+  const size = fs.statSync(file).size;
+  // видео в браузере перематывается кусками (Range), без этого плеер не даёт крутить ролик
+  const m = /bytes=(\d*)-(\d*)/.exec(req?.headers.range || '');
+  if (m) {
+    const start = m[1] ? Number(m[1]) : Math.max(0, size - Number(m[2]));
+    const end = m[1] && m[2] ? Math.min(Number(m[2]), size - 1) : size - 1;
+    if (start >= size || start > end) { res.writeHead(416, { 'Content-Range': `bytes */${size}` }); return res.end(); }
+    res.writeHead(206, { 'Content-Type': type, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Accept-Ranges': 'bytes', 'Content-Length': end - start + 1, 'Cache-Control': 'no-cache' });
+    return fs.createReadStream(file, { start, end }).pipe(res);
+  }
+  res.writeHead(200, { 'Content-Type': type, 'Content-Length': size, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-cache' });
   fs.createReadStream(file).pipe(res);
 }
 
@@ -471,13 +507,16 @@ const routes = {
   'GET /api/job': (q) => jobs.find((j) => j.id === q.get('id')) || null,
   'POST /api/version/delete': (q, b) => {
     const o = open(b.ref);
-    const vs = o.item.versions || [];
+    const video = b.slot === 'video';
+    const listKey = video ? 'videos' : 'versions', selKey = video ? 'videoSelected' : 'selected';
+    const vs = o.item[listKey] || [];
     const v = vs[b.index];
     if (!v) throw new Error('Нет такой версии');
     vs.splice(b.index, 1);
-    if (o.item.selected === b.index) o.item.selected = vs.length ? vs.length - 1 : null;
-    else if (o.item.selected > b.index) o.item.selected--;
-    if (b.ref.kind === 'shot' && !vs.length) o.item.status = 'todo';
+    if (o.item[selKey] === b.index) o.item[selKey] = vs.length ? vs.length - 1 : null;
+    else if (o.item[selKey] > b.index) o.item[selKey]--;
+    if (video && !vs.length) delete o.item.videoStatus;
+    if (!video && b.ref.kind === 'shot' && !vs.length) o.item.status = 'todo';
     o.save();
     // файл удаляем, только если его нарисовала студия; исходники в «Аниме/» не трогаем
     if (v.file.startsWith('studio/media/')) {
@@ -500,10 +539,11 @@ const routes = {
   },
   'POST /api/update': (q, b) => {
     const o = open(b.ref);
-    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group'];
+    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus'];
     for (const [k, v] of Object.entries(b.patch || {})) if (allowed.includes(k)) o.item[k] = v;
     o.save();
     if (b.patch?.status === 'approved') logInbox(`${label(b.ref)} — утверждён (${path.basename(selectedFile(o.item) || '')})`);
+    if (b.patch?.videoStatus === 'approved') logInbox(`${label(b.ref)} — видео утверждено (${path.basename(selectedVideo(o.item) || '')})`);
     if (b.patch?.notes) logInbox(`${label(b.ref)} — заметка для Claude: «${b.patch.notes}»`);
     return o.item;
   },
@@ -567,6 +607,22 @@ const server = http.createServer(async (req, res) => {
       logInbox(`Иллюстрация добавлена в библиотеку: ${rel(out)}`);
       return send(res, 200, { file: rel(out) });
     }
+    if (key === 'POST /api/video/upload') {
+      const ref = JSON.parse(url.searchParams.get('ref'));
+      if (ref.kind !== 'shot') throw new Error('Видео бывает только у кадра');
+      const ext = VIDEO_EXT[(req.headers['content-type'] || '').split(';')[0]] || '.mp4';
+      const o = open(ref);
+      const out = nextOut(o.dir, ext, 'video');
+      try { await saveStream(req, out); } finally { reserved.delete(out.replace(/\.\w+$/, '')); }
+      const o2 = open(ref);
+      o2.item.videos ||= [];
+      o2.item.videos.push({ file: rel(out), at: now(), by: url.searchParams.get('by') || 'загружено вручную', name: url.searchParams.get('name') || '' });
+      o2.item.videoSelected = o2.item.videos.length - 1;
+      delete o2.item.videoStatus;
+      o2.save();
+      logInbox(`${label(ref)} — новое видео ${path.basename(out)} (${(fs.statSync(out).size / 1e6).toFixed(1)} МБ)`);
+      return send(res, 200, o2.item);
+    }
     if (key === 'POST /api/upload') {
       const ref = JSON.parse(url.searchParams.get('ref'));
       const type = req.headers['content-type'] || '';
@@ -583,7 +639,7 @@ const server = http.createServer(async (req, res) => {
       const b = req.method === 'POST' ? JSON.parse((await body(req, 5e6)).toString() || '{}') : null;
       return send(res, 200, await routes[key](url.searchParams, b));
     }
-    if (url.pathname.startsWith('/files/')) return serveFile(res, path.resolve(ROOT, decodeURIComponent(url.pathname.slice(7))));
+    if (url.pathname.startsWith('/files/')) return serveFile(res, path.resolve(ROOT, decodeURIComponent(url.pathname.slice(7))), req);
     const f = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
     return serveFile(res, path.resolve(STUDIO, 'public', decodeURIComponent(f)));
   } catch (e) {
