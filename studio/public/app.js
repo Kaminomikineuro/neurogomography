@@ -421,7 +421,14 @@ async function renderPanel() {
 
   const versions = (it.versions || []).length ? h('div', { class: 'versions' }, ...it.versions.map((v, i) =>
     h('button', { class: i === it.selected ? 'on' : '', title: `${v.by || ''} ${v.at || ''}\n${v.note || ''}`, onclick: async () => { await save(ref, { selected: i }); renderPanel(); render(true); } },
-      h('img', { src: fileUrl(v.file), loading: 'lazy' }), h('span', {}, `v${i + 1} · ${v.by || ''}`)))) : null;
+      h('img', { src: fileUrl(v.file), loading: 'lazy' }), h('span', {}, `v${i + 1} · ${v.by || ''}`),
+      h('i', { class: 'del', title: 'Удалить эту версию', onclick: async (e) => {
+        e.stopPropagation();
+        if (!confirm(`Удалить версию v${i + 1}?` + (v.file.startsWith('studio/media/') ? ' Файл удалится с диска.' : ' Исходный файл в папке «Аниме» останется.'))) return;
+        await POST('/api/version/delete', { ref, index: i });
+        if (ref.kind === 'shot') await loadEp(); else await loadState();
+        renderPanel(); render(true);
+      } }, '✕')))) : null;
 
   const actions = h('div', { class: 'actions' },
     ref.kind === 'shot' && f ? h('button', { class: s.status === 'approved' ? 'ok' : '', onclick: async () => { await save(ref, { status: s.status === 'approved' ? 'review' : 'approved' }); renderPanel(); render(true); } },

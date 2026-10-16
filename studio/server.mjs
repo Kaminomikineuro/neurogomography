@@ -129,7 +129,7 @@ function buildPrompt(ref, opts = {}) {
   } else if (ref.kind === 'character') {
     raw = item.sheetPrompt || `anime character model sheet of ${item.token}, front, side and back views, expressions, plain white background, labeled ${item.id}`;
     raw += ', STYLE';
-    for (const r of item.refs || []) addRef(r.file, `book illustration of ${charName(item)}${r.note ? ' (' + r.note + ')' : ''} — follow this design: face, hair, costume and colors. Redraw it as a clean model sheet, do not copy the composition`);
+    for (const r of item.refs || []) addRef(r.file, `book illustration of ${charName(item)}${r.note ? ' (' + r.note + ')' : ''} — follow this design: shape, face, hair, costume and colors. Do NOT copy its rendering or painting style — redraw it in the anime style described in the prompt, as a clean model sheet, not copying the composition`);
     if (item.refs?.length) raw += '. Base the character design on the attached book illustrations';
   } else if (ref.kind === 'location') {
     raw = `wide establishing background plate, ${item.prompt}, ${item.palette || ''}, empty scene without characters, STYLE`;
@@ -169,7 +169,7 @@ function buildPrompt(ref, opts = {}) {
   lines.push('Avoid: ' + pr.negative + '.');
   if (opts.note) {
     lines.push(opts.edit
-      ? `REVISION: edit the CURRENT VERSION image. Change only this: ${opts.note}. Keep everything else — composition, characters, palette and style — the same.`
+      ? `REVISION of the CURRENT VERSION image. Apply exactly this change: ${opts.note}. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above.`
       : `Additional direction: ${opts.note}`);
   }
   warnings.unshift(...checkRules(pr, raw + ' ' + (opts.note || '')));
@@ -469,6 +469,23 @@ const routes = {
   },
   'GET /api/jobs': () => jobs.map(({ log, prompt, ...j }) => ({ ...j, logTail: log.slice(-1500) })),
   'GET /api/job': (q) => jobs.find((j) => j.id === q.get('id')) || null,
+  'POST /api/version/delete': (q, b) => {
+    const o = open(b.ref);
+    const vs = o.item.versions || [];
+    const v = vs[b.index];
+    if (!v) throw new Error('Нет такой версии');
+    vs.splice(b.index, 1);
+    if (o.item.selected === b.index) o.item.selected = vs.length ? vs.length - 1 : null;
+    else if (o.item.selected > b.index) o.item.selected--;
+    if (b.ref.kind === 'shot' && !vs.length) o.item.status = 'todo';
+    o.save();
+    // файл удаляем, только если его нарисовала студия; исходники в «Аниме/» не трогаем
+    if (v.file.startsWith('studio/media/')) {
+      for (const f of [abs(v.file), abs(v.file).replace(/\.\w+$/, '.log')]) fs.rmSync(f, { force: true });
+    }
+    logInbox(`${label(b.ref)} — удалена версия ${path.basename(v.file)}`);
+    return o.item;
+  },
   'POST /api/job/retry': (q, b) => {
     const j = jobs.find((x) => x.id === b.id);
     if (!j) throw new Error('Задание не найдено — нажми «Нарисовать» в карточке ещё раз');
