@@ -98,9 +98,10 @@
    "sheetPrompt": "anime character model sheet of the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit, heavy black boots, obsidian-black eyes, front, side, back views and head close-ups, plain white background, labeled THE LORD",
    "versions": [
     {
-     "file": "Аниме/Карты персонажей/Аниме-модельшит изысканного лорда.png",
-     "by": "импорт",
-     "at": "2026-10-16"
+     "file": "studio/media/characters/LORD/v001.jpg",
+     "at": "2026-10-16 18:41:28",
+     "by": "загружено вручную",
+     "note": ""
     }
    ],
    "selected": 0
@@ -113,12 +114,6 @@
    "sheetPrompt": "anime creature model sheet of a colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils, side view, front view, wings spread, head close-up, scale detail, human figure for scale, plain white background, labeled DRAGON",
    "versions": [
     {
-     "file": "studio/media/characters/DRAGON/v001.png",
-     "at": "2026-10-16 14:26:03",
-     "by": "загружено вручную",
-     "note": ""
-    },
-    {
      "file": "studio/media/characters/DRAGON/v003.png",
      "at": "2026-10-16 14:50:14",
      "by": "codex",
@@ -128,12 +123,7 @@
     }
    ],
    "selected": 0,
-   "refs": [
-    {
-     "file": "Аниме/Иллюстрации книги/Мрак.png",
-     "note": "референс в стиле книги"
-    }
-   ]
+   "refs": []
   },
   {
    "id": "RUKH",
@@ -216,8 +206,17 @@
    "group": "Второстепенные",
    "token": "commander Ardan, stern female drayk commander, sharp face, military bearing",
    "sheetPrompt": "anime character model sheet of a stern female drayk commander, sharp face, military bearing, drayk officer armor in dark red and brown, front, side, back views, two expressions, plain white background, labeled ARDAN",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/ARDAN/v001.png",
+     "at": "2026-10-16 15:05:46",
+     "by": "codex",
+     "note": "короткие серые волосы",
+     "style": "tv",
+     "prompt": "anime character model sheet of a stern female drayk commander, sharp face, military bearing, drayk officer armor in dark red and brown, front, side, back views, two expressions, plain white background, labeled ARDAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: короткие серые волосы"
+    }
+   ],
+   "selected": 0
   },
   {
    "id": "BELFI",
@@ -225,8 +224,23 @@
    "group": "Второстепенные",
    "token": "general Belfi, old stooped drayk general, tired worn face",
    "sheetPrompt": "anime character model sheet of an old stooped drayk general, tired worn face, heavy old drayk uniform, front, side, back views, two expressions, plain white background, labeled BELFI",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/BELFI/v002.png",
+     "at": "2026-10-16 15:14:32",
+     "by": "codex",
+     "note": "сделай его крупнее, более мужское и крупное телосложение и версия, одежда такая же, но мужская",
+     "style": "tv",
+     "prompt": "anime character model sheet of an old stooped drayk general, tired worn face, heavy old drayk uniform, front, side, back views, two expressions, plain white background, labeled BELFI, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: сделай его крупнее, более мужское и крупное телосложение и версия, одежда такая же, но мужская. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/Снимок экрана 2026-10-16 180909.png",
+     "note": "одежда такого типа"
+    }
+   ]
   },
   {
    "id": "BASTIAN",
@@ -234,8 +248,31 @@
    "group": "Второстепенные",
    "token": "Bastian, drayk commander seen only from behind or in silhouette, long cloak, mounted",
    "sheetPrompt": "anime character model sheet of a drayk cavalry commander seen from behind and in silhouette only, long cloak, armor, on horseback and standing, plain white background, labeled BASTIAN",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/BASTIAN/v001.png",
+     "at": "2026-10-16 15:15:49",
+     "by": "codex",
+     "note": "перерисовать референс в стиле аниме, как все остальное",
+     "style": "tv",
+     "prompt": "anime character model sheet of a drayk cavalry commander seen from behind and in silhouette only, long cloak, armor, on horseback and standing, plain white background, labeled BASTIAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: перерисовать референс в стиле аниме, как все остальное"
+    },
+    {
+     "file": "studio/media/characters/BASTIAN/v002.png",
+     "at": "2026-10-16 18:25:05",
+     "by": "codex",
+     "note": "меняем одежду ближе к одежде Бельфи - с красными вставками, но более практичную - то же что на референсе, без накидки",
+     "style": "tv",
+     "prompt": "anime character model sheet of a drayk cavalry commander seen from behind and in silhouette only, long cloak, armor, on horseback and standing, plain white background, labeled BASTIAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: меняем одежду ближе к одежде Бельфи - с красными вставками, но более практичную - то же что на референсе, без накидки. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+    }
+   ],
+   "selected": 1,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/Бастиан.png",
+     "note": "референс в стиле иллюстрации книги, надо в аниме стиль"
+    }
+   ]
   },
   {
    "id": "LIAM SWORD",
@@ -243,8 +280,22 @@
    "group": "Предметы",
    "token": "Liam's sword with a red ruby on the hilt",
    "sheetPrompt": "anime prop design sheet of a slender straight sword with a red ruby set in the hilt, front and side views, hilt close-up, plain white background, labeled LIAM SWORD",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/LIAM_SWORD/v001.png",
+     "at": "2026-10-16 18:36:37",
+     "by": "codex",
+     "note": "меч с референса в аниме стиле",
+     "style": "tv",
+     "prompt": "anime prop design sheet of a slender straight sword with a red ruby set in the hilt, front and side views, hilt close-up, plain white background, labeled LIAM SWORD, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: меч с референса в аниме стиле"
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/меч реф.jpg"
+    }
+   ]
   },
   {
    "id": "LORD SWORD",
@@ -252,8 +303,17 @@
    "group": "Предметы",
    "token": "black steel sword",
    "sheetPrompt": "anime prop design sheet of a black steel sword, elegant and plain, front and side views, a version dissolving into dark smoke from the tip, plain white background, labeled LORD SWORD",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/characters/LORD_SWORD/v001.png",
+     "at": "2026-10-16 18:37:32",
+     "by": "codex",
+     "note": "простой длинный черный меч, особо не примечательный",
+     "style": "tv",
+     "prompt": "anime prop design sheet of a black steel sword, elegant and plain, front and side views, a version dissolving into dark smoke from the tip, plain white background, labeled LORD SWORD, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: простой длинный черный меч, особо не примечательный"
+    }
+   ],
+   "selected": 0
   }
  ],
  "locations": [
@@ -402,32 +462,85 @@
    "name": "Ангар птиц Рух",
    "palette": "PAL-DESERT",
    "prompt": "open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust, no people",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/locations/hangar/v001.png",
+     "at": "2026-10-16 18:45:31",
+     "by": "codex",
+     "note": "",
+     "style": "tv",
+     "prompt": "wide establishing background plate, open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust, no people, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+    }
+   ],
+   "selected": 0
   },
   {
    "id": "battlefield",
    "name": "Поле битвы у кургана",
    "palette": "PAL-DESERT",
    "prompt": "vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, no people, anime stylized, no gore detail",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/locations/battlefield/v001.png",
+     "at": "2026-10-16 18:46:44",
+     "by": "codex",
+     "note": "основную идею взять с референса (без главных персов))",
+     "style": "tv",
+     "prompt": "wide establishing background plate, vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, no people, anime stylized, no gore detail, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: основную идею взять с референса (без главных персов))"
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/art (2).jpg",
+     "note": "момент передачи меча Лиаму на том самом кургане"
+    }
+   ]
   },
   {
    "id": "battlefield-rift",
    "name": "Поле битвы под разломом",
    "palette": "PAL-RIFT",
    "prompt": "the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field, no people",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/locations/battlefield-rift/v001.png",
+     "at": "2026-10-16 18:48:50",
+     "by": "codex",
+     "note": "то же что и поле бытвы у кургана, но уже в иных оттенках, с разломом - как на рефе",
+     "style": "tv",
+     "prompt": "wide establishing background plate, the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field, no people, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: то же что и поле бытвы у кургана, но уже в иных оттенках, с разломом - как на рефе"
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/разлом.jpg"
+    }
+   ]
   },
   {
    "id": "forest-lake",
    "name": "Лес у озера",
    "palette": "PAL-FOREST",
    "prompt": "shady forest clearing by a cool lake beyond the red desert cliffs, a wide old tree trunk, dense foliage, dappled green and blue light, no people",
-   "versions": [],
-   "selected": null
+   "versions": [
+    {
+     "file": "studio/media/locations/forest-lake/v001.png",
+     "at": "2026-10-16 18:50:00",
+     "by": "codex",
+     "note": "",
+     "style": "tv",
+     "prompt": "wide establishing background plate, shady forest clearing by a cool lake beyond the red desert cliffs, a wide old tree trunk, dense foliage, dappled green and blue light, no people, shady dense forest, cool lake, dappled green and blue light, calm, quiet, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/art (3).jpg",
+     "note": "сцена из иллюстрации книги)"
+    }
+   ]
   }
  ],
  "rules": [
