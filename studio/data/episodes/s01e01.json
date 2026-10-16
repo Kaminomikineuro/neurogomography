@@ -282,7 +282,7 @@
      "vid": "static camera, the glass trembles, sand grains hit and slide down",
      "characters": [],
      "location": null,
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "studio/media/s01e01/1.2/v001.png",
@@ -311,7 +311,7 @@
      "vid": "slow push-in toward the red mark, dust drifts in the light",
      "characters": [],
      "location": null,
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "studio/media/s01e01/1.3/v001.png",
@@ -342,7 +342,7 @@
       "LIAM"
      ],
      "location": null,
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "studio/media/s01e01/1.4/v001.png",
@@ -351,6 +351,14 @@
        "note": "",
        "style": "tv",
        "prompt": "close-up of Liam sitting in a heavy chair, his eyes raised from the map toward the officers, one hand at his collar, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/1.4/v002.png",
+       "at": "2026-10-16 20:02:38",
+       "by": "codex",
+       "note": "все ок, только вторую руку на стол, Лиам стучит пальцами по столу",
+       "style": "tv",
+       "prompt": "close-up of Liam sitting in a heavy chair, his eyes raised from the map toward the officers, one hand at his collar, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: все ок, только вторую руку на стол, Лиам стучит пальцами по столу. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
       }
      ],
      "selected": 0,
@@ -373,9 +381,18 @@
       "ROY"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "approved",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.5/v001.png",
+       "at": "2026-10-16 19:59:10",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium shot of a young drayk captain reporting at the map table, uncertain young voice expression, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- captain Roy: captain Roy, young drayk captain, uncertain and dutiful, plain drayk officer uniform (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "ROY",
@@ -402,9 +419,26 @@
       "BELFI"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.5a/v001.png",
+       "at": "2026-10-16 20:05:15",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme close-up of the tired eyes of an old stooped drayk general, heavy lids, deep wrinkles, light through dusty windows, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- general Belfi: general Belfi, old stooped drayk general, tired worn face (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/1.5a/v002.png",
+       "at": "2026-10-16 20:07:01",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme close-up of the tired eyes of an old stooped drayk general, heavy lids, deep wrinkles, light through dusty windows, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- general Belfi: general Belfi, old stooped drayk general, tired worn face (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 1,
      "lines": [
       {
        "who": "ROY",
@@ -431,9 +465,18 @@
       "ARDAN"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.6/v001.png",
+       "at": "2026-10-16 20:08:44",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of a stern female drayk commander, sharp face, looking sideways at someone, not at the map, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- commander Ardan: commander Ardan, stern female drayk commander, sharp face, military bearing (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "ARDAN",
@@ -460,9 +503,18 @@
       "BELFI"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.7/v001.png",
+       "at": "2026-10-16 20:10:22",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium shot of an old stooped drayk general standing at the edge of the stone table, tired worn face, knuckles pressed hard on the stone, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- general Belfi: general Belfi, old stooped drayk general, tired worn face (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "тишина, ветер."
     },
@@ -544,9 +596,18 @@
      "vid": "fingers tap twice and stop, hold",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.10/v001.png",
+       "at": "2026-10-16 20:11:36",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of a young man's fingers drumming on a carved stone armrest, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "стук пальцев, потом тишина."
     },
@@ -566,9 +627,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.11/v001.png",
+       "at": "2026-10-16 20:13:13",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "low angle shot of Liam rising from the chair, the window light behind him, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -626,9 +696,18 @@
       "BELFI"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.13/v001.png",
+       "at": "2026-10-16 20:14:56",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium two-shot, Liam turned toward the old general, a short nod toward the map, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- general Belfi: general Belfi, old stooped drayk general, tired worn face (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -655,9 +734,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.14/v001.png",
+       "at": "2026-10-16 20:16:28",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium shot of Liam walking toward a heavy door, officers behind him at the table, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -694,9 +782,18 @@
      "vid": "static camera, only dust moves in the light",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/1.15/v001.png",
+       "at": "2026-10-16 20:17:38",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "wide shot of the council room after someone left, three officers frozen around the map table, a closed door, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "звенящая тишина, дребезг окна."
     }
@@ -724,9 +821,18 @@
       "RUKH"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.1/v001.png",
+       "at": "2026-10-16 20:19:26",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "wide shot of an open hangar in a desert fortress, several giant giant riding bird birds shifting on their feet, a knight tossing pieces of dried meat into a beak, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nCharacters:\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "гарканье птиц, ветер, шорох перьев."
     },
@@ -746,9 +852,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.2/v001.png",
+       "at": "2026-10-16 20:21:16",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium shot of drayk knights silently checking saddle straps on giant birds, Liam entering the frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -769,9 +884,18 @@
       "RUKH"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.3/v001.png",
+       "at": "2026-10-16 20:24:41",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam swinging up into the saddle of a giant riding bird, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -811,9 +935,18 @@
       "RUKH"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.5/v001.png",
+       "at": "2026-10-16 20:26:18",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "aerial extreme wide shot, a formation of giant riding bird riders flying over a cracked red rocky wasteland, blazing red sun, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nCharacters:\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "ветер, хлопки крыльев. Начинается музыка."
     },
@@ -832,10 +965,27 @@
      "characters": [
       "LIAM"
      ],
-     "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "location": "desert",
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.6/v001.png",
+       "at": "2026-10-16 20:27:44",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of Liam riding, squinting against the red sun, white hair whipped by the wind, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/2.6/v002.png",
+       "at": "2026-10-16 21:50:04",
+       "by": "codex",
+       "note": "убрать ангар, это в небе сцена, над локацией пустыня",
+       "style": "tv",
+       "prompt": "close-up of Liam riding, squinting against the red sun, white hair whipped by the wind, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: endless red rocky desert, layered stone ridges to the horizon, rust-red sky with dazzling white clouds, blazing red sun, no vegetation.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: убрать ангар, это в небе сцена, над локацией пустыня. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [],
      "linesFrom": ""
     },
@@ -852,10 +1002,27 @@
      "imgFrom": null,
      "vid": "slow push-in toward the dark stain",
      "characters": [],
-     "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "location": "desert",
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.7/v001.png",
+       "at": "2026-10-16 20:29:27",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "high aerial POV, far ahead on the rust sand a dark spreading stain, smoke, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/2.7/v002.png",
+       "at": "2026-10-16 21:48:30",
+       "by": "codex",
+       "note": "убрать ангар, тут локация полета в пустыне",
+       "style": "tv",
+       "prompt": "high aerial POV, far ahead on the rust sand a dark spreading stain, smoke, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: endless red rocky desert, layered stone ridges to the horizon, rust-red sky with dazzling white clouds, blazing red sun, no vegetation.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: убрать ангар, тут локация полета в пустыне. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [],
      "linesFrom": ""
     },
@@ -872,10 +1039,19 @@
      "imgFrom": null,
      "vid": "camera glides forward above them, small figures move toward the edges",
      "characters": [],
-     "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "location": "desert",
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.8/v001.png",
+       "at": "2026-10-16 20:32:08",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "aerial wide shot of a battlefield edge, human Alliance soldiers loosely gathering at the edges without formation, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "NARRATOR",
@@ -899,12 +1075,30 @@
      "imgFrom": null,
      "vid": "he turns his head back and shouts, wind tears at his hair",
      "characters": [
-      "LIAM"
+      "LIAM",
+      "RUKH"
      ],
-     "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "location": "desert",
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/2.9/v001.png",
+       "at": "2026-10-16 20:34:14",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam in the saddle turning back to shout to riders behind him, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/2.9/v002.png",
+       "at": "2026-10-16 21:51:47",
+       "by": "codex",
+       "note": "заменить локацию на пустыню и небо в пустыне - это полет, они летят, все включая Лиама на птицах рух",
+       "style": "tv",
+       "prompt": "Liam in the saddle turning back to shout to riders behind him, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: endless red rocky desert, layered stone ridges to the horizon, rust-red sky with dazzling white clouds, blazing red sun, no vegetation.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: заменить локацию на пустыню и небо в пустыне - это полет, они летят, все включая Лиама на птицах рух. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [
       {
        "who": "LIAM",
@@ -928,7 +1122,7 @@
      "imgFrom": "2.6",
      "vid": "he faces forward, expression calm and settled, slow push-in",
      "characters": [],
-     "location": null,
+     "location": "desert",
      "status": "todo",
      "versions": [],
      "selected": null,
@@ -964,9 +1158,18 @@
      "vid": "camera descends slowly with the birds",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.1/v001.png",
+       "at": "2026-10-16 20:35:39",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "aerial wide shot descending over a vast battlefield in a red stone desert, broken weapons, scorched patches, ground stained brown and silver, bodies small and in shadow, anime stylized, no gore detail, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "горячий ветер, тишина поля."
     },
@@ -984,9 +1187,18 @@
      "vid": "slow tilt up the mound to the figure at the top",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.2/v001.png",
+       "at": "2026-10-16 20:37:17",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "low angle, a huge mound of the fallen and old bones in silhouette, bodies in shadow, a lone tall figure on top against the red sun, anime stylized, no gore detail, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1007,9 +1219,18 @@
       "LORD SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.3/v001.png",
+       "at": "2026-10-16 20:39:10",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "low angle medium shot of the Dragon Lord in human form standing calmly at the top of the mound, long black hair blown by the wind, black steel sword in hand with silvery-white blood dripping from the blade, red sun behind, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n- black steel sword: black steel sword (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "ветер, капли."
     },
@@ -1027,11 +1248,33 @@
      "vid": "the head lifts, the hairpins flash",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.4/v001.png",
+       "at": "2026-10-16 20:40:48",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme close-up of a pair of silver hairpins in long black hair, sun glint, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/3.4/v002.png",
+       "at": "2026-10-16 21:53:23",
+       "by": "codex",
+       "note": "заколки как на рефе персонажа и на рефе что я прикрепила - три плоские кенсейкан",
+       "style": "tv",
+       "prompt": "extreme close-up of a pair of silver hairpins in long black hair, sun glint, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: заколки как на рефе персонажа и на рефе что я прикрепила - три плоские кенсейкан. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "refs": [
+      {
+       "file": "Аниме/Иллюстрации книги/кенсецкуан повелителя.jpg"
+      }
+     ]
     },
     {
      "id": "3.5",
@@ -1049,9 +1292,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.5/v001.png",
+       "at": "2026-10-16 20:42:06",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme close-up of the Dragon Lord in human form obsidian-black eyes looking straight up into the camera, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "удар низкой ноты."
     },
@@ -1072,11 +1324,21 @@
       "RUKH"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.6/v001.png",
+       "at": "2026-10-16 20:44:01",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam on a giant riding bird in the air, the bird tilting sharply, Liam slipping sideways, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
-     "linesFrom": "крик птицы."
+     "linesFrom": "крик птицы.",
+     "refs": []
     },
     {
      "id": "3.7",
@@ -1094,11 +1356,33 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.7/v001.png",
+       "at": "2026-10-16 20:45:45",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of Liam trembling, wide eyes full of awe rather than fear, heavy air distortion around him, anime pressure lines, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/3.7/v002.png",
+       "at": "2026-10-16 21:54:55",
+       "by": "codex",
+       "note": "хамени фон, лиам все еще сидит на птице, просто показываем лицо - см промпт",
+       "style": "tv",
+       "prompt": "close-up of Liam trembling, wide eyes full of awe rather than fear, heavy air distortion around him, anime pressure lines, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: хамени фон, лиам все еще сидит на птице, просто показываем лицо - см промпт. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "refs": [
+      {
+       "file": "Аниме/Иллюстрации книги/лиам на пт (2).jpg"
+      }
+     ]
     },
     {
      "id": "3.8",
@@ -1114,9 +1398,18 @@
      "vid": "static camera, only dust and banners move",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.8/v001.png",
+       "at": "2026-10-16 20:47:25",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "wide shot of a battlefield square, surviving human soldiers on one side and drayk defenders on the other, everyone frozen and looking up, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1137,11 +1430,33 @@
       "RUKH"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.9/v001.png",
+       "at": "2026-10-16 20:48:55",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam leaping off a flying giant riding bird, diving headfirst toward the ground, cloak streaming, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/3.9/v002.png",
+       "at": "2026-10-16 21:57:37",
+       "by": "codex",
+       "note": "измени позу прыжка, Лиам прыгать долден ногами вперед, чтобы примерно через секунду оказаться в позе с референса, повыше от земли расположи, пусть на фоне с птицей будет видно только небо",
+       "style": "tv",
+       "prompt": "Liam leaping off a flying giant riding bird, diving headfirst toward the ground, cloak streaming, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: измени позу прыжка, Лиам прыгать долден ногами вперед, чтобы примерно через секунду оказаться в позе с референса, повыше от земли расположи, пусть на фоне с птицей будет видно только небо. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [],
-     "linesFrom": ""
+     "linesFrom": "",
+     "refs": [
+      {
+       "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg"
+      }
+     ]
     },
     {
      "id": "3.10",
@@ -1160,9 +1475,26 @@
       "LIAM SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.10/v001.png",
+       "at": "2026-10-16 20:50:40",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam mid-air hurling Liam's sword with a red ruby on the hilt downward, motion blur, speed lines, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- Liam's sword with a red ruby on the hilt: Liam's sword with a red ruby on the hilt (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      },
+      {
+       "file": "studio/media/s01e01/3.10/v002.png",
+       "at": "2026-10-16 21:56:07",
+       "by": "codex",
+       "note": "Сделай его просто на фоне неба подальше от земли, лучше бы ее вообще не видно остальное норм",
+       "style": "tv",
+       "prompt": "Liam mid-air hurling Liam's sword with a red ruby on the hilt downward, motion blur, speed lines, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- Liam's sword with a red ruby on the hilt: Liam's sword with a red ruby on the hilt (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: Сделай его просто на фоне неба подальше от земли, лучше бы ее вообще не видно остальное норм. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+      }
+     ],
+     "selected": 1,
      "lines": [],
      "linesFrom": ""
     },
@@ -1182,9 +1514,18 @@
       "LIAM SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.11/v001.png",
+       "at": "2026-10-16 20:51:42",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam's sword with a red ruby on the hilt stabbed into red stone, a web of cracks spreading, dust shockwave, impact frame, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam's sword with a red ruby on the hilt: Liam's sword with a red ruby on the hilt (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "удар металла о камень."
     },
@@ -1224,9 +1565,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/3.13/v001.png",
+       "at": "2026-10-16 20:53:12",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of the Dragon Lord in human form, eyes moving down to a sword at his feet, faint curiosity, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1274,9 +1624,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.1/v001.png",
+       "at": "2026-10-16 20:54:41",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam landing in a crouch near the mound, cloak settling, riders descending far in the background, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1297,9 +1656,18 @@
       "LIAM SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.2/v001.png",
+       "at": "2026-10-16 20:57:08",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "the Dragon Lord in human form walking down the dark mound with a long confident stride, Liam's sword with a red ruby on the hilt in his hand, the slope in deep shadow, anime stylized, no gore detail, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n- Liam's sword with a red ruby on the hilt: Liam's sword with a red ruby on the hilt (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1321,9 +1689,18 @@
       "LIAM SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.3/v001.png",
+       "at": "2026-10-16 20:58:42",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium two-shot in profile, the Dragon Lord in human form holding out Liam's sword with a red ruby on the hilt hilt-first to Liam, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n- Liam's sword with a red ruby on the hilt: Liam's sword with a red ruby on the hilt (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1344,9 +1721,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.4/v001.png",
+       "at": "2026-10-16 21:00:14",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close two-shot, the Dragon Lord in human form and Liam standing very close facing each other, Liam half a head shorter and slender, both holding eye contact, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "ветер, музыка затихает."
     },
@@ -1364,9 +1750,18 @@
      "vid": "fingers close around the hilt, the ruby catches the light",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.5/v001.png",
+       "at": "2026-10-16 21:01:26",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme close-up of fingers touching a red ruby on a sword hilt, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1384,9 +1779,18 @@
      "vid": "the sword is lowered, tip rests on the stone",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.6/v001.png",
+       "at": "2026-10-16 21:02:27",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of a sword tip touching red stone, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1404,9 +1808,18 @@
      "vid": "rack focus from the two figures to the chaos behind, riders gallop away to the left",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.7/v001.png",
+       "at": "2026-10-16 21:04:14",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "two figures in the foreground slightly out of focus, behind them drayks carrying wounded toward a ridge and human cavalry starting a chase, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "крики командиров, лязг, топот, гарканье птиц."
     },
@@ -1424,9 +1837,18 @@
      "vid": "static camera, distant dust settles",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.8/v001.png",
+       "at": "2026-10-16 21:05:18",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme wide shot, an empty red battlefield, two tiny figures facing each other, red sun, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "удаляющийся топот → ветер."
     },
@@ -1477,9 +1899,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/4.10/v001.png",
+       "at": "2026-10-16 21:06:25",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium shot of Liam bowing his head with hands joined in a formal martial salute, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -1537,9 +1968,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.1/v001.png",
+       "at": "2026-10-16 21:07:48",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "two swords clashing between the Dragon Lord in human form and Liam, sparks, impact frame, speed lines, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "звон стали."
     },
@@ -1559,9 +1999,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.2/v001.png",
+       "at": "2026-10-16 21:09:13",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam sliding backward across sand from a heavy blow, feet carving grooves, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1624,9 +2073,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.5/v001.png",
+       "at": "2026-10-16 21:10:53",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "slow motion, a black blade passing just above Liam face as he leans back, a few white hairs cut and floating, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1646,9 +2104,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.6/v001.png",
+       "at": "2026-10-16 21:12:19",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam angling his sword so the red sun reflects off it, a bright glare beam, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1668,9 +2135,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.7/v001.png",
+       "at": "2026-10-16 21:13:57",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of Liam mid-duel, sweat and dust on his face, eyes calculating, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -1698,9 +2174,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.8/v001.png",
+       "at": "2026-10-16 21:15:55",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam spinning and kicking up a cloud of rust-red grit toward the Dragon Lord in human form, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1794,9 +2279,18 @@
       "LIAM SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.12/v001.png",
+       "at": "2026-10-16 21:17:41",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam's sword with a red ruby on the hilt spinning in the air above red sand, Liam gripping his numb wrists in the background, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- Liam's sword with a red ruby on the hilt: Liam's sword with a red ruby on the hilt (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "хруст, звон, тишина."
     },
@@ -1816,9 +2310,18 @@
       "LORD SWORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/5.13/v001.png",
+       "at": "2026-10-16 21:19:12",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of black steel sword in a hand, the blade turning into dark smoke, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast\n\nLocation: vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, anime stylized, no gore detail.\n\nCharacters:\n- black steel sword: black steel sword (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     }
@@ -1847,9 +2350,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.1/v001.png",
+       "at": "2026-10-16 21:20:46",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam standing disarmed, looking past the camera toward a crimson horizon, the Dragon Lord in human form stepping closer in the foreground out of focus, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1869,9 +2381,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.2/v001.png",
+       "at": "2026-10-16 21:22:12",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of the Dragon Lord in human form raising one hand, open palm, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "NARRATOR",
@@ -1901,9 +2422,18 @@
      "vid": "the fingers twitch slightly, almost hesitating",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.3/v001.png",
+       "at": "2026-10-16 21:23:08",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme close-up of a raised hand, fingers, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -1923,9 +2453,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.4/v001.png",
+       "at": "2026-10-16 21:24:52",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up, fingertips resting on Liam chest, faint fiery glow spreading under the fabric, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "низкий гул."
     },
@@ -1983,9 +2522,18 @@
      "vid": "the ground shakes, cracks widen, sand pours in",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.7/v001.png",
+       "at": "2026-10-16 21:25:55",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of red ground cracking open, pebbles jumping, sand pouring into fissures, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "рёв отовсюду сразу."
     },
@@ -2003,9 +2551,18 @@
      "vid": "time-lapse, clouds swirl and close over the sun",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.8/v001.png",
+       "at": "2026-10-16 21:27:11",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "sky above a red desert, black storm clouds rapidly swallowing the red sun, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -2023,9 +2580,18 @@
      "vid": "the tear rips open and widens, the edges quiver and creep outward",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.9/v001.png",
+       "at": "2026-10-16 21:28:11",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "a huge tear in the air above the battlefield opening like a gigantic maw of viscous blackness, trembling ragged edges clinging to reality, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "влажный разрыв."
     },
@@ -2043,9 +2609,18 @@
      "vid": "frost spreads across the sand, breath vapor rises",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.10/v001.png",
+       "at": "2026-10-16 21:29:17",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of rust-red sand being covered with grey frost, a white breath cloud entering the frame, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -2085,9 +2660,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.12/v001.png",
+       "at": "2026-10-16 21:32:20",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "dutch angle, Liam being yanked backward off his feet toward a black tear in the air, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -2107,9 +2691,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.13/v001.png",
+       "at": "2026-10-16 21:34:06",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of Liam hands gripping a broken helmet slick with silver blood, his body pulled horizontally by force, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "рёв разлома, хруст."
     },
@@ -2129,9 +2722,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.14/v001.png",
+       "at": "2026-10-16 21:35:32",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "medium shot of the Dragon Lord in human form standing firm, frowning with deep irritation at a black rift, hair pulled toward it, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -2149,9 +2751,18 @@
      "vid": "the head slowly turns with a creak and the eyes fix on the viewer",
      "characters": [],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/6.15/v001.png",
+       "at": "2026-10-16 21:36:47",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of a dead soldier's face inside a broken helmet, cloudy grey filmed eyes, anime stylized, no gore detail, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "скрип."
     }
@@ -2179,9 +2790,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/7.1/v001.png",
+       "at": "2026-10-16 21:38:11",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "dozens of dead hands reaching out from a dark pile grabbing Liam boots and cloak, anime stylized, no gore detail, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -2221,9 +2841,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/7.3/v001.png",
+       "at": "2026-10-16 21:39:32",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "burst of white energy exploding beneath Liam, hands thrown away, impact frame, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": "взрыв."
     },
@@ -2263,9 +2892,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/7.5/v001.png",
+       "at": "2026-10-16 21:41:00",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam on all fours on red stone, coughing silver blood, clutching his side, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -2312,9 +2950,18 @@
       "LORD"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/7.7/v001.png",
+       "at": "2026-10-16 21:42:18",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "extreme wide shot, dark figures of the dead rising all over the battlefield like broken puppets, the Dragon Lord in human form standing motionless in the center, anime stylized, bodies in silhouette, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [],
      "linesFrom": ""
     },
@@ -2334,9 +2981,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/7.8/v001.png",
+       "at": "2026-10-16 21:45:55",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "close-up of Liam breathing hard, gripping a sword with both hands, frost in his hair, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
@@ -2433,9 +3089,18 @@
       "LIAM"
      ],
      "location": null,
-     "status": "todo",
-     "versions": [],
-     "selected": null,
+     "status": "review",
+     "versions": [
+      {
+       "file": "studio/media/s01e01/7.12/v001.png",
+       "at": "2026-10-16 21:47:27",
+       "by": "codex",
+       "note": "",
+       "style": "tv",
+       "prompt": "Liam raising his sword in front of him, shouting, the black rift behind the horde, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nLocation: the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nFormat: 16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+      }
+     ],
+     "selected": 0,
      "lines": [
       {
        "who": "LIAM",
