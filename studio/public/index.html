@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Студия «Белая кровь»</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="drop"></span>Белая кровь <small>студия</small></div>
+  <nav id="tabs">
+    <button data-view="board" class="on">Раскадровка</button>
+    <button data-view="chars">Персонажи</button>
+    <button data-view="locs">Локации</button>
+    <button data-view="style">Стиль</button>
+    <button data-view="queue">Очередь <b id="qcount"></b></button>
+    <button data-view="canon">Канон</button>
+  </nav>
+  <div class="tools">
+    <select id="epSel" title="Серия"></select>
+    <label class="gen" title="Кто рисует">Рисует:
+      <select id="genSel">
+        <option value="codex">Кодекс</option>
+        <option value="openai">OpenAI API</option>
+        <option value="manual">Вручную</option>
+      </select>
+    </label>
+    <span id="genStatus" class="pill">…</span>
+  </div>
+</header>
+<main id="main"></main>
+<aside id="panel" class="panel hidden"></aside>
+<div id="lightbox" class="lightbox hidden"><img alt=""></div>
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

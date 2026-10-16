@@ -1,0 +1,19 @@
+{
+ "port": 4545,
+ "generator": "codex",
+ "maxParallel": 1,
+ "codex": {
+  "command": "codex",
+  "args": ["exec", "--full-auto", "--skip-git-repo-check"],
+  "imageFlag": "-i",
+  "promptVia": "stdin",
+  "timeoutMin": 12,
+  "generatedImagesDir": "~/.codex/generated_images"
+ },
+ "openai": {
+  "model": "gpt-image-1",
+  "size": "1536x1024",
+  "quality": "high",
+  "apiKeyEnv": "OPENAI_API_KEY"
+ }
+}
