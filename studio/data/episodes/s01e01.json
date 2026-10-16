@@ -26,7 +26,7 @@
      "vid": "very slow pan to the right, clouds drift, red dust drifts low over the ground",
      "characters": [],
      "location": "desert",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Бескрайняя красная пустыня под алым солнцем.png",
@@ -52,7 +52,7 @@
       "KATNAR"
      ],
      "location": "desert-ridges",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Каменный зверь на красном хребте.png",
@@ -78,7 +78,7 @@
       "ZERR"
      ],
      "location": "desert",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Зерр выходит из красных песков.png",
@@ -102,7 +102,7 @@
      "vid": "slow forward glide along the ridge, waves break below",
      "characters": [],
      "location": "east-coast",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Алый утёс над чёрным морем.png",
@@ -126,7 +126,7 @@
      "vid": "aerial tracking shot forward over the ridges, the massif grows larger",
      "characters": [],
      "location": "desert-ridges",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Дальний подлёт к краснокаменной столице.png",
@@ -152,7 +152,7 @@
       "AKHEOP"
      ],
      "location": "akheop-fields",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Тихая пахота акхеопов в красной долине.png",
@@ -176,7 +176,7 @@
      "vid": "slow push-in, sand streams blow between the tiers, the dome shimmers faintly",
      "characters": [],
      "location": "capital",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Столица, высеченная в багровой скале.png",
@@ -200,7 +200,7 @@
      "vid": "banners whip in the wind, dust blows past, camera slowly tilts up",
      "characters": [],
      "location": "castle",
-     "status": "review",
+     "status": "approved",
      "versions": [
       {
        "file": "Аниме/1 серия - демка/Вершинный дворец в алой скале.png",
