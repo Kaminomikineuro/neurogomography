@@ -43,8 +43,13 @@ const lsGet = (k, d) => { try { return localStorage.getItem(k) ?? d; } catch { r
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
 
 // ---------- загрузка ----------
+const UI_VERSION = '2026-10-17.1';
 async function loadState() {
   S.state = await GET('/api/state');
+  if (S.state.version !== UI_VERSION && !S.warnedVersion) {
+    S.warnedVersion = true;
+    toast('⚠ Работает старая копия студии. Закрой все чёрные окна студии и запусти Студия.bat заново.', 30000);
+  }
   const sel = $('#epSel');
   sel.innerHTML = '';
   for (const e of S.state.episodes) sel.append(h('option', { value: e.id }, e.title));
@@ -751,6 +756,10 @@ async function checkGen() {
   el.title = r.text;
   el.className = 'pill ' + (r.ok ? 'good' : 'bad');
 }
+
+// Любая ошибка — на экран, а не молча: так видно, почему кнопка «не работает»
+window.addEventListener('unhandledrejection', (e) => toast('Ошибка: ' + (e.reason?.message || e.reason), 12000));
+window.addEventListener('error', (e) => toast('Ошибка: ' + e.message, 12000));
 
 document.addEventListener('DOMContentLoaded', async () => {
   $('#tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.view = b.dataset.view; render(); window.scrollTo(0, 0); } });

@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { spawn } from 'node:child_process';
+import { spawn, execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const STUDIO = path.dirname(fileURLToPath(import.meta.url));
@@ -18,6 +18,8 @@ const INBOX = path.join(STUDIO, 'inbox.md');
 const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги');
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
+// Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
+const VERSION = '2026-10-17.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -444,7 +446,13 @@ function exportEpisode(epId) {
   const pr = project();
   const chars = Object.fromEntries(pr.characters.map((c) => [c.id, c]));
   const outDir = path.join(EXPORT, safe(epId));
-  fs.rmSync(outDir, { recursive: true, force: true });
+  // папку целиком не удаляем: на Windows она может быть открыта в Проводнике и заблокирована
+  fs.mkdirSync(outDir, { recursive: true });
+  for (const e of fs.readdirSync(outDir, { withFileTypes: true })) {
+    if (e.isDirectory() && /^\d{3}_/.test(e.name)) {
+      try { fs.rmSync(path.join(outDir, e.name), { recursive: true, force: true }); } catch {}
+    }
+  }
   const rows = [];
   let n = 0, t = 0, missing = 0, videos = 0;
   for (const sc of ep.scenes) {
@@ -556,8 +564,9 @@ const routes = {
     const cfg = config();
     const bookDir = path.join(STUDIO, 'canon', 'book');
     const book = fs.existsSync(bookDir) ? fs.readdirSync(bookDir).filter((f) => f.endsWith('.txt')).sort() : [];
-    return { project: project(), episodes: listEpisodes(), generator: cfg.generator, lab: readJSON(labPath, { items: {} }), book };
+    return { version: VERSION, project: project(), episodes: listEpisodes(), generator: cfg.generator, lab: readJSON(labPath, { items: {} }), book };
   },
+  'POST /api/shutdown': () => { setTimeout(() => { saveJobs(); process.exit(0); }, 200); return { ok: true }; },
   'GET /api/episode': (q) => readJSON(epPath(q.get('id'))),
   'POST /api/preview': (q, b) => buildPrompt(b.ref, b.opts || {}),
   'POST /api/generate': (q, b) => {
@@ -720,16 +729,45 @@ const server = http.createServer(async (req, res) => {
 });
 
 const port = Number(process.env.PORT) || config().port || 4545;
-server.on('error', (e) => {
+// Найти и завершить процесс, который держит порт (старую копию студии)
+function killPortOwner(p) {
+  try {
+    if (process.platform === 'win32') {
+      const out = execSync('netstat -ano -p tcp', { encoding: 'utf8' });
+      const pids = new Set(out.split(/\r?\n/).filter((l) => l.includes(`:${p} `) && /LISTENING/i.test(l)).map((l) => l.trim().split(/\s+/).pop()));
+      for (const pid of pids) if (pid && pid !== String(process.pid)) execSync(`taskkill /PID ${pid} /T /F`);
+    } else {
+      const out = execSync(`lsof -ti tcp:${p} -sTCP:LISTEN`, { encoding: 'utf8' });
+      for (const pid of out.split(/\s+/).filter(Boolean)) if (pid !== String(process.pid)) process.kill(Number(pid));
+    }
+  } catch {}
+}
+let retried = false;
+server.on('error', async (e) => {
   if (e.code !== 'EADDRINUSE') throw e;
-  console.log(`\n  Студия уже запущена: http://localhost:${port}\n`);
-  openInOS(`http://localhost:${port}`);
-  setTimeout(() => process.exit(0), 500);
+  const base = `http://127.0.0.1:${port}`;
+  const old = await fetch(base + '/api/state').then((r) => r.json()).catch(() => null);
+  if (old?.version === VERSION) {
+    console.log(`\n  Студия уже запущена: http://localhost:${port}\n`);
+    openInOS(`http://localhost:${port}`);
+    return setTimeout(() => process.exit(0), 500);
+  }
+  if (!retried) {
+    // в фоне работает старая копия студии — просим её закрыться и занимаем порт сами
+    retried = true;
+    console.log('\n  Нашлась старая копия студии — закрываю её…');
+    const asked = await fetch(base + '/api/shutdown', { method: 'POST' }).then((r) => r.ok).catch(() => false);
+    if (!asked) killPortOwner(port); // совсем старая копия не знает команды «закройся»
+    return setTimeout(() => server.listen(port, '127.0.0.1'), 2000);
+  }
+  console.log(`\n  ⚠ Порт ${port} занят старой копией студии, и она не закрылась сама.`);
+  console.log('  Закрой все чёрные окна студии (или перезагрузи компьютер) и запусти Студия.bat снова.\n');
+  setTimeout(() => process.exit(1), 15000);
 });
 server.listen(port, '127.0.0.1', () => {
   restoreJobs();
   pump();
   process.on('SIGINT', () => { saveJobs(); process.exit(0); });
-  console.log(`\n  Студия «Белая кровь» работает: http://localhost:${port}\n  Генератор: ${config().generator}. Закрой это окно, чтобы остановить.\n`);
+  console.log(`\n  Студия «Белая кровь» работает: http://localhost:${port}  (версия ${VERSION})\n  Генератор: ${config().generator}. Закрой это окно, чтобы остановить.\n`);
   if (process.argv.includes('--open')) openInOS(`http://localhost:${port}`);
 });
