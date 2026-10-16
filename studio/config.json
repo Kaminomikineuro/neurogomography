@@ -4,7 +4,7 @@
  "maxParallel": 1,
  "codex": {
   "command": "codex",
-  "args": ["exec", "--full-auto", "--skip-git-repo-check"],
+  "args": ["exec", "-s", "workspace-write", "--skip-git-repo-check", "--enable", "image_generation"],
   "imageFlag": "-i",
   "promptVia": "stdin",
   "timeoutMin": 12,

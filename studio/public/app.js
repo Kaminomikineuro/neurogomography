@@ -238,7 +238,17 @@ function renderQueue() {
       j.note ? h('div', { class: 'muted' }, 'Правка: ' + j.note) : null,
       j.status === 'manual' ? h('div', {}, h('p', {}, 'Ручной режим: скопируй промпт, приложи референсы в чат Кодекса или ChatGPT, а готовую картинку перетащи на кадр. Файл задания: ', h('code', {}, j.queueFile)),
         h('button', { onclick: async () => copy((await GET('/api/job?id=' + j.id)).prompt) }, 'Скопировать промпт')) : null,
+      j.status === 'failed' ? h('div', { class: 'warns', style: { margin: '8px 0 0' } }, '⚠ ' + errorLine(j.logTail)) : null,
+      j.status === 'failed' ? h('div', { class: 'actions', style: { margin: '8px 0 0' } },
+        h('button', { class: 'primary', onclick: async () => { await POST('/api/job/retry', { id: j.id, generator: gen() }); pollJobs(true); } }, 'Повторить'),
+        h('button', { onclick: async () => copy((await GET('/api/job?id=' + j.id)).log) }, 'Скопировать лог для Claude')) : null,
       j.status === 'failed' || j.status === 'running' ? h('details', {}, h('summary', {}, 'Лог'), h('pre', {}, j.logTail || '')) : null))));
+}
+// Самая понятная строка ошибки из лога Кодекса
+function errorLine(log = '') {
+  const lines = log.split('\n').map((l) => l.trim()).filter(Boolean);
+  const hit = [...lines].reverse().find((l) => /error|ошибк|не найден|not found|unexpected|denied|failed|limit|unauthor/i.test(l));
+  return hit || lines.pop() || 'Кодекс не вернул картинку — открой лог ниже.';
 }
 
 // ---------- канон ----------

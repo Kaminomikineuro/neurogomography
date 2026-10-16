@@ -231,7 +231,7 @@ function enqueue(ref, opts) {
   const out = nextOut(o.dir);
   const job = {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), ref, label: label(ref), status: 'queued',
-    generator: opts.generator || cfg.generator || 'manual', note: opts.note || '', edit: !!opts.edit,
+    generator: opts.generator || cfg.generator || 'manual', note: opts.note || '', edit: !!opts.edit, opts,
     prompt: p.prompt, refs: p.refs, warnings: p.warnings, style: p.style, out: rel(out), log: '', createdAt: now(),
   };
   jobs.unshift(job);
@@ -296,6 +296,8 @@ function spawnCmd(cmd, args, opts = {}) {
   return win ? spawn([cmd, ...args].map(quoteWin).join(' '), { ...opts, shell: true, windowsHide: true }) : spawn(cmd, args, opts);
 }
 
+const DEFAULT_CODEX_ARGS = ['exec', '-s', 'workspace-write', '--skip-git-repo-check', '--enable', 'image_generation'];
+
 function killTree(pid) {
   try {
     if (process.platform === 'win32') spawn('taskkill', ['/pid', String(pid), '/T', '/F'], { windowsHide: true });
@@ -307,7 +309,9 @@ function runCodex(job) {
   const cfg = config().codex || {};
   const outAbs = abs(job.out);
   const instruction = codexInstruction(job, outAbs);
-  const args = [...(cfg.args || ['exec', '--full-auto', '--skip-git-repo-check']), '-C', ROOT];
+  // --full-auto убран в новых версиях Codex CLI: подменяем на явную песочницу
+  const base = (cfg.args || DEFAULT_CODEX_ARGS).flatMap((a) => (a === '--full-auto' ? ['-s', 'workspace-write'] : [a]));
+  const args = [...base, '-C', ROOT];
   for (const r of job.refs) args.push(cfg.imageFlag || '-i', abs(r.file));
   const viaStdin = (cfg.promptVia || 'stdin') === 'stdin';
   args.push(viaStdin ? '-' : instruction);
@@ -465,6 +469,11 @@ const routes = {
   },
   'GET /api/jobs': () => jobs.map(({ log, prompt, ...j }) => ({ ...j, logTail: log.slice(-1500) })),
   'GET /api/job': (q) => jobs.find((j) => j.id === q.get('id')) || null,
+  'POST /api/job/retry': (q, b) => {
+    const j = jobs.find((x) => x.id === b.id);
+    if (!j) throw new Error('Задание не найдено — нажми «Нарисовать» в карточке ещё раз');
+    return enqueue(j.ref, { ...(j.opts || {}), generator: b.generator || j.generator });
+  },
   'POST /api/job/cancel': (q, b) => {
     const j = jobs.find((x) => x.id === b.id);
     if (j && j.status === 'queued') { j.status = 'cancelled'; reserved.delete(abs(j.out).replace(/\.\w+$/, '')); }
