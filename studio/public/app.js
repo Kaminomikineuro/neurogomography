@@ -1,6 +1,6 @@
 // Студия «Белая кровь» — интерфейс
 const $ = (s, r = document) => r.querySelector(s);
-const S = { state: null, ep: null, view: 'board', sel: null, jobs: [], filter: 'all', jobsSig: '' };
+const S = { state: null, ep: null, view: 'board', sel: null, jobs: [], filter: 'all', jobsSig: '', drafts: {}, timers: {}, saving: [] };
 const STATUS = { todo: 'Нужно сделать', review: 'На проверке', approved: 'Утверждено' };
 
 // ---------- утилиты ----------
@@ -43,7 +43,7 @@ const lsGet = (k, d) => { try { return localStorage.getItem(k) ?? d; } catch { r
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-17.1';
+const UI_VERSION = '2026-10-17.2';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -67,6 +67,7 @@ function findShot(id) {
 function itemOf(ref) {
   if (!ref) return null;
   if (ref.kind === 'shot') return ref.ep === S.ep.id ? findShot(ref.id)?.shot : null;
+  if (ref.kind === 'scene') return ref.ep === S.ep.id ? S.ep.scenes.find((sc) => String(sc.n) === String(ref.id)) : null;
   if (ref.kind === 'character') return S.state.project.characters.find((c) => c.id === ref.id);
   if (ref.kind === 'location') return S.state.project.locations.find((c) => c.id === ref.id);
   if (ref.kind === 'lab') return S.state.lab.items[ref.id] || { versions: [], selected: null };
@@ -120,6 +121,7 @@ function renderBoard() {
       const loc = S.state.project.locations.find((l) => l.id === sc.location);
       return h('section', { class: 'scene', id: 'sc' + sc.n },
         h('h2', {}, `Сцена ${sc.n}. ${sc.title}`),
+        sceneBar(sc),
         h('div', { class: 'sub' }, `~${sc.dur} с · ${sc.shots.length} кадров` + (loc ? ` · локация: ${loc.name}` : '') + (sc.note ? ' · ' + sc.note : '')),
         h('div', { class: 'grid' }, ...shots.map((s) => shotCard(s, { kind: 'shot', ep: S.ep.id, id: s.id }))));
     }));
@@ -171,7 +173,8 @@ function assetGrid(kind) {
           run ? h('span', { class: 'spin' }, 'рисует…') : null,
           h('div', { class: 'meta' }, h('span', { class: 'dot st-' + (f ? 'approved' : 'todo') }), h('b', {}, it.name),
             usage[it.id] ? h('span', { class: 'badge' }, `в ${usage[it.id]} кадрах`) : null,
-            !f && usage[it.id] ? h('span', { class: 'badge warn' }, 'нужен') : null),
+            !f && usage[it.id] ? h('span', { class: 'badge warn' }, 'нужен') : null,
+            it.needsRedraw ? h('span', { class: 'badge warn', title: 'Claude поменял описание — перерисуй фон' }, 'перерисовать') : null),
           h('div', { class: 'desc' }, it.token || it.prompt || ''));
       })))));
 }
@@ -340,7 +343,8 @@ function refsBox(ref, it) {
     h('div', { class: 'muted', style: { fontSize: '12.5px', marginBottom: '6px' } }, hint),
     refs.length ? h('div', { class: 'reflist' }, ...refs.map((r, i) => h('div', { class: 'refitem' },
       h('img', { src: fileUrl(r.file), onclick: () => zoom(r.file) }),
-      h('input', { value: r.note || '', placeholder: 'пометка: «в бою», «в детстве»…', onchange: (e) => setRefs(refs.map((x, j) => (j === i ? { ...x, note: e.target.value } : x))) }),
+      h('input', { value: S.drafts[dkey(ref, 'refnote' + i)] ?? r.note ?? '', placeholder: 'пометка: «в бою», «в детстве»…',
+        oninput: (e) => draft(dkey(ref, 'refnote' + i), e.target.value, (v) => quietSave(ref, { refs: (itemOf(ref).refs || []).map((x, j) => (j === i ? { ...x, note: v } : x)) })) }),
       h('button', { class: 'ghost', title: 'Убрать (файл останется в библиотеке)', onclick: () => setRefs(refs.filter((_, j) => j !== i)) }, '✕')))) : null,
     h('div', { class: 'actions' },
       h('button', { onclick: async () => { const f = await pickFromLibrary(); if (f) add([f]); } }, '+ Из библиотеки'),
@@ -364,6 +368,7 @@ function renderCanon() {
 
 // ---------- панель кадра ----------
 async function select(ref) {
+  await flushDrafts();
   S.sel = ref;
   document.body.classList.add('with-panel');
   $('#panel').classList.remove('hidden');
@@ -371,6 +376,7 @@ async function select(ref) {
   await renderPanel();
 }
 function closePanel() {
+  flushDrafts();
   S.sel = null;
   document.body.classList.remove('with-panel');
   $('#panel').classList.add('hidden');
@@ -378,10 +384,50 @@ function closePanel() {
 }
 async function save(ref, patch) {
   await POST('/api/update', { ref, patch });
-  if (ref.kind === 'shot') await loadEp(); else await loadState();
+  if (ref.kind === 'shot' || ref.kind === 'scene') await loadEp(); else await loadState();
 }
-function field(label, value, onsave, opts = {}) {
-  const ta = h('textarea', { class: opts.code ? 'code' : '', rows: opts.rows || 3, onchange: (e) => onsave(e.target.value) }, value || '');
+
+// ---------- постановка сцены (полоса над кадрами сцены) ----------
+function sceneBar(sc) {
+  if (!sc.staging && !sc.masterPrompt && !sc.plan) return null;
+  const ref = { kind: 'scene', ep: S.ep.id, id: String(sc.n) };
+  const f = selFile(sc);
+  const run = runningFor(ref);
+  return h('div', { class: 'scenebar' + (sameRef(S.sel, ref) ? ' sel' : ''), onclick: () => select(ref) },
+    h('div', { class: 'thumb', style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null }, f ? '' : run ? 'рисует…' : 'мастер-плана нет'),
+    sc.plan ? h('div', { class: 'thumb plan', style: { backgroundImage: `url("${fileUrl(sc.plan)}")` } }) : null,
+    h('div', { class: 'txt' }, h('b', {}, 'Постановка сцены'), h('div', { class: 'muted' }, (sc.staging || '').slice(0, 230) + ((sc.staging || '').length > 230 ? '…' : '')),
+      !f ? h('div', { class: 'hint' }, 'Сначала нарисуй мастер-план: он задаст, кто где стоит, во всех кадрах сцены') : null));
+}
+// ---------- черновики и автосохранение ----------
+// Всё, что печатаешь, сохраняется само через секунду и при переключении кадров — ничего не слетает.
+const dkey = (ref, k) => JSON.stringify(ref) + '|' + k;
+function quietSave(ref, patch) {
+  const it = itemOf(ref);
+  if (it) Object.assign(it, patch);
+  const p = POST('/api/update', { ref, patch }).catch((e) => toast('Не сохранилось: ' + e.message, 8000));
+  S.saving.push(p);
+  return p;
+}
+function draft(key, value, save, delay = 900) {
+  S.drafts[key] = value;
+  clearTimeout(S.timers[key]);
+  S.timers[key] = setTimeout(() => { delete S.timers[key]; save(value); delete S.drafts[key]; }, delay);
+  S.flushers ||= {};
+  S.flushers[key] = () => { clearTimeout(S.timers[key]); delete S.timers[key]; delete S.flushers[key]; save(value); delete S.drafts[key]; };
+}
+async function flushDrafts() {
+  for (const f of Object.values(S.flushers || {})) f();
+  const p = S.saving; S.saving = [];
+  await Promise.all(p);
+}
+const typing = () => { const a = document.activeElement; return a && $('#panel').contains(a) && /TEXTAREA|INPUT/.test(a.tagName); };
+
+function field(label, value, ref, key, opts = {}) {
+  const k = dkey(ref, key);
+  const ta = h('textarea', { class: opts.code ? 'code' : '', rows: opts.rows || 3, placeholder: opts.placeholder || '',
+    oninput: (e) => draft(k, e.target.value, (v) => quietSave(ref, { [key]: v })),
+    onchange: () => S.flushers?.[k]?.() }, S.drafts[k] ?? value ?? '');
   return h('div', { class: 'field' }, h('label', {}, label, opts.copy ? h('button', { class: 'ghost', onclick: () => copy(ta.value) }, 'копировать') : null), ta);
 }
 function ro(label, value) {
@@ -405,14 +451,19 @@ async function renderPanel() {
   let title, sub;
   if (ref.kind === 'shot') { title = `Кадр ${s.id}`; sub = `Сцена ${shotInfo.scene.n}. ${shotInfo.scene.title} · ${s.dur || '?'} с · ${s.camera || ''} · ${s.tool || ''}`; }
   else if (ref.kind === 'lab') { const [st, , id] = ref.id.split('|'); title = `Проба: ${S.state.project.styles.find((x) => x.id === st)?.name}`; sub = `Кадр ${id}`; }
+  else if (ref.kind === 'scene') { title = `Сцена ${it.n}. ${it.title}`; sub = 'Постановка: мастер-план (общий кадр, все на своих местах), расстановка и план сверху. Мастер-план и план уходят художнику в каждый кадр сцены.'; }
   else { title = it.name; sub = ref.kind === 'character' ? 'Лист персонажа' : 'Фон локации'; }
 
-  const note = h('textarea', { rows: 3, placeholder: f ? 'Например: «волосы длиннее, взгляд ниже, убрать второго офицера». Остальное останется как есть.' : 'Пожелания к первой версии (необязательно)' });
+  const noteKey = dkey(ref, 'note');
+  const note = h('textarea', { rows: 3, oninput: (e) => { S.notes ||= {}; S.notes[noteKey] = e.target.value; },
+    placeholder: f ? 'Например: «волосы длиннее, взгляд ниже, убрать второго офицера». Остальное останется как есть.' : 'Пожелания к первой версии (необязательно)' }, S.notes?.[noteKey] || '');
   const gen1 = async (edit) => {
     const opts = { generator: gen(), note: note.value.trim(), edit: edit && !!f };
     if (edit && !opts.note) return toast('Напиши, что поменять');
+    await flushDrafts();
     await POST('/api/generate', { ref, opts });
     note.value = '';
+    if (S.notes) delete S.notes[noteKey];
     toast(opts.generator === 'manual' ? 'Задание создано — смотри «Очередь»' : 'Отправлено художнику');
     pollJobs(true);
   };
@@ -441,6 +492,7 @@ async function renderPanel() {
       s.status === 'approved' ? '✓ Утверждено' : 'Утвердить') : null,
     h('button', { onclick: () => gen1(false), disabled: !!run }, f ? 'Нарисовать заново' : 'Нарисовать'),
     h('button', { onclick: () => fileInput.click() }, 'Загрузить файл'), fileInput,
+    h('button', { title: 'Вставить картинку из буфера обмена (или просто Ctrl+V)', onclick: pasteFromButton }, '📋 Вставить'),
     h('button', { class: 'ghost', onclick: () => copy(preview.prompt) }, 'Копировать промпт'),
     ref.kind === 'shot' ? h('button', { class: 'ghost', title: 'Вырезанный кадр не попадает в пакет для видео и монтаж', onclick: async () => { await save(ref, { cut: !s.cut }); renderPanel(); render(true); } }, s.cut ? 'Вернуть кадр' : 'Вырезать кадр') : null,
     run ? h('span', { class: 'pill bad' }, run.status === 'queued' ? 'в очереди' : 'рисует…') : null);
@@ -473,19 +525,25 @@ async function renderPanel() {
       h('div', { class: 'field' }, h('label', {}, 'Локация'), locSel),
       h('div', { class: 'field' }, h('label', {}, 'В кадре'), chars),
       s.imgFrom ? ro('Картинка', `Берётся из кадра ${s.imgFrom}. Можно нарисовать отдельную — она заменит.`) : null,
-      field('IMG — промпт картинки', s.img, async (v) => { await save(ref, { img: v }); renderPanel(); }, { code: true, rows: 4 }),
-      field('VID — промпт движения для ' + (s.tool || 'видео'), s.vid, (v) => save(ref, { vid: v }), { code: true, rows: 3, copy: true }),
-      field('Заметка для Claude (логика, канон, вопросы)', s.notes, (v) => save(ref, { notes: v }), { rows: 2 }));
+      field('Непрерывность — как этот кадр стыкуется с соседними (кто где, куда смотрит)', s.continuity, ref, 'continuity', { rows: 2 }),
+      field('IMG — промпт картинки', s.img, ref, 'img', { code: true, rows: 4 }),
+      field('VID — промпт движения для ' + (s.tool || 'видео'), s.vid, ref, 'vid', { code: true, rows: 3, copy: true }),
+      field('Заметка для Claude (логика, канон, вопросы)', s.notes, ref, 'notes', { rows: 2 }));
   } else if (ref.kind === 'character') {
     fields.push(ro('Канон из книги', it.canon),
-      field('Токен — как описывать героя в кадрах', it.token, async (v) => { await save(ref, { token: v }); renderPanel(); }, { code: true, rows: 3 }),
-      field('Промпт листа персонажа', it.sheetPrompt, async (v) => { await save(ref, { sheetPrompt: v }); renderPanel(); }, { code: true, rows: 4 }));
+      field('Токен — как описывать героя в кадрах', it.token, ref, 'token', { code: true, rows: 3 }),
+      field('Промпт листа персонажа', it.sheetPrompt, ref, 'sheetPrompt', { code: true, rows: 4 }));
   } else if (ref.kind === 'location') {
     const pals = Object.entries(S.state.project.palettes);
     fields.push(
       h('div', { class: 'field' }, h('label', {}, 'Палитра'), h('select', { onchange: async (e) => { await save(ref, { palette: e.target.value }); renderPanel(); } },
         ...pals.map(([k, v]) => h('option', { value: k, selected: it.palette === k }, `${k} — ${v.name}`)))),
-      field('Описание места', it.prompt, async (v) => { await save(ref, { prompt: v }); renderPanel(); }, { code: true, rows: 4 }));
+      field('Описание места', it.prompt, ref, 'prompt', { code: true, rows: 4 }));
+  } else if (ref.kind === 'scene') {
+    fields.push(
+      it.plan ? h('div', { class: 'field' }, h('label', {}, 'План сверху (схема расстановки)'), h('img', { class: 'plan', src: fileUrl(it.plan), onclick: () => zoom(it.plan) })) : null,
+      field('Расстановка — кто где стоит, откуда свет, направление взглядов', it.staging, ref, 'staging', { rows: 8 }),
+      field('Промпт мастер-плана', it.masterPrompt, ref, 'masterPrompt', { code: true, rows: 5 }));
   }
 
   panel.replaceChildren(...[
@@ -594,7 +652,7 @@ function linesBox(ref, s) {
           b ? h('span', { class: 'badge ' + b[1] }, b[0]) : null,
           h('span', { class: 'muted' }, `~${(l.text.length / 13).toFixed(1)} с`),
           h('button', { class: 'ghost', title: 'Удалить реплику', onclick: () => set(ls.filter((_, j) => j !== i)) }, '✕')),
-        h('textarea', { rows: 2, onchange: (e) => upd({ text: e.target.value.trim(), src: 'edited' }) }, l.text),
+        h('textarea', { rows: 2, oninput: (e) => draft(dkey(ref, 'line' + i), e.target.value, (v) => quietSave(ref, { lines: (itemOf(ref).lines || []).map((x, j) => (j === i ? { ...x, text: v.trim(), src: 'edited' } : x)) })) }, S.drafts[dkey(ref, 'line' + i)] ?? l.text),
         l.book ? h('div', { class: 'bookline' }, h('span', { class: 'muted' }, 'В книге: '), l.book, ' ', h('button', { class: 'ghost', onclick: () => upd({ text: l.book.replace(/^Кхм,\s*/, ''), src: 'book' }) }, 'взять из книги')) : null);
     }),
     h('button', { onclick: () => set([...ls, { who: (s.characters || [])[0] || 'LIAM', mode: 'lips', text: '…' }]) }, '+ Реплика'));
@@ -698,7 +756,7 @@ async function upload(ref, file) {
   const r = await fetch('/api/upload?ref=' + encodeURIComponent(JSON.stringify(ref)), { method: 'POST', headers: { 'Content-Type': file.type || 'image/png' }, body: file });
   if (!r.ok) return toast('Не получилось загрузить');
   toast('Картинка добавлена как новая версия');
-  if (ref.kind === 'shot') await loadEp(); else await loadState();
+  if (ref.kind === 'shot' || ref.kind === 'scene') await loadEp(); else await loadState();
   render(true); renderPanel();
 }
 
@@ -719,7 +777,9 @@ async function pollJobs(force) {
         toast(fails.length ? `Ошибка: ${fails.map((j) => j.label).join(', ')} — смотри «Очередь»` : `Готово: ${finished.map((j) => j.label).join(', ')}`, 5000);
       }
       render(true);
-      if (finished.some((j) => sameRef(j.ref, S.sel)) || force) renderPanel();
+      if (finished.some((j) => sameRef(j.ref, S.sel)) || force) {
+        if (typing()) S.panelStale = true; else renderPanel();
+      }
     }
   } catch {}
 }
@@ -760,6 +820,48 @@ async function checkGen() {
 // Любая ошибка — на экран, а не молча: так видно, почему кнопка «не работает»
 window.addEventListener('unhandledrejection', (e) => toast('Ошибка: ' + (e.reason?.message || e.reason), 12000));
 window.addEventListener('error', (e) => toast('Ошибка: ' + e.message, 12000));
+
+// ---------- вставка картинки из буфера обмена (Ctrl+V) ----------
+async function pasteChoice(files) {
+  if (!S.sel) {
+    if (S.view === 'lib') { await addToLibrary(files); return renderLib(); }
+    return toast('Открой кадр, персонажа или локацию — и вставь туда (Ctrl+V)');
+  }
+  const ref = S.sel;
+  const where = await new Promise((resolve) => {
+    const m = h('div', { class: 'modal', onclick: (e) => e.target === m && done(null) },
+      h('div', { class: 'modal-box small' }, h('h3', {}, 'Куда вставить картинку?'),
+        h('div', { class: 'actions' },
+          h('button', { class: 'primary', onclick: () => done('version') }, 'Как новую версию'),
+          ref.kind !== 'lab' ? h('button', { onclick: () => done('ref') }, 'В референсы') : null,
+          h('button', { class: 'ghost', onclick: () => done(null) }, 'Отмена'))));
+    function done(v) { m.remove(); resolve(v); }
+    document.body.append(m);
+  });
+  if (where === 'version') for (const f of files) await upload(ref, f);
+  if (where === 'ref') {
+    const added = await addToLibrary(files);
+    if (added.length) { await save(ref, { refs: [...(itemOf(ref).refs || []), ...added.map((file) => ({ file }))] }); renderPanel(); }
+  }
+}
+async function pasteFromButton() {
+  try {
+    const items = await navigator.clipboard.read();
+    const files = [];
+    for (const it of items) for (const t of it.types) if (t.startsWith('image/')) files.push(new File([await it.getType(t)], 'вставка.' + t.split('/')[1], { type: t }));
+    if (!files.length) return toast('В буфере нет картинки. Скопируй картинку (не файл) и нажми ещё раз — или Ctrl+V.');
+    pasteChoice(files);
+  } catch { toast('Браузер не дал доступ к буферу — просто нажми Ctrl+V'); }
+}
+document.addEventListener('paste', (e) => {
+  const files = [...(e.clipboardData?.files || [])].filter((f) => f.type.startsWith('image/'));
+  if (!files.length) return; // обычный текст вставляется как обычно
+  e.preventDefault();
+  pasteChoice(files.map((f, i) => new File([f], f.name && f.name !== 'image.png' ? f.name : `вставка_${Date.now()}_${i}.png`, { type: f.type })));
+});
+// панель, которую не перерисовали, пока ты печатала, обновляется, когда уходишь из поля
+document.addEventListener('focusout', () => setTimeout(() => { if (S.panelStale && !typing()) { S.panelStale = false; renderPanel(); } }, 300));
+window.addEventListener('beforeunload', () => { for (const f of Object.values(S.flushers || {})) f(); });
 
 document.addEventListener('DOMContentLoaded', async () => {
   $('#tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.view = b.dataset.view; render(); window.scrollTo(0, 0); } });

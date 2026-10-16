@@ -19,7 +19,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-17.1';
+const VERSION = '2026-10-17.2';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -57,6 +57,14 @@ function open(ref) {
       if (item) return { item, scene: sc, ep, save: () => writeJSON(p, ep), dir: path.join(MEDIA, safe(ref.ep), safe(ref.id)) };
     }
     throw new Error('Нет кадра ' + ref.id);
+  }
+  if (ref.kind === 'scene') {
+    // сцена целиком: постановка, мастер-план, план сверху
+    const p = epPath(ref.ep);
+    const ep = readJSON(p);
+    const item = ep?.scenes.find((sc) => String(sc.n) === String(ref.id));
+    if (!item) throw new Error('Нет сцены ' + ref.id);
+    return { item, scene: item, ep, save: () => writeJSON(p, ep), dir: path.join(MEDIA, safe(ref.ep), 'scene_' + safe(ref.id)) };
   }
   if (ref.kind === 'character' || ref.kind === 'location') {
     const p = path.join(DATA, 'project.json');
@@ -100,7 +108,8 @@ function buildPrompt(ref, opts = {}) {
   const refs = [];
   const warnings = [];
   const addRef = (file, role) => { if (file && !refs.some((r) => r.file === file) && fs.existsSync(abs(file))) refs.push({ file, role }); };
-  let raw = '', lines = [], charIds = [], locId = null;
+  let raw = '', lines = [], charIds = [], locId = null, shotCtx = null, sceneCtx = null;
+  const ownRefs = [];
 
   const o = open(ref);
   const item = o.item;
@@ -127,7 +136,16 @@ function buildPrompt(ref, opts = {}) {
     }
     charIds = s.characters || [];
     locId = s.location || scene?.location;
-    for (const r of s.refs || []) addRef(r.file, `reference illustration for this shot${r.note ? ' (' + r.note + ')' : ''} — follow its composition and mood, redraw in the requested style`);
+    shotCtx = { s, scene };
+    for (const r of s.refs || []) ownRefs.push([r.file, `reference illustration for this shot${r.note ? ' (' + r.note + ')' : ''} — follow its composition and mood, redraw in the requested style`]);
+  } else if (ref.kind === 'scene') {
+    // мастер-план: вся сцена одним общим кадром, все герои на своих местах
+    raw = (item.masterPrompt || `wide master shot of the scene "${item.title}", all characters in their places`) + ', STYLE';
+    locId = item.location;
+    const ids = new Set();
+    for (const s of item.shots) if (!s.cut && (s.location || item.location) === item.location) (s.characters || []).forEach((c) => ids.add(c));
+    charIds = [...ids].filter((id) => chars[id] && !['Предметы'].includes(chars[id].group));
+    sceneCtx = item;
   } else if (ref.kind === 'character') {
     raw = item.sheetPrompt || `anime character model sheet of ${item.token}, front, side and back views, expressions, plain white background, labeled ${item.id}`;
     raw += ', STYLE';
@@ -148,10 +166,8 @@ function buildPrompt(ref, opts = {}) {
   if (loc && !/PAL-/.test(raw) && pr.palettes[loc.palette]) text += ', ' + pr.palettes[loc.palette].text;
   lines.push(text);
 
-  if (loc) {
-    addRef(selectedFile(loc), `location "${loc.name}" — keep its architecture, layout and palette`);
-    lines.push(`Location: ${loc.prompt.replace(/,?\s*(no people|no characters|empty scene[^,]*)/gi, '')}.`);
-  }
+  // Порядок референсов = важность: листы героев, мастер-план сцены, предыдущий кадр, план сверху, фон
+  const size = shotCtx ? shotSize(shotCtx.s, raw) : 'wide';
   const cl = [];
   for (const id of charIds) {
     const c = chars[id];
@@ -165,7 +181,35 @@ function buildPrompt(ref, opts = {}) {
     else if (!f) warnings.push(`Нет листа персонажа «${c.name}» — внешность может «поплыть». Сначала сделай его во вкладке «Персонажи».`);
   }
   if (cl.length) lines.push('Characters:\n' + cl.join('\n'));
-  if (loc && !selectedFile(loc)) warnings.push(`Нет референса локации «${loc.name}». Сначала сделай фон во вкладке «Локации».`);
+  for (const [f, role] of ownRefs) addRef(f, role);
+
+  const sc = shotCtx?.scene || sceneCtx;
+  const sameSet = sc && (!shotCtx || (shotCtx.s.location || sc.location) === sc.location);
+  if (sc?.staging) lines.push(`Scene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\n${sc.staging}`);
+  if (shotCtx) {
+    const { s } = shotCtx;
+    const shots = sc.shots.filter((x) => !x.cut);
+    const i = shots.indexOf(s);
+    const prev = shots.slice(0, Math.max(0, i)).reverse().find((x) => selectedFile(x) && (x.location || sc.location) === (s.location || sc.location));
+    if (sameSet && selectedFile(sc) && !opts.edit) addRef(selectedFile(sc), 'SCENE MASTER SHOT — the whole scene with everyone in place. This shot is the SAME place and the SAME moment seen from a different camera angle/framing: keep the layout, who stands where, the props and the light direction');
+    if (prev && !opts.edit) addRef(selectedFile(prev), `PREVIOUS SHOT (${prev.id}: ${prev.frame || ''}) — this shot comes right after it: keep continuity of positions, poses, clothes, light and screen direction`);
+    if (sc.plan && sameSet) addRef(sc.plan, 'top-down FLOOR PLAN of the scene (blocking diagram): who stands where and where the camera is. Use it only to understand the spatial arrangement — never draw the diagram itself');
+    const ctx = [`This shot (${s.id}, ${s.camera || 'camera not set'}): ${s.frame || ''}`];
+    if (s.continuity) ctx.push(`Continuity: ${s.continuity}`);
+    if (i > 0) ctx.push(`Previous shot (${shots[i - 1].id}): ${shots[i - 1].frame || shots[i - 1].vid || ''}`);
+    if (i >= 0 && i < shots.length - 1) ctx.push(`Next shot (${shots[i + 1].id}): ${shots[i + 1].frame || shots[i + 1].vid || ''}`);
+    lines.push(ctx.join('\n'));
+  } else if (sceneCtx?.plan) addRef(sceneCtx.plan, 'top-down FLOOR PLAN of the scene (blocking diagram): place everyone exactly as shown. Never draw the diagram itself');
+  if (loc) {
+    const env = loc.prompt.replace(/,?\s*(no people|no characters|empty scene[^,]*)/gi, '');
+    if (size === 'close') lines.push(`Background: only a soft, out-of-focus hint of the surroundings (${env.split(',')[0]}); this is a close shot, do not show the wide view of the location.`);
+    else {
+      addRef(selectedFile(loc), `location "${loc.name}" — reference for environment design, materials, palette and light ONLY. Do NOT copy its composition or camera angle: frame the shot as the prompt describes`);
+      lines.push(`Location (environment only): ${env}.`);
+    }
+    if (loc.needsRedraw) warnings.push(`Фон локации «${loc.name}» устарел — Claude поменял её описание. Перерисуй фон во вкладке «Локации».`);
+  }
+  if (loc && !selectedFile(loc) && size !== 'close') warnings.push(`Нет референса локации «${loc.name}». Сначала сделай фон во вкладке «Локации».`);
 
   if (ref.kind === 'shot' || ref.kind === 'lab') lines.push('Format: ' + pr.format + '.');
   lines.push('Avoid: ' + pr.negative + '.');
@@ -175,7 +219,7 @@ function buildPrompt(ref, opts = {}) {
       : `Additional direction: ${opts.note}`);
   }
   warnings.unshift(...checkRules(pr, raw + ' ' + (opts.note || '')));
-  const out = { prompt: lines.join('\n\n'), refs: refs.slice(0, 6), warnings, style: style.id };
+  const out = { prompt: lines.join('\n\n'), refs: refs.slice(0, 8), warnings, style: style.id };
   if (ref.kind === 'shot') {
     const v = videoPrompt(item, pr);
     out.video = v.text;
@@ -213,10 +257,19 @@ function videoPrompt(s, pr) {
   return { text: parts.filter(Boolean).join('\n\n'), warnings };
 }
 
+// Крупность кадра: на крупных и деталях фон локации не нужен — иначе модель тащит его целиком
+function shotSize(s, raw = '') {
+  const c = (s.camera || '').toLowerCase();
+  if (/сверхкрупн|крупн|детал|вставка/.test(c) || /^(extreme )?close-up/i.test(raw)) return 'close';
+  if (/общий|сверхобщ|воздух|панорам|с высоты|сверху|пролёт|пролет/.test(c) || /wide|aerial|establishing/i.test(raw.slice(0, 60))) return 'wide';
+  return 'medium';
+}
+
 function codexInstruction(p, outAbs) {
   const refList = p.refs.map((r, i) => `  Image ${i + 1}: ${r.role}`).join('\n');
   return [
-    'You are the image artist of an anime studio. Use your built-in image generation tool to create exactly ONE image.',
+    'You are the key-frame artist of an anime studio. Use your built-in image generation tool to create exactly ONE image.',
+    'This frame is one shot of a continuous scene: keep continuity with the scene master shot, the previous shot and the floor plan — same layout, same positions of characters and props, same light direction, 180-degree rule. Location images are environment references, not compositions to copy.',
     p.refs.length ? `The attached images are references:\n${refList}` : 'There are no reference images.',
     `Save the final image as PNG to this exact path (create folders if needed):\n  ${outAbs}`,
     'If the tool saved it somewhere else (for example ~/.codex/generated_images), copy it to that path.',
@@ -225,6 +278,44 @@ function codexInstruction(p, outAbs) {
     'IMAGE PROMPT:',
     p.prompt,
   ].join('\n');
+}
+
+// ---------- пакеты изменений от Claude ----------
+// Claude не правит файлы серий напрямую (чтобы не было конфликтов в Git с работой автора),
+// а кладёт пакеты в studio/migrations/. Студия применяет каждый один раз — поверх данных автора.
+const MIGRATIONS = path.join(STUDIO, 'migrations');
+function runMigrations() {
+  if (!fs.existsSync(MIGRATIONS)) return;
+  const pp = path.join(DATA, 'project.json');
+  const pr = readJSON(pp);
+  pr.appliedMigrations ||= [];
+  const eps = {};
+  const ep = (id) => (eps[id] ||= readJSON(epPath(id)));
+  const setAll = (obj, set) => { for (const [k, v] of Object.entries(set || {})) { if (v === null) delete obj[k]; else obj[k] = v; } };
+  let changed = false;
+  for (const f of fs.readdirSync(MIGRATIONS).filter((x) => x.endsWith('.json')).sort()) {
+    const m = readJSON(path.join(MIGRATIONS, f));
+    if (!m?.id || pr.appliedMigrations.includes(m.id)) continue;
+    for (const op of m.ops || []) {
+      try {
+        if (op.op === 'scene') setAll(ep(op.ep).scenes.find((s) => s.n === op.n), op.set);
+        else if (op.op === 'shot') setAll(ep(op.ep).scenes.flatMap((s) => s.shots).find((s) => s.id === op.id), op.set);
+        else if (op.op === 'location' || op.op === 'character') {
+          const list = op.op === 'location' ? pr.locations : pr.characters;
+          let it = list.find((x) => x.id === op.id);
+          if (!it) list.push((it = { id: op.id, versions: [], selected: null }));
+          setAll(it, op.set);
+        } else if (op.op === 'question-remove') pr.questions = (pr.questions || []).filter((q) => !q.startsWith(op.startsWith));
+      } catch (e) { console.log('  Пакет', m.id, 'шаг пропущен:', e.message); }
+    }
+    pr.appliedMigrations.push(m.id);
+    changed = true;
+    logInbox(`Применён пакет изменений от Claude: «${m.title || m.id}»`);
+  }
+  if (changed) {
+    for (const [id, e] of Object.entries(eps)) writeJSON(epPath(id), e);
+    writeJSON(pp, pr);
+  }
 }
 
 // ---------- очередь заданий ----------
@@ -270,6 +361,7 @@ function nextOut(dir, ext = '.png', prefix = 'v') {
 }
 
 function label(ref) {
+  if (ref.kind === 'scene') return `${ref.ep} · сцена ${ref.id} (мастер-план)`;
   return ref.kind === 'shot' ? `${ref.ep} · кадр ${ref.id}` : ref.kind === 'lab' ? `проба ${ref.id.replace(/\|/g, ' · ')}` : `${ref.kind === 'character' ? 'персонаж' : 'локация'} ${ref.id}`;
 }
 
@@ -278,14 +370,22 @@ function addVersion(ref, file, meta) {
   o.item.versions ||= [];
   o.item.versions.push({ file, at: now(), ...meta });
   o.item.selected = o.item.versions.length - 1;
+  delete o.item.needsRedraw;
   if (ref.kind === 'shot') o.item.status = 'review';
   o.save();
   logInbox(`${label(ref)} — новая версия ${path.basename(file)} (${meta.by})${meta.note ? ': «' + meta.note + '»' : ''}`);
 }
 
-function logInbox(line) {
+let lastInboxKey = null;
+function logInbox(line, key = null) {
   if (!fs.existsSync(INBOX)) fs.writeFileSync(INBOX, '# Журнал студии\n\nСюда студия пишет все правки и решения. Claude читает его, чтобы держать канон и логику.\n\n');
-  fs.appendFileSync(INBOX, `- [${now()}] ${line}\n`);
+  const entry = `- [${now()}] ${line}\n`;
+  if (key && key === lastInboxKey) {
+    // заметка сохраняется на ходу — переписываем последнюю строку, а не плодим десяток
+    const t = fs.readFileSync(INBOX, 'utf8').replace(/- \[[^\n]*\n$/, '');
+    fs.writeFileSync(INBOX, t + entry);
+  } else fs.appendFileSync(INBOX, entry);
+  lastInboxKey = key;
 }
 
 function enqueue(ref, opts) {
@@ -561,6 +661,7 @@ function openInOS(p) {
 
 const routes = {
   'GET /api/state': () => {
+    runMigrations();
     const cfg = config();
     const bookDir = path.join(STUDIO, 'canon', 'book');
     const book = fs.existsSync(bookDir) ? fs.readdirSync(bookDir).filter((f) => f.endsWith('.txt')).sort() : [];
@@ -609,12 +710,12 @@ const routes = {
   },
   'POST /api/update': (q, b) => {
     const o = open(b.ref);
-    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus', 'lines'];
+    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus', 'lines', 'staging', 'masterPrompt', 'continuity'];
     for (const [k, v] of Object.entries(b.patch || {})) if (allowed.includes(k)) o.item[k] = v;
     o.save();
     if (b.patch?.status === 'approved') logInbox(`${label(b.ref)} — утверждён (${path.basename(selectedFile(o.item) || '')})`);
     if (b.patch?.videoStatus === 'approved') logInbox(`${label(b.ref)} — видео утверждено (${path.basename(selectedVideo(o.item) || '')})`);
-    if (b.patch?.notes) logInbox(`${label(b.ref)} — заметка для Claude: «${b.patch.notes}»`);
+    if (b.patch?.notes) logInbox(`${label(b.ref)} — заметка для Claude: «${b.patch.notes}»`, 'note:' + JSON.stringify(b.ref));
     return o.item;
   },
   'POST /api/project': (q, b) => {
@@ -765,6 +866,7 @@ server.on('error', async (e) => {
   setTimeout(() => process.exit(1), 15000);
 });
 server.listen(port, '127.0.0.1', () => {
+  runMigrations();
   restoreJobs();
   pump();
   process.on('SIGINT', () => { saveJobs(); process.exit(0); });

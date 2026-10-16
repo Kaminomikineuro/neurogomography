@@ -208,3 +208,13 @@ pre { white-space: pre-wrap; word-break: break-word; font: 12px/1.45 ui-monospac
 .render canvas { width: 100%; border-radius: 8px; background: #000; display: block; margin: 8px 0; }
 .rbar { height: 6px; background: var(--card); border-radius: 9px; overflow: hidden; margin-bottom: 8px; }
 .rbar i { display: block; height: 100%; width: 0; background: var(--accent); }
+
+.scenebar { display: flex; gap: 10px; align-items: stretch; background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius); padding: 8px; margin: 0 0 12px; cursor: pointer; }
+.scenebar:hover, .scenebar.sel { border-color: var(--accent2); }
+.scenebar .thumb { width: 200px; flex: none; border-radius: 8px; font-size: 12px; }
+.scenebar .thumb.plan { width: 130px; background-size: contain; background-color: #f5f0e8; }
+.scenebar .txt { font-size: 13px; flex: 1; min-width: 0; }
+.scenebar .hint { color: var(--warn); margin-top: 6px; font-size: 12.5px; }
+img.plan { width: 100%; border-radius: 8px; cursor: zoom-in; background: #f5f0e8; }
+.modal-box.small { width: min(460px, 100%); }
+@media (max-width: 720px) { .scenebar { flex-wrap: wrap; } .scenebar .thumb { width: 45%; } }
