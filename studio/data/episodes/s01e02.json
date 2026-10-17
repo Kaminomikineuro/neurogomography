@@ -487,7 +487,7 @@
      "optional": false,
      "frame": "Лиам замечает: задержка перед движением, тяжёлый вдох, напряжённые пальцы на рукояти.",
      "sound": "",
-     "img": "close-up of [LORD] hand gripping a black sword hilt, knuckles tense, STYLE",
+     "img": "close-up of [LORD]'s black leather gloved hand gripping a black sword hilt, knuckles tense under the glove, STYLE",
      "imgFrom": null,
      "vid": "the grip tightens, a slight delay before the next swing",
      "characters": [
@@ -1373,7 +1373,10 @@
      "img": "",
      "imgFrom": null,
      "vid": "Liam's knuckles tighten on the hilt, the blade does not rise",
-     "characters": [],
+     "characters": [
+      "LIAM",
+      "LIAM SWORD"
+     ],
      "location": null,
      "status": "todo",
      "versions": [],
@@ -1711,7 +1714,7 @@
      "optional": false,
      "frame": "стаскивает Повелителя, прислоняет к широкому стволу, прижимает пальцы к его шее. *(см. флаг №1 в конце)*",
      "sound": "",
-     "img": "[LIAM] kneeling beside [LORD] who sits unconscious against a wide tree trunk, Liam's fingers at his neck, PAL-FOREST, STYLE",
+     "img": "[LIAM] kneeling beside [LORD] who sits unconscious against a wide tree trunk, Liam's bare fingers at the Lord's neck above his high black collar, PAL-FOREST, STYLE",
      "imgFrom": null,
      "vid": "he settles the body against the tree and touches two fingers to the neck",
      "characters": [
@@ -1883,7 +1886,7 @@
      "optional": false,
      "frame": "Лиам медлит. На кончиках пальцев сгусток тёмной энергии, из него соткан кривоватый, угловатый дракончик размером с кошку.",
      "sound": "",
-     "img": "close-up of [LIAM] fingertips weaving a small crooked angular dragon out of dark energy, cat-sized, PAL-FOREST, STYLE",
+     "img": "close-up of [LIAM]'s bare fingertips weaving a small crooked angular dragon out of dark energy, cat-sized, brown leather bracer at his wrist, PAL-FOREST, STYLE",
      "imgFrom": null,
      "vid": "dark energy gathers and forms into a little lopsided dragon",
      "characters": [

@@ -88,13 +88,14 @@
      "at": "2026-10-16"
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "details": "fitted dark brown-black long-sleeve tunic with NARROW close-fitting sleeves (never wide, loose or flowing sleeves); dark brown leather bracers with buckles on both forearms; BARE hands without gloves, slender pale fingers; deep burgundy hooded scarf wrapped around neck and shoulders; crossed brown leather straps over the chest; small silver winged emblem on the left chest; brown belts with a pouch on the right thigh; tall dark boots wrapped with burgundy bands; long white hair in a high ponytail with loose strands"
   },
   {
    "id": "LORD",
    "name": "Повелитель драконов (человек)",
    "group": "Главные",
-   "token": "the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes",
+   "token": "the Dragon Lord in human form, looks about 22-23, tall and composed, very long straight black hair, three flat stacked silver hairpins (kensaikan) on the left side of the head, long black high-collared coat with leather straps instead of armor, black leather gloves, heavy black boots, obsidian-black eyes",
    "sheetPrompt": "anime character model sheet of the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit, heavy black boots, obsidian-black eyes, front, side, back views and head close-ups, plain white background, labeled THE LORD",
    "versions": [
     {
@@ -104,7 +105,8 @@
      "note": ""
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "details": "black leather gloves on BOTH hands at all times (never bare hands, never bare fingers); long black high-collared coat with tight long sleeves that tuck into the gloves, buttoned cuffs; black leather straps and buckles across chest and waist; long coat skirt split at front and back; black trousers and heavy buckled black boots; very long straight black hair; three flat stacked silver plate hairpins (kensaikan) on the left side of the head; pale skin"
   },
   {
    "id": "DRAGON",
@@ -156,7 +158,8 @@
      "file": "Аниме/Иллюстрации книги/Бастиан.png",
      "note": "референс в стиле иллюстрации книги, надо в аниме стиль"
     }
-   ]
+   ],
+   "details": "long black coat with burgundy inner panels and dark ornate embroidery; black laced leather bracers on both forearms; rings on his fingers; layered dark belts; heavy laced black boots; black hair tied back; the tattoo is never visible"
   },
   {
    "id": "RUKH",
@@ -231,7 +234,8 @@
      "prompt": "anime character model sheet of a young drayk captain, uncertain and dutiful expression, plain drayk officer uniform in dark red and brown, front, side, back views, two expressions, plain white background, labeled ROY, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "details": "burgundy short-sleeved over-robe over a black long-sleeve undershirt with narrow sleeves; dark leather bracers with bronze ornaments on both forearms; bare hands; wide dark belt with a bronze buckle; long dark-brown hair in a high ponytail with a small bronze crown clasp and a red ribbon"
   },
   {
    "id": "ARDAN",
@@ -249,7 +253,8 @@
      "prompt": "anime character model sheet of a stern female drayk commander, sharp face, military bearing, drayk officer armor in dark red and brown, front, side, back views, two expressions, plain white background, labeled ARDAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: короткие серые волосы"
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "details": "ornate burgundy-and-bronze armor with dragon-shaped pauldrons; dark leather gloves on both hands with bronze vambraces; long split burgundy skirt with dragon embroidery; high collar; short grey hair, amber-brown eyes"
   },
   {
    "id": "BELFI",
@@ -273,7 +278,8 @@
      "file": "Аниме/Иллюстрации книги/Снимок экрана 2026-10-16 180909.png",
      "note": "одежда такого типа"
     }
-   ]
+   ],
+   "details": "bulky ornate bronze-and-burgundy armor with dragon-shaped bronze pauldrons; dark leather gauntlets covering both hands with ornate bronze vambraces; long burgundy surcoat with gold flame embroidery; high stiff collar; messy grey hair and grey goatee"
   },
   {
    "id": "LIAM SWORD",
@@ -647,6 +653,22 @@
    ],
    "unless": "no visible tattoo|hidden",
    "msg": "Татуировка Бастиана спрятана — в кадре её не видно."
+  },
+  {
+   "id": "lord-gloves",
+   "when": [
+    "\\[LORD\\]|Lord",
+    "bare hand|bare fingers|ungloved|without gloves"
+   ],
+   "msg": "У Повелителя руки всегда в чёрных кожаных перчатках."
+  },
+  {
+   "id": "liam-sleeves",
+   "when": [
+    "\\[LIAM\\]|Liam",
+    "(wide|loose|flowing|billowing) sleeves?"
+   ],
+   "msg": "У Лиама узкие рукава и кожаные наручи, широких рукавов нет."
   }
  ],
  "questions": [
@@ -656,6 +678,7 @@
  ],
  "appliedMigrations": [
   "2026-10-17-postanovka",
-  "2026-10-18-prigovor"
+  "2026-10-18-prigovor",
+  "2026-10-21-ruki"
  ]
 }
