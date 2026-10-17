@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-21.1';
+const UI_VERSION = '2026-10-22.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -79,6 +79,7 @@ function itemOf(ref) {
   if (ref.kind === 'character') return S.state.project.characters.find((c) => c.id === ref.id);
   if (ref.kind === 'location') return S.state.project.locations.find((c) => c.id === ref.id);
   if (ref.kind === 'lab') return S.state.lab.items[ref.id] || { versions: [], selected: null };
+  if (ref.kind === 'clip') return ref.ep === S.ep.id ? clipOf(ref.id)?.clip : null;
 }
 const runningFor = (ref) => S.jobs.find((j) => sameRef(j.ref, ref) && ['queued', 'running'].includes(j.status));
 
@@ -103,7 +104,8 @@ function shotCard(s, ref) {
       s.cut ? h('span', { class: 'badge warn' }, 'вырезан') : s.optional ? h('span', { class: 'badge warn' }, 'можно вырезать') : null,
       s.videos?.length ? h('span', { class: 'badge vid' + (s.videoStatus === 'approved' ? ' ok' : '') }, '▶ видео') : null,
       s.versions?.length > 1 ? h('span', { class: 'badge' }, 'v' + s.versions.length) : null,
-      noteOf(s.id) ? h('span', { class: 'badge note', title: 'Есть неотправленная правка: ' + noteOf(s.id) }, '✎') : null),
+      noteOf(s.id) ? h('span', { class: 'badge note', title: 'Есть неотправленная правка: ' + noteOf(s.id) }, '✎') : null,
+      clipOfShot(s.id) ? h('span', { class: 'badge clipb', title: 'Кадр в связке ' + clipOfShot(s.id).clip.id + ' — видео делается одним роликом' }, '🎬 ' + clipOfShot(s.id).clip.id) : null),
     h('div', { class: 'desc' }, s.frame || s.vid || ''));
 }
 function renderBoard() {
@@ -122,6 +124,7 @@ function renderBoard() {
     h('button', { class: S.pick ? 'primary' : '', onclick: () => (S.pick ? closePanel() : startPick()), title: 'Отметь кадры или целые сцены и перерисуй их одной кнопкой — с общей правкой или со своей у каждого' },
       S.pick ? 'Выйти из выбора' : '☑ Перерисовать скопом'),
     h('button', { onclick: drawMissing, title: 'Отправить в очередь все кадры без картинки (только видимые по фильтру сцены)' }, 'Нарисовать все недостающие'),
+    h('button', { onclick: makeClips, title: 'Сцены с героями — связками до 15 с в Seedance / Kling, вставки без героев — в Pixverse' }, '🎬 Связки для Seedance'),
     h('button', { onclick: newEpisodeDialog, title: 'Claude прочитает главу и сделает раскадровку, промпты, реплики, постановку и подписи для комикса' }, '🎬 Новая серия из главы'),
     h('button', { class: 'primary', onclick: doExport }, 'Пакет для видео'));
   const side = h('div', { class: 'scenes' }, ...S.ep.scenes.map((sc) => {
@@ -141,6 +144,7 @@ function renderBoard() {
           return h('button', { class: 'pickscene' + (all ? ' on' : ''), onclick: () => togglePick(ids, !all) }, all ? '✓ сцена выбрана' : 'выбрать всю сцену');
         })() : null),
         sceneBar(sc),
+        clipStrip(sc),
         h('div', { class: 'sub' }, `~${sc.dur} с · ${sc.shots.length} кадров` + (loc ? ` · локация: ${loc.name}` : '') + (sc.note ? ' · ' + sc.note : '')),
         h('div', { class: 'grid' }, ...shots.map((s) => shotCard(s, { kind: 'shot', ep: S.ep.id, id: s.id }))));
     }));
@@ -497,6 +501,97 @@ async function save(ref, patch) {
   if (ref.kind === 'shot' || ref.kind === 'scene') await loadEp(); else await loadState();
 }
 
+// ---------- связки (несколько кадров — один ролик Seedance / Kling) ----------
+function clipOf(id) {
+  for (const sc of S.ep.scenes) { const clip = (sc.clips || []).find((c) => c.id === id); if (clip) return { clip, scene: sc }; }
+  return null;
+}
+function clipOfShot(shotId) {
+  for (const sc of S.ep.scenes) { const clip = (sc.clips || []).find((c) => c.shots.includes(shotId)); if (clip) return { clip, scene: sc }; }
+  return null;
+}
+const clipDur = (sc, c) => c.shots.reduce((a, id) => a + (sc.shots.find((x) => x.id === id)?.dur || 3), 0);
+async function makeClips() {
+  const has = S.ep.scenes.some((sc) => sc.clips?.length);
+  const max = +(prompt('Сцены с героями будут нарезаны на связки — каждая станет одним роликом Seedance (или Kling) с референсами. Вставки без героев уйдут в Pixverse.\n\nМаксимум секунд в одной связке (Seedance 2.0 — 15, Seedance 2.5 — до 30):', lsGet('clipMax', '15')) || 0);
+  if (!max) return;
+  lsSet('clipMax', String(max));
+  if (has && !confirm('Связки уже есть. Пересобрать? Связки, к которым уже загружено видео, останутся как есть.')) return;
+  const r = await POST('/api/clips/auto', { ep: S.ep.id, max });
+  await loadEp(); render(true);
+  toast(`Готово: связок ${r.made}, вставок для Pixverse ${r.inserts}. Нажми на связку над кадрами сцены.`, 7000);
+}
+function clipStrip(sc) {
+  if (!sc.clips?.length) return null;
+  return h('div', { class: 'clipstrip' }, ...sc.clips.map((c) => {
+    const ref = { kind: 'clip', ep: S.ep.id, id: c.id };
+    const v = selVideo(c);
+    return h('button', { class: 'clipchip' + (sameRef(S.sel, ref) ? ' on' : '') + (v ? ' vid' : ''), 'data-key': JSON.stringify(ref), onclick: () => select(ref), title: 'Кадры: ' + c.shots.join(', ') },
+      h('b', {}, '🎬 ' + c.id), ` ${c.shots[0]}–${c.shots.at(-1)} · ${clipDur(sc, c)} с · ${c.tool || 'Seedance'}`, v ? ' · ▶ видео' : '');
+  }));
+}
+async function renderClip(ref) {
+  const panel = $('#panel');
+  const info = clipOf(ref.id);
+  if (!info) return closePanel();
+  const { clip, scene } = info;
+  let cp;
+  try { cp = await POST('/api/clip/preview', { ep: ref.ep, id: ref.id }); } catch (e) { cp = { text: 'Ошибка: ' + e.message, refs: [], perShot: [], warnings: [] }; }
+  if (!sameRef(S.sel, ref)) return;
+  const edit = async (op, extra = {}) => { await POST('/api/clips/edit', { ep: ref.ep, id: ref.id, op, ...extra }); await loadEp(); render(true); if (clipOf(ref.id)) renderPanel(); else closePanel(); };
+  const tool = clip.tool || 'Seedance';
+  const dl = (file, name) => h('a', { href: fileUrl(file), download: name + (file.match(/\.\w+$/)?.[0] || '.png') }, 'скачать');
+  const shotsRow = h('div', { class: 'clipshots' }, ...clip.shots.map((id, i) => {
+    const s = scene.shots.find((x) => x.id === id);
+    const f = s && keyframeOf(s, scene);
+    return h('div', { class: 'cs' },
+      h('div', { class: 'thumb', style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null, onclick: () => select({ kind: 'shot', ep: ref.ep, id }) }, f ? '' : 'нет картинки'),
+      h('div', {}, h('b', {}, id), ` · ${s?.dur || '?'} с`),
+      i > 0 ? h('button', { class: 'ghost', title: 'Разрезать связку перед этим кадром', onclick: () => edit('split', { at: id }) }, '✂ здесь') : null);
+  }));
+  const keep = sameRef(S.panelRef, ref) ? panel.scrollTop : 0;
+  S.panelRef = ref;
+  panel.replaceChildren(...[
+    h('div', { class: 'head' }, h('div', {}, h('h3', {}, `Связка ${clip.id}`),
+      h('div', { class: 'sub' }, `Сцена ${scene.n}. ${scene.title} · ${clip.shots.length} кадров · ${cp.total || clipDur(scene, clip)} с — одним роликом`)),
+      h('button', { class: 'x ghost', onclick: closePanel }, '✕')),
+    shotsRow,
+    h('div', { class: 'actions' },
+      h('label', {}, 'Где делать: ', h('select', { onchange: (e) => edit('tool', { tool: e.target.value }) }, ...['Seedance', 'Kling'].map((t) => h('option', { selected: t === tool }, t)))),
+      h('button', { onclick: () => edit('merge') }, 'Склеить со следующей'),
+      h('button', { onclick: () => confirm('Разобрать связку? Кадры пойдут по одному в Pixverse.') && edit('remove') }, 'Разобрать')),
+    cp.warnings?.length ? h('div', { class: 'warns' }, ...cp.warnings.map((w) => h('div', { class: 'warn' }, '⚠ ' + w))) : null,
+    clipVideoBox(ref, clip),
+    h('details', { open: !selVideo(clip) }, h('summary', {}, `Как сделать в ${tool}`),
+      h('ol', { class: 'steps' },
+        h('li', {}, 'Открой ', h('a', { href: tool === 'Kling' ? 'https://app.klingai.com/' : 'https://app.pixverse.ai/', target: '_blank' }, tool === 'Kling' ? 'Kling' : 'Pixverse → модель Seedance'), tool === 'Kling' ? ' → Multi-shot (Elements — листы героев).' : ' → режим с референсами (Reference / Multi-image).'),
+        h('li', {}, `Длительность: ${cp.gen || '?'} с`, cp.gen > cp.total ? h('span', { class: 'muted' }, ` (связка ${cp.total} с, лишний хвост монтаж обрежет)`) : null),
+        h('li', {}, 'Референсы — загружай строго по порядку:', ...(cp.refs || []).map((r, i) => h('div', { class: 'copyrow' }, h('img', { class: 'refmini', src: fileUrl(r.file), onclick: () => zoom(r.file) }), h('code', {}, `@Image${i + 1} — ${r.label}`), dl(r.file, `Image${i + 1}_${clip.id}`)))),
+        h('li', {}, tool === 'Kling' ? 'Промпт целиком (если multi-shot — по кадру в поле, ниже):' : 'Промпт целиком:', h('div', { class: 'copyrow' }, h('code', {}, cp.text), h('button', { class: 'ghost', onclick: () => copy(cp.text) }, 'копировать'))),
+        h('li', {}, 'По кадрам (для Kling multi-shot или если модель просит по шагам):', ...(cp.perShot || []).map((t) => h('div', { class: 'copyrow' }, h('code', {}, t), h('button', { class: 'ghost', onclick: () => copy(t) }, 'копировать')))),
+        h('li', {}, 'Negative prompt: ', h('button', { class: 'ghost', onclick: () => copy(cp.negative || S.state.project.negative) }, 'копировать')),
+        h('li', {}, 'Звук выключи. Готовое видео перетащи в блок «Видео связки» выше — монтаж сам разложит его по кадрам.'))),
+    h('p', { class: 'muted' }, 'Если что-то не так в кадре внутри связки — открой кадр (клик по миниатюре), поправь картинку или промпт, и связка возьмёт новое.')].filter(Boolean));
+  panel.scrollTop = keep;
+}
+function clipVideoBox(ref, clip) {
+  const v = selVideo(clip);
+  const input = h('input', { type: 'file', accept: 'video/*', style: { display: 'none' }, onchange: (e) => e.target.files[0] && uploadVideo(ref, e.target.files[0]) });
+  const box = h('div', { class: 'edit videobox' },
+    h('label', {}, 'Видео связки', clip.videoStatus === 'approved' ? h('span', { class: 'pill good', style: { marginLeft: '8px' } }, 'утверждено') : null),
+    v ? h('video', { src: fileUrl(v), controls: true, loop: true, preload: 'metadata' }) : h('div', { class: 'muted', style: { marginBottom: '8px' } }, 'Видео ещё нет. Сделай ролик по подсказке ниже и перетащи файл сюда.'),
+    clip.videos?.length ? h('div', { class: 'versions' }, ...clip.videos.map((x, i) => h('button', { class: (i === clip.videoSelected ? 'on ' : '') + 'vthumb', onclick: async () => { await save(ref, { videoSelected: i, videoStatus: null }); renderPanel(); } },
+      h('span', {}, `▶ видео ${i + 1}`),
+      h('i', { class: 'del', title: 'Удалить это видео', onclick: async (e) => { e.stopPropagation(); if (!confirm(`Удалить видео ${i + 1}?`)) return; await POST('/api/version/delete', { ref, index: i, slot: 'video' }); await loadEp(); renderPanel(); render(true); } }, '✕')))) : null,
+    h('div', { class: 'actions' },
+      v ? h('button', { class: clip.videoStatus === 'approved' ? 'ok' : '', onclick: async () => { await save(ref, { videoStatus: clip.videoStatus === 'approved' ? null : 'approved' }); renderPanel(); render(true); } }, clip.videoStatus === 'approved' ? '✓ Видео утверждено' : 'Утвердить видео') : null,
+      h('button', { onclick: () => input.click() }, v ? 'Загрузить ещё вариант' : 'Загрузить видео'), input));
+  box.addEventListener('dragover', (e) => { e.preventDefault(); box.classList.add('drag'); });
+  box.addEventListener('dragleave', () => box.classList.remove('drag'));
+  box.addEventListener('drop', (e) => { e.preventDefault(); box.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('video/')) uploadVideo(ref, f); });
+  return box;
+}
+
 // чат с Claude, уже знающий, о чём речь
 function askClaudeAbout(ref) {
   chatToggle(true);
@@ -632,6 +727,7 @@ async function renderPanel() {
   const panel = $('#panel');
   if (!ref) return;
   if (ref.kind === 'batch') return renderBatch();
+  if (ref.kind === 'clip') return renderClip(ref);
   if (ref.kind === 'shot' && ref.ep !== S.ep.id) { $('#epSel').value = ref.ep; await loadEp(); }
   const it = itemOf(ref) || { versions: [], selected: null };
   const shotInfo = ref.kind === 'shot' ? findShot(ref.id) : null;
@@ -777,6 +873,11 @@ function uploadVideo(ref, file) {
 }
 
 function videoBox(ref, s, scene, preview) {
+  const inClip = clipOfShot(s.id);
+  if (inClip) return h('div', { class: 'edit videobox' }, h('label', {}, 'Видео'),
+    h('p', {}, `Этот кадр в связке ${inClip.clip.id}: видео делается одним роликом вместе с кадрами ${inClip.clip.shots.join(', ')} в ${inClip.clip.tool || 'Seedance'}.`),
+    selVideo(inClip.clip) ? h('div', { class: 'muted' }, '▶ Видео связки уже загружено.') : null,
+    h('button', { class: 'primary', onclick: () => select({ kind: 'clip', ep: ref.ep, id: inClip.clip.id }) }, 'Открыть связку'));
   const v = selVideo(s);
   const key = keyframeOf(s, scene);
   const input = h('input', { type: 'file', accept: 'video/*', style: { display: 'none' }, onchange: (e) => e.target.files[0] && uploadVideo(ref, e.target.files[0]) });
@@ -867,7 +968,14 @@ function montageItems() {
   const out = [];
   for (const sc of S.ep.scenes) for (const s of sc.shots) {
     if (s.cut) continue;
-    out.push({ s, scene: sc, video: selVideo(s), img: keyframeOf(s, sc), dur: s.dur || 3 });
+    // кадр из связки играет свой кусок общего ролика связки
+    const c = (sc.clips || []).find((x) => x.shots.includes(s.id));
+    const cv = c && selVideo(c);
+    if (cv) {
+      let off = 0;
+      for (const id of c.shots) { if (id === s.id) break; off += sc.shots.find((x) => x.id === id)?.dur || 3; }
+      out.push({ s, scene: sc, video: cv, offset: off, img: keyframeOf(s, sc), dur: s.dur || 3, clip: c.id });
+    } else out.push({ s, scene: sc, video: selVideo(s), offset: 0, img: keyframeOf(s, sc), dur: s.dur || 3 });
   }
   return out;
 }
@@ -907,8 +1015,10 @@ function renderMontage() {
     blank.textContent = !x.video && !x.img ? `${x.s.id}\n${x.s.frame || ''}` : '';
     video.pause();
     if (x.video) {
-      if (video.dataset.file !== x.video) { video.dataset.file = x.video; video.src = fileUrl(x.video); }
-      video.currentTime = 0;
+      const same = video.dataset.file === x.video;
+      if (!same) { video.dataset.file = x.video; video.src = fileUrl(x.video); }
+      // внутри одной связки ролик идёт дальше без перемотки, иначе — с начала куска
+      if (!(same && playing && Math.abs(video.currentTime - x.offset) < 0.35)) video.currentTime = x.offset || 0;
       if (playing) video.play().catch(() => {});
     } else if (x.img) {
       img.src = fileUrl(x.img);
@@ -922,7 +1032,7 @@ function renderMontage() {
   }
   function tick() {
     const x = items[cur];
-    const el = x.video ? video.currentTime : (performance.now() - t0) / 1000;
+    const el = x.video ? video.currentTime - (x.offset || 0) : (performance.now() - t0) / 1000;
     head.style.left = Math.min(100, (starts[cur] + Math.min(el, x.dur)) / total * 100) + '%';
     time.textContent = `${fmt(starts[cur] + el)} / ${fmt(total)}`;
     // ролик Pixverse длиннее кадра — обрезаем по хронометражу раскадровки
@@ -1072,6 +1182,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (!$('#lightbox').classList.contains('hidden')) unzoom(); else if (S.sel) closePanel(); } });
   fitPanel();
   window.addEventListener('resize', fitPanel);
+  // высота верхнего меню меняется (перенос строки, шрифты) — панели и липкие полосы встают ровно под ним
+  if (window.ResizeObserver) new ResizeObserver(fitPanel).observe($('.top'));
   await loadState();
   $('#genSel').value = lsGet('gen', S.state.generator || 'codex');
   $('#genSel').addEventListener('change', () => { lsSet('gen', gen()); checkGen(); });
@@ -1130,6 +1242,7 @@ async function buildEpisodeVideo(items, withSubs) {
       v = h('video', { muted: true, playsinline: true, preload: 'auto' });
       v.muted = true; v.src = fileUrl(x.video);
       await new Promise((r) => { v.oncanplay = r; v.onerror = r; });
+      if (x.offset) { v.currentTime = x.offset; await new Promise((r) => { v.onseeked = r; setTimeout(r, 1500); }); }
       await v.play().catch(() => {});
     }
     const t0 = performance.now();

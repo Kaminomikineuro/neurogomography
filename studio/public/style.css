@@ -305,3 +305,14 @@ img.plan { width: 100%; border-radius: 8px; cursor: zoom-in; background: #f5f0e8
 /* панели инструментов тоже прилипают под верхним меню */
 .board .bar, .comic > .bar { position: sticky; top: var(--top, 52px); z-index: 15; background: var(--bg); padding: 8px 0; margin-top: -8px; }
 .comic-pages, .comic-side { top: calc(var(--top, 52px) + 64px); }
+
+/* связки для Seedance / Kling */
+.clipstrip { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+.clipchip { font-size: 12.5px; padding: 5px 10px; border-radius: 999px; border: 1px solid #5a3a7a; background: #2a1e33; color: var(--text); }
+.clipchip.vid { border-color: var(--review); }
+.clipchip.on { background: #5a3a7a; }
+.badge.clipb { border-color: #5a3a7a; color: #cdb4ec; }
+.clipshots { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 10px; }
+.clipshots .cs { flex: none; width: 120px; font-size: 12px; }
+.clipshots .thumb { cursor: pointer; border-radius: 6px; }
+img.refmini { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; cursor: zoom-in; flex: none; }

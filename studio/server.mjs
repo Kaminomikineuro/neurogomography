@@ -21,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-21.1';
+const VERSION = '2026-10-22.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -75,6 +75,16 @@ function open(ref) {
     const item = list.find((c) => c.id === ref.id);
     if (!item) throw new Error('Не найдено: ' + ref.id);
     return { item, project: pr, save: () => writeJSON(p, pr), dir: path.join(MEDIA, ref.kind === 'character' ? 'characters' : 'locations', safe(ref.id)) };
+  }
+  if (ref.kind === 'clip') {
+    // связка: несколько кадров сцены одним роликом Seedance / Kling
+    const p = epPath(ref.ep);
+    const ep = readJSON(p);
+    for (const sc of ep?.scenes || []) {
+      const item = (sc.clips || []).find((c) => c.id === ref.id);
+      if (item) return { item, scene: sc, ep, save: () => writeJSON(p, ep), dir: path.join(MEDIA, safe(ref.ep), 'clip_' + safe(ref.id)) };
+    }
+    throw new Error('Нет связки ' + ref.id);
   }
   if (ref.kind === 'comicart') {
     // фигура героя для страницы комикса: рисуется на белом фоне, студия вырезает её сама
@@ -317,6 +327,153 @@ function videoPrompt(s, pr) {
   return { text: parts.filter(Boolean).join('\n\n'), warnings };
 }
 
+// ---------- связки для Seedance / Kling ----------
+// Сцены с героями идут в Seedance (или Kling) связками до 15 с: несколько кадров одним роликом, с референсами —
+// так переходы логичные, а лица и костюмы стабильнее. Вставки без героев (пейзаж, предмет, деталь) — в Pixverse по одному.
+const isProp = (pr, id) => pr.characters.find((c) => c.id === id)?.group === 'Предметы';
+const peopleOf = (pr, s) => (s.characters || []).filter((id) => pr.characters.some((c) => c.id === id) && !isProp(pr, id));
+// вставка без героев (пейзаж, небо, предмет) рвёт связку; деталь героя (рука, заколка) остаётся внутри
+const isInsert = (pr, s) => !peopleOf(pr, s).length;
+const isDetail = (s) => /деталь|вставк/i.test(s.camera || '') && !/глаз|взгляд|лиц/i.test(s.frame || '');
+const GEN_DURS = [4, 5, 6, 8, 10, 12, 15, 20, 25, 30];
+function genDur(total, n, max) {
+  const need = Math.max(total, n > 1 ? 8 : 4);
+  return GEN_DURS.find((d) => d >= need && d <= Math.max(max, 15)) || Math.max(max, 15);
+}
+function autoClips(epId, max = 15) {
+  const p = epPath(epId);
+  const ep = readJSON(p);
+  const pr = project();
+  let made = 0, inserts = 0;
+  for (const sc of ep.scenes) {
+    const shots = sc.shots.filter((s) => !s.cut);
+    // связки с готовым видео не трогаем
+    const keep = (sc.clips || []).filter((c) => c.videos?.length);
+    const locked = new Set(keep.flatMap((c) => c.shots));
+    const clips = [...keep];
+    let cur = null;
+    const flush = () => { if (cur?.shots.length) clips.push(cur); cur = null; };
+    for (const s of shots) {
+      if (locked.has(s.id)) { flush(); continue; }
+      if (isInsert(pr, s)) { flush(); s.tool = 'Pixverse'; inserts++; continue; }
+      const loc = s.location || sc.location;
+      const total = cur ? cur.shots.reduce((a, id) => a + (sc.shots.find((x) => x.id === id)?.dur || 3), 0) : 0;
+      if (!cur || cur.loc !== loc || total + (s.dur || 3) > max) { flush(); cur = { id: 'C' + s.id, shots: [], tool: 'Seedance', loc }; }
+      cur.shots.push(s.id);
+      s.tool = cur.tool;
+    }
+    flush();
+    // связка из одной детали Seedance не нужна — такой кадр идёт в Pixverse
+    for (let k = clips.length - 1; k >= 0; k--) {
+      const c = clips[k];
+      if (c.videos?.length || c.shots.length > 1) continue;
+      const s = sc.shots.find((x) => x.id === c.shots[0]);
+      if (s && isDetail(s)) { clips.splice(k, 1); s.tool = 'Pixverse'; inserts++; }
+    }
+    for (const c of clips) delete c.loc;
+    const order = (c) => shots.findIndex((s) => s.id === c.shots[0]);
+    sc.clips = clips.sort((a, b) => order(a) - order(b));
+    made += clips.length - keep.length;
+  }
+  writeJSON(p, ep);
+  logInbox(`${epId} — связки для Seedance: ${made} новых, вставок для Pixverse: ${inserts}`);
+  return { made, inserts };
+}
+function editClips(b) {
+  const p = epPath(b.ep);
+  const ep = readJSON(p);
+  const sc = ep.scenes.find((x) => (x.clips || []).some((c) => c.id === b.id));
+  if (!sc) throw new Error('Нет связки ' + b.id);
+  const i = sc.clips.findIndex((c) => c.id === b.id);
+  const c = sc.clips[i];
+  if (b.op === 'tool') { c.tool = b.tool; for (const id of c.shots) { const s = sc.shots.find((x) => x.id === id); if (s) s.tool = b.tool; } }
+  else if (b.op === 'split') {
+    const k = c.shots.indexOf(b.at);
+    if (k <= 0) throw new Error('Разрезать можно только перед вторым и следующими кадрами');
+    const rest = c.shots.splice(k);
+    sc.clips.splice(i + 1, 0, { id: 'C' + rest[0], shots: rest, tool: c.tool });
+  } else if (b.op === 'merge') {
+    const n = sc.clips[i + 1];
+    if (!n) throw new Error('Дальше в сцене связок нет');
+    if (n.videos?.length && !c.videos?.length) c.videos = n.videos, c.videoSelected = n.videoSelected;
+    c.shots.push(...n.shots);
+    sc.clips.splice(i + 1, 1);
+  } else if (b.op === 'remove') {
+    sc.clips.splice(i, 1);
+    for (const id of c.shots) { const s = sc.shots.find((x) => x.id === id); if (s) s.tool = 'Pixverse'; }
+  } else if (b.op === 'gen') c.genDur = +b.value || undefined;
+  writeJSON(p, ep);
+  return { ok: true };
+}
+// Русская камера из раскадровки → английский для видеомодели
+function camEn(cam = '') {
+  const map = [[/сверхобщ/i, 'extreme wide shot'], [/сверхкрупн/i, 'extreme close-up'], [/общий/i, 'wide shot'], [/средний/i, 'medium shot'], [/крупн/i, 'close-up'], [/деталь|вставк/i, 'detail insert'],
+    [/нижн|снизу/i, 'low angle'], [/сверху|с высоты/i, 'high angle / top-down'], [/статик/i, 'static camera'], [/наезд/i, 'slow push-in'], [/отъезд/i, 'pull-back'], [/панорам/i, 'pan'],
+    [/сопровожд/i, 'tracking shot'], [/пролёт|пролет/i, 'flyover'], [/тряск/i, 'camera shake'], [/замедлен/i, 'slow motion'], [/завал/i, 'dutch angle'], [/восьм/i, 'shot / reverse shot'], [/удар|вспышк/i, 'impact frame'], [/пике/i, 'diving camera'], [/профил/i, 'profile']];
+  const out = map.filter(([rx]) => rx.test(cam)).map(([, t]) => t);
+  return [...new Set(out)].join(', ') || 'medium shot';
+}
+function clipPrompt(epId, sc, clip, pr) {
+  const chars = Object.fromEntries(pr.characters.map((c) => [c.id, c]));
+  const style = pr.styles.find((x) => x.id === pr.activeStyle) || pr.styles[0];
+  const shots = clip.shots.map((id) => sc.shots.find((s) => s.id === id)).filter(Boolean);
+  const total = shots.reduce((a, s) => a + (s.dur || 3), 0);
+  const warnings = [];
+  const keyOf = (s) => {
+    let f = selectedFile(s);
+    if (!f && s.imgFrom) f = selectedFile(findShot(epId, s.imgFrom)?.item);
+    return f;
+  };
+  const refs = [];
+  const add = (file, label) => { if (file && refs.length < 9 && !refs.some((r) => r.file === file) && fs.existsSync(abs(file))) { refs.push({ file, label }); return refs.length; } return refs.find((r) => r.file === file) ? refs.findIndex((r) => r.file === file) + 1 : null; };
+  const first = keyOf(shots[0]);
+  if (first) add(first, 'first frame — Shot 1 starts exactly from this picture');
+  else warnings.push(`У первого кадра связки (${shots[0].id}) нет картинки — нарисуй его, это стартовый кадр ролика.`);
+  const people = [...new Set(shots.flatMap((s) => peopleOf(pr, s)))];
+  const props = [...new Set(shots.flatMap((s) => (s.characters || []).filter((id) => isProp(pr, id))))];
+  const charRef = {};
+  for (const id of people.slice(0, 4)) {
+    const c = chars[id];
+    const n = add(selectedFile(c), `${c.name} — character sheet: face, hair, costume — keep exactly`);
+    if (n) charRef[id] = n; else warnings.push(`Нет листа персонажа «${c.name}» — лицо и костюм в ролике будут «плыть».`);
+  }
+  const shotRef = {};
+  shots.slice(1).forEach((s, i) => { const n = add(keyOf(s), `key frame of Shot ${i + 2} — composition and poses`); if (n) shotRef[s.id] = n; });
+  for (const id of props) add(selectedFile(chars[id]), `${chars[id].name} — prop reference`);
+  const loc = pr.locations.find((l) => l.id === (shots[0].location || sc.location));
+  if (selectedFile(sc) && (shots[0].location || sc.location) === sc.location) add(selectedFile(sc), 'scene master shot — place, positions of characters, light');
+  else if (loc) add(selectedFile(loc), `location "${loc.name}" — environment and light only`);
+  const nameOf = (id) => (chars[id] ? charName(chars[id]) : id);
+  const clean = (t) => String(t || '').replace(/@Image\d \(([^)]+)\)/g, '$1').replace(/\[([A-Z ]+)\]/g, (m, id) => (chars[id] ? charName(chars[id]) : m)).replace(/,?\s*PAL-[A-Z]+/g, '').replace(/,?\s*STYLE\b/g, '').trim();
+  let t = 0;
+  const perShot = shots.map((s, i) => {
+    const d = s.dur || 3;
+    const tc = (x) => `0:${String(Math.round(x)).padStart(2, '0')}`;
+    const lips = (s.lines || []).filter((l) => l.mode === 'lips');
+    const other = (s.lines || []).filter((l) => l.mode !== 'lips' && !l.optional);
+    const parts = [`Shot ${i + 1} (${tc(t)}–${tc(t + d)}, ${d} s, ${camEn(s.camera)})${shotRef[s.id] ? ` — like @Image${shotRef[s.id]}` : i === 0 && first ? ' — starts from @Image1' : ''}: ${clean(s.img) || clean(s.frame)}`];
+    if (s.vid) parts.push(`Motion: ${clean(s.vid)}`);
+    if (s.continuity) parts.push(`Continuity: ${s.continuity}`);
+    if (lips.length) parts.push('Lip-sync (silent video, voice added later): ' + lips.map((l) => `${nameOf(l.who)} says in Russian${l.manner ? ` (${l.manner})` : ''} «${l.text}» (~${Math.max(0.5, Math.round(l.text.length / CPS * 10) / 10)} s)`).join('; '));
+    else if (other.length) parts.push('Nobody speaks on screen — mouths closed.');
+    for (const l of lips) if (l.text.length / CPS > d + 0.3) warnings.push(`${s.id}: реплика длиннее кадра — губы не успеют.`);
+    t += d;
+    return parts.join(' ');
+  });
+  const gen = clip.genDur || genDur(total, shots.length, 15);
+  const cast = people.map((id) => `- ${nameOf(id)}${charRef[id] ? ` (@Image${charRef[id]})` : ''}: ${chars[id].token}${chars[id].details ? '. Costume: ' + chars[id].details : ''}`);
+  const text = [
+    `Multi-shot 2D anime sequence, ${shots.length} shot${shots.length > 1 ? 's' : ''}, total ${total} s${gen > total ? ` (generate ${gen} s, the extra tail will be trimmed)` : ''}, hard cuts between shots. The same characters, place and light in every shot; keep screen direction (180-degree rule). Silent: no music, no voices, no sound.`,
+    `Style: ${style.text}.`,
+    refs.length ? 'References:\n' + refs.map((r, i) => `@Image${i + 1} — ${r.label}`).join('\n') : '',
+    cast.length ? 'Characters:\n' + cast.join('\n') : '',
+    perShot.join('\n'),
+    'Anyone who does not speak keeps the mouth closed. No text, no subtitles, no watermark.',
+  ].filter(Boolean).join('\n\n');
+  if (total > 15) warnings.push(`Связка длиннее 15 с (${total} с) — Seedance 2.0 столько не сделает за раз. Разрежь её или используй модель с 30 с.`);
+  return { text, refs, perShot, total, gen, warnings, negative: pr.negative, shots: shots.map((s) => s.id) };
+}
+
 // Крупность кадра: на крупных и деталях фон локации не нужен — иначе модель тащит его целиком
 function shotSize(s, raw = '') {
   const c = (s.camera || '').toLowerCase();
@@ -426,6 +583,7 @@ function nextOut(dir, ext = '.png', prefix = 'v') {
 
 function label(ref) {
   if (ref.kind === 'scene') return `${ref.ep} · сцена ${ref.id} (мастер-план)`;
+  if (ref.kind === 'clip') return `${ref.ep} · связка ${ref.id}`;
   if (ref.kind === 'comicart') return `${ref.ep} · комикс, ${String(ref.id).startsWith('panel_') ? 'картинка панели' : 'фигура'} ${ref.id}`;
   return ref.kind === 'shot' ? `${ref.ep} · кадр ${ref.id}` : ref.kind === 'lab' ? `проба ${ref.id.replace(/\|/g, ' · ')}` : `${ref.kind === 'character' ? 'персонаж' : 'локация'} ${ref.id}`;
 }
@@ -656,6 +814,25 @@ function exportEpisode(epId) {
       rows.push(`| ${n} | ${s.id} | ${s.dur || ''} | ${s.tool || ''} | ${key ? '✓' : '—'} | ${video ? '✓' : '—'} | ${(s.sound || '').replace(/\|/g, '/')} |`);
     }
   }
+  // связки для Seedance / Kling — отдельные папки
+  for (const e of fs.readdirSync(outDir, { withFileTypes: true })) if (e.isDirectory() && /^Связка_/.test(e.name)) { try { fs.rmSync(path.join(outDir, e.name), { recursive: true, force: true }); } catch {} }
+  const clipRows = [];
+  for (const sc of ep.scenes) for (const c of sc.clips || []) {
+    const cp = clipPrompt(epId, sc, c, pr);
+    const dir = path.join(outDir, `Связка_${safe(c.id)}`);
+    fs.mkdirSync(dir, { recursive: true });
+    cp.refs.forEach((r, i) => fs.copyFileSync(abs(r.file), path.join(dir, `Image${i + 1}${path.extname(r.file)}`)));
+    const v = selectedVideo(c);
+    if (v) fs.copyFileSync(abs(v), path.join(dir, 'video' + path.extname(v)));
+    fs.writeFileSync(path.join(dir, 'prompt.txt'), [
+      `Связка ${c.id} · кадры ${cp.shots.join(', ')} · ${cp.total} с (генерировать ${cp.gen} с) · ${c.tool || 'Seedance'}`, `Сцена ${sc.n}: ${sc.title}`, '',
+      'Референсы (загружай по порядку):', ...cp.refs.map((r, i) => `Image${i + 1} — ${r.label}`), '',
+      'PROMPT:', cp.text, '', 'NEGATIVE:', cp.negative, '',
+      'Для Kling (multi-shot — по кадру в каждое поле):', ...cp.perShot,
+    ].join('\n'));
+    clipRows.push(`| ${c.id} | ${cp.shots.join(', ')} | ${cp.total} | ${c.tool || 'Seedance'} | ${v ? '✓' : '—'} |`);
+  }
+  if (clipRows.length) rows.push('', '## Связки (Seedance / Kling)', '', '| Связка | Кадры | с | Инструмент | Видео |', '|---|---|---|---|---|', ...clipRows);
   fs.writeFileSync(path.join(outDir, 'Монтажный лист.md'), [
     `# ${ep.title}`, '', `Кадров: ${n} · хронометраж ≈ ${Math.round(t / 60 * 10) / 10} мин · без ключевого кадра: ${missing} · с видео: ${videos}`, '',
     '| № | Кадр | с | Инструмент | Картинка | Видео | Звук |', '|---|---|---|---|---|---|---|', ...rows, '',
@@ -845,6 +1022,9 @@ const routes = {
     return b.item;
   },
   'POST /api/export': (q, b) => exportEpisode(b.ep),
+  'POST /api/clips/auto': (q, b) => autoClips(b.ep, +b.max || 15),
+  'POST /api/clips/edit': (q, b) => editClips(b),
+  'POST /api/clip/preview': (q, b) => { const o = open({ kind: 'clip', ep: b.ep, id: b.id }); return clipPrompt(b.ep, o.scene, o.item, project()); },
   'GET /api/library': () => {
     // все картинки, которые можно взять референсом: иллюстрации книги + материалы аниме
     const out = [];
@@ -931,7 +1111,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (key === 'POST /api/video/upload') {
       const ref = JSON.parse(url.searchParams.get('ref'));
-      if (ref.kind !== 'shot') throw new Error('Видео бывает только у кадра');
+      if (ref.kind !== 'shot' && ref.kind !== 'clip') throw new Error('Видео бывает только у кадра или связки');
       const ext = VIDEO_EXT[(req.headers['content-type'] || '').split(';')[0]] || '.mp4';
       const o = open(ref);
       const out = nextOut(o.dir, ext, 'video');
