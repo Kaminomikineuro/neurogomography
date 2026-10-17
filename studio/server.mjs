@@ -21,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-23.1';
+const VERSION = '2026-10-24.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -104,6 +104,18 @@ function open(ref) {
 }
 
 const comicPath = (ep) => path.join(DATA, 'comics', safe(ep) + '.json');
+function comicSnapshot(ep, name) {
+  const p = comicPath(ep);
+  const c = readJSON(p);
+  if (!c?.pages?.length) throw new Error('Комикс ещё не собран — сохранять нечего');
+  const dir = p.replace(/\.json$/, '.versions');
+  fs.mkdirSync(dir, { recursive: true });
+  const n = fs.readdirSync(dir).filter((f) => /^\d+/.test(f)).length + 1;
+  const file = `${String(n).padStart(3, '0')}_${now().slice(0, 16).replace(/[: ]/g, '-')}.json`;
+  writeJSON(path.join(dir, file), { ...c, versionName: name || `версия ${n}`, versionAt: now() });
+  logInbox(`${ep} — комикс: сохранена версия «${name || 'версия ' + n}»`);
+  return { file };
+}
 
 function findShot(epId, shotId) {
   try { return open({ kind: 'shot', ep: epId, id: shotId }); } catch { return null; }
@@ -999,6 +1011,34 @@ const routes = {
     comic: readJSON(comicPath(q.get('ep'))),
     hints: readJSON(path.join(STUDIO, 'canon', 'comic', safe(q.get('ep')) + '.json'), {}),
   }),
+  // ---- версии комикса: снимок раскладки, чтобы переделка не потеряла удачный вариант ----
+  'GET /api/comic/versions': (q) => {
+    const dir = comicPath(q.get('ep')).replace(/\.json$/, '.versions');
+    if (!fs.existsSync(dir)) return [];
+    return fs.readdirSync(dir).filter((f) => f.endsWith('.json')).sort().reverse().map((f) => {
+      const c = readJSON(path.join(dir, f), {});
+      return { file: f, name: c.versionName || f, at: c.versionAt || '', pages: c.pages?.length || 0, format: c.format || 'manga' };
+    });
+  },
+  'POST /api/comic/version': (q, b) => comicSnapshot(b.ep, b.name),
+  'POST /api/comic/restore': (q, b) => {
+    const p = comicPath(b.ep);
+    const src = path.join(p.replace(/\.json$/, '.versions'), path.basename(b.file));
+    const ver = readJSON(src);
+    if (!ver) throw new Error('Нет такой версии');
+    const cur = readJSON(p, {});
+    if (cur.pages?.length) comicSnapshot(b.ep, 'перед возвратом «' + (ver.versionName || b.file) + '»');
+    // нарисованные фигуры и картинки панелей общие для всех версий — берём самые свежие
+    ver.arts = { ...(ver.arts || {}), ...(cur.arts || {}) };
+    delete ver.versionName; delete ver.versionAt;
+    writeJSON(p, ver);
+    logInbox(`${b.ep} — комикс: возвращена версия «${b.file}»`);
+    return { ok: true };
+  },
+  'POST /api/comic/version/delete': (q, b) => {
+    fs.rmSync(path.join(comicPath(b.ep).replace(/\.json$/, '.versions'), path.basename(b.file)), { force: true });
+    return { ok: true };
+  },
   'POST /api/comic/save': (q, b) => {
     // фигуры (их версии пишет художник) берём с диска, чтобы сохранение страниц их не затёрло
     const p = comicPath(b.ep);
@@ -1193,8 +1233,8 @@ const server = http.createServer(async (req, res) => {
       const name = safe(url.searchParams.get('name') || 'page');
       const dir = path.join(EXPORT, ep, 'комикс');
       fs.mkdirSync(dir, { recursive: true });
-      const out = path.join(dir, name + '.png');
-      await saveStream(req, out, 200e6);
+      const out = path.join(dir, name + (url.searchParams.get('ext') === 'pdf' ? '.pdf' : '.png'));
+      await saveStream(req, out, 1e9);
       return send(res, 200, { file: rel(out), dir: rel(dir) });
     }
     if (key === 'POST /api/montage/save') {

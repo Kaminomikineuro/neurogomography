@@ -15,7 +15,7 @@ const mdLite = (t) => {
 
 // где сейчас автор — это уходит Claude вместе с просьбой
 function chatCtx() {
-  const views = { board: 'Раскадровка', chars: 'Персонажи', locs: 'Локации', lib: 'Иллюстрации', style: 'Стиль', montage: 'Монтаж', comic: 'Комикс', queue: 'Очередь', canon: 'Канон', git: 'Отправка в GitHub' };
+  const views = { board: 'Раскадровка', chars: 'Персонажи', locs: 'Локации', lib: 'Иллюстрации и GitHub', montage: 'Монтаж', comic: 'Комикс', queue: 'Очередь', canon: 'Канон', git: 'Отправка в GitHub' };
   const ctx = { view: views[S.view] || S.view, ep: S.ep?.id };
   const r = S.sel;
   if (r?.kind === 'shot') ctx.sel = `кадр ${r.id} серии ${r.ep}`;

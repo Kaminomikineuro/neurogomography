@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-23.1';
+const UI_VERSION = '2026-10-24.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -259,11 +259,13 @@ function renderStyle() {
 // ---------- отправка в GitHub порциями ----------
 const mb = (b) => (b / 1048576 >= 10 ? Math.round(b / 1048576) : (b / 1048576).toFixed(1)) + ' МБ';
 async function renderGit() {
-  const main = $('#main');
-  main.replaceChildren(h('div', { class: 'muted' }, 'Проверяю, что не отправлено…'));
+  // отправка живёт на одной странице с иллюстрациями: добавила картинки → уменьшила → отправила
+  const main = $('#gitBox');
+  if (!main) return;
+  if (!main.firstChild) main.replaceChildren(h('div', { class: 'muted' }, 'Проверяю, что не отправлено…'));
   let st;
   try { st = await GET('/api/git/status'); } catch (e) { st = { error: e.message }; }
-  if (S.view !== 'git') return;
+  if (S.view !== 'lib' || !$('#gitBox')) return;
   const job = st.job || { status: 'idle', log: [] };
   const size = lsGet('gitPortion', '80');
   const run = async () => {
@@ -286,8 +288,8 @@ async function renderGit() {
       [...(st.bigUnpushed || []), ...(st.huge || [])].length ? h('div', { class: 'warn' }, 'Файлы больше 100 МБ (GitHub их не примет, студия спрячет их от Git): ',
         [...st.bigUnpushed, ...st.huge].map((f) => `${f.path} (${mb(f.size)})`).join(', ')) : null);
   main.replaceChildren(h('div', { class: 'gitpage' },
-    h('h2', {}, 'Отправка в GitHub порциями'),
-    h('p', { class: 'muted' }, 'Большой Push GitHub обрывает («Remote disconnected»). Здесь студия сама раскладывает изменения на небольшие порции и отправляет их по одной. Если связь оборвётся — повторит. Файлы больше 100 МБ GitHub не принимает: студия спрячет их от Git (они останутся в папке), картинки уменьши через «Иллюстрации».'),
+    h('h2', {}, '2. Отправка в GitHub порциями'),
+    h('p', { class: 'muted' }, 'Большой Push GitHub обрывает («Remote disconnected»). Здесь студия сама раскладывает изменения на небольшие порции и отправляет их по одной. Если связь оборвётся — повторит. Файлы больше 100 МБ GitHub не принимает: студия спрячет их от Git (они останутся в папке).'),
     info,
     h('div', { class: 'actions' },
       h('label', {}, 'Порция: ', h('select', { id: 'gitPortion' }, ...['30', '50', '80', '150'].map((v) => h('option', { value: v, selected: v === size }, v + ' МБ')))),
@@ -314,7 +316,7 @@ async function shrinkBig(list) {
 function pollGit() {
   clearTimeout(pollGit.t);
   pollGit.t = setTimeout(async () => {
-    if (S.view !== 'git') return;
+    if (S.view !== 'lib') return;
     const job = await GET('/api/git/job').catch(() => null);
     const pre = $('.gitlog');
     if (job && pre && job.status === 'running') { pre.textContent = job.log.join('\n'); pollGit(); }
@@ -409,13 +411,18 @@ async function renderLib() {
   const groups = {};
   for (const x of lib) (groups[x.folder] ||= []).push(x);
   const order = Object.keys(groups).sort((a, b) => (b === 'Иллюстрации книги') - (a === 'Иллюстрации книги') || a.localeCompare(b));
-  $('#main').replaceChildren(h('div', {},
+  if (S.view !== 'lib') return;
+  $('#main').replaceChildren(h('div', { class: 'filespage' },
+    h('h2', {}, '1. Иллюстрации'),
     dropZone(h('div', {}, h('b', {}, 'Перетащи сюда иллюстрации из Google Диска'), h('div', { class: 'muted' }, 'Можно много сразу. Студия уменьшит их до 2048 px и положит в «Аниме/Иллюстрации книги». Потом привяжи нужные к персонажу или локации: открой карточку → «Референсы».')),
       async (files) => { await addToLibrary(files); renderLib(); }),
+    h('div', { id: 'gitBox' }),
+    h('h2', { style: { marginTop: '24px' } }, '3. Библиотека иллюстраций'),
     ...order.map((g) => h('section', { class: 'scene' }, h('h2', {}, g),
       h('div', { class: 'grid' }, ...groups[g].map((x) => h('div', { class: 'card', onclick: () => zoom(x.file) },
         h('div', { class: 'thumb', style: { backgroundImage: `url("${fileUrl(x.file)}")` } }),
         h('div', { class: 'meta' }, h('span', { class: 't' }, x.file.split('/').pop())))))))));
+  renderGit();
 }
 async function pickFromLibrary() {
   const lib = await library();
@@ -1114,9 +1121,9 @@ function render(keepScroll) {
   else if (S.view === 'style') renderStyle();
   else if (S.view === 'queue') renderQueue();
   else if (S.view === 'canon') renderCanon();
-  else if (S.view === 'lib') renderLib();
+  else if (S.view === 'lib') { if (!keepScroll || !$('.filespage')) renderLib(); }
   else if (S.view === 'montage') renderMontage();
-  else if (S.view === 'git') renderGit();
+
   else if (S.view === 'video') { if (!keepScroll || !$('.video')) renderVideo(); }
   else if (S.view === 'comic') { if (!keepScroll || !CM.data) renderComic(); }
   if (keepScroll) window.scrollTo(0, y);

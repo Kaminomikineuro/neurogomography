@@ -606,7 +606,10 @@ async function renderComic() {
     pg ? h('button', { onclick: () => addMark('anger') }, '💢') : null,
     pg ? h('button', { onclick: addCover, title: 'Обложка главы: кадр на весь лист и название серии' }, '＋ обложку') : null,
     h('button', { onclick: comicHintsAsk, title: 'Claude возьмёт из главы подписи, звуки, ключевые кадры и обновит подсказки комикса' }, '✍ Подписи из книги (Claude)'),
-    D.pages.length ? h('button', { class: 'primary', onclick: exportComic }, '⬇ Сохранить страницы PNG') : null);
+    D.pages.length ? h('button', { onclick: saveComicVersion, title: 'Запомнить комикс как есть — к этой версии всегда можно вернуться' }, '💾 Сохранить версию') : null,
+    h('button', { onclick: comicVersions, title: 'Сохранённые версии комикса: посмотреть и вернуть' }, '🕘 Версии'),
+    D.pages.length ? h('button', { onclick: () => exportComic('png') }, '⬇ PNG') : null,
+    D.pages.length ? h('button', { class: 'primary', onclick: () => exportComic('pdf') }, '⬇ PDF') : null);
   if (!D.pages.length) {
     main.replaceChildren(h('div', { class: 'comic' }, tools, h('div', { class: 'comic-empty' },
       h('h2', {}, 'Комикс из кадров серии'),
@@ -638,6 +641,8 @@ async function refreshArts() {
 }
 async function autoBuild() {
   const format = CM.data?.format || 'manga';
+  // перед пересборкой запоминаем то, что было, — вдруг новая хуже
+  if (CM.data?.pages?.length) { await saveComic(true); await POST('/api/comic/version', { ep: CM.ep, name: 'перед пересборкой' }).catch(() => {}); }
   await loadComic();
   const arts = CM.data.arts || {};
   CM.data = { format, arts, pages: [] };
@@ -916,7 +921,63 @@ async function toDataURL(file) {
   const blob = await (await fetch(fileUrl(file))).blob();
   return (CM.data64[file] = await new Promise((ok) => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(blob); }));
 }
-async function exportComic() {
+// ---------- версии ----------
+async function saveComicVersion() {
+  const name = prompt('Название версии (например: «первый вариант», «ч/б дуэль»):', 'версия от ' + new Date().toLocaleString('ru-RU').slice(0, 17));
+  if (name == null) return;
+  await saveComic(true);
+  await POST('/api/comic/version', { ep: CM.ep, name });
+  toast('Версия сохранена — вернуть её можно в «🕘 Версии»', 6000);
+}
+async function comicVersions() {
+  const list = await GET('/api/comic/versions?ep=' + encodeURIComponent(CM.ep || S.ep.id));
+  const m = h('div', { class: 'modal', onclick: (e) => e.target === m && m.remove() });
+  const box = h('div', { class: 'modal-box small' },
+    h('div', { class: 'head' }, h('h3', {}, 'Версии комикса'), h('button', { class: 'x ghost', onclick: () => m.remove() }, '✕')),
+    list.length ? h('div', { class: 'cversions' }, ...list.map((v) => h('div', { class: 'cver' },
+      h('div', { class: 'grow' }, h('b', {}, v.name), h('div', { class: 'muted' }, `${v.at} · ${v.pages} стр. · ${v.format === 'webtoon' ? 'вебтун' : 'манга'}`)),
+      h('button', { class: 'primary', onclick: async () => {
+        if (!confirm(`Вернуть версию «${v.name}»? Текущий комикс сначала сохранится отдельной версией.`)) return;
+        await saveComic(true);
+        await POST('/api/comic/restore', { ep: CM.ep, file: v.file });
+        m.remove(); CM.data = null; CM.page = 0; CM.sel = null; renderComic();
+        toast('Версия возвращена');
+      } }, 'Вернуть'),
+      h('button', { class: 'ghost', title: 'Удалить версию', onclick: async () => { if (!confirm(`Удалить версию «${v.name}»?`)) return; await POST('/api/comic/version/delete', { ep: CM.ep, file: v.file }); m.remove(); comicVersions(); } }, '✕')))) :
+      h('p', { class: 'muted' }, 'Сохранённых версий пока нет. Нажми «💾 Сохранить версию» — и к этому виду комикса всегда можно будет вернуться. Перед «Собрать заново» студия сохраняет версию сама.'));
+  m.append(box);
+  document.body.append(m);
+}
+
+// ---------- PDF без библиотек: каждая страница — картинка JPEG ----------
+function buildPdf(pages) {
+  const enc = new TextEncoder();
+  const parts = [];
+  let len = 0;
+  const offs = [];
+  const put = (x) => { const b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); len += b.length; };
+  put('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  const obj = (n, body) => { offs[n] = len; put(`${n} 0 obj\n`); for (const b of [].concat(body)) put(b); put('\nendobj\n'); };
+  const N = pages.length;
+  const kids = pages.map((_, i) => `${3 + i * 3} 0 R`).join(' ');
+  obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2, `<< /Type /Pages /Kids [${kids}] /Count ${N} >>`);
+  pages.forEach((pg, i) => {
+    const po = 3 + i * 3, co = po + 1, io = po + 2;
+    const pw = pg.pw.toFixed(2), ph = pg.ph.toFixed(2);
+    obj(po, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${io} 0 R >> >> /Contents ${co} 0 R >>`);
+    const cs = `q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+    obj(co, [`<< /Length ${cs.length} >>\nstream\n`, cs, '\nendstream']);
+    obj(io, [`<< /Type /XObject /Subtype /Image /Width ${pg.w} /Height ${pg.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${pg.jpeg.length} >>\nstream\n`, pg.jpeg, '\nendstream']);
+  });
+  const xref = len;
+  const total = 3 + N * 3;
+  let x = `xref\n0 ${total}\n0000000000 65535 f \n`;
+  for (let n = 1; n < total; n++) x += String(offs[n]).padStart(10, '0') + ' 00000 n \n';
+  put(x + `trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(parts, { type: 'application/pdf' });
+}
+async function exportComic(kind = 'png') {
   const D = CM.data;
   toast('Собираю страницы…', 60000);
   await preload(D.pages);
@@ -924,7 +985,8 @@ async function exportComic() {
   for (const pg of D.pages) for (const pn of pg.panels) { const f = panelFile(pn); if (f) files.add(f); }
   const urls = {};
   for (const f of files) urls[f] = await toDataURL(f);
-  const scale = D.format === 'webtoon' ? 1.35 : 2.4;
+  const scale = D.format === 'webtoon' ? 1.35 : kind === 'pdf' ? 2 : 2.4;
+  const pdfPages = [];
   let dir = '';
   for (let i = 0; i < D.pages.length; i++) {
     const pg = D.pages[i];
@@ -938,12 +1000,28 @@ async function exportComic() {
     x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
     x.drawImage(img, 0, 0, c.width, c.height);
     URL.revokeObjectURL(url);
+    if (kind === 'pdf') {
+      const jb = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.9));
+      const pw = 595.28; // ширина A4 в пунктах, высота — по пропорции страницы
+      pdfPages.push({ jpeg: new Uint8Array(await jb.arrayBuffer()), w: c.width, h: c.height, pw, ph: pw * pg.h / pg.w });
+      toast(`Собираю PDF: ${i + 1} из ${D.pages.length}`, 60000);
+      continue;
+    }
     const blob = await new Promise((ok) => c.toBlob(ok, 'image/png'));
     const name = (D.format === 'webtoon' ? 'вебтун_' : 'страница_') + String(i + 1).padStart(2, '0');
     const r = await fetch(`/api/comic/export?ep=${encodeURIComponent(CM.ep)}&name=${encodeURIComponent(name)}`, { method: 'POST', body: blob }).then((r) => r.json());
     if (r.error) throw new Error(r.error);
     dir = r.dir;
     toast(`Сохраняю: ${i + 1} из ${D.pages.length}`, 60000);
+  }
+  if (kind === 'pdf') {
+    const ep = S.state.episodes.find((e) => e.id === CM.ep);
+    const name = `${(ep?.title || CM.ep).replace(/[«»"]/g, '')} — ${D.format === 'webtoon' ? 'вебтун' : 'манга'}`;
+    const r = await fetch(`/api/comic/export?ep=${encodeURIComponent(CM.ep)}&name=${encodeURIComponent(name)}&ext=pdf`, { method: 'POST', body: buildPdf(pdfPages) }).then((r) => r.json());
+    if (r.error) throw new Error(r.error);
+    toast(`Готово: PDF, ${D.pages.length} стр. — ${r.file}`, 9000);
+    POST('/api/open', { path: r.dir }).catch(() => {});
+    return;
   }
   toast(`Готово: ${D.pages.length} стр. в ${dir}`, 8000);
   POST('/api/open', { path: dir }).catch(() => {});

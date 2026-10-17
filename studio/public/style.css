@@ -331,3 +331,9 @@ img.refmini { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; 
 .vresult h3 { margin: 0 0 6px; }
 pre.vprompt { max-height: 420px; }
 @media (max-width: 1000px) { .vbody { grid-template-columns: 1fr; } .vparams { position: static; max-height: none; } }
+
+/* версии комикса, иллюстрации и GitHub */
+.cversions { display: flex; flex-direction: column; gap: 8px; max-height: 60vh; overflow: auto; }
+.cver { display: flex; gap: 8px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 8px; }
+.cver .grow { flex: 1; }
+.filespage .gitpage { margin-top: 18px; padding-top: 4px; border-top: 1px solid var(--line); }
