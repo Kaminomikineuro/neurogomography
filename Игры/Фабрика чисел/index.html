@@ -302,6 +302,47 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:3px}
 .bld{position:relative}
 .bav{position:absolute;left:4px;top:0;z-index:2;font-size:clamp(30px,6vh,44px);line-height:1;font-family:system-ui}
 
+/* Russian */
+.subj{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:1000px;margin-inline:auto;flex:none}
+.sj{display:flex;align-items:center;justify-content:center;gap:10px;height:62px;border-radius:18px;background:#0c1428;border:3px solid var(--line);color:var(--muted)}
+.sj b{font-family:var(--display);font-size:26px;font-weight:400}
+.sj small{font-size:13px}
+.sj.on{background:var(--yellow);border-color:#fff3b0;color:#3a2600;box-shadow:0 5px 0 var(--yellow-dk)}
+.pic{font-size:clamp(80px,min(28vw,22vh),170px);line-height:1;text-align:center;font-family:system-ui;flex:none;animation:pop .4s backwards}
+.slogi,.first{align-items:center;justify-content:center}
+.sylrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;flex:none}
+.syl{visibility:hidden;display:grid;place-items:center;min-width:clamp(56px,16vw,92px);height:clamp(48px,9vh,70px);padding:0 10px;border-radius:14px;background:var(--panel-hi);border:3px solid var(--line);font-family:var(--display);font-size:clamp(22px,6vw,34px);color:var(--blue-lt);text-transform:uppercase}
+.syl.on{visibility:visible;animation:pop .35s backwards}
+.syl .v{color:#ff7a8e}
+.rrow{display:flex;justify-content:center;flex:none}
+.scheme{display:flex;gap:6px;justify-content:center;flex:none;flex-wrap:wrap}
+.scheme i{width:clamp(30px,8vw,46px);height:clamp(30px,8vw,46px);border-radius:8px;border:3px solid var(--line);background:var(--panel);display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:clamp(18px,5vw,28px)}
+.scheme i.q{border-color:var(--yellow);color:var(--yellow);animation:blinkq 1s steps(2) infinite}
+.scheme i.fill{background:var(--paper);border-color:#fff;animation:pop .4s backwards}
+.let.vow b{color:var(--red)}
+.let.con b{color:var(--blue)}
+.ans.let b{font-size:clamp(40px,min(12vw,9vh),72px)}
+.ans.right.let b{color:#fff}
+.card.let b{font-size:clamp(48px,min(15vw,11vh),96px)}
+.card.wrong{opacity:.35;filter:grayscale(1)}
+.card.pulse{animation:pulse 1s ease-in-out infinite}
+.vsing{font-size:40px;line-height:1;font-family:system-ui}
+.vslots{display:flex;gap:10px}
+.vslots i{width:clamp(44px,12vw,60px);height:clamp(44px,12vw,60px);border-radius:50%;border:3px dashed var(--muted);display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:clamp(22px,6vw,30px);color:#fff}
+.vslots i.got{border:3px solid #ffb3c0;background:var(--red);animation:pop .4s backwards}
+.show{flex:none;display:flex;align-items:center;justify-content:center;gap:16px;min-height:clamp(90px,18vh,150px);background:linear-gradient(var(--panel-hi),var(--panel));border:3px solid var(--line);border-radius:20px;padding:8px 14px}
+.sl{font-family:var(--display);font-size:clamp(56px,min(16vw,13vh),110px);line-height:1}
+.sl.vow{color:var(--red)}.sl.con{color:var(--blue-lt)}.sl.sign{color:var(--muted)}
+.se{font-size:clamp(48px,min(14vw,11vh),96px);line-height:1;font-family:system-ui}
+.se .pufik{height:1em;width:auto}
+.sw{font-size:clamp(16px,4.5vw,24px);color:var(--muted)}
+.abcgrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:1fr;gap:6px}
+@media (min-aspect-ratio:1/1){.abcgrid{grid-template-columns:repeat(11,1fr)}}
+.ab{border-radius:12px;background:var(--paper);font-family:var(--display);font-size:clamp(20px,min(6vw,4.4vh),40px);box-shadow:0 4px 0 var(--paper-sh);min-height:0}
+.ab.vow{color:var(--red)}.ab.con{color:var(--blue)}.ab.sign{color:#7b84a3}
+.ab.seen{outline:3px solid var(--yellow);outline-offset:-3px}
+.ab:active{transform:translateY(3px);box-shadow:0 1px 0 var(--paper-sh)}
+
 @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes bump{40%{transform:scale(1.25)}}
 @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
@@ -647,7 +688,7 @@ function showStart(){
     ${pufik('wave hero')}
     <h1 class="logo">Фабрика<br>чисел</h1>
     <button class="play" id="play" aria-label="Играть"><svg viewBox="0 0 40 40"><path d="M12 7 L34 20 L12 33 Z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></button>
-    <p class="parent">Для взрослых: включите звук. Пуфик всё объясняет голосом — читать не нужно. Тема: состав числа до 10 и до 20.</p>
+    <p class="parent">Для взрослых: включите звук. Пуфик всё объясняет голосом — читать не нужно. Темы: состав числа до 20, буквы, слоги и гласные.</p>
     <p class="parent warn" id="vwarn" hidden></p>
   </div>`;
   $('#play').addEventListener('click',()=>{actx();sfx.good();showMenu(true)});
@@ -668,10 +709,12 @@ function showMenu(greet){
       <button class="ptog" data-p="${p}"><span class="pav" id="pav${p}">${pIcons[p]}</span><span class="pinfo"><span class="pnm">${NAMES[p]}</span><span class="pcount">🏆 ${toysBy[p].length}</span></span></button>
       <button class="pchg" data-chg="${p}" aria-label="Другой зверёк">↻</button></div>`).join('')}</div>
     <p class="parent whohelp">Нажмите на имя, чтобы ребёнок играл или отдыхал. ↻ — другой зверёк.</p>
-    <div class="tiles">${Object.entries(GAMES).map(([k,g])=>`<button class="tile" data-g="${k}" style="--c:${g.color}"><span class="ic">${g.icon}</span><span class="lbl">${g.name}</span></button>`).join('')}</div>
+    <div class="subj"><button class="sj" data-s="math"><b>123</b><small>Математика</small></button><button class="sj" data-s="rus"><b>АБВ</b><small>Русский</small></button></div>
+    <div class="tiles" id="tiles"></div>
     ${shelves}
   </div>`;
-  view.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>{sfx.tap();showPicker(t.dataset.g)}));
+  renderTiles();
+  view.querySelectorAll('.sj').forEach(b=>b.addEventListener('click',()=>{if(subj===b.dataset.s)return;subj=b.dataset.s;store.set('subj',subj);sfx.tap();renderTiles();say(subj==='rus'?'Русский язык! Буквы и слоги.':'Математика! Числа и счёт.')}));
   view.querySelectorAll('.ptog').forEach(b=>b.addEventListener('click',()=>{
     const p=+b.dataset.p,card=$('#pc'+p);
     if(active[p]&&!active[1-p]){card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');say(`Кто-то должен играть! ${NAMES[p]} играет.`);return}
@@ -981,6 +1024,252 @@ function houseTurn(){
       if(tries>=2)all.find(e=>+e.dataset.v===ans).classList.add('pulse');
     }
   });
+}
+
+/* ---------- Russian: letters, syllables, sounds ---------- */
+let subj=store.get('subj','math');if(subj!=='rus')subj='math';
+const VOW='АОУЫЭИЕЁЮЯ';
+const isVow=L=>VOW.includes(L.toUpperCase());
+const LNAME={А:'а',Б:'бэ',В:'вэ',Г:'гэ',Д:'дэ',Е:'е',Ё:'ё',Ж:'жэ',З:'зэ',И:'и',Й:'и краткое',К:'ка',Л:'эль',М:'эм',Н:'эн',О:'о',П:'пэ',Р:'эр',С:'эс',Т:'тэ',У:'у',Ф:'эф',Х:'ха',Ц:'цэ',Ч:'че',Ш:'ша',Щ:'ща',Ъ:'твёрдый знак',Ы:'ы',Ь:'мягкий знак',Э:'э',Ю:'ю',Я:'я'};
+const nm=L=>LNAME[L];
+const lcls=L=>L==='Ъ'||L==='Ь'?'sign':isVow(L)?'vow':'con';
+const ABC=[['А','арбуз','🍉'],['Б','банан','🍌'],['В','волк','🐺'],['Г','гриб','🍄'],['Д','дом','🏠'],['Е','ель','🌲'],['Ё','ёжик','🦔'],['Ж','жук','🪲'],['З','заяц','🐰'],['И','индюк','🦃'],['Й','чай','☕'],['К','кот','🐱'],['Л','лиса','🦊'],['М','машина','🚗'],['Н','нога','🦵'],['О','облако','☁️'],['П','пчела','🐝'],['Р','рыба','🐟'],['С','сова','🦉'],['Т','тигр','🐯'],['У','утка','🦆'],['Ф','флаг','🚩'],['Х','хлеб','🍞'],['Ц','цыплёнок','🐥'],['Ч','черепаха','🐢'],['Ш','шар','🎈'],['Щ','щенок','🐶'],['Ъ','',''],['Ы','сыр','🧀'],['Ь','',''],['Э','эскимо','🍦'],['Ю','юбка','👗'],['Я','яблоко','🍎']];
+const WORDS=[
+  ['кот','🐱'],['дом','🏠'],['сыр','🧀'],['жук','🪲'],['кит','🐋'],['слон','🐘'],['волк','🐺'],['гриб','🍄'],['шар','🎈'],['торт','🎂'],['тигр','🐯'],['мяч','⚽'],['лук','🧅'],['флаг','🚩'],['хлеб','🍞'],
+  ['ры-ба','🐟'],['лу-на','🌙'],['ко-за','🐐'],['ли-са','🦊'],['со-ва','🦉'],['ар-буз','🍉'],['ут-ка','🦆'],['но-га','🦵'],['пче-ла','🐝'],['ёл-ка','🎄'],['ро-за','🌹'],['ба-нан','🍌'],['гру-ша','🍐'],['ли-мон','🍋'],['пин-гвин','🐧'],['пе-тух','🐓'],['за-яц','🐰'],['ин-дюк','🦃'],
+  ['ма-ши-на','🚗'],['со-ба-ка','🐶'],['ра-ке-та','🚀'],['ба-боч-ка','🦋'],['ля-гуш-ка','🐸'],['ко-ро-ва','🐄'],['яб-ло-ко','🍎'],['кро-ко-дил','🐊'],['са-мо-лёт','✈️'],['о-бла-ко','☁️'],['ви-но-град','🍇'],['мо-ло-ко','🥛'],['ба-ра-бан','🥁'],['ка-ран-даш','✏️'],
+  ['че-ре-па-ха','🐢'],['ве-ло-си-пед','🚲'],['ку-ку-ру-за','🌽'],['ко-ло-коль-чик','🔔']
+];
+const HINT={О:'круглая, как бублик',А:'похожа на шалаш',У:'похожа на веточку',Ш:'похожа на расчёску',М:'похожа на две горки',Т:'похожа на молоток',П:'похожа на ворота',Х:'похожа на крестик',Ж:'похожа на жука',С:'похожа на полумесяц',З:'похожа на цифру три',Л:'похожа на горку',Н:'похожа на лесенку',Ы:'похожа на человечка с палочкой',Э:'похожа на ушко',Г:'похожа на крючок',Д:'похожа на домик на ножках',В:'с двумя животиками',Б:'с животиком внизу',Р:'похожа на флажок',И:'похожа на лесенку с косой перекладиной'};
+const FIRST_POOL=[...'АОУИЭМНЛРСКТПБДВГЗШЖХ'];
+const FIND_VOW=[...'АОУЫИЭ'],FIND_CON=[...'МНЛРСКТПШБДВГЗХЖ'];
+const wplain=s=>s.replace(/-/g,'');
+const sylls=s=>s.split('-');
+const slogW=n=>n===1?'слог':n<5?'слога':'слогов';
+const nWordM=n=>['ноль','один','два','три','четыре','пять'][n];
+const colorWord=s=>[...s].map(c=>isVow(c)?`<span class="v">${c}</span>`:c).join('');
+function dealDeck(base){S.queue={};S.ps.forEach(p=>{S.queue[p]=shuffle(base.slice());S.prog[p]={done:0,total:base.length}})}
+function lockPulse(all,v){const e=all.find(x=>x.dataset.v===String(v));if(e)e.classList.add('pulse')}
+
+/* Азбука: tap letters, hear the letter and a word; children alternate taps */
+function gameAbc(){
+  newScreen();
+  S.shared=true;S.total=10;S.done=0;showTurn(false);
+  view.innerHTML=`<div class="screen abc">
+    <div class="show" id="show"><span class="sl sign" id="sL">?</span><span class="se" id="sE">${pufik('','38 2 124 134')}</span><span class="sw" id="sW"></span></div>
+    <div class="abcgrid">${ABC.map(([L])=>`<button class="ab ${lcls(L)}" data-l="${L}" aria-label="${nm(L)}">${L}</button>`).join('')}</div>
+  </div>`;
+  const seen=new Set();let finished=false;
+  view.querySelectorAll('.ab').forEach(b=>b.addEventListener('click',()=>{
+    if(finished)return;
+    const L=b.dataset.l,[,word,emo]=ABC.find(x=>x[0]===L);
+    sfx.pop();b.classList.add('seen');
+    const sL=$('#sL');sL.textContent=L;sL.className='sl '+lcls(L);sL.classList.add('bump');
+    $('#sE').innerHTML=emo||'';$('#sW').textContent=word;
+    let txt;
+    if(L==='Ъ')txt='Твёрдый знак. Он не звучит, а только помогает другим буквам.';
+    else if(L==='Ь')txt='Мягкий знак. Он не звучит, а делает звук мягким.';
+    else if(L==='Й')txt='Буква и краткое — согласная. Она живёт в слове чай.';
+    else if(L==='Ы')txt='Ы — гласная. Слов на ы не бывает, но она есть в слове сыр.';
+    else if(isVow(L))txt=`${cap(nm(L))} — гласная, её можно петь. ${cap(word)}!`;
+    else txt=`Буква ${nm(L)} — согласная. ${cap(word)}!`;
+    seen.add(L);S.done=Math.min(seen.size,S.total);
+    const end=seen.size>=S.total;
+    if(isDuo()&&!end){nextTurn();showTurn(true);txt+=` ${pname()}, теперь ты!`}else setProgress();
+    const p=say(txt);
+    if(end){finished=true;p.then(()=>wait(300)).then(()=>say(`Ура! ${isDuo()?'Вы узнали':'Ты узнал'} десять букв!`)).then(reward)}
+  }));
+  const intro='Это азбука. Нажимай на буквы — я расскажу про каждую. Красные буквы — гласные, они поются. Синие — согласные.';
+  if(isDuo()){showTurn(true);ask(`${both()}, ${intro} Нажимайте по очереди. Первым ходит ${pname()}!`)}
+  else ask(`${pname()}! ${intro}`);
+}
+
+/* Слоги: count the syllables of a pictured word */
+function slogiDeck(){const by=n=>shuffle(WORDS.filter(x=>sylls(x[0]).length===n));const g={1:by(1),2:by(2),3:by(3),4:by(4)};return [1,2,2,3,3,4].map(n=>g[n].pop())}
+function slogiTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),[s,emo]=takeTask(),parts=sylls(s),n=parts.length,word=wplain(s);
+  view.innerHTML=`<div class="screen slogi">
+    <div class="pic">${emo}</div>
+    <div class="sylrow" id="syl">${parts.map(x=>`<span class="syl">${colorWord(x)}</span>`).join('')}</div>
+    <div class="rrow"><button class="btn watch" id="slow" aria-label="По слогам">🗣️</button></div>
+    <div class="answers" id="ans"></div>
+  </div>`;
+  const blocks=[...$('#syl').children];let busy=false;
+  async function slow(){
+    if(busy)return;busy=true;
+    blocks.forEach(b=>b.classList.remove('on'));
+    for(let i=0;i<n;i++){blocks[i].classList.add('on');tone(660+i*90,.09,'triangle',.14);await say(parts[i]);await wait(180)}
+    busy=false;
+  }
+  $('#slow').addEventListener('click',()=>{sfx.tap();slow()});
+  const intro=first?'Слово можно разделить на кусочки — слоги. Скажи слово медленно и хлопни на каждый кусочек. ':'';
+  ask(call(first)+intro+`${cap(word)}. Сколько слогов в слове ${word}?`);
+  let tries=0;
+  renderAnswers($('#ans'),[1,2,3,4],async(v,btn,all)=>{
+    if(v===n){
+      all.forEach(x=>x.classList.add('locked'));btn.classList.remove('pulse');btn.classList.add('right');sfx.good();
+      blocks.forEach(b=>b.classList.add('on'));busy=true;
+      S.prog[curP()].done++;setProgress();
+      await say(`${praise()} ${parts.join(' — ')}. ${cap(nWordM(n))} ${slogW(n)}!`);
+      await say(`Сколько гласных — столько и слогов: ${[...word].filter(isVow).join(', ')}.`);
+      await wait(300);
+      advance(slogiTask);
+    }else{
+      tries++;btn.classList.add('wrong');sfx.bad();
+      await say(`Не ${nWordM(v)}. Давай послушаем по слогам и посчитаем кусочки.`);
+      await slow();
+      if(tries>=2)lockPulse(all,n);
+    }
+  });
+}
+
+/* Первая буква: which letter does the pictured word start with */
+function firstDeck(){return shuffle(WORDS.filter(x=>!'еёюя'.includes(x[0][0]))).slice(0,6)}
+function firstTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),[s,emo]=takeTask(),word=wplain(s),L=word[0].toUpperCase();
+  const opts=shuffle([L,...shuffle(FIRST_POOL.filter(x=>x!==L)).slice(0,2)]);
+  view.innerHTML=`<div class="screen first">
+    <div class="pic">${emo}</div>
+    <div class="scheme" id="sch">${[...word].map((c,i)=>`<i class="${i===0?'q':''}">${i===0?'?':''}</i>`).join('')}</div>
+    <div class="answers" id="ans">${opts.map(x=>`<button class="ans let ${lcls(x)}" data-v="${x}" aria-label="${nm(x)}"><b>${x}</b></button>`).join('')}</div>
+  </div>`;
+  const all=[...$('#ans').children];let tries=0;
+  all.forEach(btn=>btn.addEventListener('click',async()=>{
+    if(btn.classList.contains('locked')||btn.classList.contains('wrong'))return;
+    const x=btn.dataset.v;
+    if(x===L){
+      all.forEach(e=>e.classList.add('locked'));btn.classList.remove('pulse');btn.classList.add('right');sfx.good();
+      const q=$('#sch').firstElementChild;q.className='fill let '+lcls(L);q.innerHTML=`<b>${L}</b>`;
+      S.prog[curP()].done++;setProgress();
+      await say(`${praise()} ${cap(word)} начинается с буквы ${nm(L)}. Это ${isVow(L)?'гласная':'согласная'}.`);
+      await wait(300);
+      advance(firstTask);
+    }else{
+      tries++;btn.classList.add('wrong');sfx.bad();
+      say(`Это буква ${nm(x)}. Послушай ещё раз: ${word}.`);
+      if(tries>=2)lockPulse(all,L);
+    }
+  }));
+  ask(call(first)+(first?'Послушай слово и найди его первую букву. ':'')+`${cap(word)}. С какой буквы начинается слово ${word}?`);
+}
+
+/* Гласные: catch the falling vowels, they can be sung */
+function vowelTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),need=3;let got=0;
+  view.innerHTML=`<div class="screen catch">
+    <div class="machine"><span class="vsing">🎤</span><div class="vslots" id="vs">${'<i></i>'.repeat(need)}</div></div>
+    <div class="field" id="field"><div class="pipes" id="pipes"></div></div>
+  </div>`;
+  const field=$('#field'),FW=field.clientWidth,FH=field.clientHeight;
+  const lanes=FW<420?3:FW<760?4:5,laneW=FW/lanes,bs=Math.max(54,Math.min(110,laneW*.8,FH*.28));
+  field.style.setProperty('--bs',bs+'px');
+  $('#pipes').innerHTML=range(0,lanes-1).map(i=>`<i style="left:${(i+.5)*laneW}px"></i>`).join('');
+  const speed=FH/(first?8:6.5);
+  let balls=[],since=0,locked=false;
+  function make(L,lane){
+    const el=document.createElement('button');el.className='ball';el.textContent=L;el.setAttribute('aria-label',nm(L));
+    const c=pick(BALLC);el.style.setProperty('--c',c[0]);el.style.setProperty('--cd',c[1]);
+    const o={L,lane,el,x:(lane+.5)*laneW-bs/2,y:-bs,stop:false,gone:false};
+    el.style.transform=`translate3d(${o.x}px,${o.y}px,0)`;
+    el.addEventListener('pointerdown',e=>{e.preventDefault();hit(o)});
+    field.appendChild(el);balls.push(o);
+  }
+  function spawn(){
+    if(locked)return;
+    const live=balls.filter(o=>!o.gone&&!o.stop);
+    if(live.length<=lanes){
+      const free=range(0,lanes-1).filter(l=>!live.some(o=>o.lane===l&&o.y<bs*1.4));
+      if(free.length){
+        let L;
+        if(since>=2||Math.random()<.45){L=Math.random()<.8?pick(FIND_VOW):pick([...'ЕЁЮЯ']);since=0}else{L=pick(FIND_CON);since++}
+        make(L,pick(free));
+      }
+    }
+    later(spawn,1250);
+  }
+  let last=performance.now();
+  function frame(t){
+    const dt=Math.min(.05,(t-last)/1000);last=t;
+    for(const o of balls){
+      if(o.stop||o.gone)continue;
+      o.y+=speed*dt;o.el.style.transform=`translate3d(${o.x}px,${o.y}px,0)`;
+      if(o.y>FH+4){o.gone=true;o.el.remove()}
+    }
+    balls=balls.filter(o=>!o.gone);
+    loopId=requestAnimationFrame(frame);
+  }
+  loopId=requestAnimationFrame(frame);
+  async function hit(o){
+    if(locked||o.stop||o.gone)return;
+    const l=o.L.toLowerCase();
+    if(isVow(o.L)){
+      o.stop=true;grab(o.el,'red');tone(784,.15,'triangle',.14);
+      const slot=$('#vs').children[got];slot.textContent=o.L;slot.classList.add('got');got++;
+      if(got>=need){
+        locked=true;balls.forEach(x=>{if(x!==o&&!x.gone){x.stop=true;x.el.classList.add('fade')}});
+        sfx.good();S.prog[curP()].done++;setProgress();
+        await say(`${l}-${l}-${l}! ${praise()} Три гласные пойманы!`);
+        await wait(300);
+        advance(vowelTask);
+      }else say(`${l}-${l}-${l}!`);
+    }else{
+      o.stop=true;o.el.style.setProperty('--t',o.el.style.transform);o.el.classList.add('burst');
+      later(()=>{o.gone=true;o.el.remove()},360);
+      sfx.bad();say(`${cap(nm(o.L))} — согласная. Лови гласные — их можно петь!`);
+    }
+  }
+  ask(call(first)+(first?'Гласные звуки можно петь: а-а-а, о-о-о, у-у-у. Лови шарики с гласными буквами!':'Лови гласные!'));
+  later(spawn,isDuo()?1100:700);
+}
+
+/* Найди букву: Pufik names a letter, the child finds it among six */
+function findDeck(){return shuffle([...shuffle(FIND_VOW.slice()).slice(0,3),...shuffle(FIND_CON.slice()).slice(0,3)])}
+function findTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),T=takeTask();
+  const pool=isVow(T)?[...FIND_VOW,...FIND_CON]:[...FIND_CON,...FIND_VOW];
+  const letters=shuffle([T,...shuffle(pool.filter(x=>x!==T)).slice(0,5)]);
+  view.innerHTML=`<div class="screen pairs">
+    <div class="rrow"><button class="btn watch" id="rep" aria-label="Повторить">👂</button></div>
+    <div class="cards" style="--h:3">${letters.map((x,i)=>`<button class="card let ${lcls(x)}" data-v="${x}" style="animation-delay:${i*.05}s" aria-label="${nm(x)}"><b>${x}</b></button>`).join('')}</div>
+  </div>`;
+  const all=[...view.querySelectorAll('.card')];let tries=0,done=false;
+  const q=`Найди букву ${nm(T)}!`;
+  $('#rep').addEventListener('click',()=>{sfx.tap();say(q)});
+  all.forEach(card=>card.addEventListener('click',async()=>{
+    if(done||card.classList.contains('wrong'))return;
+    const x=card.dataset.v;
+    if(x===T){
+      done=true;card.classList.remove('pulse');sfx.good();grab(card,'blue');
+      S.prog[curP()].done++;setProgress();
+      await say(`${praise()} Это буква ${nm(T)}${HINT[T]?' — '+HINT[T]:''}.`);
+      await wait(300);
+      advance(findTask);
+    }else{
+      tries++;card.classList.add('wrong','shake');sfx.bad();
+      say(`Это буква ${nm(x)}. А нам нужна буква ${nm(T)}${HINT[T]?'. Она '+HINT[T]:''}.`);
+      if(tries>=2)lockPulse(all,T);
+    }
+  }));
+  ask(call(first)+(first?'Я назову букву, а ты найди её. ':'')+q);
+}
+
+Object.values(GAMES).forEach(g=>{g.subj='math'});
+Object.assign(GAMES,{
+  abc:{icon:'🔤',name:'Азбука',color:'#ff3d5a',subj:'rus',run:gameAbc},
+  slogi:{icon:'👏',name:'Слоги',color:'#f07a12',subj:'rus',run:()=>{dealDeck(slogiDeck());slogiTask()}},
+  first:{icon:'🍉',name:'Первая буква',color:'#17a866',subj:'rus',run:()=>{dealDeck(firstDeck());firstTask()}},
+  vowels:{icon:'🎤',name:'Гласные',color:'#e8459a',subj:'rus',run:()=>{dealDeck([0,1,2]);vowelTask()}},
+  find:{icon:'🔍',name:'Найди букву',color:'#2f7bff',subj:'rus',run:()=>{dealDeck(findDeck());findTask()}},
+});
+function renderTiles(){
+  const el=$('#tiles');if(!el)return;
+  el.innerHTML=Object.entries(GAMES).filter(([,g])=>g.subj===subj).map(([k,g])=>`<button class="tile" data-g="${k}" style="--c:${g.color}"><span class="ic">${g.icon}</span><span class="lbl">${g.name}</span></button>`).join('');
+  el.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>{sfx.tap();const g=t.dataset.g;if(GAMES[g].subj==='rus')startGame(g,'rus');else showPicker(g)}));
+  view.querySelectorAll('.sj').forEach(b=>b.classList.toggle('on',b.dataset.s===subj));
 }
 
 /* ---------- bar ---------- */
