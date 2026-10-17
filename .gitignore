@@ -2,3 +2,5 @@ studio/export/
 studio/media/**/*.log
 *.tmp
 studio/.jobs.json
+studio/media/mocap/
+__pycache__/
