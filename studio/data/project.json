@@ -1,0 +1,684 @@
+{
+ "title": "Белая кровь — студия",
+ "activeStyle": "tv",
+ "negative": "morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark",
+ "format": "16:9 landscape, single cinematic frame, no text, no captions, no watermark, no borders, no comic panels",
+ "styles": [
+  {
+   "id": "tv",
+   "name": "ТВ-аниме (текущий)",
+   "about": "Стиль, которым нарисованы фоны демки. Чистая заливка, ровные линии — надёжно, но похоже на всё остальное ИИ-аниме.",
+   "text": "anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame"
+  },
+  {
+   "id": "cel90",
+   "name": "Ретро-cel 90-х",
+   "about": "Как OVA 90-х: плёночное зерно, плотные двухтоновые тени, рисованная целлулоидная заливка. Красная пустыня в этой фактуре сразу выглядит как отдельный мир.",
+   "text": "1990s OVA anime cel animation look, hand-painted cels, two-tone hard shadows, bold confident lineart, subtle film grain, slight analog color bleed, painted background art, cinematic 16:9 composition, xianxia fantasy, key animation frame"
+  },
+  {
+   "id": "gouache",
+   "name": "Гуашевые фоны + плоские герои",
+   "about": "Фоны как живопись гуашью с видимым мазком и фактурой бумаги, герои — плоская cel-заливка поверх. Мягко, дорого, узнаваемо.",
+   "text": "anime key frame, flat cel-shaded characters with clean lineart placed over richly hand-painted gouache backgrounds, visible brush strokes and paper texture in the background, restrained highlights, cinematic 16:9 composition, xianxia fantasy"
+  },
+  {
+   "id": "ink",
+   "name": "Тушь и красный",
+   "about": "Самый «свой» вариант: линия тушью с нажимом, приглушённая палитра, где красный — единственный насыщенный цвет. Похоже на ожившую книгу Завета.",
+   "text": "anime key frame with expressive ink lineart of varying brush weight, flat muted fills, limited palette where red is the only saturated color, subtle sumi-e ink wash texture in shadows and sky, aged paper grain, cinematic 16:9 composition, xianxia fantasy"
+  },
+  {
+   "id": "rim",
+   "name": "Кино-свет",
+   "about": "Плоская заливка, но много света: контровой свет, ореол, дымка в воздухе, лёгкое зерно. Эффектно в экшене и на закате.",
+   "text": "anime film key frame, flat cel fills with two-tone shadows, strong colored rim light, soft halation glow and atmospheric haze, light bloom, subtle film grain, cinematic 16:9 composition, xianxia fantasy"
+  }
+ ],
+ "styleLab": {
+  "shots": [
+   {
+    "ep": "s01e01",
+    "id": "1.4"
+   },
+   {
+    "ep": "s01e01",
+    "id": "3.3"
+   },
+   {
+    "ep": "s01e01",
+    "id": "E4"
+   },
+   {
+    "ep": "s01e01",
+    "id": "5.1"
+   }
+  ],
+  "about": "Одни и те же кадры в каждом стиле: лицо Лиама, Повелитель на кургане, столица, удар мечей. Выбери стиль — он станет активным для всей серии."
+ },
+ "palettes": {
+  "PAL-DESERT": {
+   "name": "Эльтарион, день",
+   "text": "blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast"
+  },
+  "PAL-COUNCIL": {
+   "name": "Зал совета",
+   "text": "dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones"
+  },
+  "PAL-RIFT": {
+   "name": "Разлом",
+   "text": "black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor"
+  },
+  "PAL-FOREST": {
+   "name": "Лес у озера",
+   "text": "shady dense forest, cool lake, dappled green and blue light, calm, quiet"
+  }
+ },
+ "characters": [
+  {
+   "id": "LIAM",
+   "name": "Лиам",
+   "group": "Главные",
+   "token": "Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes",
+   "sheetPrompt": "anime character model sheet of Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes, dark fitted clothes with deep red accents, front view, side view, back view, four facial expressions, plain white background, labeled LIAM",
+   "versions": [
+    {
+     "file": "Аниме/Карты персонажей/Лиам_ модельный лист сереброволосого героя.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0,
+   "details": "fitted dark brown-black long-sleeve tunic with NARROW close-fitting sleeves (never wide, loose or flowing sleeves); dark brown leather bracers with buckles on both forearms; BARE hands without gloves, slender pale fingers; deep burgundy hooded scarf wrapped around neck and shoulders; crossed brown leather straps over the chest; small silver winged emblem on the left chest; brown belts with a pouch on the right thigh; tall dark boots wrapped with burgundy bands; long white hair in a high ponytail with loose strands"
+  },
+  {
+   "id": "LORD",
+   "name": "Повелитель драконов (человек)",
+   "group": "Главные",
+   "token": "the Dragon Lord in human form, looks about 22-23, tall and composed, very long straight black hair, three flat stacked silver hairpins (kensaikan) on the left side of the head, long black high-collared coat with leather straps instead of armor, black leather gloves, heavy black boots, obsidian-black eyes",
+   "sheetPrompt": "anime character model sheet of the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit, heavy black boots, obsidian-black eyes, front, side, back views and head close-ups, plain white background, labeled THE LORD",
+   "versions": [
+    {
+     "file": "studio/media/characters/LORD/v001.jpg",
+     "at": "2026-10-16 18:41:28",
+     "by": "загружено вручную",
+     "note": ""
+    }
+   ],
+   "selected": 0,
+   "details": "black leather gloves on BOTH hands at all times (never bare hands, never bare fingers); long black high-collared coat with tight long sleeves that tuck into the gloves, buttoned cuffs; black leather straps and buckles across chest and waist; long coat skirt split at front and back; black trousers and heavy buckled black boots; very long straight black hair; three flat stacked silver plate hairpins (kensaikan) on the left side of the head; pale skin"
+  },
+  {
+   "id": "DRAGON",
+   "name": "Чёрный дракон",
+   "group": "Главные",
+   "token": "colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils",
+   "sheetPrompt": "anime creature model sheet of a colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils, side view, front view, wings spread, head close-up, scale detail, human figure for scale, plain white background, labeled DRAGON",
+   "versions": [
+    {
+     "file": "studio/media/characters/DRAGON/v003.png",
+     "at": "2026-10-16 14:50:14",
+     "by": "codex",
+     "note": "Правка: нужно в стиле аниме - плоский, заливка чуть проще - классический современный аниме стиль, как и остальные референсы",
+     "style": "tv",
+     "prompt": "anime creature model sheet of a colossal black dragon, four legs, huge wings, black scales that absorb light and dissolve into black mist at the edges, yellow eyes with vertical pupils, side view, front view, wings spread, head close-up, scale detail, human figure for scale, plain white background, labeled DRAGON, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION: edit the CURRENT VERSION image. Change only this: Правка: нужно в стиле аниме - плоский, заливка чуть проще - классический современный аниме стиль, как и остальные референсы. Keep everything else — composition, characters, palette and style — the same."
+    }
+   ],
+   "selected": 0,
+   "refs": []
+  },
+  {
+   "id": "BASTIAN",
+   "name": "Бастиан Эльтар",
+   "group": "Главные",
+   "token": "Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, tall and rather large build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk military commander's armor and long cloak",
+   "sheetPrompt": "anime character model sheet of Bastian Eltar, Liam's uncle and commander-in-chief of the drayks, adult man, tall and rather large powerful build, sharp regular features, dark black hair falling below the shoulders, thick black eyebrows, perpetually stern frowning face, drayk commander's armor in dark red and black with a long cloak, no visible tattoo or marks on the face, front view, side view, back view, back view on horseback, head close-ups: stern frown, rare warm smile, booming laugh, plain white background, labeled BASTIAN",
+   "versions": [
+    {
+     "file": "studio/media/characters/BASTIAN/v001.png",
+     "at": "2026-10-16 15:15:49",
+     "by": "codex",
+     "note": "перерисовать референс в стиле аниме, как все остальное",
+     "style": "tv",
+     "prompt": "anime character model sheet of a drayk cavalry commander seen from behind and in silhouette only, long cloak, armor, on horseback and standing, plain white background, labeled BASTIAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: перерисовать референс в стиле аниме, как все остальное"
+    },
+    {
+     "file": "studio/media/characters/BASTIAN/v002.png",
+     "at": "2026-10-16 18:25:05",
+     "by": "codex",
+     "note": "меняем одежду ближе к одежде Бельфи - с красными вставками, но более практичную - то же что на референсе, без накидки",
+     "style": "tv",
+     "prompt": "anime character model sheet of a drayk cavalry commander seen from behind and in silhouette only, long cloak, armor, on horseback and standing, plain white background, labeled BASTIAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: меняем одежду ближе к одежде Бельфи - с красными вставками, но более практичную - то же что на референсе, без накидки. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+    }
+   ],
+   "selected": 1,
+   "canon": "Т2 гл.2: «высоким и довольно крупным мужчиной с правильными резкими чертами и темными волосами, спадающими ниже плеч… хмурил густые черные брови». Дядя Лиама, младший брат Циана, главнокомандующий. Татуировка Владыки (с Т2 гл.2) спрятана — в кадре её не видно никогда (решение автора 16.10.2026).",
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/Бастиан.png",
+     "note": "референс в стиле иллюстрации книги, надо в аниме стиль"
+    }
+   ],
+   "details": "long black coat with burgundy inner panels and dark ornate embroidery; black laced leather bracers on both forearms; rings on his fingers; layered dark belts; heavy laced black boots; black hair tied back; the tattoo is never visible"
+  },
+  {
+   "id": "RUKH",
+   "name": "Птица Рух",
+   "group": "Звери",
+   "token": "giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps",
+   "sheetPrompt": "anime creature model sheet of a giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps, several views, plain white background, labeled RUKH",
+   "versions": [
+    {
+     "file": "Аниме/Карты персонажей/Аниме-модельный лист крылатого Руха.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "ZERR",
+   "name": "Зерр",
+   "group": "Звери",
+   "token": "zerr, slender white-and-brown desert predator with a long flexible body, long tail, strong hind legs and large sensitive horn-like ears",
+   "versions": [
+    {
+     "file": "Аниме/Карты персонажей/ЗЕРР — аниме-модель пустынного существа.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "KATNAR",
+   "name": "Катнар",
+   "group": "Звери",
+   "token": "katnar, massive armored desert beast with rough rock-like weathered hide, bony growths, heavy legs and large curved tusks",
+   "versions": [
+    {
+     "file": "Аниме/Карты персонажей/КАТНАР_ аниме-модель бронированного пустынного зверя.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "AKHEOP",
+   "name": "Ахеоп",
+   "group": "Звери",
+   "token": "akheop, slow humanoid giant with a squat powerful body, long arms, broad heavy hands and rough brownish-grey skin",
+   "versions": [
+    {
+     "file": "Аниме/Карты персонажей/АХЕОП — модельный лист пустынного гиганта.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "ROY",
+   "name": "Капитан Рой",
+   "group": "Эпизодические",
+   "token": "captain Roy, young drayk captain, uncertain and dutiful, plain drayk officer uniform",
+   "sheetPrompt": "anime character model sheet of a young drayk captain, uncertain and dutiful expression, plain drayk officer uniform in dark red and brown, front, side, back views, two expressions, plain white background, labeled ROY",
+   "versions": [
+    {
+     "file": "studio/media/characters/ROY/v001.png",
+     "at": "2026-10-16 14:52:53",
+     "by": "codex",
+     "note": "",
+     "style": "tv",
+     "prompt": "anime character model sheet of a young drayk captain, uncertain and dutiful expression, plain drayk officer uniform in dark red and brown, front, side, back views, two expressions, plain white background, labeled ROY, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+    }
+   ],
+   "selected": 0,
+   "details": "burgundy short-sleeved over-robe over a black long-sleeve undershirt with narrow sleeves; dark leather bracers with bronze ornaments on both forearms; bare hands; wide dark belt with a bronze buckle; long dark-brown hair in a high ponytail with a small bronze crown clasp and a red ribbon"
+  },
+  {
+   "id": "ARDAN",
+   "name": "Командир Ардан",
+   "group": "Эпизодические",
+   "token": "commander Ardan, stern female drayk commander, sharp face, military bearing",
+   "sheetPrompt": "anime character model sheet of a stern female drayk commander, sharp face, military bearing, drayk officer armor in dark red and brown, front, side, back views, two expressions, plain white background, labeled ARDAN",
+   "versions": [
+    {
+     "file": "studio/media/characters/ARDAN/v001.png",
+     "at": "2026-10-16 15:05:46",
+     "by": "codex",
+     "note": "короткие серые волосы",
+     "style": "tv",
+     "prompt": "anime character model sheet of a stern female drayk commander, sharp face, military bearing, drayk officer armor in dark red and brown, front, side, back views, two expressions, plain white background, labeled ARDAN, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: короткие серые волосы"
+    }
+   ],
+   "selected": 0,
+   "details": "ornate burgundy-and-bronze armor with dragon-shaped pauldrons; dark leather gloves on both hands with bronze vambraces; long split burgundy skirt with dragon embroidery; high collar; short grey hair, amber-brown eyes"
+  },
+  {
+   "id": "BELFI",
+   "name": "Генерал Бельфи",
+   "group": "Эпизодические",
+   "token": "general Belfi, old stooped drayk general, tired worn face",
+   "sheetPrompt": "anime character model sheet of an old stooped drayk general, tired worn face, heavy old drayk uniform, front, side, back views, two expressions, plain white background, labeled BELFI",
+   "versions": [
+    {
+     "file": "studio/media/characters/BELFI/v002.png",
+     "at": "2026-10-16 15:14:32",
+     "by": "codex",
+     "note": "сделай его крупнее, более мужское и крупное телосложение и версия, одежда такая же, но мужская",
+     "style": "tv",
+     "prompt": "anime character model sheet of an old stooped drayk general, tired worn face, heavy old drayk uniform, front, side, back views, two expressions, plain white background, labeled BELFI, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nREVISION of the CURRENT VERSION image. Apply exactly this change: сделай его крупнее, более мужское и крупное телосложение и версия, одежда такая же, но мужская. Everything the change does not mention stays as in the current version. If the change asks for a different style, rendering or level of detail, follow the change and the style line above."
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/Снимок экрана 2026-10-16 180909.png",
+     "note": "одежда такого типа"
+    }
+   ],
+   "details": "bulky ornate bronze-and-burgundy armor with dragon-shaped bronze pauldrons; dark leather gauntlets covering both hands with ornate bronze vambraces; long burgundy surcoat with gold flame embroidery; high stiff collar; messy grey hair and grey goatee"
+  },
+  {
+   "id": "LIAM SWORD",
+   "name": "Меч Лиама",
+   "group": "Предметы",
+   "token": "Liam's sword with a red ruby on the hilt",
+   "sheetPrompt": "anime prop design sheet of a slender straight sword with a red ruby set in the hilt, front and side views, hilt close-up, plain white background, labeled LIAM SWORD",
+   "versions": [
+    {
+     "file": "studio/media/characters/LIAM_SWORD/v001.png",
+     "at": "2026-10-16 18:36:37",
+     "by": "codex",
+     "note": "меч с референса в аниме стиле",
+     "style": "tv",
+     "prompt": "anime prop design sheet of a slender straight sword with a red ruby set in the hilt, front and side views, hilt close-up, plain white background, labeled LIAM SWORD, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame. Base the character design on the attached book illustrations\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: меч с референса в аниме стиле"
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/меч реф.jpg"
+    }
+   ]
+  },
+  {
+   "id": "LORD SWORD",
+   "name": "Чёрный меч Повелителя",
+   "group": "Предметы",
+   "token": "black steel sword",
+   "sheetPrompt": "anime prop design sheet of a black steel sword, elegant and plain, front and side views, a version dissolving into dark smoke from the tip, plain white background, labeled LORD SWORD",
+   "versions": [
+    {
+     "file": "studio/media/characters/LORD_SWORD/v001.png",
+     "at": "2026-10-16 18:37:32",
+     "by": "codex",
+     "note": "простой длинный черный меч, особо не примечательный",
+     "style": "tv",
+     "prompt": "anime prop design sheet of a black steel sword, elegant and plain, front and side views, a version dissolving into dark smoke from the tip, plain white background, labeled LORD SWORD, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: простой длинный черный меч, особо не примечательный"
+    }
+   ],
+   "selected": 0
+  }
+ ],
+ "locations": [
+  {
+   "id": "desert",
+   "name": "Красная пустыня",
+   "palette": "PAL-DESERT",
+   "prompt": "endless red rocky desert, layered stone ridges to the horizon, rust-red sky with dazzling white clouds, blazing red sun, no vegetation",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Бескрайняя красная пустыня под алым солнцем.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "desert-ridges",
+   "name": "Хребты и скальный массив",
+   "palette": "PAL-DESERT",
+   "prompt": "red stone ridges with a colossal red rock massif in the distance, a city carved into it barely visible",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Дальний подлёт к краснокаменной столице.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "east-coast",
+   "name": "Восточный берег, чёрное море",
+   "palette": "PAL-DESERT",
+   "prompt": "sheer red coastal ridge dropping into dark, almost black sea water, a small stone fortified outpost on the far crest",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Алый утёс над чёрным морем.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "capital",
+   "name": "Столица в скале",
+   "palette": "PAL-DESERT",
+   "prompt": "city carved directly into a towering red rock cliff, tiers of houses, stairways and walkways hewn into the stone, a few alien inserts of smooth white stone masonry, faint shimmering protective dome, stone only, no wood",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Столица, высеченная в багровой скале.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "capital-street",
+   "name": "Террасная улица столицы",
+   "palette": "PAL-DESERT",
+   "prompt": "quiet terraced street of a city carved into red rock, doorways and balconies hewn in stone",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Тихая террасная улица краснокаменного города (2).png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "castle",
+   "name": "Замок на вершине",
+   "palette": "PAL-DESERT",
+   "prompt": "castle carved into the top of a red rock massif, parts of its walls faced with smooth white stone (allar), white arches, banners with a winged sword emblem",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Вершинный дворец в алой скале.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "council",
+   "name": "Зал совета",
+   "palette": "PAL-COUNCIL",
+   "prompt": "dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Пыльный зал совета с древней картой.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "throne-room",
+   "name": "Тронный зал (белый аллар)",
+   "palette": "PAL-DESERT",
+   "prompt": "throne hall faced with white allar stone inside a red rock castle, worn floor, tall columns, red light from openings",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Потёртый пол тронного зала.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "library",
+   "name": "Библиотека старого дворца",
+   "palette": "PAL-DESERT",
+   "prompt": "library of the old palace carved in red rock, tall shelves, stone staircases, warm dusty light",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Библиотека старого дворца в красных скалах.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "akheop-fields",
+   "name": "Поля ахеопов",
+   "palette": "PAL-DESERT",
+   "prompt": "cultivated fields in a red desert valley among red rock ridges",
+   "versions": [
+    {
+     "file": "Аниме/Карты и виды местности/Эльтарион/Тихая пахота акхеопов в красной долине.png",
+     "by": "импорт",
+     "at": "2026-10-16"
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "hangar",
+   "name": "Ангар птиц Рух",
+   "palette": "PAL-DESERT",
+   "prompt": "open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust, no people",
+   "versions": [
+    {
+     "file": "studio/media/locations/hangar/v001.png",
+     "at": "2026-10-16 18:45:31",
+     "by": "codex",
+     "note": "",
+     "style": "tv",
+     "prompt": "wide establishing background plate, open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust, no people, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+    }
+   ],
+   "selected": 0
+  },
+  {
+   "id": "battlefield",
+   "name": "Поле битвы (без кургана)",
+   "palette": "PAL-DESERT",
+   "prompt": "vast open battlefield square in a red stone desert between low red ridges, flat cracked red rock ground littered with broken weapons, scattered fallen bodies small and in shadow, scorched patches, brown and silver stains, red dust in the air, NO mound, no people standing, anime stylized, no gore detail",
+   "versions": [
+    {
+     "file": "studio/media/locations/battlefield/v001.png",
+     "at": "2026-10-16 18:46:44",
+     "by": "codex",
+     "note": "основную идею взять с референса (без главных персов))",
+     "style": "tv",
+     "prompt": "wide establishing background plate, vast battlefield square in a red stone desert near the eastern outpost ruins, broken weapons, scorched patches, ground stained brown and silver, a huge dark mound in the middle distance seen in silhouette, no people, anime stylized, no gore detail, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: основную идею взять с референса (без главных персов))"
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/art (2).jpg",
+     "note": "момент передачи меча Лиаму на том самом кургане"
+    }
+   ],
+   "needsRedraw": true
+  },
+  {
+   "id": "battlefield-rift",
+   "name": "Поле битвы под разломом",
+   "palette": "PAL-RIFT",
+   "prompt": "the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field, no people",
+   "versions": [
+    {
+     "file": "studio/media/locations/battlefield-rift/v001.png",
+     "at": "2026-10-16 18:48:50",
+     "by": "codex",
+     "note": "то же что и поле бытвы у кургана, но уже в иных оттенках, с разломом - как на рефе",
+     "style": "tv",
+     "prompt": "wide establishing background plate, the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field, no people, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark.\n\nAdditional direction: то же что и поле бытвы у кургана, но уже в иных оттенках, с разломом - как на рефе"
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/разлом.jpg"
+    }
+   ]
+  },
+  {
+   "id": "forest-lake",
+   "name": "Лес у озера",
+   "palette": "PAL-FOREST",
+   "prompt": "shady forest clearing by a cool lake beyond the red desert cliffs, a wide old tree trunk, dense foliage, dappled green and blue light, no people",
+   "versions": [
+    {
+     "file": "studio/media/locations/forest-lake/v001.png",
+     "at": "2026-10-16 18:50:00",
+     "by": "codex",
+     "note": "",
+     "style": "tv",
+     "prompt": "wide establishing background plate, shady forest clearing by a cool lake beyond the red desert cliffs, a wide old tree trunk, dense foliage, dappled green and blue light, no people, shady dense forest, cool lake, dappled green and blue light, calm, quiet, empty scene without characters, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
+    }
+   ],
+   "selected": 0,
+   "refs": [
+    {
+     "file": "Аниме/Иллюстрации книги/art (3).jpg",
+     "note": "сцена из иллюстрации книги)"
+    }
+   ]
+  },
+  {
+   "id": "battlefield-mound",
+   "versions": [],
+   "selected": null,
+   "name": "Курган на поле битвы",
+   "palette": "PAL-DESERT",
+   "prompt": "the same red stone battlefield square with a huge dark mound of the fallen and old bones in the middle distance, a flat rocky top, its slopes in deep shadow, bodies only as dark silhouettes, low red ridges around, no people standing, anime stylized, no gore detail"
+  },
+  {
+   "id": "sky-desert",
+   "versions": [],
+   "selected": null,
+   "name": "Небо над красной пустыней",
+   "palette": "PAL-DESERT",
+   "prompt": "high in the air above an endless cracked red rocky wasteland seen far below, layered red ridges, rust-red sky with dazzling white clouds, blazing red sun, wind streaks, no buildings, no hangar"
+  }
+ ],
+ "rules": [
+  {
+   "id": "sun",
+   "when": [
+    "white sun|yellow sun|golden sun"
+   ],
+   "msg": "Солнце в Эльтарионе только красное."
+  },
+  {
+   "id": "liam-blood",
+   "when": [
+    "\\[LIAM\\]|Liam",
+    "blood"
+   ],
+   "unless": "silver",
+   "msg": "Кровь Лиама (и всех драйков) — серебристая, ртутная."
+  },
+  {
+   "id": "lord-blood",
+   "when": [
+    "\\[LORD\\]",
+    "blood (running|at|on) .*(chin|lip|mouth)"
+   ],
+   "unless": "burgundy",
+   "msg": "У Повелителя в человеческом облике кровь тёмно-бордовая."
+  },
+  {
+   "id": "dragon-legs",
+   "when": [
+    "\\[DRAGON\\]|dragon",
+    "two legs|wyvern|bipedal"
+   ],
+   "msg": "Дракон — на четырёх лапах."
+  },
+  {
+   "id": "dragon-fire",
+   "when": [
+    "\\[DRAGON\\]",
+    "fire|flame"
+   ],
+   "unless": "black (fire|flame)",
+   "msg": "Пламя дракона — чёрное."
+  },
+  {
+   "id": "order-eye",
+   "when": [
+    "violet",
+    "eyes? glow|glowing eyes|both eyes"
+   ],
+   "unless": "right iris|right eye",
+   "msg": "В Приказе Лорда загорается только правый глаз Лиама."
+  },
+  {
+   "id": "sword-sheath",
+   "when": [
+    "\\[LORD SWORD\\]|black (steel )?sword",
+    "sheath"
+   ],
+   "msg": "Чёрный меч не убирается в ножны — растворяется дымкой."
+  },
+  {
+   "id": "height",
+   "when": [
+    "\\[LIAM\\]",
+    "\\[LORD\\]",
+    "two-shot|side by side|facing each other|back to back"
+   ],
+   "unless": "half a head shorter",
+   "msg": "Лиам на полголовы ниже Повелителя — допиши «Liam half a head shorter»."
+  },
+  {
+   "id": "gore",
+   "when": [
+    "dead|bodies|corpse|severed|mound of the fallen|torn"
+   ],
+   "unless": "no gore",
+   "msg": "Модерация: добавь «anime stylized, no gore detail, bodies in shadow»."
+  },
+  {
+   "id": "bastian-tattoo",
+   "when": [
+    "\\[BASTIAN\\]|Bastian",
+    "tattoo|forehead mark"
+   ],
+   "unless": "no visible tattoo|hidden",
+   "msg": "Татуировка Бастиана спрятана — в кадре её не видно."
+  },
+  {
+   "id": "lord-gloves",
+   "when": [
+    "\\[LORD\\]|Lord",
+    "bare hand|bare fingers|ungloved|without gloves"
+   ],
+   "msg": "У Повелителя руки всегда в чёрных кожаных перчатках."
+  },
+  {
+   "id": "liam-sleeves",
+   "when": [
+    "\\[LIAM\\]|Liam",
+    "(wide|loose|flowing|billowing) sleeves?"
+   ],
+   "msg": "У Лиама узкие рукава и кожаные наручи, широких рукавов нет."
+  }
+ ],
+ "questions": [
+  "Пульс Повелителя в 13.4: по канону его нет — сверить строку в главе.",
+  "VO рассказчика («Он там», «Молодой Лорд летит на собственную смерть»…) — голосом Лиама или убрать?",
+  "Подземные хищники-воронки и зыбучие пески — берём в канон?"
+ ],
+ "appliedMigrations": [
+  "2026-10-17-postanovka",
+  "2026-10-18-prigovor",
+  "2026-10-21-ruki"
+ ]
+}

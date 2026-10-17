@@ -1,0 +1,1123 @@
+{
+ "id": "2026-10-17-postanovka",
+ "title": "Постановка сцен 1–7: расстановка, мастер-планы, планы сверху, раздельные локации",
+ "ops": [
+  {
+   "op": "location",
+   "id": "battlefield",
+   "set": {
+    "name": "Поле битвы (без кургана)",
+    "palette": "PAL-DESERT",
+    "needsRedraw": true,
+    "prompt": "vast open battlefield square in a red stone desert between low red ridges, flat cracked red rock ground littered with broken weapons, scattered fallen bodies small and in shadow, scorched patches, brown and silver stains, red dust in the air, NO mound, no people standing, anime stylized, no gore detail"
+   }
+  },
+  {
+   "op": "location",
+   "id": "battlefield-mound",
+   "set": {
+    "name": "Курган на поле битвы",
+    "palette": "PAL-DESERT",
+    "prompt": "the same red stone battlefield square with a huge dark mound of the fallen and old bones in the middle distance, a flat rocky top, its slopes in deep shadow, bodies only as dark silhouettes, low red ridges around, no people standing, anime stylized, no gore detail"
+   }
+  },
+  {
+   "op": "location",
+   "id": "sky-desert",
+   "set": {
+    "name": "Небо над красной пустыней",
+    "palette": "PAL-DESERT",
+    "prompt": "high in the air above an endless cracked red rocky wasteland seen far below, layered red ridges, rust-red sky with dazzling white clouds, blazing red sun, wind streaks, no buildings, no hangar"
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 1,
+   "set": {
+    "plan": "studio/canon/plans/scene1_council.png",
+    "staging": "Зал совета, вырубленный в красной скале. Длинный тяжёлый каменный стол стоит слева направо, на нём старая карта. СПРАВА во главе стола в резном каменном кресле сидит Лиам; за его спиной высокие узкие окна, о стёкла бьёт красный песок, красноватый свет падает на стол справа (контровой свет на Лиаме). СЛЕВА у дальнего конца стола стоит ссутулившийся генерал Бельфи, упираясь кулаками в камень. У ДАЛЬНЕЙ стороны стола стоит командир Ардан и косится на Бельфи. У БЛИЖНЕЙ стороны стола посередине стоит капитан Рой и докладывает над картой. Тяжёлая дверь — в ближней стене слева. Все офицеры в одной комнате одновременно; когда камера смотрит на одного, другие видны размытыми на своих местах.",
+    "masterPrompt": "wide master shot of a dim stone council room carved in red rock, a long heavy stone table runs from left to right with an old parchment map in the middle; at the RIGHT head of the table young white-haired [LIAM] sits in a heavy carved stone chair with tall narrow windows behind him, red sand beating on the glass and red-tinted light streaming over his shoulders across the table; at the far LEFT end old stooped [BELFI] stands leaning on the table with both fists; on the far side of the table stern female [ARDAN] stands and looks sideways at Belfi; on the near side young [ROY] stands reporting over the map; a heavy stone door in the near-left wall; dust in the light beams, PAL-COUNCIL"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.2",
+   "set": {
+    "continuity": "one of the tall narrow windows behind Liam's chair at the right head of the table; the dim council room is out of focus behind the glass"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.3",
+   "set": {
+    "continuity": "top-down on the map in the middle of the table: Liam's side (windows, light) is at the RIGHT edge of the frame; officers' hands rest on the left end and on both long sides"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.4",
+   "set": {
+    "continuity": "Liam sits at the RIGHT head of the table, the windows behind him give red rim light; he looks to frame-LEFT toward the officers"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.5",
+   "set": {
+    "continuity": "camera from Liam's end of the table: Roy stands on the NEAR long side of the table over the map, light from the windows on frame-right; Belfi is out of focus at the far left end of the table"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.5a",
+   "set": {
+    "continuity": "Belfi stands at the far LEFT end of the table, facing the windows: the red window light from the far end of the room falls on his face"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.6",
+   "set": {
+    "continuity": "Ardan stands on the FAR long side of the table; she looks to frame-LEFT toward Belfi at the end of the table; window light from frame-right"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.7",
+   "set": {
+    "continuity": "seen from Liam's end of the table: Belfi at the far LEFT end, fists on the stone; the window light from behind the camera falls on him"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.10",
+   "set": {
+    "continuity": "Liam's hand on the carved stone armrest of his chair at the RIGHT head of the table, window light from behind"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.11",
+   "set": {
+    "continuity": "Liam rises from his chair at the RIGHT head of the table; the tall windows and the red light are behind him; he faces frame-LEFT toward the officers"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.13",
+   "set": {
+    "continuity": "two-shot along the table: Liam standing at the RIGHT head in the foreground, Belfi at the far LEFT end; the map between them"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.14",
+   "set": {
+    "continuity": "Liam walks from the head of the table toward the heavy door in the near-LEFT wall, passing behind Roy; the officers stay at the table behind him"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.15",
+   "set": {
+    "continuity": "wide shot from the door side: the door at frame-left has just closed; Roy, Ardan and Belfi frozen at their places around the table; Liam's chair at the right head is empty, the windows behind it"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.14",
+   "set": {
+    "characters": [
+     "LIAM",
+     "ROY",
+     "ARDAN",
+     "BELFI"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.15",
+   "set": {
+    "characters": [
+     "ROY",
+     "ARDAN",
+     "BELFI"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.3",
+   "set": {
+    "characters": []
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 2,
+   "set": {
+    "plan": "studio/canon/plans/scene2_hangar.png",
+    "staging": "Ангар (кадры 2.1–2.4): большой зал, вырубленный в скале крепости. Справа — широкий проём прямо в красное небо, через него птицы взлетают. Вдоль дальней стены в ряд стоят осёдланные птицы Рух, рыцари проверяют подпруги и кормят птиц. Лиам входит слева через арку из крепости. Полёт (2.5–2.10): клин из десятка птиц Рух летит над пустыней слева направо (так во всех кадрах полёта), Лиам — во главе клина; красное солнце высоко впереди справа. Ангара в небе НЕТ.",
+    "masterPrompt": "wide master shot of a huge hangar carved into a red rock fortress, a wide opening on the RIGHT side straight into the rust-red sky, a row of saddled giant [RUKH] birds standing along the back wall, drayk knights in dark armor checking saddle straps and tossing dried meat into a beak, an arch on the LEFT leading into the fortress through which young white-haired [LIAM] enters, red dust in the air, PAL-DESERT"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.5",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.6",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.7",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.8",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.9",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.10",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.1",
+   "set": {
+    "continuity": "the hangar opening to the sky is on frame-RIGHT; birds stand along the back wall"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.2",
+   "set": {
+    "continuity": "Liam enters from frame-LEFT through the arch; knights by the birds along the back wall"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.3",
+   "set": {
+    "continuity": "inside the hangar, the opening to the sky on frame-right; Liam mounts the bird that stands nearest to the opening"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.4",
+   "set": {
+    "continuity": "the bird runs toward the opening on frame-RIGHT and launches out into the red sky"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.5",
+   "set": {
+    "continuity": "open sky high above the red desert — no hangar, no walls; the wedge of riders flies from left to right, Liam's bird leads at the tip"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.6",
+   "set": {
+    "continuity": "in the air, no buildings; Liam rides at the tip of the wedge flying to frame-right, the red sun ahead on the right"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.7",
+   "set": {
+    "continuity": "Liam's point of view from the air, looking forward and down: far ahead a dark stain on the rust sand"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.8",
+   "set": {
+    "continuity": "seen from the air above: the edge of a battlefield far below"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.9",
+   "set": {
+    "continuity": "in the air, no buildings; Liam turns back over his LEFT shoulder to shout to the riders following behind him on frame-left"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.10",
+   "set": {
+    "continuity": "in the air; Liam faces forward (frame-right) again, calm"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.2",
+   "set": {
+    "characters": [
+     "LIAM",
+     "RUKH"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.9",
+   "set": {
+    "characters": [
+     "LIAM",
+     "RUKH"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "2.6",
+   "set": {
+    "characters": [
+     "LIAM",
+     "RUKH"
+    ]
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 3,
+   "set": {
+    "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+    "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 4,
+   "set": {
+    "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+    "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 5,
+   "set": {
+    "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+    "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 6,
+   "set": {
+    "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+    "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 7,
+   "set": {
+    "plan": "studio/canon/plans/scenes3-7_battlefield.png",
+    "staging": "Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 3,
+   "set": {
+    "location": "battlefield-mound",
+    "masterPrompt": "wide master shot of a red stone battlefield square paved with fallen bodies in shadow; a huge dark mound of the fallen on the LEFT side; on its flat top the tall black-haired [LORD] stands calmly with a black sword; high in the sky on the RIGHT a wedge of giant riding birds approaches; frozen survivors at both edges of the square; harsh midday red sun high above, PAL-DESERT, anime stylized, no gore detail"
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 4,
+   "set": {
+    "masterPrompt": "wide master shot of a red stone battlefield: the dark mound of the fallen on the far LEFT; in front of its foot [LORD] stands on the LEFT and white-haired [LIAM] on the RIGHT facing each other, Liam half a head shorter; far on the left human cavalry rides away, on the right drayks carry the wounded toward a low ridge; harsh midday light, PAL-DESERT, anime stylized, no gore detail"
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 5,
+   "set": {
+    "masterPrompt": "wide shot of the duel on an open red stone battlefield: [LORD] on the LEFT and [LIAM] on the RIGHT crossing swords, red dust, harsh high midday sun, the mound of the fallen far in the background on the left, PAL-DESERT, anime stylized, no gore detail"
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 6,
+   "set": {
+    "masterPrompt": "wide shot of the red stone battlefield under black storm clouds swallowing the red sun: a giant black tear in the air on the RIGHT like a maw; [LIAM] on the right being pulled toward it, [LORD] standing firm on the LEFT, frost on the red sand, PAL-RIFT, anime stylized, no gore detail"
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 7,
+   "set": {
+    "masterPrompt": "extreme wide shot of the battlefield under black clouds: the black rift on the RIGHT pulsing, dark silhouettes of the dead rising everywhere like broken puppets, [LORD] motionless in the center-left, [LIAM] on the right gripping a sword, PAL-RIFT, anime stylized, bodies in silhouette"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.2",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.3",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.4",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.5",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.8",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.11",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.12",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.13",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.14",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.1",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.2",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.8",
+   "set": {
+    "location": "battlefield-mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.6",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.7",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.9",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.10",
+   "set": {
+    "location": "sky-desert"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.1",
+   "set": {
+    "continuity": "the birds descend from the RIGHT; the mound is ahead on the left side of the square"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.2",
+   "set": {
+    "continuity": "camera at the foot of the mound looking up; harsh midday sun high above the top gives the figure a dark silhouette"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.3",
+   "set": {
+    "continuity": "on the flat top of the mound, low angle; the Lord faces frame-RIGHT toward the sky where the riders come from"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.5",
+   "set": {
+    "continuity": "the Lord on the mound looks UP and to the right, straight into the camera (Liam's point of view from the sky)"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.6",
+   "set": {
+    "continuity": "high in the air above the battlefield (seen far below); the riders fly from right to left toward the mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.7",
+   "set": {
+    "continuity": "in the air, the sky behind him; the Lord is far below on the left"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.8",
+   "set": {
+    "continuity": "wide: the mound in the middle with the Lord on top; human survivors frozen on the left edge, drayks on the right edge, all looking up at the sky"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.9",
+   "set": {
+    "continuity": "high in the air: Liam leaps off his bird and dives HEADFIRST down toward the mound on frame-left, arms forward, cloak streaming behind his legs"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.10",
+   "set": {
+    "continuity": "still in the same HEADFIRST dive (head down, legs up, cloak streaming upward), he hurls the sword downward ahead of him toward the top of the mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.11",
+   "set": {
+    "continuity": "on the flat top of the mound right at the Lord's boots: the sword strikes the stone"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.12",
+   "set": {
+    "continuity": "same view as 3.8: everyone frozen, dust hanging in the air"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.13",
+   "set": {
+    "continuity": "on the mound top: the Lord looks down at the sword at his feet, then up to the right where Liam is coming down"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.1",
+   "set": {
+    "continuity": "Liam has flipped in the air and lands in a crouch on the RIGHT side of the foot of the mound, facing frame-left toward the mound"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.2",
+   "set": {
+    "continuity": "the Lord walks down the right slope of the mound toward Liam, holding Liam's ruby-hilted sword"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.3",
+   "set": {
+    "continuity": "two-shot in profile at the foot of the mound: the Lord on the LEFT holds the sword out hilt-first to Liam on the RIGHT"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.4",
+   "set": {
+    "continuity": "the Lord on the LEFT, Liam on the RIGHT, very close; no mound in this close framing"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.7",
+   "set": {
+    "continuity": "the two figures in the foreground (the Lord left, Liam right); behind them human cavalry gallops away to the LEFT, drayks carry the wounded to the ridge on the RIGHT"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.8",
+   "set": {
+    "continuity": "extreme wide: the mound on the far left, two tiny figures facing each other in front of it (the Lord left, Liam right)"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.10",
+   "set": {
+    "continuity": "Liam on the right side faces frame-LEFT toward the Lord"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.1",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.2",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.3",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.4",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.5",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.6",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.7",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.8",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.9",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.10",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.11",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.12",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.13",
+   "set": {
+    "continuity": "duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.3",
+   "set": {
+    "characters": [
+     "LIAM",
+     "LORD"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.9",
+   "set": {
+    "characters": [
+     "LORD",
+     "LIAM"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.11",
+   "set": {
+    "characters": [
+     "LIAM",
+     "LORD"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "5.13",
+   "set": {
+    "characters": [
+     "LORD",
+     "LORD SWORD"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.5",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.6",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.7",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.8",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.9",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.10",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.11",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.13",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.15",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.1",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.2",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.3",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.5",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.6",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.7",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.8",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.9",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.10",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.11",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.12",
+   "set": {
+    "continuity": "the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.1",
+   "set": {
+    "continuity": "still before the rift: Liam on the RIGHT looks past the Lord toward the horizon on the LEFT (west, where Bastian is); the Lord steps closer from the left"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.12",
+   "set": {
+    "continuity": "Liam is ripped off his feet and pulled BACKWARD to frame-RIGHT toward the black tear"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.14",
+   "set": {
+    "continuity": "the Lord on the LEFT frowns at the rift on frame-RIGHT; his hair and coat are pulled to the right"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.4",
+   "set": {
+    "continuity": "the energy blast throws Liam far to frame-LEFT, away from the rift; he rolls over the stones"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.6",
+   "set": {
+    "characters": [
+     "LORD"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.2",
+   "set": {
+    "characters": [
+     "LIAM"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.4",
+   "set": {
+    "characters": [
+     "LIAM"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.6",
+   "set": {
+    "characters": [
+     "LIAM",
+     "LIAM SWORD"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "7.9",
+   "set": {
+    "characters": [
+     "LORD"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.7",
+   "set": {
+    "characters": [
+     "LORD",
+     "LIAM"
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.8",
+   "set": {
+    "characters": [
+     "LORD",
+     "LIAM"
+    ]
+   }
+  }
+ ]
+}
