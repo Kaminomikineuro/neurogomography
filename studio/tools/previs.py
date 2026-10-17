@@ -115,9 +115,97 @@ for p in PLAN.get('props', []):
         add(o, 0.48)
 
 
+# ---------- манекены из захвата движения (studio/tools/mocap.py) ----------
+LIMBS = [('LeftUpLeg', 'LeftLeg', 0.07), ('LeftLeg', 'LeftFoot', 0.055), ('LeftFoot', 'LeftToeBase', 0.045),
+         ('RightUpLeg', 'RightLeg', 0.07), ('RightLeg', 'RightFoot', 0.055), ('RightFoot', 'RightToeBase', 0.045),
+         ('Hips', 'Spine1', 0.13), ('Spine1', 'Neck', 0.15), ('Neck', 'Head', 0.05),
+         ('LeftArm', 'LeftForeArm', 0.045), ('LeftForeArm', 'LeftHand', 0.04),
+         ('RightArm', 'RightForeArm', 0.045), ('RightForeArm', 'RightHand', 0.04),
+         ('LeftArm', 'RightArm', 0.06), ('LeftUpLeg', 'RightUpLeg', 0.07)]
+mocap_actors = []  # (план, имена, кадры×суставы×3, объекты)
+if any('motion' in a for a in PLAN['actors']):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import mocap
+
+
+def stick(name, r, shade):
+    bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=1, vertices=12)
+    o = bpy.context.object
+    o.name = name
+    o.rotation_mode = 'QUATERNION'
+    return add(o, shade)
+
+
+def place(o, p, q, f):
+    d = Vector(q) - Vector(p)
+    o.location = (Vector(p) + Vector(q)) / 2
+    o.rotation_quaternion = d.to_track_quat('Z', 'Y')
+    o.scale = (1, 1, max(1e-3, d.length))
+    o.keyframe_insert('location', frame=f)
+    o.keyframe_insert('rotation_quaternion', frame=f)
+    o.keyframe_insert('scale', frame=f)
+
+
+for a in [a for a in PLAN['actors'] if 'motion' in a]:
+    H, sh = a.get('height', 1.8), a.get('shade', 0.5)
+    face = {'+x': 0, '-x': math.pi, '+y': math.pi / 2, '-y': -math.pi / 2}.get(a.get('face', '+x'), 0)
+    names, parents, P = mocap.track(a['motion'], FRAMES, FPS, H, lambda t, a=a: interp(a['keys'], t), face)
+    for r in a.get('reach', []):  # {"side": "Left", "at": 6.7, "to": 7.6, "target": "face"} — прикрыть глаза
+        mocap.reach(names, P, FPS, r.get('side', 'Left'), r['at'], r['to'], r.get('target', 'face'))
+    J = {n: i for i, n in enumerate(names)}
+    objs = [(stick('limb', r * H / 1.8, sh), J[p], J[q]) for p, q, r in LIMBS]
+    head = sphere('head', 0.115 * H / 1.8, (0, 0, 0), sh)
+    blade = stick('sword', 0.022, min(1, sh + 0.25)) if a.get('sword') else None
+    for f in range(FRAMES):
+        p = P[f]
+        for o, i, j in objs:
+            place(o, p[i], p[j], f + 1)
+        head.location = (p[J['Head']] + p[J['Head_end']]) / 2
+        head.keyframe_insert('location', frame=f + 1)
+        if blade:  # меч продолжает кисть
+            grip = Vector(p[J['RightHandIndex1']])
+            d = (grip - Vector(p[J['RightHand']])).normalized()
+            place(blade, grip - d * 0.15, grip + d * a.get('blade', 0.95) * H / 1.8, f + 1)
+    mocap_actors.append((a, names, P))
+
+
+def joint(ref, f):
+    """"LIAM:LeftToeBase" → где этот сустав в кадре f; "LORD:Head" — середина головы."""
+    aid, jn = ref.split(':')
+    for a, names, P in mocap_actors:
+        if a['id'] == aid:
+            if jn == 'Head':
+                return Vector((P[f][names.index('Head')] + P[f][names.index('Head_end')]) / 2)
+            return Vector(P[f][names.index(jn)])
+    raise KeyError(ref)
+
+
+# ---------- эффекты: облако пыли из-под ноги в лицо ----------
+import random
+for fx in PLAN.get('fx', []):
+    rnd = random.Random(7)
+    f0, f1 = int(fx['at'] * FPS), int((fx['at'] + fx.get('dur', 0.7)) * FPS)
+    for k in range(fx.get('n', 16)):
+        o = sphere('dust', 1, (0, 0, 0), fx.get('shade', 0.72))
+        delay = rnd.uniform(0, 0.35) * (f1 - f0)
+        spread = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-0.6, 0.5))) * fx.get('spread', 0.35)
+        for f in range(max(1, f0 - 1), min(FRAMES, f1 + int(0.6 * FPS)) + 1):
+            u = (f - f0 - delay) / max(1, (f1 - f0 - delay))
+            if u <= 0:
+                o.scale = (0, 0, 0)
+                o.location = joint(fx['from'], f0)
+            else:
+                start, end = joint(fx['from'], f0), joint(fx['to'], min(FRAMES - 1, f))
+                v = min(1.0, u)
+                o.location = start.lerp(end, 1 - (1 - v) ** 2) + spread * v
+                r = (0.04 + 0.16 * v) * (1 - max(0.0, u - 1) * 1.6)
+                o.scale = (max(0, r),) * 3
+            o.keyframe_insert('location', frame=f)
+            o.keyframe_insert('scale', frame=f)
+
 # ---------- манекены: простые анатомические блоки ----------
 actors = []
-for a in PLAN['actors']:
+for a in [a for a in PLAN['actors'] if 'motion' not in a]:
     H, sh = a.get('height', 1.8), a.get('shade', 0.5)
     k = H / 1.8
     root = bpy.data.objects.new(a['id'], None)
@@ -212,7 +300,9 @@ for f in range(1, FRAMES + 1):
     t = (f - 1) / FPS
     cam.location = at_dist(L * (f - 1) / max(1, FRAMES - 1))
     if look == 'actors':
-        tgt = sum((Vector((*interp(a['keys'], t), look_z)) for a, *_ in actors), Vector()) / len(actors)
+        pts = [Vector((*interp(a['keys'], t), look_z)) for a, *_ in actors]
+        pts += [Vector((*P[f - 1][names.index('Hips')][:2], look_z)) for a, names, P in mocap_actors]
+        tgt = sum(pts, Vector()) / len(pts)
     else:
         tgt = Vector(interp(look, t))
     tgt = tgt if prev is None else prev.lerp(tgt, 0.15)  # мягко, без рывков
