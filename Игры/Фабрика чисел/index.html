@@ -343,6 +343,56 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:3px}
 .ab.seen{outline:3px solid var(--yellow);outline-offset:-3px}
 .ab:active{transform:translateY(3px);box-shadow:0 1px 0 var(--paper-sh)}
 
+/* gifts & saved games */
+.mrow{display:flex;gap:10px;width:100%;max-width:1000px;margin-inline:auto;flex:none}
+.giftbtn,.cont{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:64px;border-radius:20px;font-family:var(--display);font-size:18px;color:#fff}
+.giftbtn{background:linear-gradient(#ff5f8f,#d9356a);box-shadow:0 6px 0 #8f1d43}
+.cont{background:linear-gradient(#2fbf7a,#169a5c);box-shadow:0 6px 0 #0d6b3e}
+.giftbtn:active,.cont:active{transform:translateY(4px);box-shadow:none}
+.giftbtn .gi,.cont .ci,.cont .cav{font-size:30px;line-height:1;font-family:system-ui}
+.cont .cav{font-size:22px}
+.cplay{font-size:22px}
+.gcount{position:absolute;right:-6px;top:-8px;font-size:15px;font-family:var(--display);font-weight:400;background:var(--red);color:#fff;border-radius:12px;padding:2px 8px;border:2px solid #fff;line-height:1.2}
+.gbox{position:relative;font-size:clamp(64px,18vw,110px);line-height:1;font-family:system-ui;filter:drop-shadow(0 0 16px var(--pc));animation:gwiggle 1.8s ease-in-out infinite}
+.gbox.opening{animation:gopen .9s ease-in forwards}
+.gbox.empty{animation:none;filter:grayscale(1);opacity:.3}
+@keyframes gwiggle{0%,68%,100%{transform:rotate(0)}74%{transform:rotate(-10deg)}80%{transform:rotate(10deg)}86%{transform:rotate(-6deg)}92%{transform:rotate(6deg)}}
+@keyframes gopen{0%{transform:scale(1)}20%{transform:scale(1.1) rotate(-12deg)}40%{transform:scale(1.15) rotate(12deg)}60%{transform:scale(1.2) rotate(-12deg)}80%{transform:scale(1.35);opacity:1}100%{transform:scale(2.2);opacity:0}}
+.gslot{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.greveal{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;max-width:230px;padding:10px;border-radius:18px;animation:pop .5s backwards}
+.greveal.real{background:rgba(255,201,40,.14);border:2px solid var(--yellow);box-shadow:0 0 24px rgba(255,201,40,.35)}
+.ge{font-size:clamp(56px,15vw,92px);line-height:1;font-family:system-ui;animation:prize .8s cubic-bezier(.3,1.6,.5,1) both}
+.gt{font-family:var(--display);font-size:clamp(16px,4.4vw,22px);color:var(--yellow);line-height:1.15}
+.gd{font-size:13px;color:var(--fg);line-height:1.3;font-weight:700}
+.grare{font-size:12px;font-family:var(--display);color:#fff;background:var(--pc);padding:3px 10px;border-radius:10px}
+.gmore{font-size:20px;padding:8px 14px;border-radius:14px;background:var(--panel-hi);border:2px solid var(--line);font-family:var(--display);color:var(--fg)}
+.gempty{font-size:12px;color:var(--muted);text-align:center;font-weight:700}
+.reward{justify-content:safe center}
+.reward.opened .pufik.rp{height:clamp(80px,15vh,150px)}
+.prz{min-width:0;max-width:48%}
+.gcols{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:900px;margin-inline:auto;flex:none}
+.gcol{background:var(--panel);border:3px solid var(--pc);border-radius:22px;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+.ghead{display:flex;align-items:center;gap:8px}
+.ghead .pav{width:44px;height:44px;border-radius:50%;background:var(--pc);display:grid;place-items:center;font-size:26px;line-height:1;font-family:system-ui}
+.plist{display:flex;flex-direction:column;gap:6px;width:100%}
+.pz{display:flex;align-items:center;gap:8px;background:#0c1428;border:2px solid var(--line);border-radius:12px;padding:6px 8px;text-align:left;width:100%}
+.pz .pe{font-size:24px;line-height:1;font-family:system-ui}
+.pz .pzt{flex:1;font-size:12px;min-width:0;line-height:1.2}
+.pz .pzs{font-size:16px}
+.pz.given{opacity:.45}
+.parent-on .pz{border-color:var(--yellow)}
+.parentbtn{align-self:center;font-size:13px;color:var(--muted);padding:12px 18px;border-radius:14px;border:2px dashed var(--line);position:relative;overflow:hidden;flex:none;font-weight:700}
+.parentbtn.hold::after{content:"";position:absolute;inset:0;background:rgba(255,201,40,.3);transform-origin:left;animation:hold 1.5s linear forwards}
+@keyframes hold{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.parent-area{background:#0c1428;border:2px solid var(--yellow);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:900px;margin-inline:auto;flex:none;font-size:14px;font-weight:700}
+.rates{display:flex;flex-wrap:wrap;gap:6px}
+.rates button{padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--panel)}
+.rates button.on{background:var(--yellow);color:#3a2600;border-color:#fff3b0}
+.pcheck{display:flex;align-items:center;gap:8px}
+.pcheck input{width:22px;height:22px;accent-color:var(--yellow)}
+.pcheck small{color:var(--muted);margin-left:auto}
+.phelp{font-size:12px;color:var(--muted);line-height:1.4}
+
 @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes bump{40%{transform:scale(1.25)}}
 @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
@@ -434,8 +484,9 @@ let gen=0, loopId=0;
 const timers=new Set();
 function later(fn,ms){const g=gen;const id=setTimeout(()=>{timers.delete(id);if(g===gen)fn()},ms);timers.add(id);return id}
 const wait=ms=>new Promise(r=>later(r,ms));
+let curScreen='';
 function newScreen(){
-  gen++;timers.forEach(clearTimeout);timers.clear();
+  gen++;curScreen='';timers.forEach(clearTimeout);timers.clear();
   if(loopId){cancelAnimationFrame(loopId);loopId=0}
   try{synth&&synth.cancel()}catch(e){}
   setTalking(false);grabL.innerHTML='';
@@ -648,6 +699,7 @@ function setProgress(){
 }
 let splashT=0;
 function showTurn(withSplash){
+  saveSession();
   const p=curP();
   app.style.setProperty('--pc',PCOL[p]);app.classList.toggle('duo',isDuo());
   setProgress();
@@ -709,11 +761,12 @@ function showMenu(greet){
       <button class="ptog" data-p="${p}"><span class="pav" id="pav${p}">${pIcons[p]}</span><span class="pinfo"><span class="pnm">${NAMES[p]}</span><span class="pcount">🏆 ${toysBy[p].length}</span></span></button>
       <button class="pchg" data-chg="${p}" aria-label="Другой зверёк">↻</button></div>`).join('')}</div>
     <p class="parent whohelp">Нажмите на имя, чтобы ребёнок играл или отдыхал. ↻ — другой зверёк.</p>
+    ${menuExtras()}
     <div class="subj"><button class="sj" data-s="math"><b>123</b><small>Математика</small></button><button class="sj" data-s="rus"><b>АБВ</b><small>Русский</small></button></div>
     <div class="tiles" id="tiles"></div>
     ${shelves}
   </div>`;
-  renderTiles();
+  renderTiles();bindMenuExtras();curScreen='menu';
   view.querySelectorAll('.sj').forEach(b=>b.addEventListener('click',()=>{if(subj===b.dataset.s)return;subj=b.dataset.s;store.set('subj',subj);sfx.tap();renderTiles();say(subj==='rus'?'Русский язык! Буквы и слоги.':'Математика! Числа и счёт.')}));
   view.querySelectorAll('.ptog').forEach(b=>b.addEventListener('click',()=>{
     const p=+b.dataset.p,card=$('#pc'+p);
@@ -728,7 +781,7 @@ function showMenu(greet){
     const av=$('#pav'+p);av.textContent=pIcons[p];av.classList.remove('bump');void av.offsetWidth;av.classList.add('bump');sfx.pop();
   }));
   const ps=activePlayers(),hi=ps.map(p=>NAMES[p]).join(' и ');
-  ask(greet?`Привет, ${hi}! Я Пуфик. Добро пожаловать на фабрику чисел! Выбери игру.`:'Выбери игру!');
+  if(greet!=='quiet')ask(greet?`Привет, ${hi}! Я Пуфик. Добро пожаловать на фабрику чисел! Выбери игру.`:'Выбери игру!');
 }
 
 function showPicker(g){
@@ -750,21 +803,22 @@ function showPicker(g){
 
 function reward(){
   newScreen();
+  store.set('session',null);
   S.ps.forEach(p=>{S.prog[p].done=S.prog[p].total});S.done=S.total;
   app.classList.remove('duo');splash.hidden=true;
   prog.innerHTML=S.ps.map(p=>`<div class="prow solo" style="--pc:${PCOL[p]}"><span class="pav">${pIcons[p]}</span><span class="lamps">${S.shared?'':lamps(S.prog[p].total,S.prog[p].total)}</span></div>`).join('');
-  const got=S.ps.map(p=>{const t=pick(TOYS);toysBy[p].push(t);if(toysBy[p].length>200)toysBy[p]=toysBy[p].slice(-200);return [p,t]});
-  store.set('toys2',toysBy);
+  S.ps.forEach(p=>{gifts[p].pending++});saveGifts();
   sfx.win();
   const conf=Array.from({length:36},(_,i)=>`<i style="--x:${rnd(0,100)}%;--d:${(Math.random()*1.5+1.8).toFixed(2)}s;--dl:${(Math.random()*1.2).toFixed(2)}s;--c:${PAL[i%PAL.length]};--r:${rnd(0,360)}deg"></i>`).join('');
-  view.innerHTML=`<div class="screen reward"><div class="confetti">${conf}</div>${pufik('dance rp')}
-    <div class="prizes">${got.map(([p,t],i)=>`<div class="prz" style="--pc:${PCOL[p]};animation-delay:${.3+i*.35}s"><span class="prize">${t}</span><span class="pav">${pIcons[p]}</span><span class="pnm">${NAMES[p]}</span></div>`).join('')}</div>
+  view.innerHTML=`<div class="screen reward scroll"><div class="confetti">${conf}</div>${pufik('dance rp')}
+    <div class="prizes">${S.ps.map((p,i)=>`<div class="prz" style="--pc:${PCOL[p]};animation-delay:${.3+i*.35}s"><div class="gslot" id="gs${p}">${boxHTML(p)}</div><span class="pav">${pIcons[p]}</span><span class="pnm">${NAMES[p]}</span></div>`).join('')}</div>
     <div class="rbtns"><button class="btn" id="again" aria-label="Ещё раз">${ICON.again}</button><button class="btn blue" id="rhome" aria-label="Меню">${ICON.home}</button></div></div>`;
+  S.ps.forEach(p=>bindSlot($('#gs'+p),p,()=>{const r=view.querySelector('.reward');if(r)r.classList.add('opened')}));
   $('#again').addEventListener('click',()=>{sfx.tap();startGame(S.game,S.mode)});
   $('#rhome').addEventListener('click',()=>{sfx.tap();showMenu()});
   lastQ='';
-  say(S.ps.length>1?pick([`${both()}, вы молодцы! Каждому по новой игрушке!`,`Ура! ${both()} справились! Держите игрушки!`,`Супер! Фабрика работает! ${both()}, это вам!`])
-    :pick([`Ура, ${NAMES[S.ps[0]]}! Ты справился! Вот тебе новая игрушка!`,`Супер, ${NAMES[S.ps[0]]}! Держи игрушку!`,`Здорово! ${NAMES[S.ps[0]]}, ты настоящий мастер чисел!`]));
+  say(S.ps.length>1?`${both()}, вы молодцы! Вот вам подарки — нажмите на коробку и откройте!`
+    :`${NAMES[S.ps[0]]}, ты молодец! Вот тебе подарок — нажми на коробку и открой!`);
 }
 
 /* ---------- game 1: baskets (learn the composition; children take turns moving toys) ---------- */
@@ -1271,6 +1325,192 @@ function renderTiles(){
   el.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>{sfx.tap();const g=t.dataset.g;if(GAMES[g].subj==='rus')startGame(g,'rus');else showPicker(g)}));
   view.querySelectorAll('.sj').forEach(b=>b.classList.toggle('on',b.dataset.s===subj));
 }
+
+/* ---------- gifts: boxes earned by winning, opened by tapping ---------- */
+const PRIZES=[
+  {id:'candy',e:'🍬',t:'Маленькая конфетка',d:'Сладкая награда за старание! Попроси у мамы или папы.',w:5},
+  {id:'choco',e:'🍫',t:'Маленькая шоколадка',d:'Шоколадка для настоящего мастера фабрики!',w:4},
+  {id:'cartoon',e:'📺',t:'5 минут мультиков',d:'Целых пять минут любимых мультиков!',w:4},
+  {id:'late',e:'🌙',t:'Спать на 10 минут позже',d:'Сегодня можно лечь спать на десять минут позже!',w:2},
+  {id:'movie',e:'🎬',t:'Посмотреть фильм',d:'Вечер кино! Выбирай фильм!',w:1},
+  {id:'sunday',e:'🏖️',t:'Выходной в воскресенье',d:'В воскресенье — день отдыха без занятий!',w:.5},
+];
+const GIFT_TOYS=[
+  {e:'🧸',t:'Мишка Топтыжка',d:'Любит обниматься и есть мёд.'},
+  {e:'🚗',t:'Гоночная машинка',d:'Мчится быстрее ветра!'},
+  {e:'🎈',t:'Воздушный шарик',d:'Может улететь до самых облаков.'},
+  {e:'🪀',t:'Йо-йо',d:'Крутится вверх и вниз, вверх и вниз.'},
+  {e:'🤖',t:'Робот Винтик',d:'Умеет считать до ста и мигать глазами.'},
+  {e:'🦖',t:'Динозаврик Рекс',d:'Громко рычит, но очень добрый.'},
+  {e:'🐙',t:'Осьминожка',d:'Может обнять сразу восемью лапками.'},
+  {e:'🚀',t:'Ракета',d:'Летит прямо к звёздам!'},
+  {e:'⚽',t:'Футбольный мяч',d:'Удар — и гол!'},
+  {e:'🪁',t:'Воздушный змей',d:'Танцует в небе на ветру.'},
+  {e:'🦆',t:'Уточка для купания',d:'Плавает в ванне и говорит кря-кря.'},
+  {e:'🧩',t:'Пазл',d:'Собери картинку из кусочков!'},
+  {e:'🦁',t:'Львёнок',d:'Маленький, но очень храбрый.'},
+  {e:'🦄',t:'Единорог',d:'Волшебный, с радужной гривой.'},
+  {e:'🐸',t:'Лягушонок-прыгунок',d:'Прыгает выше всех. Ква!'},
+  {e:'🐣',t:'Цыплёнок',d:'Только что вылупился из яйца!'},
+  {e:'🚂',t:'Паровозик',d:'Чух-чух, едет по рельсам.'},
+  {e:'🛸',t:'Летающая тарелка',d:'Прилетела с другой планеты!'},
+  {e:'🦕',t:'Длинношеий динозавр',d:'Достаёт до самых верхушек деревьев.'},
+  {e:'🪄',t:'Волшебная палочка',d:'Взмахни — и случится чудо!'},
+];
+const RATES=[[1,'Всегда'],[.5,'Часто'],[.33,'Иногда'],[.2,'Редко'],[0,'Никогда']];
+let gifts=store.get('gifts',null);
+if(!gifts||!gifts[0]||!gifts[1]||!Array.isArray(gifts[0].prizes)||!Array.isArray(gifts[1].prizes))gifts={0:{pending:0,prizes:[]},1:{pending:0,prizes:[]}};
+let prizeCfg=store.get('prizecfg',null);
+if(!prizeCfg||typeof prizeCfg.rate!=='number'||!prizeCfg.on)prizeCfg={rate:.5,on:{}};
+const saveGifts=()=>store.set('gifts',gifts);
+const prizeById=id=>PRIZES.find(z=>z.id===id);
+function wpick(list){let x=Math.random()*list.reduce((s,z)=>s+z.w,0);for(const z of list){if((x-=z.w)<=0)return z}return list[list.length-1]}
+function rollGift(p){
+  const g=gifts[p];g.pending=Math.max(0,g.pending-1);
+  const pool=PRIZES.filter(z=>prizeCfg.on[z.id]!==false);
+  let r;
+  if(pool.length&&Math.random()<prizeCfg.rate){
+    const z=wpick(pool);g.prizes.push({id:z.id,given:false});
+    r={real:true,e:z.e,t:z.t,d:z.d,rare:z.w<=.5?'Супер-редкий приз!':z.w<=2?'Редкий приз!':''};
+  }else{
+    const t=pick(GIFT_TOYS);toysBy[p].push(t.e);if(toysBy[p].length>200)toysBy[p]=toysBy[p].slice(-200);store.set('toys2',toysBy);
+    r={real:false,e:t.e,t:t.t,d:t.d,rare:''};
+  }
+  saveGifts();return r;
+}
+function boxHTML(p){
+  const n=gifts[p].pending;
+  return n>0?`<button class="gbox" data-p="${p}" aria-label="Открыть подарок">🎁${n>1?`<b class="gcount">×${n}</b>`:''}</button>`
+    :`<div class="gbox empty">🎁</div><span class="gempty">Выиграй игру — получишь подарок</span>`;
+}
+/* turns a slot with a box into an opened gift; onOpen runs after the reveal */
+function bindSlot(slot,p,onOpen){
+  const b=slot.querySelector('.gbox:not(.empty),.gmore');
+  if(b)b.addEventListener('click',()=>openGift(slot,p,onOpen));
+}
+function openGift(slot,p,onOpen){
+  if(gifts[p].pending<=0||slot.dataset.busy)return;
+  slot.dataset.busy='1';
+  if(!slot.querySelector('.gbox')){slot.innerHTML=boxHTML(p)}
+  const box=slot.querySelector('.gbox');box.classList.add('opening');
+  [392,494,587,698].forEach((f,i)=>tone(f,.12,'triangle',.12,i*.18));
+  later(()=>{
+    const r=rollGift(p);
+    const conf=Array.from({length:14},(_,i)=>`<i style="--x:${rnd(5,95)}%;--d:${(Math.random()+1.2).toFixed(2)}s;--dl:${(Math.random()*.3).toFixed(2)}s;--c:${PAL[i%PAL.length]};--r:${rnd(0,360)}deg"></i>`).join('');
+    const more=gifts[p].pending;
+    slot.innerHTML=`<div class="greveal${r.real?' real':''}"><div class="confetti">${conf}</div><span class="ge">${r.e}</span>${r.rare?`<span class="grare">★ ${r.rare}</span>`:''}<span class="gt">${r.t}</span><span class="gd">${r.d}</span></div>
+      ${more?`<button class="gmore" aria-label="Открыть ещё">🎁 ×${more}</button>`:''}`;
+    slot.dataset.busy='';
+    r.real?sfx.win():sfx.good();
+    bindSlot(slot,p,onOpen);
+    say(`${NAMES[p]}, ${r.real?(r.rare?r.rare.toLowerCase()+' ':'настоящий приз! '):'это '}${r.t}! ${r.d}`);
+    if(onOpen)onOpen(p,r);
+  },900);
+}
+function prizeListHTML(p){
+  const list=gifts[p].prizes.map((z,i)=>[z,i]).reverse().slice(0,20);
+  if(!list.length)return '<span class="gempty">Настоящих призов пока нет</span>';
+  return list.map(([z,i])=>{const P=prizeById(z.id)||{e:'🎁',t:'Приз'};return `<button class="pz${z.given?' given':''}" data-p="${p}" data-i="${i}"><span class="pe">${P.e}</span><span class="pzt">${P.t}</span><span class="pzs">${z.given?'✓':'⏳'}</span></button>`}).join('');
+}
+function showGifts(){
+  newScreen();leaveGame();curScreen='gifts';bHome.hidden=false;bMute.hidden=true;
+  view.innerHTML=`<div class="screen gifts scroll">
+    <div class="ph"><span class="ic">🎁</span><span>Подарки</span></div>
+    <div class="gcols">${[0,1].map(p=>`<div class="gcol" style="--pc:${PCOL[p]}">
+      <div class="ghead"><span class="pav">${pIcons[p]}</span><span class="pnm">${NAMES[p]}</span></div>
+      <div class="gslot" id="gs${p}">${boxHTML(p)}</div>
+      <div class="plist" id="pl${p}">${prizeListHTML(p)}</div>
+    </div>`).join('')}</div>
+    <button class="parentbtn" id="pbtn">Для взрослых: нажмите и держите</button>
+    <div class="parent-area" id="parea" hidden>
+      <b>Как часто в подарке настоящий приз</b>
+      <div class="rates">${RATES.map(([v,l])=>`<button data-r="${v}" class="${prizeCfg.rate===v?'on':''}">${l}</button>`).join('')}</div>
+      <b>Какие призы могут выпасть</b>
+      ${PRIZES.map(z=>`<label class="pcheck"><input type="checkbox" id="pz_${z.id}" data-z="${z.id}"${prizeCfg.on[z.id]!==false?' checked':''}> <span>${z.e} ${z.t}</span><small>${z.w<=.5?'супер-редкий':z.w<=2?'редкий':'обычный'}</small></label>`).join('')}
+      <span class="phelp">Когда выдали приз, нажмите на него в списке ребёнка: ⏳ сменится на ✓. Игрушки без приза уходят на полку в меню.</span>
+    </div>
+  </div>`;
+  const refresh=p=>{const el=$('#pl'+p);if(el){el.innerHTML=prizeListHTML(p);bindPrizes(p)}};
+  function bindPrizes(p){
+    view.querySelectorAll(`#pl${p} .pz`).forEach(b=>b.addEventListener('click',()=>{
+      if(!app.classList.contains('parent-on')){say('Покажи этот приз маме или папе!');return}
+      const z=gifts[p].prizes[+b.dataset.i];z.given=!z.given;saveGifts();sfx.tap();refresh(p);
+    }));
+  }
+  [0,1].forEach(p=>{bindSlot($('#gs'+p),p,()=>refresh(p));bindPrizes(p)});
+  const pb=$('#pbtn');let holdT=0;
+  const stop=()=>{clearTimeout(holdT);pb.classList.remove('hold')};
+  pb.addEventListener('pointerdown',()=>{pb.classList.add('hold');holdT=setTimeout(()=>{stop();$('#parea').hidden=false;app.classList.add('parent-on');pb.hidden=true;sfx.good()},1500)});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>pb.addEventListener(ev,stop));
+  view.querySelectorAll('.rates button').forEach(b=>b.addEventListener('click',()=>{prizeCfg.rate=+b.dataset.r;store.set('prizecfg',prizeCfg);view.querySelectorAll('.rates button').forEach(x=>x.classList.toggle('on',x===b))}));
+  view.querySelectorAll('.pcheck input').forEach(c=>c.addEventListener('change',()=>{prizeCfg.on[c.dataset.z]=c.checked;store.set('prizecfg',prizeCfg)}));
+  const ps=activePlayers(),waiting=ps.filter(p=>gifts[p].pending>0);
+  ask(waiting.length?`${waiting.map(p=>NAMES[p]).join(' и ')}, нажми на подарок, чтобы открыть!`.replace('нажми',waiting.length>1?'нажмите':'нажми'):'Здесь твои подарки. Выигрывай игры — и получишь новые!');
+}
+
+/* ---------- saved games: an unfinished round can be continued from the menu ---------- */
+const TASKFN={hide:()=>hideTask(),catch:()=>catchTask(),pairs:()=>pairsTurn(),house:()=>houseTurn(),slogi:()=>slogiTask(),first:()=>firstTask(),vowels:()=>vowelTask(),find:()=>findTask()};
+function saveSession(){
+  if(!TASKFN[S.game])return;
+  const {game,mode,ps,turn,lastN,prog,intro,queue,house,boards}=S;
+  store.set('session',{game,mode,ps,turn,lastN,prog,intro,queue,house,boards});
+}
+function savedSession(){const s=store.get('session',null);return s&&TASKFN[s.game]&&GAMES[s.game]&&Array.isArray(s.ps)&&s.ps.length?s:null}
+function resumeSession(){
+  const s=savedSession();if(!s)return;
+  S=Object.assign({shared:false,done:0,total:0,intro:{}},s);
+  bar.hidden=false;bHome.hidden=false;bMute.hidden=true;sub.hidden=false;
+  TASKFN[s.game]();
+}
+function menuExtras(){
+  const pend=gifts[0].pending+gifts[1].pending,s=savedSession();
+  return `<div class="mrow">
+    ${s?`<button class="cont" id="cont"><span class="cplay">▶</span><span class="ci">${GAMES[s.game].icon}</span><span class="cl">Продолжить</span><span class="cav">${s.ps.map(p=>pIcons[p]).join('')}</span></button>`:''}
+    <button class="giftbtn" id="giftbtn"><span class="gi">🎁</span><span>Подарки</span>${pend?`<b class="gcount">${pend}</b>`:''}</button>
+  </div>`;
+}
+function bindMenuExtras(){
+  const c=$('#cont');if(c)c.addEventListener('click',()=>{sfx.tap();resumeSession()});
+  $('#giftbtn').addEventListener('click',()=>{sfx.tap();showGifts()});
+}
+
+/* ---------- progress kept in the viewer's Claude account (falls back to this browser) ---------- */
+const SAVE_KEYS=['stats','toys2','gifts','icons','active','prizecfg','subj','session'];
+const rawSet=store.set;
+let cloudRef=null,cloudT=0;
+store.set=function(k,v){rawSet(k,v);if(k!=='ts'&&k!=='muted'){rawSet('ts',Date.now());cloudSave()}};
+function snapshotAll(){const o={};SAVE_KEYS.forEach(k=>{o[k]=store.get(k,null)});return o}
+function cloudWrite(){if(!cloudRef)return;cloudRef.set({blob:JSON.stringify(snapshotAll()),ts:store.get('ts',0)}).catch(()=>{})}
+function cloudSave(){if(!cloudRef)return;clearTimeout(cloudT);cloudT=setTimeout(cloudWrite,1500)}
+function loadAll(){
+  stats=store.get('stats',{});if(typeof stats!=='object'||!stats)stats={};
+  const ic=store.get('icons',null);if(Array.isArray(ic)&&ic.length===2)pIcons=ic;
+  const ac=store.get('active',null);if(Array.isArray(ac)&&ac.length===2&&(ac[0]||ac[1]))active=ac;
+  const tb=store.get('toys2',null);if(tb&&Array.isArray(tb[0])&&Array.isArray(tb[1]))toysBy=tb;
+  const gf=store.get('gifts',null);if(gf&&gf[0]&&gf[1]&&Array.isArray(gf[0].prizes)&&Array.isArray(gf[1].prizes))gifts=gf;
+  const pc=store.get('prizecfg',null);if(pc&&typeof pc.rate==='number'&&pc.on)prizeCfg=pc;
+  subj=store.get('subj','math')==='rus'?'rus':'math';
+}
+(async()=>{
+  try{
+    if(!window.claude||typeof window.claude.use!=='function')return;
+    const [db,user]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
+    if(!db||!user)return;
+    const id=await user.id();if(!id)return;
+    const ref=db.doc('data/users/'+id+'/fabrika');
+    const snap=await ref.get();
+    const localTs=store.get('ts',0),d=snap.exists?snap.data():null,cloudTs=d?(+d.ts||0):0;
+    if(d&&typeof d.blob==='string'&&cloudTs>localTs){
+      const o=JSON.parse(d.blob);
+      SAVE_KEYS.forEach(k=>{if(o[k]!==undefined&&o[k]!==null)rawSet(k,o[k])});
+      rawSet('ts',cloudTs);loadAll();
+      if(curScreen==='menu')showMenu('quiet');else if(curScreen==='gifts')showGifts();
+    }
+    cloudRef=ref;
+    if(cloudTs<localTs)cloudWrite();
+  }catch(e){}
+})();
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&cloudRef){clearTimeout(cloudT);cloudWrite()}});
 
 /* ---------- bar ---------- */
 bHome.addEventListener('click',()=>{sfx.tap();showMenu()});
