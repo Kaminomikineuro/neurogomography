@@ -36,3 +36,7 @@
 - В студии есть чат «💬 Claude» (`studio/agent.mjs`, `studio/public/chat.js`): студия запускает `claude -p` в папке репозитория (если Claude Code нет — `codex exec`). Разговоры — `studio/data/chat.json`.
 - Порядки работы для таких запусков — `studio/canon/howto/`: `new-episode.md` (серия по главе), `comic.md` (комикс), `studio-chat.md` (любые просьбы из студии). Skills: `.claude/skills/new-episode`, `.claude/skills/comic-hints`.
 - Инструменты общие для всех глав: `python studio/tools/import_storyboard.py "<md>"` (шапка `<!-- studio ... -->`), `python studio/tools/lines.py <серии>`.
+
+## Видео: Seedance и Kling
+- Кадры с героями идут связками (`scene.clips`: `shots`, `tool`, `opts` — модель, секунды, пожелания) одним роликом в Seedance 2.0 или Kling 3.0; вставки без героев — Pixverse.
+- Вкладка «Видео» (`studio/public/video.js`) собирает пакет: `clipPrompt` в `studio/server.mjs` (картинки `@Image`, Elements для Kling, промпт по таймкодам). Как подстраивать — `studio/canon/howto/video.md`.

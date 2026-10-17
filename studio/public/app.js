@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-22.1';
+const UI_VERSION = '2026-10-23.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -558,6 +558,7 @@ async function renderClip(ref) {
     shotsRow,
     h('div', { class: 'actions' },
       h('label', {}, 'Где делать: ', h('select', { onchange: (e) => edit('tool', { tool: e.target.value }) }, ...['Seedance', 'Kling'].map((t) => h('option', { selected: t === tool }, t)))),
+      h('button', { onclick: () => { loadClipToVideo(clip.id); closePanel(); S.view = 'video'; render(); } }, 'Настроить во вкладке «Видео»'),
       h('button', { onclick: () => edit('merge') }, 'Склеить со следующей'),
       h('button', { onclick: () => confirm('Разобрать связку? Кадры пойдут по одному в Pixverse.') && edit('remove') }, 'Разобрать')),
     cp.warnings?.length ? h('div', { class: 'warns' }, ...cp.warnings.map((w) => h('div', { class: 'warn' }, '⚠ ' + w))) : null,
@@ -566,7 +567,9 @@ async function renderClip(ref) {
       h('ol', { class: 'steps' },
         h('li', {}, 'Открой ', h('a', { href: tool === 'Kling' ? 'https://app.klingai.com/' : 'https://app.pixverse.ai/', target: '_blank' }, tool === 'Kling' ? 'Kling' : 'Pixverse → модель Seedance'), tool === 'Kling' ? ' → Multi-shot (Elements — листы героев).' : ' → режим с референсами (Reference / Multi-image).'),
         h('li', {}, `Длительность: ${cp.gen || '?'} с`, cp.gen > cp.total ? h('span', { class: 'muted' }, ` (связка ${cp.total} с, лишний хвост монтаж обрежет)`) : null),
-        h('li', {}, 'Референсы — загружай строго по порядку:', ...(cp.refs || []).map((r, i) => h('div', { class: 'copyrow' }, h('img', { class: 'refmini', src: fileUrl(r.file), onclick: () => zoom(r.file) }), h('code', {}, `@Image${i + 1} — ${r.label}`), dl(r.file, `Image${i + 1}_${clip.id}`)))),
+        cp.modelName ? h('li', {}, 'Модель: ', h('b', {}, cp.modelName)) : null,
+        h('li', {}, 'Картинки — загружай строго по порядку:', ...(cp.refs || []).map((r, i) => h('div', { class: 'copyrow' }, h('img', { class: 'refmini', src: fileUrl(r.file), onclick: () => zoom(r.file) }), h('code', {}, `${r.tag || '@Image' + (i + 1)} — ${r.label}`), dl(r.file, `Image${i + 1}_${clip.id}`)))),
+        cp.elements?.length ? h('li', {}, 'Elements — листы героев по порядку:', ...cp.elements.map((e, i) => h('div', { class: 'copyrow' }, h('img', { class: 'refmini', src: fileUrl(e.file), onclick: () => zoom(e.file) }), h('code', {}, `@Element${i + 1} — ${e.label}`), dl(e.file, `Element${i + 1}_${e.id}`)))) : null,
         h('li', {}, tool === 'Kling' ? 'Промпт целиком (если multi-shot — по кадру в поле, ниже):' : 'Промпт целиком:', h('div', { class: 'copyrow' }, h('code', {}, cp.text), h('button', { class: 'ghost', onclick: () => copy(cp.text) }, 'копировать'))),
         h('li', {}, 'По кадрам (для Kling multi-shot или если модель просит по шагам):', ...(cp.perShot || []).map((t) => h('div', { class: 'copyrow' }, h('code', {}, t), h('button', { class: 'ghost', onclick: () => copy(t) }, 'копировать')))),
         h('li', {}, 'Negative prompt: ', h('button', { class: 'ghost', onclick: () => copy(cp.negative || S.state.project.negative) }, 'копировать')),
@@ -1114,6 +1117,7 @@ function render(keepScroll) {
   else if (S.view === 'lib') renderLib();
   else if (S.view === 'montage') renderMontage();
   else if (S.view === 'git') renderGit();
+  else if (S.view === 'video') { if (!keepScroll || !$('.video')) renderVideo(); }
   else if (S.view === 'comic') { if (!keepScroll || !CM.data) renderComic(); }
   if (keepScroll) window.scrollTo(0, y);
 }

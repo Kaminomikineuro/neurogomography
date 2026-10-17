@@ -9,6 +9,7 @@
 | Раскадровка целиком, новые кадры, новые сцены | `.md` раскадровки серии (путь в поле `storyboard` серии) → потом `python studio/tools/import_storyboard.py "<md>"` (для серий 1–2 — без аргумента) и `python studio/tools/lines.py <серии>` |
 | Новая серия по главе | `studio/canon/howto/new-episode.md` |
 | Комикс: подсказки, подписи, страницы | `studio/canon/howto/comic.md` |
+| Видео в Seedance / Kling, связки кадров | `studio/canon/howto/video.md` |
 | Герои (`token`, `details` — руки, рукава, перчатки), локации, палитры, стиль, правила канона, вопросы | `studio/data/project.json` |
 
 ## Правила
