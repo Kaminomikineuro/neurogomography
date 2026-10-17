@@ -154,8 +154,9 @@ def track(segments, frames, fps, height, base_xy, face):
         for f in range(f_start, f_end):
             u = (f - f_start) / fps * speed
             st = b - u if seg.get('reverse') else a + u
-            i = min(len(pos) - 1, int(st * sfps))
-            p = pos[i].copy()
+            x = min(len(pos) - 1.001, max(0.0, st * sfps))
+            i = int(x)
+            p = pos[i] + (pos[i + 1] - pos[i]) * (x - i)  # между кадрами записи — плавно
             c = flock * (fs[i0] - fs[i])
             if c:
                 h = p[hip, :2].copy()

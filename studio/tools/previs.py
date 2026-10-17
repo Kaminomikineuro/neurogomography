@@ -301,11 +301,12 @@ for f in range(1, FRAMES + 1):
     cam.location = at_dist(L * (f - 1) / max(1, FRAMES - 1))
     if look == 'actors':
         pts = [Vector((*interp(a['keys'], t), look_z)) for a, *_ in actors]
-        pts += [Vector((*P[f - 1][names.index('Hips')][:2], look_z)) for a, names, P in mocap_actors]
+        # камера смотрит туда, где герои стоят (keys), а не на каждое движение корпуса — иначе дрожит
+        pts += [Vector((*interp(a['keys'], t), look_z)) for a, names, P in mocap_actors]
         tgt = sum(pts, Vector()) / len(pts)
     else:
         tgt = Vector(interp(look, t))
-    tgt = tgt if prev is None else prev.lerp(tgt, 0.15)  # мягко, без рывков
+    tgt = tgt if prev is None else prev.lerp(tgt, 0.08)  # мягко, без рывков
     prev = tgt
     d = tgt - cam.location
     cam.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
