@@ -40,3 +40,4 @@
 ## Видео: Seedance и Kling
 - Кадры с героями идут связками (`scene.clips`: `shots`, `tool`, `opts` — модель, секунды, пожелания) одним роликом в Seedance 2.0 или Kling 3.0; вставки без героев — Pixverse.
 - Вкладка «Видео» (`studio/public/video.js`) собирает пакет: `clipPrompt` в `studio/server.mjs` (картинки `@Image`, Elements для Kling, промпт по таймкодам). Как подстраивать — `studio/canon/howto/video.md`.
+- Превиз в Blender: `python studio/tools/previs.py studio/canon/previs/<связка>.json` (`--still 0 4 8` — быстрые кадры). Ролик идёт в Seedance как `@video1` (только камера), пакет промпта — `studio/canon/previs/<связка>_seedance.md`.
