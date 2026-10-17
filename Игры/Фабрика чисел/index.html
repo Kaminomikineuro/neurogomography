@@ -393,6 +393,31 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:3px}
 .pcheck small{color:var(--muted);margin-left:auto}
 .phelp{font-size:12px;color:var(--muted);line-height:1.4}
 
+/* English */
+.subj{grid-template-columns:repeat(3,1fr)}
+.sj{flex-direction:column;gap:0;height:66px}
+.sj b{font-size:24px;line-height:1.1}
+.sj small{font-size:12px}
+.cattabs{display:flex;gap:8px;justify-content:center;flex:none}
+.ctab{width:54px;height:48px;border-radius:14px;background:#0c1428;border:3px solid var(--line);font-size:26px;line-height:1;font-family:system-ui}
+.ctab.on{background:var(--yellow);border-color:#fff3b0}
+.wgrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:8px}
+@media (min-aspect-ratio:1/1){.wgrid{grid-template-columns:repeat(8,1fr)}}
+.wcard{border-radius:14px;background:var(--paper);box-shadow:0 4px 0 var(--paper-sh);font-size:clamp(28px,min(9vw,6vh),54px);line-height:1;display:grid;place-items:center;min-height:0;font-family:system-ui}
+.wcard.seen{outline:3px solid var(--yellow);outline-offset:-3px}
+.wcard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--paper-sh)}
+.cdot{display:inline-block;width:1em;height:1em;border-radius:50%;background:var(--c);border:3px solid rgba(0,0,0,.25);vertical-align:middle}
+.enum{font-family:var(--display);color:var(--ink);font-weight:400}
+.show .enum{color:var(--yellow)}
+.wtx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wtx b{font-family:var(--display);font-size:clamp(24px,7vw,44px);color:var(--yellow);font-weight:400;line-height:1.1}
+.wtx small{font-size:16px;color:var(--muted)}
+.wface{font-size:clamp(56px,min(18vw,13vh),110px);line-height:1;font-family:system-ui}
+.wface .cdot{font-size:1em}
+.btn.watch.big{height:clamp(90px,15vh,130px);min-width:clamp(90px,15vh,130px);font-size:clamp(44px,7vh,64px);border-radius:30px}
+.pic .pufik{height:1.2em;width:auto;display:inline-block}
+.vslots i.cslot{border:3px solid #fff}
+
 @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes bump{40%{transform:scale(1.25)}}
 @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
@@ -494,23 +519,32 @@ function newScreen(){
 
 /* ---------- voice ---------- */
 const synth=('speechSynthesis' in window)?window.speechSynthesis:null;
-let voice=null, lastQ='', lastSay='', curU=null;
+let voice=null, voiceEn=null, lastQ='', lastSay='', curU=null, sayTok=0;
 function pickVoice(){
   if(!synth)return;
-  const vs=synth.getVoices().filter(v=>/^ru/i.test(v.lang)||/russian|русск/i.test(v.name));
+  const all=synth.getVoices(),vs=all.filter(v=>/^ru/i.test(v.lang)||/russian|русск/i.test(v.name));
   voice=vs.find(v=>/google/i.test(v.name))||vs.find(v=>/milena|katya|alena|irina|svetlana|dariya|anna/i.test(v.name))||vs[0]||null;
+  const en=all.filter(v=>/^en/i.test(v.lang));
+  voiceEn=en.find(v=>/google us/i.test(v.name))||en.find(v=>/^en.US/i.test(v.lang)&&/samantha|google|aria|jenny|allison/i.test(v.name))||en.find(v=>/^en.(US|GB)/i.test(v.lang))||en[0]||null;
 }
 if(synth){pickVoice();try{synth.addEventListener('voiceschanged',pickVoice)}catch(e){synth.onvoiceschanged=pickVoice}}
 function setTalking(on){app.classList.toggle('talking',!!on)}
-function say(text){
-  subT.textContent=text;lastSay=text;
-  const g0=gen;
+/* say("текст") speaks Russian; say([["Cat!","en"],["— кошка.","ru"]]) speaks the parts in turn with matching voices */
+function say(x){
+  const tok=++sayTok;lastSay=x;
+  if(!Array.isArray(x))return speak(x,'ru',true);
+  subT.textContent=x.map(p=>p[0]).join(' ');
+  return (async()=>{for(const [t,l] of x){if(tok!==sayTok)return;await speak(t,l||'ru',false)}})();
+}
+function speak(text,lang,sub){
+  if(sub)subT.textContent=text;
+  const g0=gen,en=lang==='en';
   return new Promise(res=>{
     let done=false;
     const fin=()=>{if(done)return;done=true;setTalking(false);if(g0===gen)res()};
     if(!synth||muted){setTimeout(fin,600+text.length*45);return}
     const u=new SpeechSynthesisUtterance(text);
-    u.lang='ru-RU';if(voice)u.voice=voice;u.rate=.93;u.pitch=1.12;
+    u.lang=en?'en-US':'ru-RU';const vv=en?voiceEn:voice;if(vv)u.voice=vv;u.rate=en?.82:.93;u.pitch=en?1.05:1.12;
     u.onstart=()=>{if(!done)setTalking(true)};u.onend=fin;u.onerror=fin;
     curU=u;
     setTimeout(fin,3000+text.length*110);
@@ -740,7 +774,7 @@ function showStart(){
     ${pufik('wave hero')}
     <h1 class="logo">Фабрика<br>чисел</h1>
     <button class="play" id="play" aria-label="Играть"><svg viewBox="0 0 40 40"><path d="M12 7 L34 20 L12 33 Z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></button>
-    <p class="parent">Для взрослых: включите звук. Пуфик всё объясняет голосом — читать не нужно. Темы: состав числа до 20, буквы, слоги и гласные.</p>
+    <p class="parent">Для взрослых: включите звук. Пуфик всё объясняет голосом — читать не нужно. Темы: состав числа до 20, буквы и слоги, первые английские слова.</p>
     <p class="parent warn" id="vwarn" hidden></p>
   </div>`;
   $('#play').addEventListener('click',()=>{actx();sfx.good();showMenu(true)});
@@ -762,12 +796,12 @@ function showMenu(greet){
       <button class="pchg" data-chg="${p}" aria-label="Другой зверёк">↻</button></div>`).join('')}</div>
     <p class="parent whohelp">Нажмите на имя, чтобы ребёнок играл или отдыхал. ↻ — другой зверёк.</p>
     ${menuExtras()}
-    <div class="subj"><button class="sj" data-s="math"><b>123</b><small>Математика</small></button><button class="sj" data-s="rus"><b>АБВ</b><small>Русский</small></button></div>
+    <div class="subj"><button class="sj" data-s="math"><b>123</b><small>Математика</small></button><button class="sj" data-s="rus"><b>АБВ</b><small>Русский</small></button><button class="sj" data-s="eng"><b>ABC</b><small>English</small></button></div>
     <div class="tiles" id="tiles"></div>
     ${shelves}
   </div>`;
   renderTiles();bindMenuExtras();curScreen='menu';
-  view.querySelectorAll('.sj').forEach(b=>b.addEventListener('click',()=>{if(subj===b.dataset.s)return;subj=b.dataset.s;store.set('subj',subj);sfx.tap();renderTiles();say(subj==='rus'?'Русский язык! Буквы и слоги.':'Математика! Числа и счёт.')}));
+  view.querySelectorAll('.sj').forEach(b=>b.addEventListener('click',()=>{if(subj===b.dataset.s)return;subj=b.dataset.s;store.set('subj',subj);sfx.tap();renderTiles();say(subj==='rus'?'Русский язык! Буквы и слоги.':subj==='eng'?[['Английский язык!','ru'],['Hello!','en']]:'Математика! Числа и счёт.')}));
   view.querySelectorAll('.ptog').forEach(b=>b.addEventListener('click',()=>{
     const p=+b.dataset.p,card=$('#pc'+p);
     if(active[p]&&!active[1-p]){card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');say(`Кто-то должен играть! ${NAMES[p]} играет.`);return}
@@ -1081,7 +1115,7 @@ function houseTurn(){
 }
 
 /* ---------- Russian: letters, syllables, sounds ---------- */
-let subj=store.get('subj','math');if(subj!=='rus')subj='math';
+let subj=store.get('subj','math');if(subj!=='rus'&&subj!=='eng')subj='math';
 const VOW='АОУЫЭИЕЁЮЯ';
 const isVow=L=>VOW.includes(L.toUpperCase());
 const LNAME={А:'а',Б:'бэ',В:'вэ',Г:'гэ',Д:'дэ',Е:'е',Ё:'ё',Ж:'жэ',З:'зэ',И:'и',Й:'и краткое',К:'ка',Л:'эль',М:'эм',Н:'эн',О:'о',П:'пэ',Р:'эр',С:'эс',Т:'тэ',У:'у',Ф:'эф',Х:'ха',Ц:'цэ',Ч:'че',Ш:'ша',Щ:'ща',Ъ:'твёрдый знак',Ы:'ы',Ь:'мягкий знак',Э:'э',Ю:'ю',Я:'я'};
@@ -1322,9 +1356,227 @@ Object.assign(GAMES,{
 function renderTiles(){
   const el=$('#tiles');if(!el)return;
   el.innerHTML=Object.entries(GAMES).filter(([,g])=>g.subj===subj).map(([k,g])=>`<button class="tile" data-g="${k}" style="--c:${g.color}"><span class="ic">${g.icon}</span><span class="lbl">${g.name}</span></button>`).join('');
-  el.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>{sfx.tap();const g=t.dataset.g;if(GAMES[g].subj==='rus')startGame(g,'rus');else showPicker(g)}));
+  el.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>{sfx.tap();const g=t.dataset.g;if(GAMES[g].subj!=='math')startGame(g,GAMES[g].subj);else showPicker(g)}));
   view.querySelectorAll('.sj').forEach(b=>b.classList.toggle('on',b.dataset.s===subj));
 }
+
+/* ---------- English: words by ear, with a Russian translation ---------- */
+const EN_CATS=[
+  {id:'animals',icon:'🐾',name:'Животные',items:[['cat','кошка','🐱'],['dog','собака','🐶'],['cow','корова','🐄'],['pig','свинья','🐷'],['horse','лошадь','🐴'],['duck','утка','🦆'],['fish','рыба','🐟'],['bird','птица','🐦'],['frog','лягушка','🐸'],['lion','лев','🦁'],['monkey','обезьяна','🐵'],['bear','медведь','🐻'],['rabbit','кролик','🐰'],['mouse','мышка','🐭'],['elephant','слон','🐘'],['zebra','зебра','🦓']]},
+  {id:'food',icon:'🍎',name:'Еда',items:[['apple','яблоко','🍎'],['banana','банан','🍌'],['orange','апельсин','🍊'],['milk','молоко','🥛'],['bread','хлеб','🍞'],['egg','яйцо','🥚'],['cake','торт','🎂'],['ice cream','мороженое','🍦'],['cheese','сыр','🧀'],['juice','сок','🧃'],['grapes','виноград','🍇'],['carrot','морковка','🥕']]},
+  {id:'things',icon:'🧸',name:'Вещи',items:[['ball','мяч','⚽'],['car','машина','🚗'],['book','книга','📖'],['house','дом','🏠'],['sun','солнце','☀️'],['tree','дерево','🌳'],['star','звезда','⭐'],['flower','цветок','🌸'],['boat','лодка','⛵'],['train','поезд','🚂'],['bike','велосипед','🚲'],['teddy bear','плюшевый мишка','🧸']]},
+  {id:'colors',icon:'🎨',name:'Цвета',items:[['red','красный','#ff3d5a'],['blue','синий','#2f7bff'],['green','зелёный','#22c07a'],['yellow','жёлтый','#ffd23f'],['orange','оранжевый','#ff8a1f'],['pink','розовый','#ff7ec4'],['purple','фиолетовый','#8f5bff'],['brown','коричневый','#8b5a2b'],['black','чёрный','#1b1b22'],['white','белый','#ffffff']]},
+  {id:'numbers',icon:'🔢',name:'Числа',items:[['one','один',1],['two','два',2],['three','три',3],['four','четыре',4],['five','пять',5],['six','шесть',6],['seven','семь',7],['eight','восемь',8],['nine','девять',9],['ten','десять',10]]},
+];
+const EN_COLORS=EN_CATS[3].items;
+const EN_NUM=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
+const EN_ABC=[['A','apple','яблоко','🍎'],['B','ball','мяч','⚽'],['C','cat','кошка','🐱'],['D','dog','собака','🐶'],['E','egg','яйцо','🥚'],['F','fish','рыба','🐟'],['G','grapes','виноград','🍇'],['H','house','дом','🏠'],['I','ice cream','мороженое','🍦'],['J','juice','сок','🧃'],['K','kite','воздушный змей','🪁'],['L','lion','лев','🦁'],['M','monkey','обезьяна','🐵'],['N','nose','нос','👃'],['O','orange','апельсин','🍊'],['P','pig','свинья','🐷'],['Q','queen','королева','👸'],['R','rabbit','кролик','🐰'],['S','sun','солнце','☀️'],['T','tree','дерево','🌳'],['U','umbrella','зонтик','☂️'],['V','violin','скрипка','🎻'],['W','watch','часы','⌚'],['X','box','коробка','📦'],['Y','yo-yo','йо-йо','🪀'],['Z','zebra','зебра','🦓']];
+const enVow=L=>'AEIOU'.includes(L);
+function enFace(cid,it){
+  if(cid==='colors')return `<span class="cdot" style="--c:${it[2]}"></span>`;
+  if(cid==='numbers')return `<b class="enum">${it[2]}</b>`;
+  return it[2];
+}
+
+/* Словарик: tap pictures, hear the English word and its translation */
+function gameWords(){
+  newScreen();
+  S.shared=true;S.total=10;S.done=0;showTurn(false);
+  let cat=0,finished=false;const seen=new Set();
+  view.innerHTML=`<div class="screen abc">
+    <div class="show"><span class="se" id="wE">${pufik('','38 2 124 134')}</span><span class="wtx"><b id="wEn">Hello!</b><small id="wRu">Привет!</small></span></div>
+    <div class="cattabs">${EN_CATS.map((c,i)=>`<button class="ctab${i===0?' on':''}" data-c="${i}" aria-label="${c.name}">${c.icon}</button>`).join('')}</div>
+    <div class="wgrid" id="wg"></div>
+  </div>`;
+  function grid(){
+    const C=EN_CATS[cat];
+    $('#wg').innerHTML=C.items.map((it,i)=>`<button class="wcard${seen.has(C.id+i)?' seen':''}" data-i="${i}" aria-label="${it[0]}">${enFace(C.id,it)}</button>`).join('');
+    view.querySelectorAll('.wcard').forEach(b=>b.addEventListener('click',()=>{
+      if(finished)return;
+      const it=C.items[+b.dataset.i];
+      sfx.pop();b.classList.add('seen');
+      $('#wE').innerHTML=enFace(C.id,it);$('#wEn').textContent=it[0];$('#wRu').textContent=it[1];
+      seen.add(C.id+b.dataset.i);S.done=Math.min(seen.size,S.total);
+      const end=seen.size>=S.total,parts=[[it[0]+'!','en'],['— '+it[1]+'.','ru']];
+      if(isDuo()&&!end){nextTurn();showTurn(true);parts.push([`${pname()}, теперь ты!`,'ru'])}else setProgress();
+      const p=say(parts);
+      if(end){finished=true;p.then(()=>wait(300)).then(()=>say(`Ура! ${isDuo()?'Вы узнали':'Ты узнал'} десять английских слов!`)).then(reward)}
+    }));
+  }
+  view.querySelectorAll('.ctab').forEach(t=>t.addEventListener('click',()=>{
+    cat=+t.dataset.c;sfx.tap();view.querySelectorAll('.ctab').forEach(x=>x.classList.toggle('on',x===t));grid();say(EN_CATS[cat].name+'!');
+  }));
+  grid();
+  const who=isDuo()?both():pname();
+  if(isDuo())showTurn(true);
+  ask([[`${who}, это английский словарик. Нажимай${isDuo()?'те по очереди':''} на картинки — я скажу, как это по-английски. Например:`,'ru'],['Hello!','en'],['— это привет!','ru']]);
+}
+
+/* ABC: the English alphabet with a word for every letter */
+function gameEnAbc(){
+  newScreen();
+  S.shared=true;S.total=10;S.done=0;showTurn(false);
+  view.innerHTML=`<div class="screen abc">
+    <div class="show"><span class="sl con" id="sL">?</span><span class="se" id="sE">${pufik('','38 2 124 134')}</span><span class="wtx"><b id="sW"></b><small id="sR"></small></span></div>
+    <div class="abcgrid">${EN_ABC.map(([L])=>`<button class="ab ${enVow(L)?'vow':'con'}" data-l="${L}" aria-label="${L}">${L}</button>`).join('')}</div>
+  </div>`;
+  const seen=new Set();let finished=false;
+  view.querySelectorAll('.ab').forEach(b=>b.addEventListener('click',()=>{
+    if(finished)return;
+    const [L,word,ru,emo]=EN_ABC.find(x=>x[0]===b.dataset.l);
+    sfx.pop();b.classList.add('seen');
+    const sL=$('#sL');sL.textContent=L+L.toLowerCase();sL.className='sl '+(enVow(L)?'vow':'con');sL.classList.add('bump');
+    $('#sE').innerHTML=emo;$('#sW').textContent=word;$('#sR').textContent=ru;
+    seen.add(L);S.done=Math.min(seen.size,S.total);
+    const end=seen.size>=S.total,parts=[[`${L}. ${word}!`,'en'],['— '+ru+'.','ru']];
+    if(isDuo()&&!end){nextTurn();showTurn(true);parts.push([`${pname()}, теперь ты!`,'ru'])}else setProgress();
+    const p=say(parts);
+    if(end){finished=true;p.then(()=>wait(300)).then(()=>say(`Ура! ${isDuo()?'Вы узнали':'Ты узнал'} десять английских букв!`)).then(reward)}
+  }));
+  const who=isDuo()?both():pname();
+  if(isDuo())showTurn(true);
+  ask([[`${who}, это английский алфавит. Нажимай на буквы — я назову букву и слово. Например:`,'ru'],['A. Apple!','en'],['— яблоко.','ru']]);
+}
+
+/* Найди картинку: hear an English word, tap the matching picture */
+function listenDeck(){return shuffle([0,1,2].flatMap(ci=>EN_CATS[ci].items.map((it,i)=>[ci,i]))).slice(0,6)}
+function listenTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),[ci,ii]=takeTask(),C=EN_CATS[ci],T=C.items[ii];
+  const opts=shuffle([ii,...shuffle(C.items.map((x,i)=>i).filter(i=>i!==ii)).slice(0,3)]);
+  view.innerHTML=`<div class="screen pairs">
+    <div class="rrow"><button class="btn watch" id="rep" aria-label="Повторить">👂</button></div>
+    <div class="cards" style="--h:2">${opts.map((i,k)=>`<button class="card" data-i="${i}" data-v="${i}" style="animation-delay:${k*.05}s" aria-label="${C.items[i][0]}"><span class="wface">${C.items[i][2]}</span></button>`).join('')}</div>
+  </div>`;
+  const all=[...view.querySelectorAll('.card')];let tries=0,done=false;
+  $('#rep').addEventListener('click',()=>{sfx.tap();say([[T[0]+'!','en']])});
+  all.forEach(card=>card.addEventListener('click',async()=>{
+    if(done||card.classList.contains('wrong'))return;
+    const x=C.items[+card.dataset.i];
+    if(x===T){
+      done=true;card.classList.remove('pulse');sfx.good();grab(card,'blue');
+      S.prog[curP()].done++;setProgress();
+      await say([[praise(),'ru'],[T[0],'en'],[`— это ${T[1]}!`,'ru']]);
+      await wait(300);
+      advance(listenTask);
+    }else{
+      tries++;card.classList.add('wrong','shake');sfx.bad();
+      say([['Это','ru'],[x[0],'en'],[`— ${x[1]}. Послушай ещё раз:`,'ru'],[T[0]+'!','en']]);
+      if(tries>=2)lockPulse(all,ii);
+    }
+  }));
+  ask([[call(first)+(first?'Послушай английское слово и найди картинку. ':'')+'Найди:','ru'],[T[0]+'!','en']]);
+}
+
+/* Цвета: catch the balloons of the colour named in English */
+function colorDeck(){return shuffle(range(0,6)).slice(0,3)}
+function colorTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),ti=takeTask(),T=EN_COLORS[ti],need=3;let got=0;
+  view.innerHTML=`<div class="screen catch">
+    <div class="machine"><button class="btn watch" id="rep" aria-label="Повторить">👂</button><div class="vslots" id="vs">${'<i></i>'.repeat(need)}</div></div>
+    <div class="field" id="field"><div class="pipes" id="pipes"></div></div>
+  </div>`;
+  $('#rep').addEventListener('click',()=>{sfx.tap();say([['Лови','ru'],[T[0]+'!','en']])});
+  const field=$('#field'),FW=field.clientWidth,FH=field.clientHeight;
+  const lanes=FW<420?3:FW<760?4:5,laneW=FW/lanes,bs=Math.max(54,Math.min(110,laneW*.8,FH*.28));
+  field.style.setProperty('--bs',bs+'px');
+  $('#pipes').innerHTML=range(0,lanes-1).map(i=>`<i style="left:${(i+.5)*laneW}px"></i>`).join('');
+  const speed=FH/(first?8:6.5);
+  let balls=[],since=0,locked=false;
+  function make(ci,lane){
+    const C=EN_COLORS[ci],el=document.createElement('button');el.className='ball';el.setAttribute('aria-label',C[0]);
+    el.style.setProperty('--c',C[2]);el.style.setProperty('--cd',C[2]);
+    const o={ci,lane,el,x:(lane+.5)*laneW-bs/2,y:-bs,stop:false,gone:false};
+    el.style.transform=`translate3d(${o.x}px,${o.y}px,0)`;
+    el.addEventListener('pointerdown',e=>{e.preventDefault();hit(o)});
+    field.appendChild(el);balls.push(o);
+  }
+  function spawn(){
+    if(locked)return;
+    const live=balls.filter(o=>!o.gone&&!o.stop);
+    if(live.length<=lanes){
+      const free=range(0,lanes-1).filter(l=>!live.some(o=>o.lane===l&&o.y<bs*1.4));
+      if(free.length){
+        let ci;
+        if(since>=2||Math.random()<.45){ci=ti;since=0}else{ci=pick(range(0,6).filter(i=>i!==ti));since++}
+        make(ci,pick(free));
+      }
+    }
+    later(spawn,1250);
+  }
+  let last=performance.now();
+  function frame(t){
+    const dt=Math.min(.05,(t-last)/1000);last=t;
+    for(const o of balls){
+      if(o.stop||o.gone)continue;
+      o.y+=speed*dt;o.el.style.transform=`translate3d(${o.x}px,${o.y}px,0)`;
+      if(o.y>FH+4){o.gone=true;o.el.remove()}
+    }
+    balls=balls.filter(o=>!o.gone);
+    loopId=requestAnimationFrame(frame);
+  }
+  loopId=requestAnimationFrame(frame);
+  async function hit(o){
+    if(locked||o.stop||o.gone)return;
+    if(o.ci===ti){
+      o.stop=true;grab(o.el,'red');tone(784,.15,'triangle',.14);
+      const slot=$('#vs').children[got];slot.style.background=T[2];slot.classList.add('got','cslot');got++;
+      if(got>=need){
+        locked=true;balls.forEach(x=>{if(x!==o&&!x.gone){x.stop=true;x.el.classList.add('fade')}});
+        sfx.good();S.prog[curP()].done++;setProgress();
+        await say([[praise(),'ru'],[T[0],'en'],[`— это ${T[1]}!`,'ru']]);
+        await wait(300);
+        advance(colorTask);
+      }else say([[T[0]+'!','en']]);
+    }else{
+      o.stop=true;o.el.style.setProperty('--t',o.el.style.transform);o.el.classList.add('burst');
+      later(()=>{o.gone=true;o.el.remove()},360);
+      const C=EN_COLORS[o.ci];
+      sfx.bad();say([['Это','ru'],[C[0],'en'],[`— ${C[1]}. Лови`,'ru'],[T[0]+'!','en']]);
+    }
+  }
+  ask([[call(first)+(first?'Слушай английское слово и лови шарики такого цвета! Лови':'Лови'),'ru'],[T[0]+'!','en']]);
+  later(spawn,isDuo()?1100:700);
+}
+
+/* Числа: hear an English number from 1 to 10, tap the digit */
+function numDeck(){return shuffle(range(1,10)).slice(0,6)}
+function numTask(){
+  newScreen();showTurn(true);
+  const first=firstFor(),n=takeTask();
+  view.innerHTML=`<div class="screen first">
+    <div class="pic">${pufik('wave','0 0 200 250')}</div>
+    <button class="btn watch big" id="rep" aria-label="Повторить">👂</button>
+    <div class="hint" id="hint"></div>
+    <div class="answers" id="ans"></div>
+  </div>`;
+  $('#rep').addEventListener('click',()=>{sfx.tap();say([[EN_NUM[n]+'!','en']])});
+  let tries=0;
+  renderAnswers($('#ans'),options(n,11),async(v,btn,all)=>{
+    if(v===n){
+      all.forEach(x=>x.classList.add('locked'));btn.classList.remove('pulse');btn.classList.add('right');sfx.good();
+      $('#hint').innerHTML=slots(n,n,0);
+      S.prog[curP()].done++;setProgress();
+      await say([[praise(),'ru'],[EN_NUM[n],'en'],[`— это ${w(n)}!`,'ru']]);
+      await wait(300);
+      advance(numTask);
+    }else{
+      tries++;btn.classList.add('wrong');sfx.bad();
+      say([['Это','ru'],[EN_NUM[v],'en'],[`— ${w(v)}. Послушай ещё раз:`,'ru'],[EN_NUM[n]+'!','en']]);
+      if(tries>=2)lockPulse(all,n);
+    }
+  });
+  ask([[call(first)+(first?'Послушай английское число и найди его. ':'')+'Послушай:','ru'],[EN_NUM[n]+'!','en']]);
+}
+
+Object.assign(GAMES,{
+  words:{icon:'📖',name:'Словарик',color:'#2f7bff',subj:'eng',run:gameWords},
+  enabc:{icon:'🔠',name:'Алфавит ABC',color:'#e8459a',subj:'eng',run:gameEnAbc},
+  listen:{icon:'👂',name:'Найди картинку',color:'#17a866',subj:'eng',run:()=>{dealDeck(listenDeck());listenTask()}},
+  colors:{icon:'🎨',name:'Цвета',color:'#f07a12',subj:'eng',run:()=>{dealDeck(colorDeck());colorTask()}},
+  numbers:{icon:'🔢',name:'Числа',color:'#8f5bff',subj:'eng',run:()=>{dealDeck(numDeck());numTask()}},
+});
 
 /* ---------- gifts: boxes earned by winning, opened by tapping ---------- */
 const PRIZES=[
@@ -1449,7 +1701,7 @@ function showGifts(){
 }
 
 /* ---------- saved games: an unfinished round can be continued from the menu ---------- */
-const TASKFN={hide:()=>hideTask(),catch:()=>catchTask(),pairs:()=>pairsTurn(),house:()=>houseTurn(),slogi:()=>slogiTask(),first:()=>firstTask(),vowels:()=>vowelTask(),find:()=>findTask()};
+const TASKFN={hide:()=>hideTask(),catch:()=>catchTask(),pairs:()=>pairsTurn(),house:()=>houseTurn(),slogi:()=>slogiTask(),first:()=>firstTask(),vowels:()=>vowelTask(),find:()=>findTask(),listen:()=>listenTask(),colors:()=>colorTask(),numbers:()=>numTask()};
 function saveSession(){
   if(!TASKFN[S.game])return;
   const {game,mode,ps,turn,lastN,prog,intro,queue,house,boards}=S;
@@ -1489,7 +1741,7 @@ function loadAll(){
   const tb=store.get('toys2',null);if(tb&&Array.isArray(tb[0])&&Array.isArray(tb[1]))toysBy=tb;
   const gf=store.get('gifts',null);if(gf&&gf[0]&&gf[1]&&Array.isArray(gf[0].prizes)&&Array.isArray(gf[1].prizes))gifts=gf;
   const pc=store.get('prizecfg',null);if(pc&&typeof pc.rate==='number'&&pc.on)prizeCfg=pc;
-  subj=store.get('subj','math')==='rus'?'rus':'math';
+  subj=store.get('subj','math');if(subj!=='rus'&&subj!=='eng')subj='math';
 }
 (async()=>{
   try{
