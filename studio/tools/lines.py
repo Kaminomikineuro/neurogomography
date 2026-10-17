@@ -2,8 +2,10 @@
 
 Запуск: python studio/tools/lines.py  — дополняет кадры полем lines и пишет отчёт
 studio/canon/Реплики_Т2-01.md. Уже отредактированные в студии реплики не трогает.
+        python studio/tools/lines.py s01e03 s01e04 — любые серии: глава берётся из поля chapter серии,
+отчёт — studio/canon/Реплики_<серия>.md.
 """
-import json, os, re, difflib
+import json, os, re, sys, difflib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CHAPTER = os.path.join(ROOT, 'studio', 'canon', 'book', 'Т2-01 Это Грань.txt')
@@ -12,14 +14,30 @@ NAMES = {'Лиам': 'LIAM', 'Повелитель': 'LORD', 'Рой': 'ROY', '�
 OFFSCREEN = {('8.4', 'LIAM'), ('8.8', 'LIAM'), ('1.14', 'ROY')}
 CPS = 13  # русская речь ≈ 13 знаков в секунду
 
-book = re.sub(r'\s+', ' ', open(CHAPTER, encoding='utf-8').read())
 norm = lambda s: re.sub(r'[^а-яa-z0-9 ]', '', s.lower().replace('ё', 'е')).strip()
-nbook = norm(book)
+book = nbook = ''
+pieces, npieces = [], []
 
 
-# книга, разбитая на фразы: реплики сверяем с отрезками из 1–4 соседних фраз
-pieces = [x.strip(' ,—') for x in re.split(r'(?<=[.!?…»])\s+|\s+—\s+|[«»]', book) if len(x.strip(' ,—')) > 1]
-npieces = [norm(x) for x in pieces]
+def load_book(chapter):
+    global book, nbook, pieces, npieces
+    book = re.sub(r'\s+', ' ', open(chapter, encoding='utf-8').read())
+    nbook = norm(book)
+    # книга, разбитая на фразы: реплики сверяем с отрезками из 1–4 соседних фраз
+    pieces = [x.strip(' ,—') for x in re.split(r'(?<=[.!?…»])\s+|\s+—\s+|[«»]', book) if len(x.strip(' ,—')) > 1]
+    npieces = [norm(x) for x in pieces]
+
+
+def load_names():
+    # «Лиам» → LIAM: имена героев из project.json, первое слово имени
+    try:
+        pr = json.load(open(os.path.join(ROOT, 'studio', 'data', 'project.json'), encoding='utf-8'))
+        for c in pr.get('characters', []):
+            first = re.split(r'[\s(«]', c.get('name', ''))[0]
+            if first and first[0].isupper() and first not in NAMES:
+                NAMES[first] = c['id']
+    except Exception:
+        pass
 
 
 def book_match(text):
@@ -82,11 +100,16 @@ def parse(sound, chars):
 
 
 def main():
-    rep = ['# Реплики серий 1–2 (Т2, гл. 1)', '',
-           'Сверка с `studio/canon/book/Т2-01 Это Грань.txt` — актуальный Том 2 (docx от автора, 16.10.2026).', '',
+    load_names()
+    eps = sys.argv[1:] or ['s01e01', 's01e02']
+    first = json.load(open(os.path.join(ROOT, 'studio', 'data', 'episodes', eps[0] + '.json'), encoding='utf-8'))
+    chapter = os.path.join(ROOT, first['chapter']) if sys.argv[1:] and first.get('chapter') else CHAPTER
+    load_book(chapter)
+    rep = [f'# Реплики: {", ".join(eps)}', '',
+           f'Сверка с `{os.path.relpath(chapter, ROOT)}`.', '',
            'Режим: **губы** — герой в кадре говорит (нужен липсинк), **за кадром** — голос без губ, **VO** — мысли/рассказчик.', '',
            '| Кадр | с | Кто | Режим | Реплика | Длит. речи | Книга |', '|---|---|---|---|---|---|---|']
-    for ep in ('s01e01', 's01e02'):
+    for ep in eps:
         p = os.path.join(ROOT, 'studio', 'data', 'episodes', ep + '.json')
         e = json.load(open(p, encoding='utf-8'))
         for sc in e['scenes']:
@@ -118,7 +141,7 @@ def main():
                     if l.get('book'):
                         rep.append(f"| | | | | *в книге:* {l['book'][:300]} | | |")
         json.dump(e, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-    out = os.path.join(ROOT, 'studio', 'canon', 'Реплики_Т2-01.md')
+    out = os.path.join(ROOT, 'studio', 'canon', 'Реплики_Т2-01.md' if not sys.argv[1:] else f'Реплики_{"_".join(eps)}.md')
     open(out, 'w', encoding='utf-8').write('\n'.join(rep) + '\n')
     print('\n'.join(rep))
 

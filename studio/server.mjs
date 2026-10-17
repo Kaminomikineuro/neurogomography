@@ -8,6 +8,7 @@ import os from 'node:os';
 import { spawn, execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createGitSender } from './git-send.mjs';
+import { createAgent } from './agent.mjs';
 
 const STUDIO = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.dirname(STUDIO);
@@ -20,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-19.1';
+const VERSION = '2026-10-20.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -161,7 +162,10 @@ function buildPrompt(ref, opts = {}) {
     raw = (item.prompt || 'full-body figure') + ', STYLE';
     charIds = item.characters || [];
     const so = item.fromShot && findShot(ref.ep, item.fromShot);
-    if (so && selectedFile(so.item)) ownRefs.push([selectedFile(so.item), 'the same moment from the anime: copy the pose, outfit and expression, but draw ONLY the figure, full body, on a pure white background, no scenery']);
+    if (so && item.kind === 'panel') locId = so.item.location || so.scene?.location;
+    if (so && selectedFile(so.item)) ownRefs.push([selectedFile(so.item), item.kind === 'panel'
+      ? 'the same moment from the anime (key frame): keep the characters, outfit, place, light and mood, but recompose the picture for the comic panel format'
+      : 'the same moment from the anime: copy the pose, outfit and expression, but draw ONLY the figure, full body, on a pure white background, no scenery']);
   } else if (ref.kind === 'character') {
     raw = item.sheetPrompt || `anime character model sheet of ${item.token}, front, side and back views, expressions, plain white background, labeled ${item.id}`;
     raw += ', STYLE';
@@ -236,7 +240,8 @@ function buildPrompt(ref, opts = {}) {
   if (loc && !selectedFile(loc) && size !== 'close') warnings.push(`Нет референса локации «${loc.name}». Сначала сделай фон во вкладке «Локации».`);
 
   if (ref.kind === 'shot' || ref.kind === 'lab') lines.push('Format: ' + pr.format + '.');
-  if (ref.kind === 'comicart') lines.push('Format: vertical 2:3 portrait, the whole figure from head to toe fits inside the frame with a margin, pure flat white background (#FFFFFF) everywhere around the figure, no ground, no cast shadow, no frame, no text; a clean dark outline around the whole silhouette so it can be cut out.');
+  if (ref.kind === 'comicart' && item.kind === 'panel') lines.push(`Format: one comic panel illustration, ${item.aspect || '16:9 horizontal'} composition, full scene with background, no text, no speech bubbles, no panel borders, no frame.`);
+  else if (ref.kind === 'comicart') lines.push('Format: vertical 2:3 portrait, the whole figure from head to toe fits inside the frame with a margin, pure flat white background (#FFFFFF) everywhere around the figure, no ground, no cast shadow, no frame, no text; a clean dark outline around the whole silhouette so it can be cut out.');
   lines.push('Avoid: ' + pr.negative + '.');
   if (opts.note) {
     lines.push(opts.edit
@@ -387,7 +392,7 @@ function nextOut(dir, ext = '.png', prefix = 'v') {
 
 function label(ref) {
   if (ref.kind === 'scene') return `${ref.ep} · сцена ${ref.id} (мастер-план)`;
-  if (ref.kind === 'comicart') return `${ref.ep} · комикс, фигура ${ref.id}`;
+  if (ref.kind === 'comicart') return `${ref.ep} · комикс, ${String(ref.id).startsWith('panel_') ? 'картинка панели' : 'фигура'} ${ref.id}`;
   return ref.kind === 'shot' ? `${ref.ep} · кадр ${ref.id}` : ref.kind === 'lab' ? `проба ${ref.id.replace(/\|/g, ' · ')}` : `${ref.kind === 'character' ? 'персонаж' : 'локация'} ${ref.id}`;
 }
 
@@ -686,7 +691,15 @@ function openInOS(p) {
 }
 
 const gitSend = createGitSender(ROOT, (t) => logInbox(t));
+const agent = createAgent({ ROOT, STUDIO, DATA, config, logInbox: (t) => logInbox(t) });
 const routes = {
+  // ---- Claude в студии ----
+  'GET /api/agent': () => agent.status(),
+  'GET /api/agent/engines': () => agent.engines(true),
+  'POST /api/agent/send': (q, b) => agent.send({ text: String(b.text || '').trim(), ctx: b.ctx, threadId: b.thread, title: b.title }),
+  'POST /api/agent/stop': () => agent.stop(),
+  'POST /api/agent/new': () => agent.newThread(),
+  'POST /api/agent/thread': (q, b) => agent.switchThread(b.id),
   'GET /api/git/status': () => ({ ...gitSend.status(), job: gitSend.job() }),
   'GET /api/git/job': () => gitSend.job(),
   'POST /api/git/send': (q, b) => gitSend.start(b.maxMB),
@@ -722,6 +735,8 @@ const routes = {
     comic.arts ||= {};
     const a = (comic.arts[b.id] ||= { versions: [], selected: null });
     Object.assign(a, { prompt: b.prompt, characters: b.characters || [], fromShot: b.fromShot || null });
+    if (b.kind) a.kind = b.kind;
+    if (b.aspect) a.aspect = b.aspect;
     fs.mkdirSync(path.dirname(p), { recursive: true });
     writeJSON(p, comic);
     return a;

@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-19.1';
+const UI_VERSION = '2026-10-20.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -122,6 +122,7 @@ function renderBoard() {
     h('button', { class: S.pick ? 'primary' : '', onclick: () => (S.pick ? closePanel() : startPick()), title: 'Отметь кадры или целые сцены и перерисуй их одной кнопкой — с общей правкой или со своей у каждого' },
       S.pick ? 'Выйти из выбора' : '☑ Перерисовать скопом'),
     h('button', { onclick: drawMissing, title: 'Отправить в очередь все кадры без картинки (только видимые по фильтру сцены)' }, 'Нарисовать все недостающие'),
+    h('button', { onclick: newEpisodeDialog, title: 'Claude прочитает главу и сделает раскадровку, промпты, реплики, постановку и подписи для комикса' }, '🎬 Новая серия из главы'),
     h('button', { class: 'primary', onclick: doExport }, 'Пакет для видео'));
   const side = h('div', { class: 'scenes' }, ...S.ep.scenes.map((sc) => {
     const k = counts(sc.shots);
@@ -473,6 +474,14 @@ async function save(ref, patch) {
   if (ref.kind === 'shot' || ref.kind === 'scene') await loadEp(); else await loadState();
 }
 
+// чат с Claude, уже знающий, о чём речь
+function askClaudeAbout(ref) {
+  chatToggle(true);
+  const what = ref.kind === 'shot' ? `кадр ${ref.id}` : ref.kind === 'scene' ? `сцену ${ref.id}` : ref.kind === 'character' ? `персонажа ${ref.id}` : ref.kind === 'location' ? `локацию ${ref.id}` : 'это';
+  const input = $('#chatInput');
+  if (input && !input.value) { input.value = `Про ${what}: `; input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+}
+
 // ---------- перерисовка скопом ----------
 const BATCH_MODES = {
   basis: ['Заново, с опорой на текущую', 'Кодекс рисует кадр заново по новой постановке (общий план, схема, локация), а старую картинку берёт как черновик: лица, позы, ракурс. Подходит, когда поменялись место, фон или расстановка.'],
@@ -654,6 +663,7 @@ async function renderPanel() {
       s.status === 'approved' ? '✓ Утверждено' : 'Утвердить') : null,
     h('button', { onclick: () => gen1(false), disabled: !!run }, f ? 'Нарисовать заново' : 'Нарисовать'),
     h('button', { onclick: () => fileInput.click() }, 'Загрузить файл'), fileInput,
+    h('button', { onclick: () => askClaudeAbout(ref), title: 'Открыть чат с Claude про этот кадр / персонажа / локацию' }, '💬 Спросить Claude'),
     h('button', { title: 'Вставить картинку из буфера обмена (или просто Ctrl+V)', onclick: pasteFromButton }, '📋 Вставить'),
     h('button', { class: 'ghost', onclick: () => copy(preview.prompt) }, 'Копировать промпт'),
     ref.kind === 'shot' ? h('button', { class: 'ghost', title: 'Вырезанный кадр не попадает в пакет для видео и монтаж', onclick: async () => { await save(ref, { cut: !s.cut }); renderPanel(); render(true); } }, s.cut ? 'Вернуть кадр' : 'Вырезать кадр') : null,

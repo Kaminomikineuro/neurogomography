@@ -2,7 +2,17 @@
 
 Повторный запуск не затирает работу: версии картинок, статусы и правки
 из студии сохраняются, обновляются только тексты из раскадровки.
-Запуск: python studio/tools/import_storyboard.py
+Запуск: python studio/tools/import_storyboard.py            — серии 1–2 (Т2, гл. 1)
+        python studio/tools/import_storyboard.py <файл.md>  — любая раскадровка с шапкой studio:
+
+<!-- studio
+ep: s01e03 | Серия 3 — «Название» | сцены 1-6 | финал: чем кончается
+ep: s01e04 | Серия 4 — «Название» | сцены 7-12
+chapter: studio/canon/book/Т2-02 Название.txt
+source: Т2, гл. 2 «Название»
+-->
+Сцена: «## СЦЕНА 1. Название · ~40 с · @council» (после @ — id локации из project.json).
+Кадр: «**1.1** · 4 с · Средний · Kling», дальше строки «Кадр:», «Звук:», «IMG:», «VID:».
 """
 import json, os, re, sys
 
@@ -23,6 +33,9 @@ TOOLS = ['Pixverse', 'Kling', 'Seedance']
 EXTRA_CHARS = [('ROY', r'young (drayk )?captain'), ('ARDAN', r'female (drayk )?commander'),
                ('BELFI', r'old (stooped )?(drayk )?general|old man'), ('KATNAR', r'boulder .*beast|tusks'),
                ('ZERR', r'horn-like ears'), ('AKHEOP', r'humanoid giants'), ('BASTIAN', r'commander seen from behind')]
+
+
+PROJECT_CHARS = []
 
 
 def code(s):
@@ -66,7 +79,8 @@ def parse_shot_block(sid, head, body):
     if extra:
         shot['note'] = ' '.join(extra)
     txt = shot['img'] + ' ' + shot['vid']
-    shot['characters'] = [t for t in CHAR_TOKENS if '[' + t + ']' in txt]
+    tokens = list(dict.fromkeys(CHAR_TOKENS + PROJECT_CHARS))
+    shot['characters'] = [t for t in tokens if '[' + t + ']' in txt]
     for t, rx in EXTRA_CHARS:
         if re.search(rx, txt, re.I) and t not in shot['characters']:
             shot['characters'].append(t)
@@ -77,8 +91,16 @@ def parse_shot_block(sid, head, body):
     return shot
 
 
-def parse_storyboard():
-    lines = open(SB, encoding='utf-8').read().split('\n')
+def project_chars():
+    try:
+        pr = json.load(open(os.path.join(ROOT, 'studio', 'data', 'project.json'), encoding='utf-8'))
+        return [c['id'] for c in pr.get('characters', [])]
+    except Exception:
+        return []
+
+
+def parse_storyboard(sb=None, generic=False):
+    lines = open(sb or SB, encoding='utf-8').read().split('\n')
     scenes, cur, sid, head, body = [], None, None, None, []
 
     def flush():
@@ -88,11 +110,13 @@ def parse_storyboard():
         sid, head, body = None, None, []
 
     for line in lines:
-        m = re.match(r'^## СЦЕНА (\d+)\. (.+?) · ~(\d+) с', line)
+        m = re.match(r'^## СЦЕНА (\d+)\. (.+?) · ~(\d+) с(.*)$', line)
         if m:
             flush()
             n = int(m.group(1))
-            cur = {'n': n, 'title': m.group(2).strip(), 'dur': int(m.group(3)), 'location': SCENE_LOC.get(n), 'shots': []}
+            loc = re.search(r'@([\w-]+)', m.group(4) or '')
+            cur = {'n': n, 'title': m.group(2).strip(), 'dur': int(m.group(3)),
+                   'location': loc.group(1) if loc else (None if generic else SCENE_LOC.get(n)), 'shots': []}
             scenes.append(cur)
             continue
         if re.match(r'^## \d\. ', line) or line.startswith('# СЕРИЯ'):
@@ -142,18 +166,77 @@ def merge(old, new):
     if not old:
         return new
     keep = {s['id']: s for sc in old['scenes'] for s in sc['shots']}
+    old_sc = {sc['n']: sc for sc in old['scenes']}
     for sc in new['scenes']:
+        o = old_sc.get(sc['n'])
+        # постановка сцены, мастер-план и план сверху живут в студии
+        for k in ('staging', 'masterPrompt', 'plan', 'versions', 'selected', 'caption'):
+            if o and k in o:
+                sc[k] = o[k]
+        if o and o.get('location'):
+            sc['location'] = o['location']  # локацию сцены могли поменять в студии — она главнее
         for s in sc['shots']:
             o = keep.get(s['id'])
             if not o:
                 continue
-            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs', 'videos', 'videoSelected', 'videoStatus', 'tool', 'cut', 'lines', 'linesFrom'):
+            for k in ('versions', 'selected', 'status', 'history', 'location', 'characters', 'img', 'vid', 'locked', 'notes', 'refs', 'videos', 'videoSelected', 'videoStatus', 'tool', 'cut', 'lines', 'linesFrom', 'continuity', 'comic'):
                 if k in o:
                     s[k] = o[k]
     return new
 
 
+def parse_header(sb):
+    text = open(sb, encoding='utf-8').read()
+    m = re.search(r'<!--\s*studio(.*?)-->', text, re.S)
+    if not m:
+        sys.exit('В раскадровке нет шапки <!-- studio ... --> (см. начало import_storyboard.py)')
+    eps, meta = [], {}
+    for line in m.group(1).split('\n'):
+        line = line.strip()
+        if line.startswith('ep:'):
+            parts = [p.strip() for p in line[3:].split('|')]
+            e = {'id': parts[0], 'title': parts[1] if len(parts) > 1 else parts[0], 'from': 0, 'to': 10 ** 6, 'note': ''}
+            for p in parts[2:]:
+                r = re.match(r'сцены?\s*(\d+)\s*[-–]\s*(\d+)', p)
+                if r:
+                    e['from'], e['to'] = int(r.group(1)), int(r.group(2))
+                elif p.startswith('финал:'):
+                    e['note'] = p[6:].strip()
+            eps.append(e)
+        elif ':' in line:
+            k, v = line.split(':', 1)
+            meta[k.strip()] = v.strip()
+    return eps, meta
+
+
+def main_generic(sb):
+    global PROJECT_CHARS
+    PROJECT_CHARS = project_chars()
+    eps, meta = parse_header(sb)
+    scenes = parse_storyboard(sb, generic=True)
+    for sc in scenes:
+        for s in sc['shots']:
+            s.setdefault('location', None)
+            s.setdefault('status', 'todo')
+            s.setdefault('versions', [])
+            s.setdefault('selected', None)
+    for e in eps:
+        sc = [x for x in scenes if e['from'] <= x['n'] <= e['to']]
+        path = os.path.join(OUT, e['id'] + '.json')
+        old = json.load(open(path, encoding='utf-8')) if os.path.exists(path) else None
+        ep = {'id': e['id'], 'title': e['title'], 'source': meta.get('source', ''), 'note': e['note'],
+              'storyboard': os.path.relpath(os.path.abspath(sb), ROOT).replace(os.sep, '/'),
+              'chapter': meta.get('chapter', ''), 'scenes': sc}
+        ep = merge(old, ep)
+        json.dump(ep, open(path, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+        print(e['id'], len(sc), 'сцен,', sum(len(s['shots']) for s in sc), 'кадров')
+
+
 def main():
+    if len(sys.argv) > 1:
+        return main_generic(sys.argv[1])
+    global PROJECT_CHARS
+    PROJECT_CHARS = project_chars()
     scenes = [parse_cold_open()] + parse_storyboard()
     ep1 = [s for s in scenes if s['n'] <= 7]
     ep2 = [s for s in scenes if s['n'] >= 8]

@@ -31,3 +31,8 @@
 ## Комикс
 - Вкладка «Комикс» (`studio/public/comic.js`) собирает страницы манги или ленту вебтуна из кадров серии. Раскладка лежит в `studio/data/comics/<серия>.json`.
 - Подсказки для автосклейки ведёт Claude в `studio/canon/comic/<серия>.json`: `splash` (кадр на всю страницу), `hero` (страница с большой фигурой героя), `eyes`, `spark`, `stickers`, `captions` (короткие цитаты из книги), `sfx`, `kind` (вид пузыря), `sides` (с какой стороны стоит говорящий в сцене).
+
+## Claude в студии
+- В студии есть чат «💬 Claude» (`studio/agent.mjs`, `studio/public/chat.js`): студия запускает `claude -p` в папке репозитория (если Claude Code нет — `codex exec`). Разговоры — `studio/data/chat.json`.
+- Порядки работы для таких запусков — `studio/canon/howto/`: `new-episode.md` (серия по главе), `comic.md` (комикс), `studio-chat.md` (любые просьбы из студии). Skills: `.claude/skills/new-episode`, `.claude/skills/comic-hints`.
+- Инструменты общие для всех глав: `python studio/tools/import_storyboard.py "<md>"` (шапка `<!-- studio ... -->`), `python studio/tools/lines.py <серии>`.

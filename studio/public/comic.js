@@ -1,14 +1,15 @@
 // Студия «Белая кровь» — комикс: автосклейка страниц из кадров серии,
 // пузыри с репликами из книги, подписи, звуки, эффекты манги, большая фигура героя.
 // Манга — страницы 1000×1414 (как B5). Вебтун — длинная лента шириной 800.
-const CM = { data: null, hints: {}, page: 0, sel: null, dim: {}, cut: {}, timer: null, ep: null };
+const CM = { data: null, hints: {}, page: 0, sel: null, dim: {}, cut: {}, tone: {}, timer: null, ep: null };
 const MANGA = { w: 1000, h: 1414, m: 44, g: 16 };
 const WEB = { w: 800, gap: 70, sceneGap: 260, pageH: 7000 };
 const FONT = "'Arial Narrow','Roboto Condensed','Segoe UI',Arial,sans-serif";
 const BUBBLES = {
   speak: 'Речь', think: 'Мысли', whisper: 'Шёпот', yell: 'Крик', scream: 'Вопль', burst: 'Удар / взрыв',
-  spooky: 'Жуть', digital: 'Связь / магия', dreamy: 'Воспоминание', caption: 'Подпись', 'caption-dark': 'Подпись (тёмная)', sfx: 'Звук',
+  spooky: 'Жуть', digital: 'Связь / магия', dreamy: 'Воспоминание', caption: 'Подпись', 'caption-dark': 'Подпись (тёмная)', sfx: 'Звук', title: 'Заголовок',
 };
+const COLORS = { full: 'полный цвет', 'ink-red': 'ч/б + красный', ink: 'ч/б (тушь)' };
 const FX = { '': 'без эффекта', speed: 'линии скорости →', speedv: 'линии скорости ↓', focus: 'фокус-линии (в центр)', flash: 'вспышка', dark: 'затемнение краёв' };
 
 // ---------- данные ----------
@@ -41,7 +42,7 @@ function wrap(text, fs, kind) {
   mctx.font = `${kind === 'sfx' ? 900 : 700} ${fs}px ${FONT}`;
   const words = String(text || '').split(/\s+/).filter(Boolean);
   const len = String(text || '').length;
-  const maxW = kind === 'sfx' ? 1e9 : Math.max(fs * 4.5, Math.min(fs * 13, Math.sqrt(len) * fs * 1.9));
+  const maxW = kind === 'sfx' || kind === 'title' ? 1e9 : Math.max(fs * 4.5, Math.min(fs * 13, Math.sqrt(len) * fs * 1.9));
   const lines = [];
   let cur = '';
   for (const w of words) {
@@ -74,7 +75,7 @@ function bubbleSVG(b, sel) {
   const rnd = PRNG(b.id);
   const shapes = []; // [d, extra]
   let stroke = '#111', sw = 3, dash = '', fill = '#fff', color = '#111';
-  const tail = b.tail && !/caption|sfx/.test(k) ? b.tail : null;
+  const tail = b.tail && !/caption|sfx|title/.test(k) ? b.tail : null;
   if (k === 'speak' || k === 'whisper') {
     shapes.push(P(ellipsePts(cx, cy, rx, ry, 48)));
     if (tail) shapes.push(P(tailPts(cx, cy, rx, ry, tail)));
@@ -120,7 +121,10 @@ function bubbleSVG(b, sel) {
   const d = shapes.join(' ');
   const rot = b.rot ? ` rotate(${b.rot} ${cx} ${cy})` : '';
   let body = '';
-  if (k === 'sfx') {
+  if (k === 'title') {
+    const ffs = fs * 2.6;
+    body = t.lines.map((l, i) => `<text x="${cx}" y="${cy + (i - (t.lines.length - 1) / 2) * ffs * 1.05}" font-family="${FONT}" font-weight="900" font-size="${ffs}" text-anchor="middle" dominant-baseline="central" fill="${b.color || '#fff'}" stroke="#111" stroke-width="${ffs * 0.12}" paint-order="stroke" stroke-linejoin="round" letter-spacing="2">${esc(l)}</text>`).join('');
+  } else if (k === 'sfx') {
     const ffs = fs * 2.1;
     body = t.lines.map((l, i) => `<text x="${cx}" y="${cy + (i - (t.lines.length - 1) / 2) * ffs}" font-family="${FONT}" font-weight="900" font-style="italic" font-size="${ffs}" text-anchor="middle" dominant-baseline="central" fill="${b.color || '#111'}" stroke="#fff" stroke-width="${ffs * 0.16}" paint-order="stroke" stroke-linejoin="round" letter-spacing="1">${esc(l)}</text>`).join('');
   } else {
@@ -184,6 +188,52 @@ function fxSVG(pn, b) {
   }
   return out;
 }
+// картинка панели: своя (нарисованная для комикса) или ключевой кадр аниме
+function artFile(id) {
+  const a = id && CM.data?.arts?.[id];
+  return a && a.selected != null ? a.versions?.[a.selected]?.file || null : null;
+}
+const panelFile = (pn) => artFile(pn.art) || shotImg(shotById(pn.shot));
+const toneOf = (pg, pn) => (pn && pn.color) || pg.color || CM.data?.color || CM.hints.color || 'full';
+const toneKey = (src, mode) => src + '|' + mode + '|' + (CM.data?.redHue ?? 6);
+// «Ч/б + красный»: всё в серой туши, цветом остаётся только чистый красный (солнце, кровь, рубин)
+function toneImage(src, mode) {
+  const key = toneKey(src, mode);
+  if (CM.tone[key]) return Promise.resolve(CM.tone[key]);
+  return new Promise((ok) => {
+    const im = new Image();
+    im.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = im.naturalWidth; c.height = im.naturalHeight;
+      const x = c.getContext('2d');
+      x.drawImage(im, 0, 0);
+      const d = x.getImageData(0, 0, c.width, c.height), a = d.data;
+      const hueW = CM.data?.redHue ?? 6;
+      for (let i = 0; i < a.length; i += 4) {
+        const r = a[i] / 255, g = a[i + 1] / 255, b = a[i + 2] / 255;
+        const mx = Math.max(r, g, b), mn = Math.min(r, g, b), dl = mx - mn;
+        let L = 0.3 * r + 0.59 * g + 0.11 * b;
+        L = Math.min(1, Math.max(0, (L - 0.5) * 1.3 + 0.5)); // тушь контрастнее
+        let keep = 0;
+        if (mode === 'ink-red' && dl > 0 && mx === r) {
+          let hdeg = 60 * (((g - b) / dl) % 6);
+          if (hdeg < 0) hdeg += 360;
+          const dist = Math.min(hdeg, 360 - hdeg), sat = dl / mx;
+          keep = Math.max(0, Math.min(1, (hueW + 6 - dist) / 6)) * Math.max(0, Math.min(1, (sat - 0.45) / 0.2)) * (mx > 0.2 ? 1 : 0);
+        }
+        a[i] = (r * keep + L * (1 - keep)) * 255;
+        a[i + 1] = (g * keep + L * (1 - keep)) * 255;
+        a[i + 2] = (b * keep + L * (1 - keep)) * 255;
+      }
+      x.putImageData(d, 0, 0);
+      CM.tone[key] = c.toDataURL('image/jpeg', 0.92);
+      if (/^data:image\/png/.test(src)) CM.tone[key] = c.toDataURL('image/png');
+      ok(CM.tone[key]);
+    };
+    im.onerror = () => ok(null);
+    im.src = src.startsWith('data:') ? src : fileUrl(src);
+  });
+}
 function figReady(pg) {
   const art = pg.figure && CM.data.arts?.[pg.figure.art];
   const file = art && art.selected != null && art.versions?.[art.selected]?.file;
@@ -192,22 +242,26 @@ function figReady(pg) {
 function panelSVG(pn, i, sel, opt) {
   // когда фигура героя готова, её панель-заглушка уступает место белому листу
   if (pn.heroSlot && opt.fig) return sel ? `<path d="${P(pn.poly)}" fill="none" stroke="#e8553d" stroke-width="3" stroke-dasharray="10 6" pointer-events="none"/>` : '';
-  const s = shotById(pn.shot);
-  const file = shotImg(s);
+  const file = panelFile(pn);
   const cp = `cp${opt.uid}_${i}`;
   const b = bbox(pn.poly);
   let inner;
-  if (file) {
+  const mode = toneOf(opt.pg, pn);
+  if (!pn.shot && !pn.art) {
+    inner = `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="${pn.fill === 'black' ? '#0d0a0c' : '#fff'}"/>`;
+  } else if (file) {
     const pl = imgPlace(pn, file);
-    inner = `<image data-k="img" href="${opt.src(file)}" xlink:href="${opt.src(file)}" x="${pl.x}" y="${pl.y}" width="${pl.w}" height="${pl.h}" preserveAspectRatio="none"/>`;
+    const src = mode !== 'full' && CM.tone[toneKey(file, mode)] ? CM.tone[toneKey(file, mode)] : opt.src(file);
+    inner = `<image data-k="img" href="${src}" xlink:href="${src}" x="${pl.x}" y="${pl.y}" width="${pl.w}" height="${pl.h}" preserveAspectRatio="none"/>`;
   } else {
     inner = `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="#ddd"/><text x="${b.x + b.w / 2}" y="${b.y + b.h / 2}" text-anchor="middle" font-family="${FONT}" font-size="22" fill="#777">кадр ${esc(pn.shot || '?')} — нет картинки</text>`;
   }
   return `<clipPath id="${cp}"><path d="${P(pn.poly)}"/></clipPath>`
     + `<g data-k="panel" data-i="${i}" clip-path="url(#${cp})" style="cursor:grab">${inner}${fxSVG(pn, b)}</g>`
     + (pn.border === false ? '' : `<path d="${P(pn.poly)}" fill="none" stroke="#111" stroke-width="4" stroke-linejoin="miter" pointer-events="none"/>`)
-    + (sel ? `<path d="${P(pn.poly)}" fill="none" stroke="#e8553d" stroke-width="4" stroke-dasharray="10 6" pointer-events="none"/>` : '')
-    + (opt.labels ? `<text x="${b.x + 8}" y="${b.y + 22}" font-family="${FONT}" font-size="16" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" pointer-events="none">${esc(pn.shot)}</text>` : '');
+    + (sel ? `<path d="${P(pn.poly)}" fill="none" stroke="#e8553d" stroke-width="4" stroke-dasharray="10 6" pointer-events="none"/>`
+      + pn.poly.map((p, v) => `<circle data-k="vtx" data-i="${i}" data-v="${v}" cx="${p[0]}" cy="${p[1]}" r="11" fill="#e8553d" stroke="#fff" stroke-width="3" style="cursor:nwse-resize"/>`).join('') : '')
+    + (opt.labels && pn.shot ? `<text x="${b.x + 8}" y="${b.y + 22}" font-family="${FONT}" font-size="16" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" pointer-events="none">${esc(pn.shot)}${pn.art && artFile(pn.art) ? ' ✎' : ''}</text>` : '');
 }
 function figureSVG(pg, sel, opt) {
   const f = pg.figure;
@@ -215,8 +269,10 @@ function figureSVG(pg, sel, opt) {
   const art = CM.data.arts?.[f.art];
   const file = art && art.selected != null && art.versions?.[art.selected]?.file;
   if (!file) return '';
-  const src = opt.cutSrc(file, f.thr ?? 28);
+  let src = opt.cutSrc(file, f.thr ?? 28);
   if (!src) return '';
+  const mode = toneOf(pg);
+  if (mode !== 'full' && CM.tone[toneKey(src, mode)]) src = CM.tone[toneKey(src, mode)];
   const d = CM.dim[file] || { w: 1024, h: 1536 };
   const h = f.h, w = h * d.w / d.h;
   return `<g data-k="fig" style="cursor:move" filter="url(#halo)"><image href="${src}" xlink:href="${src}" x="${f.x - w / 2}" y="${f.y}" width="${w}" height="${h}"/></g>`
@@ -229,11 +285,13 @@ function pageSVG(pg, opt = {}) {
   const defs = `<defs><radialGradient id="vign"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.75"/></radialGradient>`
     + `<filter id="halo" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="dilate" radius="7" result="d"/><feFlood flood-color="#fff"/><feComposite in2="d" operator="in" result="w"/><feMorphology in="SourceAlpha" operator="dilate" radius="9" result="d2"/><feFlood flood-color="#111"/><feComposite in2="d2" operator="in" result="k"/><feMerge><feMergeNode in="k"/><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
   opt.fig = figReady(pg);
+  opt.pg = pg;
+  const bands = (pg.bands || []).map((bd, k) => `<linearGradient id="bd${opt.uid}_${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${bd.from}"/><stop offset="1" stop-color="${bd.to}"/></linearGradient><rect x="0" y="${bd.y}" width="${pg.w}" height="${bd.h}" fill="url(#bd${opt.uid}_${k})" pointer-events="none"/>`).join('');
   const panels = pg.panels.map((pn, i) => panelSVG(pn, i, isSel('panel', i), opt)).join('');
   const fig = figureSVG(pg, isSel('fig', 0), opt);
   const marks = (pg.marks || []).map((m) => (m.kind === 'anger' ? angerSVG(m, isSel('mark', m.id)) : sparkSVG(m, isSel('mark', m.id)))).join('');
   const bubbles = (pg.bubbles || []).map((b) => bubbleSVG(b, isSel('bubble', b.id))).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${pg.w} ${pg.h}" width="${opt.width || pg.w}" height="${opt.width ? opt.width * pg.h / pg.w : pg.h}">${defs}<rect data-k="bg" width="${pg.w}" height="${pg.h}" fill="${pg.bg || '#fff'}"/>${panels}${fig}${marks}${bubbles}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${pg.w} ${pg.h}" width="${opt.width || pg.w}" height="${opt.width ? opt.width * pg.h / pg.w : pg.h}">${defs}<rect data-k="bg" width="${pg.w}" height="${pg.h}" fill="${pg.bg || '#fff'}"/>${bands}${panels}${fig}${marks}${bubbles}</svg>`;
 }
 
 // ---------- автосклейка ----------
@@ -400,7 +458,9 @@ function autoWebtoon() {
     const c = cls(s);
     if (lastScene !== null && sc.n !== lastScene) y += WEB.sceneGap - WEB.gap;
     lastScene = sc.n;
-    const h = c.eyes ? 260 : c.splash ? 1100 : c.size === 'close' ? 900 : c.size === 'wide' ? 520 : 640;
+    // падение и полёт — одна высокая панель: читатель листает и «падает» вместе с героем
+    const fall = /пикир|падает|прыга|срывается|летит вниз|швыря/.test((s.frame || '').toLowerCase());
+    const h = c.eyes ? 260 : fall ? 1500 : c.splash ? 1100 : c.size === 'close' ? 900 : c.size === 'wide' ? 520 : 640;
     if (y + h > WEB.pageH - 100) newPage();
     const capSpace = CM.hints.captions?.[s.id] ? 90 : 0;
     y += capSpace;
@@ -408,6 +468,18 @@ function autoWebtoon() {
     const poly = [[0, y + sl], [W, y], [W, y + h], [0, y + h - sl]];
     const pn = { id: cid(), shot: s.id, poly, crop: { s: 1, x: 0.5, y: c.eyes ? 0.42 : 0.5 }, border: false, fx: c.impact ? (c.size === 'close' ? 'focus' : 'speed') : '' };
     pg.panels.push(pn);
+    // тёмные сцены (разлом, ночь): фон ленты темнеет плавно
+    const dark = (CM.hints.darkScenes || []).includes(sc.n) || /rift|night|ночь/.test(s.location || sc.location || '');
+    if (dark) {
+      const top = y - capSpace - WEB.gap, bot = y + h + WEB.gap;
+      const last = pg.bands?.at(-1);
+      pg.bands ||= [];
+      if (last && last.dark && last.y + last.h >= top - 1) last.h = bot - last.y;
+      else pg.bands.push({ y: top - 260, h: 260, from: '#ffffff', to: '#141014' }, { y: top, h: bot - top, from: '#141014', to: '#141014', dark: true });
+    } else if (pg.bands?.at(-1)?.dark && !pg.bands.at(-1).closed) {
+      const last = pg.bands.at(-1); last.closed = true;
+      pg.bands.push({ y: last.y + last.h, h: 260, from: '#141014', to: '#ffffff' });
+    }
     const b = bbox(poly);
     // в вебтуне подпись — в белом поле над кадром, реплики — по краю кадра
     pg.marks.push(...linesToBubbles(s, sc, { x: b.x + 40, y: b.y - capSpace + 10, w: b.w - 80, h: b.h * 0.9 + capSpace }, pg.bubbles, 'l'), ...sparkFor(s, b));
@@ -439,12 +511,23 @@ function saveComic(now) {
 }
 async function preload(pages) {
   const files = new Set();
+  const tones = [];
   for (const pg of pages) {
-    for (const pn of pg.panels) { const f = shotImg(shotById(pn.shot)); if (f) files.add(f); }
-    const art = pg.figure && CM.data.arts?.[pg.figure.art];
-    const ff = art && art.selected != null && art.versions?.[art.selected]?.file;
-    if (ff) { files.add(ff); await cutout(ff, pg.figure.thr ?? 28); }
+    for (const pn of pg.panels) {
+      const f = panelFile(pn);
+      if (!f) continue;
+      files.add(f);
+      const mode = toneOf(pg, pn);
+      if (mode !== 'full') tones.push([f, mode]);
+    }
+    const ff = pg.figure && artFile(pg.figure.art);
+    if (ff) {
+      files.add(ff);
+      const cut = await cutout(ff, pg.figure.thr ?? 28);
+      if (cut && toneOf(pg) !== 'full') tones.push([cut, toneOf(pg)]);
+    }
   }
+  for (const [f, mode] of tones) await toneImage(f, mode);
   await Promise.all([...files].filter((f) => !CM.dim[f]).map((f) => new Promise((ok) => {
     const im = new Image();
     im.onload = () => { CM.dim[f] = { w: im.naturalWidth, h: im.naturalHeight }; ok(); };
@@ -521,6 +604,8 @@ async function renderComic() {
     pg ? h('button', { onclick: () => addBubble('sfx') }, '💥 звук') : null,
     pg ? h('button', { onclick: () => addMark('spark') }, '⚡ искру взглядов') : null,
     pg ? h('button', { onclick: () => addMark('anger') }, '💢') : null,
+    pg ? h('button', { onclick: addCover, title: 'Обложка главы: кадр на весь лист и название серии' }, '＋ обложку') : null,
+    h('button', { onclick: comicHintsAsk, title: 'Claude возьмёт из главы подписи, звуки, ключевые кадры и обновит подсказки комикса' }, '✍ Подписи из книги (Claude)'),
     D.pages.length ? h('button', { class: 'primary', onclick: exportComic }, '⬇ Сохранить страницы PNG') : null);
   if (!D.pages.length) {
     main.replaceChildren(h('div', { class: 'comic' }, tools, h('div', { class: 'comic-empty' },
@@ -581,12 +666,13 @@ function bindStage(stage, pg) {
     else if (k === 'spark') { const m = pg.marks.find((x) => x.id === t.dataset.id); drag = { k, m, i: +t.dataset.i, p }; }
     else if (k === 'mark') { const m = pg.marks.find((x) => x.id === t.dataset.id); CM.sel = { k: 'mark', id: m.id }; drag = { k, m, p, pts: m.pts.map((q) => [...q]) }; }
     else if (k === 'fig') { CM.sel = { k: 'fig', id: 0 }; drag = { k, p, x: pg.figure.x, y: pg.figure.y }; }
+    else if (k === 'vtx') { const pn = pg.panels[+t.dataset.i]; drag = { k, pn, v: +t.dataset.v, p, orig: [...pn.poly[+t.dataset.v]] }; }
     else if (k === 'panel' || k === 'img') {
       const g = t.closest('[data-k="panel"]');
       const i = +g.dataset.i;
       const pn = pg.panels[i];
       CM.sel = { k: 'panel', id: i };
-      const file = shotImg(shotById(pn.shot));
+      const file = panelFile(pn);
       drag = { k: 'panel', pn, p, crop: { ...(pn.crop || { s: 1, x: 0.5, y: 0.5 }) }, pl: file && imgPlace(pn, file), img: g.querySelector('image') };
     } else if (k === 'bg') { CM.sel = null; }
     drag && (drag.moved = false);
@@ -601,12 +687,18 @@ function bindStage(stage, pg) {
     else if (drag.k === 'spark') { drag.m.pts[drag.i] = [p.x, p.y]; throttle(() => refresh(pg, true)); }
     else if (drag.k === 'mark') { drag.m.pts = drag.pts.map((q) => [q[0] + dx, q[1] + dy]); throttle(() => refresh(pg, true)); }
     else if (drag.k === 'fig') { pg.figure.x = drag.x + dx; pg.figure.y = drag.y + dy; throttle(() => refresh(pg, true)); }
+    else if (drag.k === 'vtx') {
+      // угол панели: прилипает к сетке 4 px (с Shift — свободно), не вылезает за лист
+      const sn = (v) => (e.shiftKey ? v : Math.round(v / 4) * 4);
+      drag.pn.poly[drag.v] = [Math.min(pg.w, Math.max(0, sn(drag.orig[0] + dx))), Math.min(pg.h, Math.max(0, sn(drag.orig[1] + dy)))];
+      throttle(() => refresh(pg, true));
+    }
     else if (drag.k === 'panel' && drag.pl && drag.img) {
       const { pl } = drag;
       const c = drag.pn.crop = { ...drag.crop };
       if (pl.b.w - pl.w) c.x = Math.min(1, Math.max(0, drag.crop.x + dx / (pl.b.w - pl.w)));
       if (pl.b.h - pl.h) c.y = Math.min(1, Math.max(0, drag.crop.y + dy / (pl.b.h - pl.h)));
-      const np = imgPlace(drag.pn, shotImg(shotById(drag.pn.shot)));
+      const np = imgPlace(drag.pn, panelFile(drag.pn));
       drag.img.setAttribute('x', np.x); drag.img.setAttribute('y', np.y);
     }
   });
@@ -661,22 +753,41 @@ function inspector(pg) {
     h('button', { disabled: CM.page === 0, onclick: () => movePage(-1), title: 'Страницу раньше' }, '↑'),
     h('button', { disabled: CM.page === D.pages.length - 1, onclick: () => movePage(1), title: 'Страницу позже' }, '↓'),
     h('button', { onclick: () => { if (confirm('Удалить эту страницу?')) { D.pages.splice(CM.page, 1); CM.page = Math.max(0, CM.page - 1); CM.sel = null; saveComic(); renderComic(); } } }, 'Удалить стр.'));
-  box.push(h('h3', {}, `Страница ${CM.page + 1} из ${D.pages.length}`), pageOps);
+  box.push(h('h3', {}, `Страница ${CM.page + 1} из ${D.pages.length}`), pageOps,
+    h('button', { class: 'askc', onclick: () => { chatToggle(true); const i = $('#chatInput'); if (i && !i.value) { i.value = `На странице ${CM.page + 1}: `; i.focus(); } } }, '💬 Попросить Claude про эту страницу'));
   if (!sel) {
-    box.push(h('p', { class: 'muted' }, 'Нажми на панель, пузырь или фигуру, чтобы поправить. Тяни мышкой: пузыри — двигать, кадр внутри панели — сдвинуть, колёсико над панелью — приблизить. Красная точка у пузыря — хвост.'));
+    box.push(h('p', { class: 'muted' }, 'Нажми на панель, пузырь или фигуру, чтобы поправить. Тяни мышкой: пузыри — двигать, кадр внутри панели — сдвинуть, колёсико над панелью — приблизить, красные точки на углах выбранной панели — менять её форму. Красная точка у пузыря — хвост.'),
+      h('div', { class: 'field' }, h('label', {}, 'Цвет этой страницы'), h('select', { onchange: async (e) => { pg.color = e.target.value || undefined; saveComic(); await preload([pg]); refresh(pg); } },
+        h('option', { value: '' }, 'как у всего комикса'), ...Object.entries(COLORS).map(([k, t]) => h('option', { value: k, selected: pg.color === k }, t)))),
+      h('div', { class: 'field' }, h('label', {}, 'Цвет всего комикса'), h('select', { onchange: async (e) => { D.color = e.target.value; saveComic(); await preload([pg]); refresh(pg); } },
+        ...Object.entries(COLORS).map(([k, t]) => h('option', { value: k, selected: (D.color || CM.hints.color || 'full') === k }, t)))),
+      (D.color === 'ink-red' || pg.color === 'ink-red') ? h('div', { class: 'field' }, h('label', {}, 'Сколько красного оставить'), h('input', { type: 'range', min: 3, max: 30, value: D.redHue ?? 6, onchange: async (e) => { D.redHue = +e.target.value; saveComic(); await preload([pg]); refresh(pg); } })) : null,
+      h('div', { class: 'field' }, h('label', {}, 'Фон страницы'), h('input', { type: 'color', value: pg.bg || '#ffffff', onchange: (e) => { pg.bg = e.target.value; saveComic(); refresh(pg); } })),
+      h('div', { class: 'actions' },
+        h('button', { onclick: () => addPanel(pg) }, '＋ панель'),
+        h('button', { onclick: () => insertPage() }, '＋ пустая страница после этой')));
     if (pg.figure) box.push(figureBox(pg));
   } else if (sel.k === 'panel') {
     const pn = pg.panels[sel.id];
-    const opts = allShots().filter(({ s }) => shotImg(s) || s.id === pn.shot).map(({ s }) => h('option', { value: s.id, selected: s.id === pn.shot }, `${s.id} — ${(s.frame || '').slice(0, 40)}`));
-    box.push(h('h3', {}, `Панель · кадр ${pn.shot}`),
-      h('div', { class: 'field' }, h('label', {}, 'Какой кадр в панели'), h('select', { onchange: (e) => { pn.shot = e.target.value; pn.crop = { s: 1, x: 0.5, y: 0.5 }; saveComic(); preload([pg]).then(() => refresh(pg)); } }, ...opts)),
+    const opts = [h('option', { value: '', selected: !pn.shot && pn.fill !== 'black' }, '— пустая белая (пауза, тишина)'), h('option', { value: '#black', selected: !pn.shot && pn.fill === 'black' }, '— пустая чёрная'),
+      ...allShots().filter(({ s }) => shotImg(s) || s.id === pn.shot).map(({ s }) => h('option', { value: s.id, selected: s.id === pn.shot }, `${s.id} — ${(s.frame || '').slice(0, 40)}`))];
+    box.push(h('h3', {}, pn.shot ? `Панель · кадр ${pn.shot}` : 'Пустая панель'),
+      h('div', { class: 'field' }, h('label', {}, 'Какой кадр в панели'), h('select', { onchange: (e) => {
+        const v = e.target.value;
+        pn.shot = v && v !== '#black' ? v : null; pn.fill = v === '#black' ? 'black' : undefined; delete pn.art;
+        pn.crop = { s: 1, x: 0.5, y: 0.5 }; saveComic(); preload([pg]).then(() => refresh(pg));
+      } }, ...opts)),
+      h('div', { class: 'field' }, h('label', {}, 'Цвет панели'), h('select', { onchange: async (e) => { pn.color = e.target.value || undefined; saveComic(); await preload([pg]); refresh(pg); } },
+        h('option', { value: '' }, 'как у страницы'), ...Object.entries(COLORS).map(([k, t]) => h('option', { value: k, selected: pn.color === k }, t)))),
       h('div', { class: 'field' }, h('label', {}, 'Эффект'), h('select', { onchange: (e) => { pn.fx = e.target.value; saveComic(); refresh(pg); } }, ...Object.entries(FX).map(([k, t]) => h('option', { value: k, selected: (pn.fx || '') === k }, t)))),
       h('div', { class: 'field' }, h('label', {}, 'Приближение'), h('input', { type: 'range', min: 1, max: 4, step: 0.05, value: pn.crop?.s || 1, oninput: (e) => { pn.crop = { s: 1, x: 0.5, y: 0.5, ...pn.crop, s: +e.target.value }; throttle(() => refresh(pg, true)); saveComic(); } })),
       h('div', { class: 'actions' },
         h('button', { onclick: () => { pn.crop = { s: 1, x: 0.5, y: 0.5 }; saveComic(); refresh(pg); } }, 'Кадр по центру'),
         h('button', { onclick: () => { pn.border = pn.border === false; saveComic(); refresh(pg); } }, pn.border === false ? 'Вернуть рамку' : 'Без рамки'),
-        h('button', { onclick: () => select({ kind: 'shot', ep: S.ep.id, id: pn.shot }) }, 'Открыть кадр'),
-        !pg.figure ? h('button', { onclick: () => makeHero(pg, sel.id) }, '🧍 Сделать героем страницы') : null));
+        pn.shot ? h('button', { onclick: () => select({ kind: 'shot', ep: S.ep.id, id: pn.shot }) }, 'Открыть кадр') : null,
+        !pg.figure && pn.shot ? h('button', { onclick: () => makeHero(pg, sel.id) }, '🧍 Сделать героем страницы') : null,
+        h('button', { onclick: () => { pg.panels.splice(sel.id, 1); CM.sel = null; saveComic(); refresh(pg); } }, 'Удалить панель')));
+    if (pn.shot) box.push(panelArtBox(pg, pn));
     if (pg.figure) box.push(figureBox(pg));
   } else if (sel.k === 'bubble') {
     const b = pg.bubbles.find((x) => x.id === sel.id);
@@ -685,13 +796,13 @@ function inspector(pg) {
       h('div', { class: 'field' }, h('label', {}, 'Текст'), h('textarea', { rows: 3, oninput: (e) => { b.text = e.target.value; throttle(() => refresh(pg, true)); saveComic(); } }, b.text)),
       h('div', { class: 'field' }, h('label', {}, 'Вид'), h('div', { class: 'bkinds' }, ...Object.entries(BUBBLES).map(([k, t]) => h('button', { class: b.kind === k ? 'on' : '', onclick: () => {
         b.kind = k;
-        if (!/caption|sfx/.test(k) && !b.tail) b.tail = [b.x + 30, b.y + 100];
+        if (!/caption|sfx|title/.test(k) && !b.tail) b.tail = [b.x + 30, b.y + 100];
         saveComic(); refresh(pg);
       } }, t)))),
       h('div', { class: 'field' }, h('label', {}, 'Размер шрифта'), h('input', { type: 'range', min: 12, max: 48, value: b.size || 21, oninput: (e) => { b.size = +e.target.value; throttle(() => refresh(pg, true)); saveComic(); } })),
-      b.kind === 'sfx' ? h('div', { class: 'field' }, h('label', {}, 'Наклон'), h('input', { type: 'range', min: -40, max: 40, value: b.rot || 0, oninput: (e) => { b.rot = +e.target.value; throttle(() => refresh(pg, true)); saveComic(); } })) : null,
+      /sfx|title/.test(b.kind) ? h('div', { class: 'field' }, h('label', {}, 'Наклон'), h('input', { type: 'range', min: -40, max: 40, value: b.rot || 0, oninput: (e) => { b.rot = +e.target.value; throttle(() => refresh(pg, true)); saveComic(); } })) : null,
       h('div', { class: 'actions' },
-        !/caption|sfx/.test(b.kind) ? h('button', { onclick: () => { b.tail = b.tail ? null : [b.x + 30, b.y + 100]; saveComic(); refresh(pg); } }, b.tail ? 'Убрать хвост' : 'Добавить хвост') : null,
+        !/caption|sfx|title/.test(b.kind) ? h('button', { onclick: () => { b.tail = b.tail ? null : [b.x + 30, b.y + 100]; saveComic(); refresh(pg); } }, b.tail ? 'Убрать хвост' : 'Добавить хвост') : null,
         h('button', { onclick: () => { pg.bubbles = pg.bubbles.filter((x) => x !== b); CM.sel = null; saveComic(); refresh(pg); } }, 'Удалить')));
   } else if (sel.k === 'mark') {
     const m = pg.marks.find((x) => x.id === sel.id);
@@ -701,27 +812,83 @@ function inspector(pg) {
   } else if (sel.k === 'fig') box.push(figureBox(pg));
   return h('div', {}, ...box);
 }
+// Рисование для комикса (фигура героя или своя картинка панели): промпт, правка, версии — всё редактируется
+function artControls(pg, id, label, onGo) {
+  const art = CM.data.arts[id] || {};
+  const run = S.jobs.find((j) => j.ref?.kind === 'comicart' && j.ref.id === id && ['queued', 'running'].includes(j.status));
+  const promptTa = h('textarea', { rows: 4, oninput: (e) => { art.prompt = e.target.value; saveComic(); } }, art.prompt || '');
+  const noteIn = h('input', { placeholder: 'Что поменять в текущей версии? (необязательно)' });
+  const go = async (edit) => {
+    if (edit && !noteIn.value.trim()) return toast('Напиши, что поменять');
+    onGo?.();
+    await saveComic(true);
+    await POST('/api/comic/art', { ep: CM.ep, id, prompt: promptTa.value, characters: art.characters, fromShot: art.fromShot, kind: art.kind, aspect: art.aspect });
+    await POST('/api/generate', { ref: { kind: 'comicart', ep: CM.ep, id }, opts: { generator: gen(), note: noteIn.value.trim(), edit: edit && !!artFile(id) } });
+    toast(label + ': отправлено художнику'); pollJobs(true);
+    setTimeout(() => refresh(pg), 300);
+  };
+  return [
+    h('div', { class: 'field' }, h('label', {}, 'Что нарисовать'), promptTa),
+    h('div', { class: 'field' }, noteIn),
+    h('div', { class: 'actions' },
+      h('button', { class: 'primary', disabled: !!run, onclick: () => go(false) }, run ? 'Рисует…' : art.versions?.length ? 'Нарисовать ещё вариант' : 'Нарисовать'),
+      art.versions?.length ? h('button', { disabled: !!run, onclick: () => go(true) }, 'Перерисовать с правкой') : null),
+    art.versions?.length ? h('div', { class: 'versions' }, ...art.versions.map((v, i) => h('button', { class: i === art.selected ? 'on' : '', onclick: async () => {
+      await POST('/api/update', { ref: { kind: 'comicart', ep: CM.ep, id }, patch: { selected: i } }).catch(() => {});
+      art.selected = i; await preload([pg]); refresh(pg);
+    } }, h('img', { src: fileUrl(v.file) }), h('span', {}, 'v' + (i + 1)),
+      h('i', { class: 'del', title: 'Удалить эту версию', onclick: async (e) => {
+        e.stopPropagation();
+        if (!confirm(`Удалить версию v${i + 1}?`)) return;
+        await POST('/api/version/delete', { ref: { kind: 'comicart', ep: CM.ep, id }, index: i });
+        await refreshArts();
+      } }, '✕')))) : null,
+  ];
+}
+function panelArtBox(pg, pn) {
+  const id = pn.art || 'panel_' + pn.id;
+  const s = shotById(pn.shot);
+  const b = bbox(pn.poly);
+  const aspect = b.w > b.h * 1.25 ? '16:9 horizontal' : b.h > b.w * 1.25 ? '2:3 vertical' : 'square';
+  if (!CM.data.arts[id]) CM.data.arts[id] = { versions: [], selected: null, kind: 'panel', aspect, fromShot: s?.id, characters: s?.characters || [],
+    prompt: `${s?.img || s?.frame || ''} — recomposed for a ${aspect} comic panel` };
+  const own = pn.art && artFile(pn.art);
+  return h('details', { class: 'figbox', open: !!pn.art },
+    h('summary', {}, own ? '🎨 Своя картинка панели (сейчас стоит она)' : '🎨 Перерисовать только для комикса'),
+    h('p', { class: 'muted' }, 'Кадр аниме не меняется. Кодекс рисует отдельную картинку под форму этой панели — например, вертикальную, крупнее или с другим ракурсом. Готовая версия сразу встанет в панель.'),
+    ...artControls(pg, id, 'Картинка панели', () => { pn.art = id; }),
+    own ? h('button', { onclick: () => { delete pn.art; saveComic(); refresh(pg); } }, 'Вернуть кадр из аниме') : null);
+}
+function addPanel(pg) {
+  const w = pg.w * 0.4, hh = Math.min(pg.h * 0.25, 360), x = (pg.w - w) / 2, y = (pg.h - hh) / 2;
+  pg.panels.push({ id: cid(), shot: null, poly: [[x, y], [x + w, y], [x + w, y + hh], [x, y + hh]], crop: { s: 1, x: 0.5, y: 0.5 }, fx: '' });
+  CM.sel = { k: 'panel', id: pg.panels.length - 1 };
+  saveComic(); refresh(pg);
+}
+function insertPage() {
+  const cur = CM.data.pages[CM.page];
+  CM.data.pages.splice(CM.page + 1, 0, { id: cid(), w: cur.w, h: cur.webtoon ? 2000 : cur.h, webtoon: cur.webtoon, panels: [], bubbles: [], marks: [] });
+  CM.page++; CM.sel = null; saveComic(); renderComic();
+}
+function addCover() {
+  const D = CM.data;
+  const H = CM.hints;
+  const shot = H.cover || H.splash?.[1] || H.splash?.[0] || D.pages[0]?.panels[0]?.shot;
+  const W = D.format === 'webtoon' ? WEB.w : MANGA.w, Hh = D.format === 'webtoon' ? 1300 : MANGA.h;
+  const ep = S.state.episodes.find((e) => e.id === CM.ep);
+  const title = (ep?.title || '').replace(/^Серия \d+\s*—\s*/, '').replace(/[«»]/g, '') || 'Название';
+  D.pages.unshift({ id: cid(), w: W, h: Hh, webtoon: D.format === 'webtoon', cover: true, panels: [{ id: cid(), shot, poly: [[0, 0], [W, 0], [W, Hh], [0, Hh]], crop: { s: 1.15, x: 0.5, y: 0.5 }, border: false, fx: 'dark' }],
+    bubbles: [{ id: cid(), kind: 'title', text: title, x: W / 2, y: Hh * 0.16, size: 34 }, { id: cid(), kind: 'caption-dark', text: (S.ep.source || '') + (ep?.title ? ' · ' + ep.title.split('—')[0].trim() : ''), x: W / 2, y: Hh * 0.9, size: 20 }], marks: [] });
+  CM.page = 0; CM.sel = null; saveComic(); renderComic();
+  toast('Обложка добавлена первой страницей — текст и кадр можно поменять');
+}
 function figureBox(pg) {
   const f = pg.figure;
-  const art = CM.data.arts[f.art] || {};
-  const run = S.jobs.find((j) => j.ref?.kind === 'comicart' && j.ref.id === f.art && ['queued', 'running'].includes(j.status));
-  const promptTa = h('textarea', { rows: 4, oninput: (e) => { art.prompt = e.target.value; saveComic(); } }, art.prompt || '');
   return h('div', { class: 'figbox' },
     h('h3', {}, '🧍 Фигура героя'),
     h('p', { class: 'muted' }, 'Большая фигура во весь рост поверх страницы. Кодекс рисует её на белом фоне, студия вырезает и обводит белым контуром.'),
-    h('div', { class: 'field' }, h('label', {}, 'Что нарисовать'), promptTa),
-    h('div', { class: 'actions' },
-      h('button', { class: 'primary', disabled: !!run, onclick: async () => {
-        await POST('/api/comic/art', { ep: CM.ep, id: f.art, prompt: promptTa.value, characters: art.characters, fromShot: art.fromShot });
-        await POST('/api/generate', { ref: { kind: 'comicart', ep: CM.ep, id: f.art }, opts: { generator: gen() } });
-        toast('Фигура отправлена художнику'); pollJobs(true);
-        setTimeout(() => refresh(pg), 300);
-      } }, run ? 'Рисует…' : art.versions?.length ? 'Нарисовать ещё вариант' : 'Нарисовать фигуру'),
-      h('button', { onclick: () => { delete pg.figure; pg.panels.forEach((p) => delete p.heroSlot); CM.sel = null; saveComic(); refresh(pg); } }, 'Убрать фигуру')),
-    art.versions?.length ? h('div', { class: 'versions' }, ...art.versions.map((v, i) => h('button', { class: i === art.selected ? 'on' : '', onclick: async () => {
-      await POST('/api/update', { ref: { kind: 'comicart', ep: CM.ep, id: f.art }, patch: { selected: i } }).catch(() => {});
-      art.selected = i; await preload([pg]); refresh(pg);
-    } }, h('img', { src: fileUrl(v.file) }), h('span', {}, 'v' + (i + 1))))) : null,
+    ...artControls(pg, f.art, 'Фигура'),
+    h('button', { onclick: () => { delete pg.figure; pg.panels.forEach((p) => delete p.heroSlot); CM.sel = null; saveComic(); refresh(pg); } }, 'Убрать фигуру'),
     h('div', { class: 'field' }, h('label', {}, 'Высота фигуры'), h('input', { type: 'range', min: 300, max: pg.h * 1.1, value: f.h, oninput: (e) => { f.h = +e.target.value; throttle(() => refresh(pg, true)); saveComic(); } })),
     h('div', { class: 'field' }, h('label', {}, 'Сколько белого убирать'), h('input', { type: 'range', min: 8, max: 60, value: f.thr ?? 28, onchange: async (e) => { f.thr = +e.target.value; await preload([pg]); refresh(pg); saveComic(); } })),
     h('p', { class: 'muted' }, 'Фигуру можно тянуть мышкой. Пока её нет, на её месте стоит кадр — нарисуй фигуру, и она встанет поверх.'));
@@ -754,7 +921,7 @@ async function exportComic() {
   toast('Собираю страницы…', 60000);
   await preload(D.pages);
   const files = new Set();
-  for (const pg of D.pages) for (const pn of pg.panels) { const f = shotImg(shotById(pn.shot)); if (f) files.add(f); }
+  for (const pg of D.pages) for (const pn of pg.panels) { const f = panelFile(pn); if (f) files.add(f); }
   const urls = {};
   for (const f of files) urls[f] = await toDataURL(f);
   const scale = D.format === 'webtoon' ? 1.35 : 2.4;
