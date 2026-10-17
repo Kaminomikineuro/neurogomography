@@ -16,7 +16,9 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
+html { height: 100%; }
+/* min-height, а не height: иначе «липкое» меню держится только первый экран */
+body { margin: 0; min-height: 100%; }
 body { background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, "Segoe UI", Roboto, sans-serif; }
 button, select, input, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; }
@@ -45,7 +47,7 @@ a { color: var(--accent2); }
 .pill.good { color: var(--ok); border-color: #355d37; }
 .pill.bad { color: var(--warn); border-color: #6b5426; }
 
-main { padding: 16px; transition: margin-right .2s; }
+main { padding: 16px; }
 body.with-panel main { margin-right: 540px; }
 
 .board { display: grid; grid-template-columns: 220px 1fr; gap: 16px; align-items: start; }
@@ -299,3 +301,7 @@ img.plan { width: 100%; border-radius: 8px; cursor: zoom-in; background: #f5f0e8
 .chat-row label { max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chat-warn { margin: 8px 12px 0; color: var(--accent2); font-size: 13px; }
 .comic-side .askc { width: 100%; margin: 8px 0 4px; }
+
+/* панели инструментов тоже прилипают под верхним меню */
+.board .bar, .comic > .bar { position: sticky; top: var(--top, 52px); z-index: 15; background: var(--bg); padding: 8px 0; margin-top: -8px; }
+.comic-pages, .comic-side { top: calc(var(--top, 52px) + 64px); }

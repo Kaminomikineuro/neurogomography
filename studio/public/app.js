@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-20.1';
+const UI_VERSION = '2026-10-21.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -94,7 +94,7 @@ function shotCard(s, ref) {
   const dot = run ? 'running' : s.status;
   const picked = S.pick?.has(s.id);
   const click = S.pick ? () => togglePick([s.id]) : () => select(ref);
-  return h('div', { class: 'card' + (s.cut ? ' cut' : '') + (sameRef(S.sel, ref) ? ' sel' : '') + (S.pick ? ' picking' : '') + (picked ? ' picked' : ''), onclick: click },
+  return h('div', { class: 'card' + (s.cut ? ' cut' : '') + (sameRef(S.sel, ref) ? ' sel' : '') + (S.pick ? ' picking' : '') + (picked ? ' picked' : ''), 'data-key': JSON.stringify(ref), onclick: click },
     S.pick ? h('span', { class: 'check' }, picked ? '✓' : '') : null,
     h('div', { class: 'thumb', style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null }, f ? '' : (s.imgFrom ? `картинка = кадр ${s.imgFrom}` : !s.img ? 'только видео' : 'ещё не нарисован')),
     run ? h('span', { class: 'spin' }, run.status === 'queued' ? 'в очереди' : 'рисует…') : null,
@@ -187,7 +187,7 @@ function assetGrid(kind) {
         const ref = { kind, id: it.id };
         const f = selFile(it);
         const run = runningFor(ref);
-        return h('div', { class: 'card' + (sameRef(S.sel, ref) ? ' sel' : ''), onclick: () => select(ref) },
+        return h('div', { class: 'card' + (sameRef(S.sel, ref) ? ' sel' : ''), 'data-key': JSON.stringify(ref), onclick: () => select(ref) },
           h('div', { class: 'thumb' + (kind === 'character' ? ' sheet' : ''), style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null }, f ? '' : 'нет референса'),
           run ? h('span', { class: 'spin' }, 'рисует…') : null,
           h('div', { class: 'meta' }, h('span', { class: 'dot st-' + (f ? 'approved' : 'todo') }), h('b', {}, it.name),
@@ -390,7 +390,16 @@ function dropZone(text, onFiles) {
   z.addEventListener('drop', (e) => { e.preventDefault(); z.classList.remove('drag'); onFiles(e.dataTransfer.files); });
   return z;
 }
-function zoom(file) { $('#lightbox img').src = fileUrl(file); $('#lightbox').classList.remove('hidden'); }
+function zoom(file) {
+  S.zoomScroll = { y: window.scrollY, panel: $('#panel').scrollTop };
+  $('#lightbox img').src = fileUrl(file);
+  $('#lightbox').classList.remove('hidden');
+}
+function unzoom() {
+  $('#lightbox').classList.add('hidden');
+  // после просмотра картинки возвращаемся туда же, где были
+  if (S.zoomScroll) { window.scrollTo(0, S.zoomScroll.y); $('#panel').scrollTop = S.zoomScroll.panel; S.zoomScroll = null; }
+}
 async function renderLib() {
   const lib = await library();
   const groups = {};
@@ -452,22 +461,36 @@ function renderCanon() {
 }
 
 // ---------- панель кадра ----------
+// Панель сужает раскадровку, и карточки переезжают. Держим выбранную карточку на том же месте экрана.
+const anchorOf = (ref) => ref && document.querySelector(`[data-key="${CSS.escape(JSON.stringify(ref))}"]`);
+function keepAnchor(ref, fn) {
+  const top = anchorOf(ref)?.getBoundingClientRect().top;
+  fn();
+  const el = anchorOf(ref);
+  if (el && top != null) window.scrollBy(0, el.getBoundingClientRect().top - top);
+}
 async function select(ref) {
   await flushDrafts();
   if (ref.kind !== 'batch') S.pick = null;
+  const prev = S.sel;
   S.sel = ref;
-  document.body.classList.add('with-panel');
-  $('#panel').classList.remove('hidden');
-  render(true);
+  keepAnchor(prev && anchorOf(prev) && !anchorOf(ref) ? prev : ref, () => {
+    document.body.classList.add('with-panel');
+    $('#panel').classList.remove('hidden');
+    render(true);
+  });
   await renderPanel();
 }
 function closePanel() {
   flushDrafts();
+  const was = S.sel;
   S.sel = null;
   S.pick = null;
-  document.body.classList.remove('with-panel');
-  $('#panel').classList.add('hidden');
-  render(true);
+  keepAnchor(was, () => {
+    document.body.classList.remove('with-panel');
+    $('#panel').classList.add('hidden');
+    render(true);
+  });
 }
 async function save(ref, patch) {
   await POST('/api/update', { ref, patch });
@@ -563,7 +586,7 @@ function sceneBar(sc) {
   const ref = { kind: 'scene', ep: S.ep.id, id: String(sc.n) };
   const f = selFile(sc);
   const run = runningFor(ref);
-  return h('div', { class: 'scenebar' + (sameRef(S.sel, ref) ? ' sel' : ''), onclick: () => select(ref) },
+  return h('div', { class: 'scenebar' + (sameRef(S.sel, ref) ? ' sel' : ''), 'data-key': JSON.stringify(ref), onclick: () => select(ref) },
     h('div', { class: 'thumb', style: f ? { backgroundImage: `url("${fileUrl(f)}")` } : null }, f ? '' : run ? 'рисует…' : 'мастер-плана нет'),
     sc.plan ? h('div', { class: 'thumb plan', style: { backgroundImage: `url("${fileUrl(sc.plan)}")` } }) : null,
     h('div', { class: 'txt' }, h('b', {}, 'Постановка сцены'), h('div', { class: 'muted' }, (sc.staging || '').slice(0, 230) + ((sc.staging || '').length > 230 ? '…' : '')),
@@ -704,6 +727,7 @@ async function renderPanel() {
   } else if (ref.kind === 'character') {
     fields.push(ro('Канон из книги', it.canon),
       field('Токен — как описывать героя в кадрах', it.token, ref, 'token', { code: true, rows: 3 }),
+      field('Детали костюма для крупных планов — руки, рукава, перчатки, украшения (по листу)', it.details, ref, 'details', { code: true, rows: 3, placeholder: 'black leather gloves on both hands, never bare hands…' }),
       field('Промпт листа персонажа', it.sheetPrompt, ref, 'sheetPrompt', { code: true, rows: 4 }));
   } else if (ref.kind === 'location') {
     const pals = Object.entries(S.state.project.palettes);
@@ -718,9 +742,12 @@ async function renderPanel() {
       field('Промпт мастер-плана', it.masterPrompt, ref, 'masterPrompt', { code: true, rows: 5 }));
   }
 
+  const keep = sameRef(S.panelRef, ref) ? panel.scrollTop : 0;
+  S.panelRef = ref;
   panel.replaceChildren(...[
     h('div', { class: 'head' }, h('div', {}, h('h3', {}, title), h('div', { class: 'sub' }, sub)), h('button', { class: 'x ghost', onclick: closePanel }, '✕')),
     viewer, versions, actions, editBox, ref.kind === 'shot' ? videoBox(ref, s, shotInfo.scene, preview) : null, warns, sent, ...fields].filter(Boolean));
+  panel.scrollTop = keep;
 }
 
 // ---------- видео кадра ----------
@@ -1041,8 +1068,8 @@ window.addEventListener('beforeunload', () => { for (const f of Object.values(S.
 document.addEventListener('DOMContentLoaded', async () => {
   $('#tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.view = b.dataset.view; render(); window.scrollTo(0, 0); } });
   $('#epSel').addEventListener('change', async (e) => { lsSet('ep', e.target.value); await loadEp(); CM.data = null; closePanel(); });
-  $('#lightbox').addEventListener('click', () => $('#lightbox').classList.add('hidden'));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (!$('#lightbox').classList.contains('hidden')) $('#lightbox').classList.add('hidden'); else if (S.sel) closePanel(); } });
+  $('#lightbox').addEventListener('click', unzoom);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (!$('#lightbox').classList.contains('hidden')) unzoom(); else if (S.sel) closePanel(); } });
   fitPanel();
   window.addEventListener('resize', fitPanel);
   await loadState();

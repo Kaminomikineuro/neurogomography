@@ -21,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-20.1';
+const VERSION = '2026-10-21.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -112,6 +112,23 @@ function checkRules(pr, text) {
   return out;
 }
 
+// Чья рука в детали: герои кадра, а если их нет — по именам в описании кадра («пальцы Лиама»)
+function inferOwners(pr, s) {
+  const have = (s.characters || []).filter((id) => pr.characters.find((c) => c.id === id && c.group !== 'Предметы'));
+  if (have.length) return have;
+  const text = `${s.frame || ''} ${s.img || ''}`;
+  const out = [];
+  for (const c of pr.characters) {
+    if (c.group === 'Предметы') continue;
+    // имена собственные из имени героя («Генерал Бельфи» → Бельф…), без званий
+    const words = (c.name || '').split(/[\s()«»]+/).filter((w) => /^[А-ЯЁ]/.test(w) && !/^(Капитан|Командир|Генерал|Повелитель|Птица|Чёрный|Меч)$/.test(w));
+    const stems = words.map((w) => (w.length > 4 ? w.slice(0, -1) : w));
+    if (c.id === 'LORD') stems.push('Повелител', 'Lord');
+    if (stems.some((st) => new RegExp(st).test(text)) || text.includes('[' + c.id + ']')) out.push(c.id);
+  }
+  return out;
+}
+
 function buildPrompt(ref, opts = {}) {
   const pr = project();
   const chars = Object.fromEntries(pr.characters.map((c) => [c.id, c]));
@@ -188,19 +205,32 @@ function buildPrompt(ref, opts = {}) {
 
   // Порядок референсов = важность: листы героев, мастер-план сцены, предыдущий кадр, план сверху, фон
   const size = shotCtx ? shotSize(shotCtx.s, raw) : 'wide';
+  // Крупный план руки, пальцев, рукава: чья это рука — иначе художник рисует «случайную» руку без перчаток и с чужими рукавами
+  const partText = shotCtx ? `${raw} ${shotCtx.s.frame || ''}` : '';
+  const bodyPart = shotCtx && size !== 'wide' && /\b(hands?|fingers?|fingertips?|palms?|fists?|wrists?|knuckles?|sleeves?|forearms?|gloves?)\b|рук|пальц|ладон|кист|запяст|кулак|костяш|рукав|перчат/i.test(partText);
+  if (bodyPart) {
+    const owners = inferOwners(pr, shotCtx.s);
+    for (const id of owners) if (!charIds.includes(id)) charIds = [...charIds, id];
+    if (!charIds.some((id) => chars[id] && chars[id].group !== 'Предметы')) warnings.push('Крупный план руки/пальцев, но не указано, чья это рука. Добавь героя в кадр (поле героев) — иначе рука будет «чужая».');
+  }
   const cl = [];
+  const parts = [];
   for (const id of charIds) {
     const c = chars[id];
     if (!c) continue;
     const f = selectedFile(c);
-    addRef(f, `character sheet: ${charName(c)} — match face, hair, outfit and proportions exactly`);
+    addRef(f, bodyPart && c.group !== 'Предметы'
+      ? `character sheet: ${charName(c)} — this close-up shows only PART of ${charName(c)} (hand / arm / sleeve): copy the exact gloves or bare hands, sleeves, bracers, cuffs and skin from this sheet`
+      : `character sheet: ${charName(c)} — match face, hair, outfit and proportions exactly`);
     const ill = !f && c.refs?.[0]?.file;
     if (ill) addRef(ill, `book illustration of ${charName(c)} — match appearance`);
-    cl.push(`- ${charName(c)}: ${c.token}${f || ill ? ' (see reference)' : ''}`);
+    cl.push(`- ${charName(c)}: ${c.token}${c.details ? '. Costume details: ' + c.details : ''}${f || ill ? ' (see reference)' : ''}`);
+    if (bodyPart && c.group !== 'Предметы') parts.push(`${charName(c)} — ${c.details || 'exactly as on the character sheet'}`);
     if (ill) warnings.push(`У «${c.name}» нет листа персонажа — пока беру иллюстрацию книги. Лист даст результат стабильнее.`);
     else if (!f) warnings.push(`Нет листа персонажа «${c.name}» — внешность может «поплыть». Сначала сделай его во вкладке «Персонажи».`);
   }
   if (cl.length) lines.push('Characters:\n' + cl.join('\n'));
+  if (parts.length) lines.push(`BODY-PART CLOSE-UP: the hand / arm / sleeve in this shot belongs to a known character, never a generic hand. It must match the character sheet exactly:\n${parts.map((x) => '- ' + x).join('\n')}`);
   for (const [f, role] of ownRefs) addRef(f, role);
 
   const sc = shotCtx?.scene || sceneCtx;
@@ -335,6 +365,10 @@ function runMigrations() {
           let it = list.find((x) => x.id === op.id);
           if (!it) list.push((it = { id: op.id, versions: [], selected: null }));
           setAll(it, op.set);
+        } else if (op.op === 'rule') {
+          pr.rules ||= [];
+          const i = pr.rules.findIndex((r) => r.id === op.set.id);
+          if (i >= 0) pr.rules[i] = op.set; else pr.rules.push(op.set);
         } else if (op.op === 'question-remove') pr.questions = (pr.questions || []).filter((q) => !q.startsWith(op.startsWith));
       } catch (e) { console.log('  Пакет', m.id, 'шаг пропущен:', e.message); }
     }
@@ -783,7 +817,7 @@ const routes = {
   },
   'POST /api/update': (q, b) => {
     const o = open(b.ref);
-    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus', 'lines', 'staging', 'masterPrompt', 'continuity'];
+    const allowed = ['img', 'vid', 'frame', 'sound', 'location', 'characters', 'status', 'selected', 'notes', 'cut', 'tool', 'dur', 'camera', 'token', 'sheetPrompt', 'prompt', 'palette', 'name', 'refs', 'canon', 'group', 'videoSelected', 'videoStatus', 'lines', 'staging', 'masterPrompt', 'continuity', 'details'];
     for (const [k, v] of Object.entries(b.patch || {})) if (allowed.includes(k)) o.item[k] = v;
     o.save();
     if (b.patch?.status === 'approved') logInbox(`${label(b.ref)} — утверждён (${path.basename(selectedFile(o.item) || '')})`);
