@@ -122,21 +122,17 @@ def track(segments, frames, fps, height, base_xy, face):
     """Позиции суставов героя на каждый кадр ролика. base_xy(t) — где стоит (keys), face — угол взгляда (рад)."""
     xy = base_xy
     base_xy = lambda t: np.array(xy(t), float)
-    names = parents = None
-    out = np.zeros((frames, 0, 3))
-    have = np.zeros(frames, bool)
-    for seg in sorted(segments, key=lambda s: s['at']):
-        n, pa, pos, sfps = load(seg['bvh'])
-        if names is None:
-            names, parents = n, pa
-            out = np.zeros((frames, len(names), 3))
-            lengths = [0 if q < 0 else np.linalg.norm(pos[0, j] - pos[0, q]) * height for j, q in enumerate(parents)]
-        a, b = seg['from'], seg['to']
-        hip = names.index('Hips')
-        speed = seg.get('speed', 1.0)
+    segments = sorted(segments, key=lambda s: s['at'])
+    names, parents, pos0, _ = load(segments[0]['bvh'])
+    lengths = [0 if q < 0 else np.linalg.norm(pos0[0, j] - pos0[0, q]) * height for j, q in enumerate(parents)]
+    hip = names.index('Hips')
+
+    def player(seg):
+        """Поза куска на кадре ролика f; за концом куска запись идёт дальше — для плавного перехода."""
+        _, _, pos, sfps = load(seg['bvh'])
+        a, b, speed, rev = seg['from'], seg['to'], seg.get('speed', 1.0), seg.get('reverse')
         f_start = int(round(seg['at'] * fps))
-        f_end = min(frames, f_start + int(round((b - a) / speed * fps)))
-        src0 = pos[int((b if seg.get('reverse') else a) * sfps)]
+        src0 = pos[int((b if rev else a) * sfps)]
         if seg.get('faceBy') == 'hand':
             i0, i1 = sorted((int(a * sfps), int(b * sfps)))
             v = (pos[i0:i1, names.index('RightHand'), :2] - pos[i0:i1, hip, :2]).mean(0)
@@ -147,13 +143,12 @@ def track(segments, frames, fps, height, base_xy, face):
         Rz = np.array([[math.cos(turn), -math.sin(turn), 0], [math.sin(turn), math.cos(turn), 0], [0, 0, 1]])
         lock, amp = seg.get('lock', 1.0), seg.get('amp', 1.0)
         rest = pos[int(seg.get('rest', a) * sfps)]
-        blend = seg.get('blend', 0.25)
-        prev = out[f_start - 1].copy() if f_start > 0 and have[f_start - 1] else None
         fs, flock = _smooth_facing(seg['bvh']), seg.get('faceLock', 1.0)
-        i0 = int((b if seg.get('reverse') else a) * sfps)
-        for f in range(f_start, f_end):
+        i0 = int((b if rev else a) * sfps)
+
+        def pose(f):
             u = (f - f_start) / fps * speed
-            st = b - u if seg.get('reverse') else a + u
+            st = b - u if rev else a + u
             x = min(len(pos) - 1.001, max(0.0, st * sfps))
             i = int(x)
             p = pos[i] + (pos[i + 1] - pos[i]) * (x - i)  # между кадрами записи — плавно
@@ -170,20 +165,35 @@ def track(segments, frames, fps, height, base_xy, face):
             p[:, :2] -= src0[hip, :2] + lock * (root[:2] - src0[hip, :2])
             p = p @ Rz.T * height
             p[:, :2] += base_xy(f / fps)
-            w = min(1.0, (f - f_start) / max(1, blend * fps)) if prev is not None else 1.0
+            return p
+        return f_start, min(frames, f_start + int(round((b - a) / speed * fps))), pose
+
+    out = np.zeros((frames, len(names), 3))
+    prev = None  # (конец прошлого куска, его поза)
+    for seg in segments:
+        f_start, f_end, pose = player(seg)
+        blend = max(1, seg.get('blend', 0.25) * fps)
+        if prev and prev[0] >= f_start - 1:
+            src = prev[1]  # куски стык в стык: прошлое движение продолжается и перетекает в новое
+        elif prev:
+            last, at = prev[1](prev[0] - 1), prev[0] - 1  # был перерыв — герой держал последнюю позу
+            src = lambda f, last=last, at=at: last + np.r_[base_xy(f / fps) - base_xy(at / fps), 0]
+        else:
+            src = None
+        for f in range(f_start, f_end):
+            p = pose(f)
+            w = min(1.0, (f - f_start) / blend) if src else 1.0
             if w < 1:
-                p = prev + (p - prev) * (w * w * (3 - 2 * w))
+                q = src(f)
+                p = q + (p - q) * (w * w * (3 - 2 * w))
             out[f] = _fix_lengths(p, parents, lengths)
-            have[f] = True
-        # держим последнюю позу до следующего куска
+        prev = (f_end, pose)
         last = out[f_end - 1].copy()
-        drift = base_xy((f_end - 1) / fps)
-        for f in range(f_end, frames):
+        for f in range(f_end, frames):  # держим последнюю позу до следующего куска
             out[f] = last
-            out[f, :, :2] += base_xy(f / fps) - drift
-            have[f] = True
-    first = int(np.argmax(have))
-    out[:first] = out[first]  # до первого куска — его первая поза
+            out[f, :, :2] += base_xy(f / fps) - base_xy((f_end - 1) / fps)
+    f0 = int(round(segments[0]['at'] * fps))
+    out[:f0] = out[f0]  # до первого куска — его первая поза
     return names, parents, out
 
 
