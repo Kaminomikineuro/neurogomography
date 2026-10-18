@@ -115,6 +115,14 @@ for p in PLAN.get('props', []):
         add(o, 0.48)
 
 
+def face_of(a):
+    """Куда смотрит герой: '+x', '-x', '+y', '-y' или угол в градусах (0 — вдоль +x, 90 — вдоль +y)."""
+    f = a.get('face', '+x')
+    if isinstance(f, (int, float)):
+        return math.radians(f)
+    return {'+x': 0, '-x': math.pi, '+y': math.pi / 2, '-y': -math.pi / 2}.get(f, 0)
+
+
 # ---------- манекены из захвата движения (studio/tools/mocap.py) ----------
 LIMBS = [('LeftUpLeg', 'LeftLeg', 0.07), ('LeftLeg', 'LeftFoot', 0.055), ('LeftFoot', 'LeftToeBase', 0.045),
          ('RightUpLeg', 'RightLeg', 0.07), ('RightLeg', 'RightFoot', 0.055), ('RightFoot', 'RightToeBase', 0.045),
@@ -148,8 +156,10 @@ def place(o, p, q, f):
 
 for a in [a for a in PLAN['actors'] if 'motion' in a]:
     H, sh = a.get('height', 1.8), a.get('shade', 0.5)
-    face = {'+x': 0, '-x': math.pi, '+y': math.pi / 2, '-y': -math.pi / 2}.get(a.get('face', '+x'), 0)
+    face = face_of(a)
     names, parents, P = mocap.track(a['motion'], FRAMES, FPS, H, lambda t, a=a: interp(a['keys'], t), face)
+    if a.get('lean'):  # ссутулиться вперёд, градусы
+        mocap.lean(names, P, a['lean'])
     for r in a.get('reach', []):  # {"side": "Left", "at": 6.7, "to": 7.6, "target": "face"} — прикрыть глаза
         mocap.reach(names, P, FPS, r.get('side', 'Left'), r['at'], r['to'], r.get('target', 'face'))
     J = {n: i for i, n in enumerate(names)}
@@ -233,7 +243,7 @@ for a in [a for a in PLAN['actors'] if 'motion' not in a]:
     cyl('arm_r', 0.05 * k, 0.6 * k, (0.3 * k, 0, 0), sh, shoulder, rot=(0, math.radians(90), 0))
     if a.get('sword'):
         cube('sword', (0.95 * k, 0.025, 0.06), (0.6 * k + 0.5 * k, 0, 0), min(1, sh + 0.25), shoulder)
-    face = {'+x': 0, '-x': math.pi, '+y': math.pi / 2, '-y': -math.pi / 2}.get(a.get('face', '+x'), 0)
+    face = face_of(a)
     root.rotation_euler = (0, 0, face)
     actors.append((a, root, hips, shoulder, k, legs))
 
@@ -255,7 +265,10 @@ for f in range(1, FRAMES + 1):
         shoulder.keyframe_insert('rotation_euler', frame=f)
 
 
-# ---------- камера: один непрерывный путь, постоянная скорость ----------
+# ---------- камера ----------
+# "camera": один непрерывный путь с постоянной скоростью (для Seedance: одно движение без склеек);
+# "cameraShots": кадры со склейками — у каждого своя камера: [{"from": 0, "to": 4, "pos": [x, y, z], "look": "LIAM:Head",
+#   "pos2": [...], "look2": [...], "lens": 50}] — pos2/look2 — куда камера приходит к концу кадра (наезд, наклон).
 def catmull(pts, n=400):
     P = [Vector(p) for p in pts]
     P = [P[0]] + P + [P[-1]]
@@ -269,23 +282,9 @@ def catmull(pts, n=400):
     return out
 
 
-path = catmull([c[1] for c in PLAN['camera']])
-acc = [0.0]
-for a_, b_ in zip(path, path[1:]):
-    acc.append(acc[-1] + (b_ - a_).length)
-L = acc[-1]
-
-
-def at_dist(d):
-    lo, hi = 0, len(acc) - 1
-    while lo < hi - 1:
-        mid = (lo + hi) // 2
-        if acc[mid] < d:
-            lo = mid
-        else:
-            hi = mid
-    seg = max(1e-9, acc[hi] - acc[lo])
-    return path[lo].lerp(path[hi], (d - acc[lo]) / seg)
+def point(v, f):
+    """Точка взгляда: [x, y, z] или "ГЕРОЙ:сустав" (следит за суставом героя)."""
+    return joint(v, min(FRAMES - 1, f)) if isinstance(v, str) else Vector(v)
 
 
 cam_data = bpy.data.cameras.new('cam')
@@ -293,25 +292,61 @@ cam_data.lens = PLAN.get('lens', 35)
 cam = bpy.data.objects.new('cam', cam_data)
 scn.collection.objects.link(cam)
 scn.camera = cam
-look = PLAN.get('look', 'actors')
-look_z = PLAN.get('lookZ', 1.25)  # на какой высоте точка взгляда: ниже — горизонт выше в кадре
-prev = None
-for f in range(1, FRAMES + 1):
-    t = (f - 1) / FPS
-    cam.location = at_dist(L * (f - 1) / max(1, FRAMES - 1))
-    if look == 'actors':
-        pts = [Vector((*interp(a['keys'], t), look_z)) for a, *_ in actors]
-        # камера смотрит туда, где герои стоят (keys), а не на каждое движение корпуса — иначе дрожит
-        pts += [Vector((*interp(a['keys'], t), look_z)) for a, names, P in mocap_actors]
-        tgt = sum(pts, Vector()) / len(pts)
-    else:
-        tgt = Vector(interp(look, t))
-    tgt = tgt if prev is None else prev.lerp(tgt, 0.08)  # мягко, без рывков
-    prev = tgt
-    d = tgt - cam.location
-    cam.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
-    cam.keyframe_insert('location', frame=f)
-    cam.keyframe_insert('rotation_euler', frame=f)
+if 'cameraShots' in PLAN:
+    shots = sorted(PLAN['cameraShots'], key=lambda c: c['from'])
+    prev, cur = None, None
+    for f in range(1, FRAMES + 1):
+        t = (f - 1) / FPS
+        c = next((c for c in shots if c['from'] <= t < c['to']), shots[-1])
+        u = min(1.0, max(0.0, (t - c['from']) / max(1e-6, c['to'] - c['from'])))
+        u = u * u * (3 - 2 * u)
+        pos = Vector(c['pos']).lerp(Vector(c.get('pos2', c['pos'])), u)
+        tgt = point(c['look'], f - 1).lerp(point(c.get('look2', c['look']), f - 1), u)
+        tgt = tgt if prev is None or c is not cur else prev.lerp(tgt, 0.2)  # внутри кадра — мягко; на склейке — сразу
+        prev, cur = tgt, c
+        cam.location = pos
+        cam.rotation_euler = (tgt - pos).to_track_quat('-Z', 'Y').to_euler()
+        cam_data.lens = c.get('lens', PLAN.get('lens', 35))
+        cam.keyframe_insert('location', frame=f)
+        cam.keyframe_insert('rotation_euler', frame=f)
+        cam_data.keyframe_insert('lens', frame=f)
+else:
+    path = catmull([c[1] for c in PLAN['camera']])
+    acc = [0.0]
+    for a_, b_ in zip(path, path[1:]):
+        acc.append(acc[-1] + (b_ - a_).length)
+    L = acc[-1]
+
+    def at_dist(d):
+        lo, hi = 0, len(acc) - 1
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if acc[mid] < d:
+                lo = mid
+            else:
+                hi = mid
+        seg = max(1e-9, acc[hi] - acc[lo])
+        return path[lo].lerp(path[hi], (d - acc[lo]) / seg)
+
+    look = PLAN.get('look', 'actors')
+    look_z = PLAN.get('lookZ', 1.25)  # на какой высоте точка взгляда: ниже — горизонт выше в кадре
+    prev = None
+    for f in range(1, FRAMES + 1):
+        t = (f - 1) / FPS
+        cam.location = at_dist(L * (f - 1) / max(1, FRAMES - 1))
+        if look == 'actors':
+            pts = [Vector((*interp(a['keys'], t), look_z)) for a, *_ in actors]
+            # камера смотрит туда, где герои стоят (keys), а не на каждое движение корпуса — иначе дрожит
+            pts += [Vector((*interp(a['keys'], t), look_z)) for a, names, P in mocap_actors]
+            tgt = sum(pts, Vector()) / len(pts)
+        else:
+            tgt = Vector(interp(look, t))
+        tgt = tgt if prev is None else prev.lerp(tgt, 0.08)  # мягко, без рывков
+        prev = tgt
+        d = tgt - cam.location
+        cam.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
+        cam.keyframe_insert('location', frame=f)
+        cam.keyframe_insert('rotation_euler', frame=f)
 for fc in (cam.animation_data.action.fcurves if hasattr(cam.animation_data.action, 'fcurves') else []):
     for kp in fc.keyframe_points:
         kp.interpolation = 'LINEAR'

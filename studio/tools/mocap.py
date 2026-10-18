@@ -8,7 +8,8 @@
    "amp": 1.0, "rest": 2.3,                            # <1 — движения мельче, вокруг позы на секунде rest (по умолчанию from)
    "turn": 0, "blend": 0.25,                           # доворот в градусах, плавный переход от прошлого куска
    "faceLock": 1.0,                                    # 1 — не даём актёру записи постепенно отвернуться
-   "faceBy": "hips"}                                   # "hand" — «вперёд» там, куда в среднем смотрит рука с мечом (для боя)
+   "faceBy": "hips",                                   # "hand" — «вперёд» там, куда в среднем смотрит рука с мечом (для боя)
+   "ground": true}                                     # false — не ставить стопы на пол в начале куска (прыжок в воздухе)
 Между кусками герой держит последнюю позу.
 """
 import math, os, urllib.request
@@ -133,6 +134,9 @@ def track(segments, frames, fps, height, base_xy, face):
         a, b, speed, rev = seg['from'], seg['to'], seg.get('speed', 1.0), seg.get('reverse')
         f_start = int(round(seg['at'] * fps))
         src0 = pos[int((b if rev else a) * sfps)]
+        # ноги на полу: в начале куска нижняя стопа — на земле (в некоторых записях актёр стоит на подставке)
+        toes = [names.index(n) for n in ('LeftToeBase', 'RightToeBase', 'LeftFoot', 'RightFoot')]
+        lift = src0[toes, 2].min() if seg.get('ground', True) else 0.0
         if seg.get('faceBy') == 'hand':
             i0, i1 = sorted((int(a * sfps), int(b * sfps)))
             v = (pos[i0:i1, names.index('RightHand'), :2] - pos[i0:i1, hip, :2]).mean(0)
@@ -163,6 +167,7 @@ def track(segments, frames, fps, height, base_xy, face):
                 p = r + amp * (p - r)
             root = p[hip].copy()
             p[:, :2] -= src0[hip, :2] + lock * (root[:2] - src0[hip, :2])
+            p[:, 2] -= lift
             p = p @ Rz.T * height
             p[:, :2] += base_xy(f / fps)
             return p
@@ -209,7 +214,12 @@ def reach(names, P, fps, side='Left', at=0.0, to=1.0, target='face', ramp=0.2):
         p = P[f]
         lat = p[J['LeftUpLeg']] - p[J['RightUpLeg']]
         fwd = np.array([lat[1], -lat[0], 0.0]) / max(1e-6, np.hypot(lat[0], lat[1]))
-        T = (p[J['Head']] + p[J['Head_end']]) / 2 + fwd * 0.12 if target == 'face' else np.array(target, float)
+        if target == 'face':
+            T = (p[J['Head']] + p[J['Head_end']]) / 2 + fwd * 0.12
+        elif target == 'neck':  # ослабить ворот
+            T = p[J['Neck']] + fwd * 0.08
+        else:
+            T = np.array(target, float)
         L1, L2 = np.linalg.norm(p[E] - p[S]), np.linalg.norm(p[W] - p[E])
         d = T - p[S]
         dist = min(np.linalg.norm(d), L1 + L2 - 1e-3)
@@ -223,4 +233,22 @@ def reach(names, P, fps, side='Left', at=0.0, to=1.0, target='face', ramp=0.2):
         p[E] = p[E] + (e2 - p[E]) * w
         for j in hand:
             p[j] = p[j] + shift * w
+    return P
+
+
+def lean(names, P, deg):
+    """Наклонить корпус вперёд на deg градусов от бёдер (ноги остаются на месте) — ссутулиться над столом."""
+    legs = {j for j, n in enumerate(names) if any(k in n for k in ('Leg', 'Foot', 'Toe', 'HipJoint')) or n == 'Hips'}
+    J = {n: i for i, n in enumerate(names)}
+    a = math.radians(deg)
+    for p in P:
+        lat = p[J['LeftUpLeg']] - p[J['RightUpLeg']]
+        k = lat / max(1e-6, np.linalg.norm(lat))  # ось — линия бёдер; поворот к «вперёд»
+        h = p[J['Hips']].copy()
+        for j in range(len(names)):
+            if j in legs:
+                continue
+            v = p[j] - h
+            # Родриг: поворот на +a вокруг k наклоняет верх корпуса вперёд
+            p[j] = h + v * math.cos(a) + np.cross(k, v) * math.sin(a) + k * np.dot(k, v) * (1 - math.cos(a))
     return P
