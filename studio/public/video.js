@@ -6,6 +6,7 @@ const VDURS = [0, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30];
 const MODEL_HELP = {
   seedance: ['Открой Pixverse → модель Seedance 2.0 → режим со всеми референсами (Reference / Omni).', 'Загрузи картинки строго по порядку — их номера в промпте (@Image1, @Image2…) должны совпасть.', 'Вставь промпт целиком, поставь длительность, звук выключи.'],
   'seedance-ff': ['Открой Pixverse → модель Seedance 2.0 → режим «первый и последний кадр» (First/Last frame).', 'Image1 — первый кадр, Image2 — последний.', 'Вставь промпт, поставь длительность, звук выключи.'],
+  kling4: ['Открой Kling 4.0 → Video Generation → режим Omni Reference (не Keyframes).', 'Загрузи картинки по порядку (@Image1 — стартовый кадр), листы героев — как Elements (@Element1, @Element2…), превиз — как видео (@Video1), если он есть.', 'Вставь промпт целиком в одно поле, поставь длительность. Native audio выключи — голоса потом.', 'Сначала пробуй в 720p: дешевле. 1080p — когда понравится.'],
   kling: ['Открой Kling 3.0 → Image to Video. Стартовый кадр — в поле Start Frame.', 'Листы героев загрузи в Elements по порядку — в промпте они @Element1, @Element2…', 'Включи Multi-shot: общий промпт — в основное поле, каждый кадр — в своё поле со своей длительностью (до 6 кадров).', 'Native audio выключи.'],
 };
 
@@ -65,7 +66,7 @@ function renderVideo() {
         h('button', { class: 'ghost', onclick: () => { VS.shots = sc.shots.filter((s) => !s.cut && peopleOfShot(s).length && !inOther(s.id)).map((s) => s.id); renderVideo(); } }, 'все с героями'),
         h('button', { class: 'ghost', onclick: () => { VS.shots = []; renderVideo(); } }, 'снять'))),
     h('div', { class: 'field' }, h('label', {}, 'Модель'),
-      ...Object.entries({ seedance: 'Seedance 2.0 — все референсы (лучше всего для сцен с героями)', 'seedance-ff': 'Seedance 2.0 — первый и последний кадр (один плавный переход)', kling: 'Kling 3.0 — multi-shot + Elements (до 6 кадров)' }).map(([k, t]) =>
+      ...Object.entries({ seedance: 'Seedance 2.0 — все референсы (лучше всего для сцен с героями)', 'seedance-ff': 'Seedance 2.0 — первый и последний кадр (один плавный переход)', kling: 'Kling 3.0 — multi-shot + Elements (до 6 кадров)', kling4: 'Kling 4.0 — Omni Reference (до 30 с, одно поле, превиз как видео)' }).map(([k, t]) =>
         h('label', { class: 'radio' + (VS.opts.model === k ? ' on' : '') }, h('input', { type: 'radio', name: 'vmodel', checked: VS.opts.model === k, onchange: () => { set({ model: k }); renderVideo(); } }), h('span', {}, t)))),
     h('div', { class: 'field' }, h('label', {}, 'Длительность ролика'),
       h('select', { onchange: (e) => set({ dur: +e.target.value }) }, ...VDURS.map((d) => h('option', { value: d, selected: (VS.opts.dur || 0) === d }, d ? d + ' с' : `авто (под кадры: ${total} с)`)))),
@@ -103,8 +104,10 @@ function renderVideoResult() {
       ...p.refs.map((r, i) => refRow(r, r.tag || `@Image${i + 1}`, `${r.tag ? r.tag.replace(/\s/g, '_') : 'Image' + (i + 1)}_${VS.clipId || VS.shots[0]}`))) : null,
     p.elements?.length ? h('div', { class: 'field' }, h('label', {}, 'Elements — листы героев по порядку'),
       ...p.elements.map((e, i) => refRow(e, `@Element${i + 1}`, `Element${i + 1}_${e.id}`))) : null,
+    p.videos?.length ? h('div', { class: 'field' }, h('label', {}, 'Видео — превиз'),
+      ...p.videos.map((e, i) => h('div', { class: 'copyrow' }, h('code', {}, `@Video${i + 1} — ${e.label}`), h('a', { href: fileUrl(e.file), download: `Video${i + 1}_previs.mp4` }, 'скачать')))) : null,
     h('div', { class: 'field' }, h('label', {}, p.model === 'kling' ? 'Общий промпт' : 'Промпт целиком', h('button', { class: 'ghost', onclick: () => copy(p.text) }, 'копировать')), h('pre', { class: 'vprompt' }, p.text)),
-    h('div', { class: 'field' }, h('label', {}, p.model === 'kling' ? 'Multi-shot — по кадру в поле' : 'По кадрам (если удобнее частями)'),
+    p.model === 'kling4' ? null : h('div', { class: 'field' }, h('label', {}, p.model === 'kling' ? 'Multi-shot — по кадру в поле' : 'По кадрам (если удобнее частями)'),
       ...p.perShot.map((t) => h('div', { class: 'copyrow' }, h('code', {}, t), h('button', { class: 'ghost', onclick: () => copy(t) }, 'копировать')))),
     h('div', { class: 'field' }, h('label', {}, 'Negative prompt', h('button', { class: 'ghost', onclick: () => copy(p.negative) }, 'копировать')), h('div', { class: 'muted' }, p.negative)),
   ].filter(Boolean));
@@ -119,6 +122,6 @@ async function saveVideoClip() {
   } catch (e) { toast(e.message, 8000); }
 }
 function askClaudeVideo() {
-  const model = { seedance: 'Seedance 2.0 (все референсы)', 'seedance-ff': 'Seedance 2.0 (первый и последний кадр)', kling: 'Kling 3.0 multi-shot' }[VS.opts.model];
+  const model = { seedance: 'Seedance 2.0 (все референсы)', 'seedance-ff': 'Seedance 2.0 (первый и последний кадр)', kling: 'Kling 3.0 multi-shot', kling4: 'Kling 4.0 Omni Reference' }[VS.opts.model];
   chatSend(`Подстрой ролик для ${model}: серия ${S.ep.id}, сцена ${VS.scene}, кадры ${VS.shots.join(', ')}${VS.opts.dur ? `, ${VS.opts.dur} с` : ''}${VS.opts.wishes ? `, пожелания: «${VS.opts.wishes}»` : ''}. Проверь порядок и состав кадров, допиши VID и continuity кадров так, чтобы действие шло непрерывно и было понятно модели, по studio/canon/howto/video.md. Если стоит убрать или добавить кадр — скажи.`, { title: 'Видео: сцена ' + VS.scene });
 }

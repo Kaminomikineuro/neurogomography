@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-24.1';
+const UI_VERSION = '2026-10-25.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
