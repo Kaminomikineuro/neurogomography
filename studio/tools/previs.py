@@ -161,7 +161,8 @@ for a in [a for a in PLAN['actors'] if 'motion' in a]:
     if a.get('lean'):  # ссутулиться вперёд, градусы
         mocap.lean(names, P, a['lean'])
     for r in a.get('reach', []):  # {"side": "Left", "at": 6.7, "to": 7.6, "target": "face"} — прикрыть глаза
-        mocap.reach(names, P, FPS, r.get('side', 'Left'), r['at'], r['to'], r.get('target', 'face'))
+        mocap.reach(names, P, FPS, r.get('side', 'Left'), r['at'], r['to'], r.get('target', 'face'), r.get('ramp', 0.5))
+    P = mocap.smooth(P, FPS, a.get('smooth', 0.08))  # без дрожи датчиков; для резких ударов можно меньше
     J = {n: i for i, n in enumerate(names)}
     objs = [(stick('limb', r * H / 1.8, sh), J[p], J[q]) for p, q, r in LIMBS]
     head = sphere('head', 0.115 * H / 1.8, (0, 0, 0), sh)

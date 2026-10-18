@@ -202,14 +202,14 @@ def track(segments, frames, fps, height, base_xy, face):
     return names, parents, out
 
 
-def reach(names, P, fps, side='Left', at=0.0, to=1.0, target='face', ramp=0.2):
+def reach(names, P, fps, side='Left', at=0.0, to=1.0, target='face', ramp=0.5):
     """Рука тянется к цели (прикрыть глаза): двухзвенный IK плечо–локоть–кисть, плавно входит и выходит."""
     J = {n: i for i, n in enumerate(names)}
     S, E, W = J[side + 'Arm'], J[side + 'ForeArm'], J[side + 'Hand']
     hand = [j for j, n in enumerate(names) if n.startswith(side + 'Hand') or n.startswith(side[0] + 'Thumb') or n.startswith(side + 'Finger')]
     for f in range(int(at * fps), min(len(P), int(to * fps) + 1)):
         t = f / fps
-        w = min(1.0, (t - at) / ramp, (to - t) / ramp)
+        w = max(0.0, min(1.0, (t - at) / ramp, (to - t) / ramp))
         w = w * w * (3 - 2 * w)
         p = P[f]
         lat = p[J['LeftUpLeg']] - p[J['RightUpLeg']]
@@ -252,3 +252,15 @@ def lean(names, P, deg):
             # Родриг: поворот на +a вокруг k наклоняет верх корпуса вперёд
             p[j] = h + v * math.cos(a) + np.cross(k, v) * math.sin(a) + k * np.dot(k, v) * (1 - math.cos(a))
     return P
+
+
+def smooth(P, fps, sec=0.08):
+    """Убрать дрожь датчиков: гауссово сглаживание траекторий суставов (sec — ширина, 0 — не сглаживать)."""
+    if not sec:
+        return P
+    sigma = max(0.5, sec * fps)
+    k = int(3 * sigma)
+    w = np.exp(-0.5 * (np.arange(-k, k + 1) / sigma) ** 2)
+    w /= w.sum()
+    Q = np.pad(P, ((k, k), (0, 0), (0, 0)), mode='edge')
+    return sum(w[i] * Q[i:i + len(P)] for i in range(2 * k + 1))
