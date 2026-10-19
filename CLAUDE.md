@@ -41,3 +41,8 @@
 - Кадры с героями идут связками (`scene.clips`: `shots`, `tool`, `opts` — модель, секунды, пожелания) одним роликом в Seedance 2.0, Kling 3.0 или Kling 4.0 (Omni Reference, до 30 с, превиз как @Video1); вставки без героев — Pixverse.
 - Вкладка «Видео» (`studio/public/video.js`) собирает пакет: `clipPrompt` в `studio/server.mjs` (картинки `@Image`, Elements для Kling, промпт по таймкодам). Как подстраивать — `studio/canon/howto/video.md`.
 - Превиз в Blender: `python studio/tools/previs.py studio/canon/previs/<связка>.json` (`--still 0 4 8` — быстрые кадры). Ролик идёт в Seedance как `@video1` (только камера), пакет промпта — `studio/canon/previs/<связка>_seedance.md`.
+
+## Монтаж и озвучка
+- Вкладка «Монтаж»: корзина «Дубли» (`studio/media/<серия>/takes/`, раскладка — `studio/data/montage/<серия>.json`: `takes`, `place` — дубль на кадре и с какой секунды, `trans` — переход в кадр: flash, fade, dissolve, whip). Дубль идёт с кадра дальше по следующим, пока не кончится.
+- Озвучка: `studio/media/<серия>/voice/<кадр>_<герой>_<номер реплики>.mp3`; список фраз с голосами — кнопка «📋 Фразы для нейросети» или `studio/canon/voice/<серия>_озвучка.md`, голоса героев — `studio/canon/voice/voices.json`.
+- Чистовая склейка (делает Claude): `python studio/tools/montage.py <серия> [--scene N] [--shots 1.4-1.9] [--preview]` → `studio/export/<серия>/Монтаж_*.mp4`, с `--preview` ещё 720p в `studio/media/<серия>/renders/` для Git. Перед склейкой — посмотреть дубли (кадры ffmpeg), отметить лучшие, поставить переходы в `trans`.

@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-26.1';
+const UI_VERSION = '2026-10-27.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -974,60 +974,160 @@ function subText(s) {
   const nm = (id) => S.state.project.characters.find((c) => c.id === id)?.name.split(' ')[0] || (id === 'NARRATOR' ? '' : id);
   return (s.lines || []).filter((l) => !l.optional).map((l) => l.mode === 'vo' ? (l.who === 'NARRATOR' ? `(${l.text})` : `(${nm(l.who)}, мысленно) ${l.text}`) : `${nm(l.who)}: ${l.text}`).join('\n');
 }
-function montageItems() {
+// Что играет на каждом кадре: свой дубль автора (лежит на кадре и идёт дальше, пока не кончится) →
+// видео связки → видео кадра → картинка
+function montageItems(M) {
+  const takes = Object.fromEntries((M?.takes || []).map((t) => [t.id, t]));
   const out = [];
+  let run = null;
   for (const sc of S.ep.scenes) for (const s of sc.shots) {
     if (s.cut) continue;
+    const dur = s.dur || 3;
+    const trans = M?.trans?.[s.id] || '';
+    const p = M?.place?.[s.id];
+    if (p && takes[p.take]) run = { take: takes[p.take], t: p.in || 0, from: s.id };
+    if (run && (run.from === s.id || (run.take.dur && run.take.dur - run.t > 0.4))) {
+      out.push({ s, scene: sc, video: run.take.file, offset: run.t, img: keyframeOf(s, sc), dur, take: run.take.id, takeStart: run.from === s.id, trans });
+      run.t += dur;
+      if (!run.take.dur || run.t >= run.take.dur - 0.4) run = null;
+      continue;
+    }
+    run = null;
     // кадр из связки играет свой кусок общего ролика связки
     const c = (sc.clips || []).find((x) => x.shots.includes(s.id));
     const cv = c && selVideo(c);
     if (cv) {
       let off = 0;
       for (const id of c.shots) { if (id === s.id) break; off += sc.shots.find((x) => x.id === id)?.dur || 3; }
-      out.push({ s, scene: sc, video: cv, offset: off, img: keyframeOf(s, sc), dur: s.dur || 3, clip: c.id });
-    } else out.push({ s, scene: sc, video: selVideo(s), offset: 0, img: keyframeOf(s, sc), dur: s.dur || 3 });
+      out.push({ s, scene: sc, video: cv, offset: off, img: keyframeOf(s, sc), dur, clip: c.id, trans });
+    } else out.push({ s, scene: sc, video: selVideo(s), offset: 0, img: keyframeOf(s, sc), dur, trans });
   }
   return out;
 }
 function fmt(t) { t = Math.max(0, Math.round(t)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; }
+const durOf = (file) => new Promise((r) => {
+  const v = document.createElement('video');
+  v.preload = 'metadata';
+  v.onloadedmetadata = () => { r(v.duration || 0); URL.revokeObjectURL(v.src); };
+  v.onerror = () => r(0);
+  v.src = URL.createObjectURL(file);
+});
+// дубли с компьютера: в корзину или сразу на кадр (первый файл)
+async function uploadTakes(files, shot) {
+  files = [...files].filter((f) => f.type.startsWith('video/') || /\.(mp4|mov|webm)$/i.test(f.name));
+  if (!files.length) return toast('Это не видео — нужен mp4, mov или webm');
+  for (const [k, f] of files.entries()) {
+    if (f.size > 95e6) toast(`«${f.name}» больше 95 МБ — GitHub его не примет. Скачай из Kling в 720p или сожми.`, 9000);
+    toast(`Загружаю ${k + 1}/${files.length}: ${f.name}…`, 3000);
+    const dur = await durOf(f);
+    const q = `ep=${encodeURIComponent(S.ep.id)}&name=${encodeURIComponent(f.name)}&dur=${dur.toFixed(2)}${shot && !k ? `&shot=${encodeURIComponent(shot)}` : ''}`;
+    const r = await fetch('/api/montage/take?' + q, { method: 'POST', headers: { 'Content-Type': f.type || 'video/mp4' }, body: f });
+    if (!r.ok) { toast('Не получилось загрузить ' + f.name, 6000); continue; }
+  }
+  toast(shot ? `Дубль лёг на кадр ${shot}` : 'Дубли в корзине — тяни их на кадры в полосе', 5000);
+  renderMontage(S.montageCur);
+}
+async function uploadVoices(files, line) {
+  const M = S.mont;
+  const miss = [];
+  for (const f of [...files]) {
+    if (!/^audio\//.test(f.type) && !/\.(mp3|wav|ogg|m4a)$/i.test(f.name)) continue;
+    const base = f.name.replace(/\.\w+$/, '');
+    const hit = line || M.voices.find((v) => v.name.replace(/\.\w+$/, '') === base);
+    if (!hit) { miss.push(f.name); continue; }
+    await fetch(`/api/voice/upload?ep=${encodeURIComponent(S.ep.id)}&name=${encodeURIComponent(hit.name.replace(/\.\w+$/, '') + (f.name.match(/\.\w+$/)?.[0] || '.mp3'))}`, { method: 'POST', headers: { 'Content-Type': f.type || 'audio/mpeg' }, body: f });
+  }
+  if (miss.length) toast(`Не узнала по имени: ${miss.join(', ')}. Перетащи такой файл прямо на строчку фразы.`, 9000);
+  else toast('Озвучка добавлена', 4000);
+  renderMontage(S.montageCur);
+}
+const dropProps = (onFiles, extra = {}) => ({
+  ondragover: (e) => { e.preventDefault(); e.currentTarget.classList.add('drop'); },
+  ondragleave: (e) => e.currentTarget.classList.remove('drop'),
+  ondrop: (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('drop'); onFiles(e); },
+  ...extra,
+});
 
-function renderMontage() {
-  const items = montageItems();
+async function renderMontage(startAt = 0) {
+  let M;
+  try { M = await GET('/api/montage?ep=' + encodeURIComponent(S.ep.id)); } catch { M = { takes: [], place: {}, trans: {}, voices: [] }; }
+  if (S.view !== 'montage') return;
+  if (S.montage) { S.montage.stop(); S.montage = null; }
+  S.mont = M;
+  const ep = S.ep.id;
+  const items = montageItems(M);
   const total = items.reduce((a, x) => a + x.dur, 0);
   const starts = []; items.reduce((a, x, i) => (starts[i] = a, a + x.dur), 0);
-  const cnt = { video: items.filter((x) => x.video).length, img: items.filter((x) => !x.video && x.img).length };
+  const cnt = { video: items.filter((x) => x.video).length, img: items.filter((x) => !x.video && x.img).length, take: items.filter((x) => x.take).length };
+  const voicesOf = (id) => M.voices.filter((v) => v.shot === id && v.file);
   const video = h('video', { playsinline: true, muted: false, preload: 'auto' });
   const img = h('img', { alt: '' });
   const blank = h('div', { class: 'blank' });
   const sub = h('div', { class: 'subs' });
   const tag = h('div', { class: 'tag' });
-  const screen = h('div', { class: 'screen' }, blank, img, video, tag, sub);
+  const flash = h('div', { class: 'flash' });
+  const screen = h('div', { class: 'screen' }, blank, img, video, flash, tag, sub);
   const playBtn = h('button', { class: 'primary' }, '▶ Смотреть');
   const time = h('span', { class: 'muted' }, `0:00 / ${fmt(total)}`);
   const subsOn = h('input', { type: 'checkbox', checked: lsGet('subs', '1') === '1', onchange: (e) => { lsSet('subs', e.target.checked ? '1' : '0'); show(cur); } });
-  const segs = items.map((x, i) => h('div', { class: 'seg ' + (x.video ? 'v' : x.img ? 'i' : 'e') + (i && x.scene !== items[i - 1].scene ? ' scene' : ''), style: { flexGrow: x.dur }, title: `${x.s.id} · ${x.dur} с · ${x.video ? 'видео' : x.img ? 'картинка' : 'пусто'}`, onclick: () => { cur = i; show(i); } }));
+  const segs = items.map((x, i) => h('div', {
+    class: 'seg ' + (x.take ? 't' : x.video ? 'v' : x.img ? 'i' : 'e') + (x.takeStart ? ' tstart' : '') + (i && x.scene !== items[i - 1].scene ? ' scene' : ''), style: { flexGrow: x.dur },
+    title: `${x.s.id} · ${x.dur} с · ${x.take ? 'дубль ' + x.take : x.video ? 'видео' : x.img ? 'картинка' : 'пусто'}${x.trans ? ' · переход: ' + x.trans : ''}\nперетащи сюда дубль или видео с компьютера`,
+    onclick: () => { cur = i; show(i); },
+    ...dropProps(async (e) => {
+      const shot = x.s.id;
+      const tid = e.dataTransfer.getData('text/take');
+      if (tid) { await POST('/api/montage/place', { ep, shot, take: tid }); toast(`Дубль ${tid} → кадр ${shot}`); return renderMontage(i); }
+      if (e.dataTransfer.files.length) uploadTakes(e.dataTransfer.files, shot);
+    }),
+  }, x.s.id));
   const line = h('div', { class: 'timeline' }, ...segs);
   const head = h('div', { class: 'playhead' });
   line.append(head);
-  let cur = 0, playing = false, t0 = 0, timer = null, raf = null;
+  const info = h('div', { class: 'shotinfo' });
+  let cur = Math.min(startAt, items.length - 1), playing = false, t0 = 0, timer = null, raf = null, audios = [];
 
-  function stopTimers() { clearTimeout(timer); cancelAnimationFrame(raf); }
+  function stopTimers() { clearTimeout(timer); cancelAnimationFrame(raf); audios.forEach((a) => a.pause()); audios = []; }
+  function playVoices(x) {
+    // реплики кадра по очереди, как лягут в монтаж
+    const list = voicesOf(x.s.id).map((v) => new Audio(fileUrl(v.file)));
+    audios = list;
+    list.forEach((a, k) => { if (k) list[k - 1].onended = () => playing && a.play().catch(() => {}); });
+    list[0]?.play().catch(() => {});
+  }
+  function renderInfo(x) {
+    const takes = M.takes;
+    const p = M.place[x.s.id];
+    info.replaceChildren(...[
+      h('b', {}, `Кадр ${x.s.id}`), ' · ',
+      x.take ? h('span', {}, `дубль ${x.take}${x.takeStart ? '' : ' (продолжение)'}, с ${x.offset.toFixed(1)} с `) : h('span', { class: 'muted' }, x.video ? (x.clip ? `видео связки ${x.clip} ` : 'видео кадра ') : 'видео нет '),
+      p ? h('label', { class: 'muted' }, ' начать дубль с ', h('input', { type: 'number', step: 0.1, min: 0, value: p.in || 0, style: { width: '60px' }, onchange: async (e) => { await POST('/api/montage/place', { ep, shot: x.s.id, take: p.take, in: +e.target.value }); renderMontage(cur); } }), ' с ') : null,
+      p ? h('button', { class: 'ghost', onclick: async () => { await POST('/api/montage/place', { ep, shot: x.s.id, take: null }); renderMontage(cur); } }, 'убрать дубль с кадра') : null,
+      h('span', { class: 'grow' }),
+      h('label', { class: 'muted' }, 'переход в кадр: ',
+        h('select', { onchange: async (e) => { await POST('/api/montage/trans', { ep, shot: x.s.id, trans: e.target.value }); M.trans[x.s.id] = e.target.value; x.trans = e.target.value; } },
+          ...[['cut', 'склейка'], ['flash', 'белая вспышка (удар)'], ['fade', 'из затемнения'], ['dissolve', 'наплыв'], ['whip', 'смазанная панорама']].map(([k, t]) => h('option', { value: k, selected: (x.trans || 'cut') === k }, t)))),
+      voicesOf(x.s.id).length ? h('span', { class: 'muted' }, ` · 🎙 ${voicesOf(x.s.id).length}`) : null].filter(Boolean));
+  }
   function show(i) {
     stopTimers();
     const x = items[i];
     if (!x) { playing = false; playBtn.textContent = '▶ Смотреть'; return; }
+    S.montageCur = i;
     segs.forEach((g, j) => g.classList.toggle('cur', j === i));
-    tag.textContent = `Сцена ${x.scene.n} · кадр ${x.s.id} · ${x.dur} с`;
+    tag.textContent = `Сцена ${x.scene.n} · кадр ${x.s.id} · ${x.dur} с${x.take ? ' · дубль ' + x.take : ''}`;
     sub.textContent = subsOn.checked ? subText(x.s) : '';
     sub.style.display = sub.textContent ? '' : 'none';
     video.style.display = x.video ? '' : 'none';
     img.style.display = !x.video && x.img ? '' : 'none';
     blank.textContent = !x.video && !x.img ? `${x.s.id}\n${x.s.frame || ''}` : '';
+    renderInfo(x);
+    if (playing && x.trans && x.trans !== 'cut') { flash.className = 'flash ' + x.trans; void flash.offsetWidth; flash.classList.add('go'); }
     video.pause();
     if (x.video) {
       const same = video.dataset.file === x.video;
       if (!same) { video.dataset.file = x.video; video.src = fileUrl(x.video); }
-      // внутри одной связки ролик идёт дальше без перемотки, иначе — с начала куска
+      // внутри одного ролика (связка или дубль) он идёт дальше без перемотки, иначе — с нужного места
       if (!(same && playing && Math.abs(video.currentTime - x.offset) < 0.35)) video.currentTime = x.offset || 0;
       if (playing) video.play().catch(() => {});
     } else if (x.img) {
@@ -1036,6 +1136,7 @@ function renderMontage() {
       img.style.animationDuration = x.dur + 's';
       img.style.animationPlayState = playing ? 'running' : 'paused';
     }
+    if (playing) playVoices(x);
     t0 = performance.now();
     if (playing) tick();
     else head.style.left = (starts[i] / total * 100) + '%';
@@ -1045,7 +1146,7 @@ function renderMontage() {
     const el = x.video ? video.currentTime - (x.offset || 0) : (performance.now() - t0) / 1000;
     head.style.left = Math.min(100, (starts[cur] + Math.min(el, x.dur)) / total * 100) + '%';
     time.textContent = `${fmt(starts[cur] + el)} / ${fmt(total)}`;
-    // ролик Pixverse длиннее кадра — обрезаем по хронометражу раскадровки
+    // ролик длиннее кадра — обрезаем по хронометражу раскадровки
     if (el >= x.dur || (x.video && video.ended)) { cur++; return show(cur); }
     raf = requestAnimationFrame(tick);
   }
@@ -1056,18 +1157,51 @@ function renderMontage() {
     show(cur);
   };
   S.montage = { stop: () => { playing = false; stopTimers(); video.pause(); } };
+
+  // ---- корзина дублей ----
+  const fileIn = h('input', { type: 'file', accept: 'video/*', multiple: true, style: { display: 'none' }, onchange: (e) => uploadTakes(e.target.files) });
+  const usedOn = (id) => Object.entries(M.place).filter(([, p]) => p.take === id).map(([k]) => k);
+  const bin = h('div', { class: 'bin', ...dropProps((e) => uploadTakes(e.dataTransfer.files)) },
+    h('div', { class: 'bin-head' }, h('b', {}, `Дубли (${M.takes.length})`),
+      h('span', { class: 'muted' }, ' — перетащи сюда ролики из Kling / Seedance (можно несколько), потом тяни дубль на кадр в полосе. Длинный дубль сам ляжет на следующие кадры.'),
+      h('span', { class: 'grow' }), h('button', { onclick: () => fileIn.click() }, '+ Добавить ролики'), fileIn),
+    M.takes.length ? h('div', { class: 'takes' }, ...M.takes.map((t) => h('div', { class: 'take' + (usedOn(t.id).length ? ' used' : ''), draggable: 'true', ondragstart: (e) => e.dataTransfer.setData('text/take', t.id), title: t.name },
+      h('video', { src: fileUrl(t.file), muted: true, preload: 'metadata', onmouseenter: (e) => e.target.play().catch(() => {}), onmouseleave: (e) => e.target.pause() }),
+      h('div', { class: 'take-cap' }, h('b', {}, t.id), ` ${t.dur ? t.dur.toFixed(1) + ' с' : ''}`, usedOn(t.id).length ? h('span', { class: 'muted' }, ` → ${usedOn(t.id).join(', ')}`) : null),
+      h('div', { class: 'take-cap muted' }, t.name),
+      h('div', { class: 'take-cap' },
+        h('input', { placeholder: 'заметка: лучший, лица плывут…', value: t.note || '', onchange: (e) => POST('/api/montage/take/note', { ep, id: t.id, note: e.target.value }) }),
+        h('button', { class: 'ghost', title: 'Удалить дубль', onclick: async () => { if (!confirm(`Удалить дубль ${t.id} (${t.name})?`)) return; await POST('/api/montage/take/delete', { ep, id: t.id }); renderMontage(cur); } }, '×'))))) : null);
+
+  // ---- озвучка ----
+  const vIn = h('input', { type: 'file', accept: 'audio/*', multiple: true, style: { display: 'none' }, onchange: (e) => uploadVoices(e.target.files) });
+  const have = M.voices.filter((v) => v.file).length;
+  const MODE = { lips: 'в кадре', offscreen: 'за кадром', vo: 'мысли' };
+  const voice = h('div', { class: 'bin', ...dropProps((e) => uploadVoices(e.dataTransfer.files)) },
+    h('div', { class: 'bin-head' }, h('b', {}, `Озвучка: ${have} из ${M.voices.length}`),
+      h('span', { class: 'muted' }, ' — назови файлы как в первой колонке и перетащи сюда пачкой, или брось файл прямо на строчку.'),
+      h('span', { class: 'grow' }),
+      h('button', { onclick: async () => { const r = await GET('/api/voice/script?ep=' + encodeURIComponent(ep)); copy(r.text); toast('Список фраз с голосами скопирован — вставь в нейросеть или в заметки', 6000); } }, '📋 Фразы для нейросети'),
+      h('button', { onclick: () => vIn.click() }, '+ mp3'), vIn),
+    h('table', { class: 'voicetab' }, ...M.voices.map((v) => h('tr', { class: v.file ? 'ok' : '', ...dropProps((e) => uploadVoices(e.dataTransfer.files, v)) },
+      h('td', {}, h('code', {}, v.name)), h('td', {}, v.whoName), h('td', { class: 'muted' }, [MODE[v.mode] || v.mode, v.manner].filter(Boolean).join(', ')), h('td', {}, v.text),
+      h('td', {}, v.file ? h('button', { class: 'ghost', onclick: () => new Audio(fileUrl(v.file)).play() }, '▶') : h('span', { class: 'muted' }, '—'))))));
+
   $('#main').replaceChildren(h('div', { class: 'montage' },
     h('div', { class: 'bar' },
-      h('span', { class: 'muted' }, `Черновой монтаж: ${items.length} кадров, ${fmt(total)}. Видео — ${cnt.video}, картинки вместо видео — ${cnt.img}, пусто — ${items.length - cnt.video - cnt.img}.`)),
+      h('span', { class: 'muted' }, `Черновой монтаж: ${items.length} кадров, ${fmt(total)}. Свои дубли — ${cnt.take}, видео — ${cnt.video - cnt.take}, картинки вместо видео — ${cnt.img}, пусто — ${items.length - cnt.video - cnt.img}.`)),
     screen,
     h('div', { class: 'bar', style: { marginTop: '10px' } },
       h('button', { onclick: () => { cur = Math.max(0, cur - 1); show(cur); } }, '⏮'), playBtn, h('button', { onclick: () => { cur = Math.min(items.length - 1, cur + 1); show(cur); } }, '⏭'),
       time, h('span', { class: 'grow' }), h('label', { class: 'muted' }, subsOn, ' реплики субтитрами'),
-      h('button', { class: 'primary', title: 'Склеить всю серию в один видеофайл', onclick: () => { playing = false; stopTimers(); video.pause(); playBtn.textContent = '▶ Смотреть'; buildEpisodeVideo(items, subsOn.checked); } }, '⬇ Собрать видео серии'),
-      h('button', { class: 'ghost', onclick: () => select({ kind: 'shot', ep: S.ep.id, id: items[cur].s.id }) }, 'Открыть кадр')),
+      h('button', { class: 'primary', title: 'Склеить всю серию в один видеофайл (черновик в браузере)', onclick: () => { playing = false; stopTimers(); video.pause(); playBtn.textContent = '▶ Смотреть'; buildEpisodeVideo(items, subsOn.checked); } }, '⬇ Собрать видео серии'),
+      h('button', { class: 'ghost', onclick: () => select({ kind: 'shot', ep, id: items[cur].s.id }) }, 'Открыть кадр')),
     line,
-    h('div', { class: 'legend muted' }, h('i', { class: 'seg v' }), ' видео ', h('i', { class: 'seg i' }), ' картинка ', h('i', { class: 'seg e' }), ' пусто · клик по полосе — перейти к кадру')));
-  show(0);
+    info,
+    h('div', { class: 'legend muted' }, h('i', { class: 'seg t' }), ' свой дубль ', h('i', { class: 'seg v' }), ' видео ', h('i', { class: 'seg i' }), ' картинка ', h('i', { class: 'seg e' }), ' пусто · клик по полосе — перейти к кадру, перетащи на кадр дубль или файл'),
+    bin,
+    voice));
+  show(cur);
 }
 
 async function upload(ref, file) {

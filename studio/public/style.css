@@ -347,3 +347,28 @@ pre.vprompt { max-height: 420px; }
 .muted.small { font-size: 12px; margin: 4px 0; }
 .vgen { border: 1px solid var(--line, #444); border-radius: 8px; padding: 8px 10px; margin: 10px 0; }
 .vgen-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+
+/* Монтаж: свои дубли, переходы, озвучка */
+.timeline .seg { font-size: 9px; color: rgba(255,255,255,.75); overflow: hidden; white-space: nowrap; text-align: center; line-height: 22px; }
+.seg.t { background: #a46ad8; }
+.seg.tstart { box-shadow: inset 2px 0 0 #fff; }
+.seg.drop, .bin.drop, .voicetab tr.drop { outline: 2px dashed var(--accent2); outline-offset: -2px; }
+.legend .seg.t { display: inline-block; width: 14px; height: 10px; }
+.shotinfo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 8px 0; font-size: 13px; }
+.bin { border: 1px dashed var(--line); border-radius: 10px; padding: 10px; margin-top: 14px; }
+.bin-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.takes { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.take { border: 1px solid var(--line); border-radius: 8px; padding: 6px; cursor: grab; background: rgba(255,255,255,.02); }
+.take.used { border-color: #a46ad8; }
+.take video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; background: #000; pointer-events: auto; }
+.take-cap { font-size: 12px; margin-top: 4px; display: flex; gap: 4px; align-items: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.take-cap input { flex: 1; min-width: 0; font-size: 12px; }
+.voicetab { width: 100%; border-collapse: collapse; font-size: 13px; }
+.voicetab td { padding: 4px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+.voicetab tr.ok td:first-child code { color: #6fcf7f; }
+.screen .flash { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+.screen .flash.flash.go { background: #fff; animation: mflash .35s ease-out; }
+.screen .flash.fade.go { background: #000; animation: mflash .6s ease-out; }
+.screen .flash.dissolve.go { background: #000; animation: mflash .4s ease-out; opacity: 0; }
+.screen .flash.whip.go { backdrop-filter: blur(14px); animation: mflash .25s ease-out; }
+@keyframes mflash { from { opacity: 1; } to { opacity: 0; } }

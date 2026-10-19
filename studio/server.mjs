@@ -21,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-26.1';
+const VERSION = '2026-10-27.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -1168,6 +1168,44 @@ function openInOS(p) {
 
 const gitSend = createGitSender(ROOT, (t) => logInbox(t));
 const agent = createAgent({ ROOT, STUDIO, DATA, config, logInbox: (t) => logInbox(t) });
+// ---------- монтаж: свои дубли и озвучка ----------
+// Дубли — любые ролики автора (Kling, Seedance…) в studio/media/<серия>/takes. Дубль кладётся на кадр и идёт дальше
+// по следующим кадрам, пока не кончится. Озвучка — mp3 с именем «<кадр>_<герой>_<номер реплики>.mp3» в …/voice.
+const montagePath = (ep) => path.join(DATA, 'montage', safe(ep) + '.json');
+const montageData = (ep) => ({ takes: [], place: {}, trans: {}, ...readJSON(montagePath(ep), {}) });
+const AUDIO_EXT = { 'audio/mpeg': '.mp3', 'audio/mp3': '.mp3', 'audio/wav': '.wav', 'audio/x-wav': '.wav', 'audio/wave': '.wav', 'audio/ogg': '.ogg', 'audio/mp4': '.m4a', 'audio/x-m4a': '.m4a' };
+function voiceLines(ep) {
+  const e = readJSON(epPath(ep), { scenes: [] });
+  const pr = project();
+  const dir = `studio/media/${safe(ep)}/voice`;
+  const have = fs.existsSync(abs(dir)) ? fs.readdirSync(abs(dir)) : [];
+  const out = [];
+  for (const sc of e.scenes) for (const s of sc.shots) {
+    if (s.cut) continue;
+    (s.lines || []).forEach((l, i) => {
+      if (l.optional) return;
+      const base = `${s.id}_${l.who}_${i + 1}`;
+      const f = have.find((x) => x.replace(/\.\w+$/, '') === base);
+      const c = pr.characters.find((x) => x.id === l.who);
+      out.push({ key: `${s.id}#${i}`, shot: s.id, scene: sc.n, i, who: l.who, whoName: c ? c.name.split(' (')[0] : (l.who === 'NARRATOR' ? 'Рассказчик' : l.who), text: l.text, mode: l.mode, manner: l.manner || '', name: base + '.mp3', file: f ? `${dir}/${f}` : null, dur: s.dur || 3 });
+    });
+  }
+  return out;
+}
+function voiceScript(ep) {
+  const lines = voiceLines(ep);
+  const voices = readJSON(path.join(STUDIO, 'canon', 'voice', 'voices.json'), {});
+  const who = [...new Set(lines.map((l) => l.who))];
+  const MODE = { lips: 'в кадре, губы', offscreen: 'за кадром', vo: 'мысли / закадр' };
+  return [
+    `# Озвучка ${ep}: ${lines.length} фраз`, '',
+    'Каждую фразу — отдельным файлом с именем из первой колонки (mp3 или wav). Готовые файлы перетащи во вкладку «Монтаж» → «Озвучка».', '',
+    '## Голоса', '', ...who.map((w) => `- **${lines.find((l) => l.who === w).whoName}** (${w}): ${voices[w] || '—'}`), '',
+    '## Фразы', '', '| Файл | Кто | Как | Фраза | Кадр, с |', '|---|---|---|---|---|',
+    ...lines.map((l) => `| ${l.name} | ${l.whoName} | ${[MODE[l.mode] || l.mode, l.manner].filter(Boolean).join(', ')} | ${l.text} | ${l.dur} |`), '',
+  ].join('\n');
+}
+
 const routes = {
   // ---- Claude в студии ----
   'GET /api/agent': () => agent.status(),
@@ -1176,6 +1214,38 @@ const routes = {
   'POST /api/agent/stop': () => agent.stop(),
   'POST /api/agent/new': () => agent.newThread(),
   'POST /api/agent/thread': (q, b) => agent.switchThread(b.id),
+  // ---- монтаж: дубли, переходы, озвучка ----
+  'GET /api/montage': (q) => ({ ...montageData(q.get('ep')), voices: voiceLines(q.get('ep')) }),
+  'GET /api/voice/script': (q) => ({ text: voiceScript(q.get('ep')) }),
+  'POST /api/montage/place': (q, b) => {
+    const m = montageData(b.ep);
+    if (b.take) m.place[b.shot] = { take: b.take, in: Math.max(0, +b.in || 0) }; else delete m.place[b.shot];
+    writeJSON(montagePath(b.ep), m);
+    return m;
+  },
+  'POST /api/montage/trans': (q, b) => {
+    const m = montageData(b.ep);
+    if (b.trans && b.trans !== 'cut') m.trans[b.shot] = b.trans; else delete m.trans[b.shot];
+    writeJSON(montagePath(b.ep), m);
+    return m;
+  },
+  'POST /api/montage/take/note': (q, b) => {
+    const m = montageData(b.ep);
+    const t = m.takes.find((x) => x.id === b.id);
+    if (t) t.note = String(b.note || '');
+    writeJSON(montagePath(b.ep), m);
+    return m;
+  },
+  'POST /api/montage/take/delete': (q, b) => {
+    const m = montageData(b.ep);
+    const t = m.takes.find((x) => x.id === b.id);
+    if (t) { try { fs.rmSync(abs(t.file), { force: true }); } catch {} }
+    m.takes = m.takes.filter((x) => x.id !== b.id);
+    for (const k of Object.keys(m.place)) if (m.place[k].take === b.id) delete m.place[k];
+    writeJSON(montagePath(b.ep), m);
+    logInbox(`${b.ep} — монтаж: убран дубль ${b.id}${t ? ` (${t.name})` : ''}`);
+    return m;
+  },
   'GET /api/git/status': () => ({ ...gitSend.status(), job: gitSend.job() }),
   'GET /api/git/job': () => gitSend.job(),
   'POST /api/git/send': (q, b) => gitSend.start(b.maxMB),
@@ -1429,6 +1499,35 @@ const server = http.createServer(async (req, res) => {
       await saveStream(req, out, 4e9);
       logInbox(`${ep} — собран черновой монтаж ${path.basename(out)}`);
       return send(res, 200, { file: rel(out) });
+    }
+    if (key === 'POST /api/montage/take') {
+      // дубль для монтажа: длительность меряет браузер (у автора может не быть ffprobe)
+      const ep = safe(url.searchParams.get('ep') || 'episode');
+      const ext = VIDEO_EXT[(req.headers['content-type'] || '').split(';')[0]] || '.mp4';
+      const m = montageData(ep);
+      const n = m.takes.reduce((a, t) => Math.max(a, +t.id.slice(1) || 0), 0) + 1;
+      const id = 'T' + String(n).padStart(3, '0');
+      const out = abs(`studio/media/${ep}/takes/${id}${ext}`);
+      fs.mkdirSync(path.dirname(out), { recursive: true });
+      await saveStream(req, out, 2e9);
+      m.takes.push({ id, file: rel(out), name: url.searchParams.get('name') || id, dur: +url.searchParams.get('dur') || 0, at: now(), note: '' });
+      const shot = url.searchParams.get('shot');
+      if (shot) m.place[shot] = { take: id, in: 0 };
+      writeJSON(montagePath(ep), m);
+      logInbox(`${ep} — монтаж: дубль ${id} «${url.searchParams.get('name') || ''}» (${(fs.statSync(out).size / 1e6).toFixed(1)} МБ)${shot ? ` → кадр ${shot}` : ''}`);
+      return send(res, 200, { id, ...m });
+    }
+    if (key === 'POST /api/voice/upload') {
+      const ep = safe(url.searchParams.get('ep') || 'episode');
+      const ext = AUDIO_EXT[(req.headers['content-type'] || '').split(';')[0]] || (String(url.searchParams.get('name')).match(/\.(mp3|wav|ogg|m4a)$/i)?.[0] || '.mp3');
+      const base = safe(String(url.searchParams.get('name') || 'voice').replace(/\.(mp3|wav|ogg|m4a)$/i, ''));
+      const dir = abs(`studio/media/${ep}/voice`);
+      fs.mkdirSync(dir, { recursive: true });
+      for (const f of fs.readdirSync(dir)) if (f.replace(/\.\w+$/, '') === base) fs.rmSync(path.join(dir, f), { force: true });
+      const out = path.join(dir, base + ext.toLowerCase());
+      await saveStream(req, out, 200e6);
+      logInbox(`${ep} — озвучка: ${base}${ext}`);
+      return send(res, 200, { file: rel(out), voices: voiceLines(ep) });
     }
     if (key === 'POST /api/video/upload') {
       const ref = JSON.parse(url.searchParams.get('ref'));
