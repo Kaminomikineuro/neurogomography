@@ -337,3 +337,13 @@ pre.vprompt { max-height: 420px; }
 .cver { display: flex; gap: 8px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 8px; }
 .cver .grow { flex: 1; }
 .filespage .gitpage { margin-top: 18px; padding-top: 4px; border-top: 1px solid var(--line); }
+
+/* Видео: режимы Kling 4.0 и карточки генераций Keyframes */
+.vseg { display: flex; gap: 0; margin: 4px 0; }
+.vseg button { flex: 1; border-radius: 0; }
+.vseg button:first-child { border-radius: 6px 0 0 6px; }
+.vseg button:last-child { border-radius: 0 6px 6px 0; }
+.vseg button.on { background: var(--accent, #c0392b); color: #fff; }
+.muted.small { font-size: 12px; margin: 4px 0; }
+.vgen { border: 1px solid var(--line, #444); border-radius: 8px; padding: 8px 10px; margin: 10px 0; }
+.vgen-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }

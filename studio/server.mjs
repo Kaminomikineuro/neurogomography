@@ -21,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-25.1';
+const VERSION = '2026-10-26.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -426,18 +426,21 @@ function camEn(cam = '') {
   return [...new Set(out)].join(', ') || 'medium shot';
 }
 // Пакет для видеомодели. Правила из гайдов:
-// Seedance 2.0 — картинки @Image1…@Image9, у каждой в тексте своя роль; действие по таймкодам «0–3 s: …»;
-//   режим «все референсы» или «первый + последний кадр».
-// Kling 3.0 — герои как Elements (@Element1…), стартовый кадр отдельно; multi-shot до 6 кадров,
-//   у каждого своя длительность и описание до ~500 знаков; героев описываем одинаково в начале; звук выключить.
-// Kling 4.0 Omni Reference — одно окно промпта, до 30 с; картинки @Image (до 10), герои @Element (до 7),
-//   видео @Video (до 5, вместе до 30 с) — сюда идёт превиз из Blender как референс камеры и постановки.
+// Seedance 2.0 — картинки @Image1…@Image9, у каждой в тексте своя роль; действие по таймкодам «0–3 s: …»; до 15 с.
+// Kling 3.0 — герои как Elements (@Element1…), стартовый кадр отдельно; multi-shot до 6 кадров, до 15 с.
+// Kling 4.0 (studio/canon/howto/kling4.md) — два режима, вместе нельзя:
+//   Omni Reference — картинки @Image (до 10), герои @Element (до 7), видео @Video (превиз); одна генерация до 30 с
+//     (Flash — до 20 с); промпт блоками: роли файлов, карта сцены, шоты с таймингом, темп, звук, стиль, обязательное.
+//   Keyframes — только картинки: каждый шот отдельно с первым кадром; переход — первый + последний кадр.
 const VIDEO_MODELS = {
   'seedance': 'Seedance 2.0 — все референсы',
   'seedance-ff': 'Seedance 2.0 — первый и последний кадр',
   'kling': 'Kling 3.0 — multi-shot + Elements',
   'kling4': 'Kling 4.0 — Omni Reference',
+  'kling4-kf': 'Kling 4.0 — Keyframes',
 };
+const MAX_DUR = (model, o = {}) => (model.startsWith('kling4') ? (o.flash ? 20 : 30) : 15);
+const NOT_PHOTO = 'Not photorealistic, not a 3D render, not live action.';
 // Текст кадра для видеомодели: без русских служебных фраз из промптов картинок («Один ключевой кадр аниме…»)
 // и без повторов (continuity часто уже вписана в img или VID). Реплики в «» остаются по-русски.
 function videoText(bits) {
@@ -456,14 +459,51 @@ function videoText(bits) {
   }
   return out.join('. ');
 }
+// «Звук» раскадровки (по-русски) → английская атмосфера для модели; реплики и музыка отбрасываются
+const SOUND_EN = [[/гул город/i, 'distant city hum'], [/удаляющ\w* топот/i, 'fading hoofbeats'], [/дребезг\w* стекл/i, 'rattling window glass'], [/хлоп\w* крыл/i, 'heavy wing beats'],
+  [/гарканье птиц|крик\w* птиц/i, 'bird cries'], [/шорох перьев/i, 'rustling feathers'], [/звон стали|лязг/i, 'ringing steel'], [/рёв разлом|рев разлом/i, 'roar of the rift'],
+  [/скрежет камн/i, 'grinding stone'], [/тяж\w* шаг/i, 'heavy footsteps'], [/глух\w* удар/i, 'dull thuds on the ground'], [/удар низкой ноты/i, 'a low boom'],
+  [/стук пальцев/i, 'fingers tapping on stone'], [/скрип песка|песок|песка/i, 'sand on stone'], [/голоса на фоне/i, 'murmur of voices'], [/крики/i, 'distant shouts'],
+  [/топот/i, 'hoofbeats'], [/прибой/i, 'surf below'], [/ветер|ветр/i, 'wind'], [/тишин/i, 'quiet room tone'], [/грохот/i, 'rumble'], [/взрыв/i, 'explosion'],
+  [/хруст/i, 'crunching'], [/капли/i, 'dripping'], [/низкий гул|гул/i, 'low drone'], [/разрыв/i, 'tearing'], [/скрип/i, 'creaking leather']];
+function soundEn(texts) {
+  const out = [];
+  for (const raw of texts) {
+    const t = String(raw || '').replace(/«[^»]*»/g, '').replace(/^[^:«]*:\s*/, (m) => (/[А-Яа-я]+\s*(\([^)]*\))?:\s*$/.test(m) ? '' : m));
+    let rest = t;
+    for (const [rx, en] of SOUND_EN) if (rx.test(rest)) { rest = rest.replace(rx, ' '); if (!out.includes(en)) out.push(en); }
+  }
+  return out;
+}
+// Шот с вложенными «Shot 1: … Shot 2: …» в VID → отдельные шоты (иначе нумерация сталкивается с общей)
+function shotUnits(s) {
+  const d = s.dur || 3;
+  const vid = String(s.vid || '');
+  const parts = [...vid.matchAll(/Shot\s*\d+\s*:\s*([\s\S]*?)(?=\s*Shot\s*\d+\s*:|$)/gi)].map((m) => m[1].trim()).filter(Boolean);
+  if (parts.length < 2) return [{ s, d, vid, sub: 0 }];
+  return parts.map((p, i) => ({ s, d: Math.round((d / parts.length) * 10) / 10, vid: p, sub: i + 1 }));
+}
+function splitHint(shots, max) {
+  const out = [];
+  let cur = [], t = 0;
+  for (const s of shots) {
+    const d = s.dur || 3;
+    if (cur.length && t + d > max) { out.push([cur, t]); cur = []; t = 0; }
+    cur.push(s.id); t += d;
+  }
+  if (cur.length) out.push([cur, t]);
+  return out.map(([ids, t]) => `${ids.length > 1 ? `${ids[0]}–${ids.at(-1)}` : ids[0]} (${t} с)`).join(' | ');
+}
 function clipPrompt(epId, sc, clip, pr, o = {}) {
-  const model = o.model || clip.model || (clip.tool === 'Kling' ? 'kling' : 'seedance');
+  let model = o.model || clip.model || (clip.tool === 'Kling' ? 'kling' : 'seedance');
+  if (model === 'kling4' && o.mode === 'keyframes') model = 'kling4-kf';
+  const k4 = model.startsWith('kling4');
   const chars = Object.fromEntries(pr.characters.map((c) => [c.id, c]));
   const style = pr.styles.find((x) => x.id === pr.activeStyle) || pr.styles[0];
   const shots = clip.shots.map((id) => sc.shots.find((s) => s.id === id)).filter((s) => s && !s.cut);
   const total = shots.reduce((a, s) => a + (s.dur || 3), 0);
   const warnings = [];
-  const maxDur = model === 'kling4' ? 30 : 15;
+  const maxDur = MAX_DUR(model, o);
   const keyOf = (s) => {
     let f = selectedFile(s);
     if (!f && s.imgFrom) f = selectedFile(findShot(epId, s.imgFrom)?.item);
@@ -473,9 +513,27 @@ function clipPrompt(epId, sc, clip, pr, o = {}) {
   const props = [...new Set(shots.flatMap((s) => (s.characters || []).filter((id) => isProp(pr, id))))];
   const nameOf = (id) => (chars[id] ? charName(chars[id]) : id);
   const clean = (t) => String(t || '').replace(/@Image\d \(([^)]+)\)/g, '$1').replace(/\[([A-Z ]+)\]/g, (m, id) => (chars[id] ? charName(chars[id]) : m)).replace(/,?\s*PAL-[A-Z]+/g, '').replace(/,?\s*STYLE\b/g, '').trim();
+  // канон в тексте: у кого перчатки или латные рукавицы — у того нет видимых костяшек
+  const gloved = (ids) => ids.some((id) => /glove|gauntlet/i.test(`${chars[id]?.details || ''} ${chars[id]?.token || ''}`));
+  const canonFix = (t, ids) => (gloved(ids) ? t.replace(/\b(?:whitened |white |pale )?knuckles\b/gi, 'gauntleted fists').replace(/gauntleted fists pressed hard on the stone(?!, leather)/gi, 'gauntleted fists pressed hard on the stone, leather creaking') : t);
   const first = keyOf(shots[0]);
   const last = shots.length > 1 ? keyOf(shots.at(-1)) : null;
-  if (!first) warnings.push(`У первого кадра (${shots[0]?.id}) нет картинки — нарисуй его, это стартовый кадр ролика.`);
+  if (!first && model !== 'kling4-kf') warnings.push(`У первого кадра (${shots[0]?.id}) нет картинки — нарисуй его, это стартовый кадр ролика.`);
+  const ambient = soundEn(shots.map((s) => s.sound));
+  const audio = `Ambient sound only: ${ambient.length ? ambient.join(', ') : 'natural ambience of the place'}. No dialogue audio, no music, no subtitles.`;
+  const styleLine = `${style.text}. ${NOT_PHOTO}`;
+  // реплики: по умолчанию без текста — голоса пишем отдельно (русский липсинк Kling не обещает)
+  const speech = (s) => {
+    const lips = o.lips === false ? [] : (s.lines || []).filter((l) => l.mode === 'lips');
+    const other = (s.lines || []).filter((l) => l.mode !== 'lips' && !l.optional);
+    if (lips.length) {
+      for (const l of lips) if (l.text.length / CPS > (s.dur || 3) + 0.3) warnings.push(`${s.id}: реплика длиннее кадра — губы не успеют.`);
+      return o.lineText
+        ? lips.map((l) => `${nameOf(l.who)} says in Russian${l.manner ? ` (${l.manner})` : ''}: «${l.text}»`).join('; ')
+        : [...new Set(lips.map((l) => nameOf(l.who)))].map((n) => `${n} speaks a short line, mouth moving naturally`).join('; ');
+    }
+    return other.length ? 'nobody speaks on screen, mouths closed' : '';
+  };
 
   // ---- референсы ----
   const refs = []; // { file, label, tag }
@@ -485,11 +543,13 @@ function clipPrompt(epId, sc, clip, pr, o = {}) {
     if (!file || !fs.existsSync(abs(file))) return null;
     const i = refs.findIndex((r) => r.file === file);
     if (i >= 0) return i + 1;
-    if (refs.length >= (model === 'kling4' ? 10 : 9)) return null;
+    if (refs.length >= (k4 ? 10 : 9)) return null;
     refs.push({ file, label });
     return refs.length;
   };
   const charRef = {}, shotRef = {};
+  const loc = pr.locations.find((l) => l.id === (shots[0]?.location || sc.location));
+  const placeFile = selectedFile(sc) && (shots[0]?.location || sc.location) === sc.location ? selectedFile(sc) : (loc ? selectedFile(loc) : null);
   if (model === 'kling') {
     if (first) refs.push({ file: first, label: 'start frame (Start Frame / Image to Video)', tag: 'Start frame' });
     if (o.lastFrame && last) refs.push({ file: last, label: 'end frame (End Frame)', tag: 'End frame' });
@@ -500,24 +560,24 @@ function clipPrompt(epId, sc, clip, pr, o = {}) {
     });
     if (shots.length > 6) warnings.push(`В Kling multi-shot не больше 6 кадров, а здесь ${shots.length}. Разрежь связку.`);
   } else if (model === 'kling4') {
-    if (first) add(first, 'the start frame — begin exactly from this picture');
+    if (first) add(first, 'start frame');
+    const placeN = add(placeFile, 'place');
+    if (placeN) refs[placeN - 1].role = 'place';
+    for (const id of props) { const n = add(selectedFile(chars[id]), 'prop'); if (n) refs[n - 1].role = `prop:${id}`; }
+    shots.slice(1).forEach((s) => { const n = add(keyOf(s), 'key frame'); if (n) shotRef[s.id] = n; });
     people.slice(0, 7).forEach((id) => {
       const f = selectedFile(chars[id]);
       if (f) { elements.push({ file: f, id, label: `${charName(chars[id])} — character sheet` }); charRef[id] = '@Element' + elements.length; }
       else warnings.push(`Нет листа персонажа «${chars[id].name}» — без Element лицо будет «плыть».`);
     });
-    const loc = pr.locations.find((l) => l.id === (shots[0]?.location || sc.location));
-    if (selectedFile(sc) && (shots[0]?.location || sc.location) === sc.location) add(selectedFile(sc), 'the scene master shot — the place, where everyone stands, the light');
-    else if (loc) add(selectedFile(loc), `the place "${loc.name}" — environment and light only`);
-    for (const id of props) add(selectedFile(chars[id]), `${charName(chars[id])}: prop design reference`);
-    shots.slice(1).forEach((s, i) => { const n = add(keyOf(s), `key frame of shot ${i + 2} — composition and poses`); if (n) shotRef[s.id] = n; });
     const pv = `studio/media/${epId}/previs/${clip.id || 'C' + shots[0]?.id}.mp4`;
     if (fs.existsSync(abs(pv))) videos.push({ file: pv, label: 'previs from Blender — camera movement, blocking and timing only' });
+    if (refs.length + elements.length + videos.length > 15) warnings.push('Kling 4.0: больше 15 референсов в одной задаче — убери лишние ключевые кадры.');
   } else if (model === 'seedance-ff') {
     if (first) add(first, 'first frame');
     if (last) add(last, 'last frame');
     shotRef[shots[0]?.id] = 1;
-  } else {
+  } else if (model === 'seedance') {
     if (first) add(first, 'the first frame of the video — start exactly from this picture');
     people.slice(0, 4).forEach((id) => {
       const n = add(selectedFile(chars[id]), `${charName(chars[id])}: character design reference — face, hair, costume`);
@@ -526,83 +586,150 @@ function clipPrompt(epId, sc, clip, pr, o = {}) {
     shots.slice(1).forEach((s, i) => { const n = add(keyOf(s), `key frame of shot ${i + 2} — composition and poses`); if (n) shotRef[s.id] = n; });
     if (o.lastFrame && last && !shotRef[shots.at(-1).id]) add(last, 'the last frame of the video — end exactly on this picture');
     for (const id of props) add(selectedFile(chars[id]), `${charName(chars[id])}: prop design reference`);
-    const loc = pr.locations.find((l) => l.id === (shots[0]?.location || sc.location));
-    if (selectedFile(sc) && (shots[0]?.location || sc.location) === sc.location) add(selectedFile(sc), 'the scene master shot — place, where everyone stands, light');
-    else if (loc) add(selectedFile(loc), `the place "${loc.name}" — environment and light only`);
+    if (placeFile) add(placeFile, placeFile === selectedFile(sc) ? 'the scene master shot — place, where everyone stands, light' : `the place "${loc.name}" — environment and light only`);
   }
 
-  // ---- кадры ----
-  let t = 0;
-  const tc = (x) => `${Math.round(x)}`;
+  // ---- шоты ----
   const who = (id) => (charRef[id] ? `${nameOf(id)} (${charRef[id]})` : nameOf(id));
-  const shotLines = shots.map((s, i) => {
-    const d = s.dur || 3;
-    const lips = o.lips === false ? [] : (s.lines || []).filter((l) => l.mode === 'lips');
-    const other = (s.lines || []).filter((l) => l.mode !== 'lips' && !l.optional);
-    let body = clean(s.img) || clean(s.frame);
-    for (const id of peopleOf(pr, s)) body = body.split(nameOf(id)).join(who(id));
-    const bits = [body];
-    if (s.vid) bits.push(clean(s.vid));
-    if (s.continuity) bits.push(s.continuity);
-    if (lips.length) bits.push(lips.map((l) => `${nameOf(l.who)} speaks in Russian${l.manner ? ` (${l.manner})` : ''}: «${l.text}»`).join('; ') + ' — lips move in sync, no voice audio');
-    else if (other.length) bits.push('nobody speaks on screen, mouths closed');
-    for (const l of lips) if (l.text.length / CPS > d + 0.3) warnings.push(`${s.id}: реплика длиннее кадра — губы не успеют.`);
-    const r = { id: s.id, d, from: t, to: t + d, cam: camEn(s.camera), text: videoText(bits) };
-    t += d;
+  const named = (t, s) => { for (const id of peopleOf(pr, s)) t = t.split(nameOf(id)).join(who(id)); return t; };
+  // если у шота есть ключевой кадр, модель видит его сама — в тексте только движение, камера и свет
+  const unitText = (u, hasKey) => {
+    const s = u.s;
+    const desc = hasKey || u.sub > 1 ? '' : named(clean(s.img) || clean(s.frame), s);
+    // одинаковая для многих шотов continuity — это карта сцены, её держит блок LOCATION MAP
+    const shared = sc.stagingEn && shots.filter((x) => x.continuity && x.continuity === s.continuity).length > 1;
+    const bits = [desc, named(clean(u.vid), s), u.sub || shared ? '' : s.continuity, u.sub && u.sub < shotUnits(s).length ? '' : speech(s)];
+    return canonFix(videoText(bits), peopleOf(pr, s));
+  };
+  let t = 0;
+  const tc = (x) => (Number.isInteger(x) ? `${x}` : x.toFixed(1));
+  const units = shots.flatMap((s) => shotUnits(s));
+  for (const s of shots) if (shotUnits(s).length > 1) warnings.push(`${s.id}: внутри кадра ${shotUnits(s).length} склейки — разбила на отдельные шоты.`);
+  const shotLines = units.map((u) => {
+    const hasKey = k4 && u.sub <= 1 && (u.s === shots[0] ? !!first : !!shotRef[u.s.id]);
+    const r = { id: u.s.id + (u.sub ? String.fromCharCode(96 + u.sub) : ''), sid: u.s.id, sub: u.sub, d: u.d, from: t, to: t + u.d, cam: u.sub > 1 ? '' : camEn(u.s.camera), text: k4 ? unitText(u, hasKey) : canonFix(videoText([u.sub > 1 ? '' : named(clean(u.s.img) || clean(u.s.frame), u.s), named(clean(u.vid), u.s), u.sub ? '' : u.s.continuity, speech(u.s)]), peopleOf(pr, u.s)) };
+    t += u.d;
     return r;
   });
-  const gen = o.dur || clip.genDur || genDur(total, shots.length, maxDur);
-  if (gen < total) warnings.push(`Выбрано ${gen} с, а кадры связки занимают ${total} с — модель сожмёт действие. Лучше ${genDur(total, shots.length, 30)} с или убери кадр.`);
-  const cast = people.map((id) => `${who(id)}: ${chars[id].token}${chars[id].details ? '. Costume: ' + chars[id].details : ''}`);
   const wish = o.wishes ? `Extra direction: ${o.wishes}` : '';
+  const cast = people.map((id) => `${who(id)}: ${chars[id].token}${chars[id].details ? '. Costume: ' + chars[id].details : ''}`);
+
+  // ---- Kling 4.0 Keyframes: каждый шот — своя генерация; переход — первый + последний кадр ----
+  if (model === 'kling4-kf') {
+    const links = new Set(o.links || []);
+    const gens = [];
+    for (let i = 0; i < shots.length; i++) {
+      const s = shots[i], nx = shots[i + 1];
+      const a = keyOf(s);
+      const link = nx && links.has(s.id) && a && keyOf(nx);
+      const part = link ? [s, nx] : [s];
+      if (!a) warnings.push(`${s.id}: нет ключевого кадра — в Keyframes его не снять. Нарисуй кадр или сними этот шот через Omni.`);
+      if (shotUnits(s).length > 1) warnings.push(`${s.id}: внутри кадра склейки, а Keyframes — один непрерывный план. Лучше Omni или раздели кадр в раскадровке.`);
+      const lines = [];
+      let tt = 0;
+      part.forEach((p, j) => {
+        const d = p.dur || 3;
+        // склейки внутри кадра в Keyframes не бывает: «Shot 1: … Shot 2: cut to …» → одно действие «…, then …»
+        const parts = shotUnits(p);
+        const vid = parts.length > 1 ? parts.map((u) => u.vid.replace(/^cut to\s+/i, '').replace(/[.\s]+$/, '')).join(', then ') : clean(p.vid);
+        const cam = camEn(p.camera).split(', ').filter((c) => !vid.toLowerCase().includes(c) && !/shot \/ reverse/.test(c)).join(', ');
+        const motion = canonFix(videoText([cam, named(clean(vid), p), p.continuity && /light|frame-|left|right/i.test(p.continuity) ? p.continuity : '', speech(p)]), peopleOf(pr, p));
+        lines.push(`${tc(tt)}–${tc(tt + d)}s: ${j ? 'the camera continues in the same direction into the next framing; ' : ''}${motion || 'subtle natural movement, breathing, blinking'}.`);
+        tt += d;
+      });
+      const dur = Math.max(3, Math.min(maxDur, Math.round(tt)));
+      lines[lines.length - 1] += ' Hold on the final frame.';
+      gens.push({
+        id: part.map((p) => p.id).join('→'), shots: part.map((p) => p.id), dur,
+        refs: [a ? { file: a, tag: 'First frame', label: `кадр ${s.id}` } : null, link ? { file: keyOf(nx), tag: 'Last frame', label: `кадр ${nx.id}` } : null].filter(Boolean),
+        text: [
+          `Use @Image1 as the first frame${link ? ' and @Image2 as the last frame' : ''}. One continuous shot, no cuts.`,
+          lines.join('\n'),
+          wish,
+          styleLine,
+          `Ambient sound only: ${soundEn(part.map((p) => p.sound)).join(', ') || 'natural ambience of the place'}. No dialogue audio, no music, no subtitles.`,
+        ].filter(Boolean).join('\n'),
+      });
+      if (link) i++;
+    }
+    return { model, mode: 'keyframes', modelName: VIDEO_MODELS[model], gens, text: '', refs: [], elements: [], videos: [], perShot: [], total, gen: total, maxDur, warnings, negative: pr.negative, shots: shots.map((s) => s.id) };
+  }
+
+  const gen = Math.min(maxDur, o.dur || clip.genDur || genDur(total, shots.length, maxDur));
+  if (total > maxDur) warnings.push(`Кадры занимают ${total} с, а ${VIDEO_MODELS[model].split(' —')[0]}${o.flash ? ' Flash' : ''} делает максимум ${maxDur} с. Резать: ${splitHint(shots, maxDur)}.`);
+  else if (gen < total) warnings.push(`Выбрано ${gen} с, а кадры связки занимают ${total} с — модель сожмёт действие.`);
   let text, perShot;
   if (model === 'kling') {
-    perShot = shotLines.map((x, i) => `Shot ${i + 1} (${x.d}s): ${x.cam}. ${x.text}`.slice(0, 500));
+    perShot = shotLines.map((x, i) => `Shot ${i + 1} (${x.d}s): ${x.cam ? x.cam + '. ' : ''}${x.text}`.slice(0, 500));
     for (const [i, x] of perShot.entries()) if (x.length >= 500) warnings.push(`Kling: описание кадра ${i + 1} длиннее 500 знаков — я его обрезала, проверь конец.`);
     text = [
-      `${style.text}. 2D anime, ${shots.length} shots, ${gen} s total, cuts between shots, the same characters and place in every shot, keep screen direction.`,
+      `${styleLine} 2D anime, ${shotLines.length} shots, ${gen} s total, cuts between shots, the same characters and place in every shot, keep screen direction.`,
       cast.length ? cast.join('\n') : '',
       wish,
-      'No music, no voices, no sound effects (turn native audio OFF).',
+      audio,
     ].filter(Boolean).join('\n\n');
   } else if (model === 'kling4') {
-    perShot = shotLines.map((x, i) => `${tc(x.from)}–${tc(x.to)} s — shot ${i + 1}, ${x.cam}${shotRef[x.id] ? `, like @Image${shotRef[x.id]}` : ''}: ${x.text}`);
+    // блоки по официальному шаблону Kling 4.0 для длинных сцен
+    const names = people.map(nameOf);
+    const roles = [];
+    refs.forEach((r, i) => {
+      const tag = `@Image${i + 1}`;
+      if (i === 0 && r.label === 'start frame') roles.push(`${tag} is the start frame: begin exactly from this picture, keep its framing and light.`);
+      else if (r.role === 'place') roles.push(`${tag} defines the place: preserve its spatial layout, where everyone stands and the light; do not copy its framing.`);
+      else if (r.role?.startsWith('prop:')) roles.push(`${tag} defines ${nameOf(r.role.slice(5))}: preserve its shape and details.`);
+      else { const sl = shotLines.find((x) => !x.sub || x.sub === 1 ? shotRef[x.sid] === i + 1 : false); if (sl) roles.push(`${tag} is the key frame of SHOT ${shotLines.indexOf(sl) + 1}: match its framing and poses.`); }
+    });
+    elements.forEach((e, i) => roles.push(`@Element${i + 1} defines ${nameOf(e.id)}: preserve the face, hair, eyes and clothing exactly.`));
+    if (videos.length) roles.push('Reference only the camera movement, blocking and timing of @Video1 — not its grey mannequins, grey blocks, setting or style.');
+    perShot = shotLines.map((x, i) => {
+      const cam = x.cam.split(', ').filter((c) => c && !x.text.toLowerCase().includes(c) && !/shot \/ reverse/.test(c)).join(', ');
+      return `SHOT ${i + 1} — ${tc(x.from)}–${tc(x.to)}s${cam ? ` (${cam})` : ''}: ${x.text}`;
+    });
+    const action = shots.some((s) => /удар|вспышк|тряск|замедлен|сопровожд/i.test(s.camera || '') || /strike|clash|slash|lunge|spin|kick/i.test(s.vid || ''));
+    const nevers = people.flatMap((id) => [...String(chars[id].details || '').matchAll(/\(never ([^)]+)\)/gi)].map((m) => `${nameOf(id)}: never ${m[1]}`));
+    const constraints = [
+      names.length ? `Only these characters appear: ${names.join(', ')} — nobody else, no duplicates.` : 'No people in focus.',
+      people.includes('LIAM') && people.includes('LORD') ? 'Liam is half a head shorter than the Dragon Lord.' : '',
+      ...nevers.map((x) => x + '.'),
+      'Changing hair color, a changed costume or an extra limb equals a failed shot.',
+    ].filter(Boolean);
     text = [
-      [first ? '@Image1 as the start frame.' : '', videos.length ? '@Video1 as a camera movement and blocking reference only; its grey mannequins and blocks must never appear.' : ''].filter(Boolean).join(' '),
-      `2D anime video, ${gen} seconds, ${shots.length} shot${shots.length > 1 ? 's' : ''} with hard cuts. The same characters, place and light in every shot; keep screen direction (180-degree rule).`,
-      refs.length > 1 ? refs.slice(1).map((r, i) => `@Image${i + 2} — ${r.label}.`).join('\n') : '',
-      `Style: ${style.text}.`,
-      cast.length ? 'Characters:\n' + cast.join('\n') : '',
-      'Timeline:\n' + perShot.join('\n'),
+      `SCENE CONTEXT: ${names.length ? `EXACTLY ${names.length} CHARACTER${names.length > 1 ? 'S' : ''} — NO DUPLICATES. ` : ''}${gen} seconds, ${shotLines.length} shot${shotLines.length > 1 ? 's' : ''}.`,
+      'ACTIVE REFERENCES:\n' + roles.join('\n'),
+      cast.length ? 'CHARACTERS (the same description in every shot):\n' + cast.join('\n') : '',
+      sc.stagingEn ? 'LOCATION MAP: ' + sc.stagingEn : '',
+      `FORMAT MODE: ${shotLines.length > 1 ? `${shotLines.length} shots, hard cuts, no fades or dissolves.` : 'one continuous shot, no cuts, no angle changes.'}\n` + perShot.join('\n'),
+      'PACING: ' + (action ? 'fast and punchy; impact frames on clashes; hold the final pose for a beat.' : 'calm and measured; each shot holds a beat before the cut; small natural movements, breathing, blinking.'),
       wish,
-      'Silent video: native audio off, no music, no voices. Anyone who does not speak keeps the mouth closed. No text, no subtitles, no watermark.',
+      'AUDIO: ' + audio,
+      'STYLE: ' + styleLine,
+      'POSITIVE CONSTRAINTS: ' + constraints.join(' '),
     ].filter(Boolean).join('\n\n');
+    if (!sc.stagingEn) warnings.push('У сцены нет карты на английском (stagingEn) — попроси Claude дописать, без неё модель хуже держит стороны.');
   } else if (model === 'seedance-ff') {
-    perShot = shotLines.map((x) => `${tc(x.from)}–${tc(x.to)} s: ${x.cam}. ${x.text}`);
+    perShot = shotLines.map((x) => `${tc(x.from)}–${tc(x.to)} s: ${x.cam ? x.cam + '. ' : ''}${x.text}`);
     text = [
       `@Image1 is the first frame, ${last ? '@Image2 is the last frame. ' : ''}2D anime video, ${gen} s, smooth continuous action from the first frame to the last one.`,
-      `Style: ${style.text}.`,
+      `Style: ${styleLine}`,
       cast.length ? 'Characters: ' + cast.join(' ') : '',
       'Timeline:\n' + perShot.join('\n'),
       wish,
-      'Silent: no music, no voices. Anyone who does not speak keeps the mouth closed. No text, no subtitles, no watermark.',
+      audio + ' Anyone who does not speak keeps the mouth closed. No text, no watermark.',
     ].filter(Boolean).join('\n\n');
   } else {
-    perShot = shotLines.map((x, i) => `${tc(x.from)}–${tc(x.to)} s — shot ${i + 1}, ${x.cam}${shotRef[x.id] ? `, like @Image${shotRef[x.id]}` : ''}: ${x.text}`);
+    perShot = shotLines.map((x, i) => `${tc(x.from)}–${tc(x.to)} s — shot ${i + 1}${x.cam ? ', ' + x.cam : ''}${!x.sub || x.sub === 1 ? (shotRef[x.sid] ? `, like @Image${shotRef[x.sid]}` : '') : ''}: ${x.text}`);
     text = [
-      `2D anime video, ${gen} seconds, ${shots.length} shot${shots.length > 1 ? 's' : ''} with hard cuts.${first ? ' Start from @Image1 as the first frame.' : ''} The same characters, place and light in every shot; keep screen direction (180-degree rule).`,
+      `2D anime video, ${gen} seconds, ${shotLines.length} shot${shotLines.length > 1 ? 's' : ''} with hard cuts.${first ? ' Start from @Image1 as the first frame.' : ''} The same characters, place and light in every shot; keep screen direction (180-degree rule).`,
       refs.length ? refs.map((r, i) => `@Image${i + 1} — ${r.label}.`).join('\n') : '',
-      `Style: ${style.text}.`,
+      `Style: ${styleLine}`,
       cast.length ? 'Characters:\n' + cast.join('\n') : '',
       'Timeline:\n' + perShot.join('\n'),
       wish,
-      'Silent video: no music, no voices. Anyone who does not speak keeps the mouth closed. No text, no subtitles, no watermark.',
+      audio + ' Anyone who does not speak keeps the mouth closed. No text, no watermark.',
     ].filter(Boolean).join('\n\n');
   }
-  if (model === 'kling4' && text.length > 2500) warnings.push(`Промпт ${text.length} знаков. Если Kling обрежет или ругнётся на длину — убери кадр или сократи VID; описания героев можно оставить короче, их держат Elements.`);
-  if (model === 'kling4' && total > 30) warnings.push(`Кадры занимают ${total} с — Kling 4.0 делает до 30 с за раз. Разрежь связку.`);
-  if (total > 15 && model !== 'kling' && model !== 'kling4') warnings.push(`Кадры занимают ${total} с — Seedance 2.0 делает до 15 с за раз. Разрежь связку (или выбери 30 с, если у тебя Seedance 2.5).`);
-  return { model, modelName: VIDEO_MODELS[model], text, refs, elements, videos, perShot, total, gen, warnings, negative: pr.negative, shots: shots.map((s) => s.id) };
+  if (k4) refs.forEach((r) => { r.label = r.label === 'start frame' ? 'start frame — begin exactly from this picture' : r.role === 'place' ? 'the place: layout, where everyone stands, light' : r.label === 'key frame' ? 'key frame of a shot — framing and poses' : r.label; });
+  return { model, modelName: VIDEO_MODELS[model], text, refs, elements, videos, perShot, total, gen, maxDur, warnings, negative: pr.negative, shots: shots.map((s) => s.id) };
 }
 
 // Крупность кадра: на крупных и деталях фон локации не нужен — иначе модель тащит его целиком
@@ -953,6 +1080,7 @@ function exportEpisode(epId) {
     const dir = path.join(outDir, `Связка_${safe(c.id)}`);
     fs.mkdirSync(dir, { recursive: true });
     cp.refs.forEach((r, i) => fs.copyFileSync(abs(r.file), path.join(dir, `Image${i + 1}${path.extname(r.file)}`)));
+    (cp.gens || []).forEach((g, n) => g.refs.forEach((r) => fs.copyFileSync(abs(r.file), path.join(dir, `Gen${n + 1}_${r.tag === 'Last frame' ? 'last' : 'first'}${path.extname(r.file)}`))));
     (cp.elements || []).forEach((e, i) => fs.copyFileSync(abs(e.file), path.join(dir, `Element${i + 1}_${safe(e.id)}${path.extname(e.file)}`)));
     (cp.videos || []).forEach((e, i) => fs.copyFileSync(abs(e.file), path.join(dir, `Video${i + 1}_previs${path.extname(e.file)}`)));
     const v = selectedVideo(c);
@@ -963,8 +1091,9 @@ function exportEpisode(epId) {
       'Референсы (загружай по порядку):', ...cp.refs.map((r, i) => `Image${i + 1} — ${r.label}`),
       ...(cp.elements?.length ? ['', 'Elements (Kling):', ...cp.elements.map((e, i) => `Element${i + 1} — ${e.label}`)] : []),
       ...(cp.videos?.length ? ['', 'Видео-референсы (Kling 4.0):', ...cp.videos.map((e, i) => `Video${i + 1} — ${e.label}`)] : []), '',
-      'PROMPT:', cp.text, '', 'NEGATIVE:', cp.negative, '',
-      'По кадрам (Kling multi-shot — по кадру в поле):', ...cp.perShot,
+      ...(cp.gens ? cp.gens.flatMap((g, n) => [`ГЕНЕРАЦИЯ ${n + 1} · кадры ${g.id} · ${g.dur} с · файлы Gen${n + 1}_first${g.refs.length > 1 ? ' + Gen' + (n + 1) + '_last' : ''}`, g.text, '']) : ['PROMPT:', cp.text, '']),
+      'NEGATIVE:', cp.negative, '',
+      ...(cp.perShot.length ? ['По кадрам:', ...cp.perShot] : []),
     ].join('\n'));
     clipRows.push(`| ${c.id} | ${cp.shots.join(', ')} | ${cp.total} | ${c.tool || 'Seedance'} | ${v ? '✓' : '—'} |`);
   }

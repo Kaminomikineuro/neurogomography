@@ -1,0 +1,72 @@
+{
+ "id": "2026-10-19-kling4",
+ "title": "Kling 4.0: карта сцен на английском (LOCATION MAP), латные кулаки Бельфи вместо костяшек",
+ "ops": [
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 1,
+   "set": {
+    "stagingEn": "Council hall carved into red rock. A long heavy stone table runs from frame-left to frame-right with an old map on it. Liam sits at the RIGHT head of the table in a carved stone chair; tall narrow windows behind him, red sand beating on the glass, reddish light falls across the table from frame-right (rim light on Liam). General Belfi stands stooped at the far LEFT end of the table, gauntleted fists pressed on the stone. Commander Ardan stands on the FAR long side and glances sideways at Belfi. Captain Roy stands on the NEAR long side in the middle, reporting over the map. A heavy door in the near wall on the left. All four are in the room at once; when the camera is on one, the others stay blurred in their places."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 2,
+   "set": {
+    "stagingEn": "Hangar (2.1–2.4): a large hall carved into the fortress rock; on the right a wide opening straight into the red sky, the birds take off through it. Saddled giant Rukh birds stand in a row along the far wall; knights check girths and feed them. Liam enters from the left through an arch from the fortress. Flight (2.5–2.10): a wedge of about ten Rukh birds flies over the red desert from frame-left to frame-right in every flight shot, Liam leads the wedge; the red sun is high ahead on the right. No hangar in the sky."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 3,
+   "set": {
+    "stagingEn": "The Dragon Lord stands on top of the mound; Liam arrives from the right. A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 4,
+   "set": {
+    "stagingEn": "A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 5,
+   "set": {
+    "stagingEn": "A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 6,
+   "set": {
+    "stagingEn": "SENTENCE (6.1–6.8) happens BEFORE the rift: clear rust-red sky, red sun, no darkness in the air; in 6.5–6.7 only the ground shakes; in 6.8 black clouds roll in. The rift first appears in 6.9 and stays in the background from then on: a black tear in the air on the RIGHT, behind Liam, so he is pulled backwards to the right. A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
+   }
+  },
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 7,
+   "set": {
+    "stagingEn": "A black rift hangs in the air on the RIGHT, behind Liam; black storm clouds swallow the red sun, grey frost on the red sand. A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "1.7",
+   "set": {
+    "frame": "Бельфи у края стола, ссутулился. Камера опускается к кулакам в латных перчатках: так упёрлись в камень, что кожа скрипит.",
+    "img": "medium shot of an old stooped drayk general standing at the edge of the stone table, tired worn face, gauntleted fists pressed hard on the stone, PAL-COUNCIL, STYLE",
+    "vid": "slow tilt down from his face to his gauntleted fists pressed hard on the stone, leather creaking"
+   }
+  }
+ ]
+}
