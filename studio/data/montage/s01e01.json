@@ -79,6 +79,22 @@
    "dur": 7.04,
    "at": "2026-10-19 09:17:03",
    "note": ""
+  },
+  {
+   "id": "T011",
+   "file": "studio/media/s01e01/takes/T011.mp4",
+   "name": "kling_20261019_VIDEO_Element1_i_4380_0.mp4",
+   "dur": 5.04,
+   "at": "2026-10-19 09:17:51",
+   "note": ""
+  },
+  {
+   "id": "T012",
+   "file": "studio/media/s01e01/takes/T012.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_4361_0.mp4",
+   "dur": 30.04,
+   "at": "2026-10-19 09:18:02",
+   "note": ""
   }
  ],
  "place": {},
