@@ -1,0 +1,185 @@
+"""Режиссёрская склейка серии по монтажному листу: куски дублей, переходы, титры, звук.
+
+Запуск:  python studio/tools/cut.py s01e01 [--size 1920x1080] [--preview] [--only 1.4-1.9]
+Монтажный лист: studio/data/montage/<серия>.cut.json
+  "video": [{"id": "1.4", "take": "T012", "in": 0, "out": 4.17, "trans": "cut", "td": 0.4, "zoom": 1.08}, …,
+            {"id": "title", "card": ["ХРОНИКИ РОДА ЭЛЬТАР", "БЕЛАЯ КРОВЬ", "Серия 1 · Это Грань?"], "dur": 4.5}]
+    trans — переход В этот кусок: cut, dissolve, fadeblack, fadewhite (вспышка), whip (смазанная панорама), zoomin; td — его длина.
+  "audio": [{"src": "wind_soft", "from": "E1", "to": "E5", "gain": 0.4, "fin": 2, "fout": 2, "at": 0.5}, …]
+    src — звук из SFX ниже (синтез ffmpeg, файлы не нужны) или путь к mp3/wav (музыка, озвучка);
+    from/to — id кусков (от начала from до конца to), at — сдвиг от начала from, dur — длина вместо to.
+Водяной знак Kling в правом нижнем углу затирается (delogo). Звука в дублях нет — вся звуковая дорожка из листа.
+"""
+import json, os, re, shutil, subprocess, sys, tempfile, time
+
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+A = sys.argv[1:]
+EP = A[0] if A and not A[0].startswith('--') else 's01e01'
+opt = lambda k, d=None: A[A.index(k) + 1] if k in A and A.index(k) + 1 < len(A) else d
+W, H = map(int, opt('--size', '1920x1080').split('x'))
+FPS = 24
+FF = shutil.which('ffmpeg') or 'ffmpeg'
+FONT = next((f for f in ['/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+                         'C:/Windows/Fonts/georgia.ttf', 'C:/Windows/Fonts/arial.ttf'] if os.path.exists(f)), '')
+P = lambda r: os.path.join(ROOT, *r.split('/'))
+run = lambda cmd: subprocess.run(cmd, check=True)
+
+# ---- звуки: синтез ffmpeg (lavfi), {d} — длительность ----
+SR = 48000
+SFX = {
+    'wind_soft': 'anoisesrc=c=brown:a=0.6:r={sr}:d={d},lowpass=f=520,highpass=f=50,tremolo=f=0.13:d=0.55',
+    'wind_strong': 'anoisesrc=c=pink:a=0.5:r={sr}:d={d},bandpass=f=650:width_type=h:w=900,tremolo=f=0.31:d=0.65,volume=2.2',
+    'room': 'anoisesrc=c=brown:a=0.25:r={sr}:d={d},lowpass=f=170',
+    'surf': 'anoisesrc=c=brown:a=0.8:r={sr}:d={d},lowpass=f=950,tremolo=f=0.11:d=0.95',
+    'sand_glass': 'anoisesrc=c=white:a=0.25:r={sr}:d={d},highpass=f=3200,tremolo=f=6.5:d=0.9',
+    'whoosh': 'anoisesrc=c=pink:a=0.9:r={sr}:d={d},bandpass=f=1300:width_type=h:w=1800,afade=t=in:d={h},afade=t=out:st={h}:d={h}',
+    'wing': 'anoisesrc=c=brown:a=1:r={sr}:d={d},lowpass=f=420,afade=t=in:d=0.07,afade=t=out:st=0.08:d={h2},volume=2.5',
+    'boom': "aevalsrc='0.95*sin(2*PI*(42+38*exp(-3*t))*t)*exp(-1.4*t)':s={sr}:d={d},aecho=0.8:0.6:180|420:0.35|0.2",
+    'hit': "aevalsrc='0.5*(sin(2*PI*660*t)+0.6*sin(2*PI*990*t)+0.4*sin(2*PI*1485*t))*exp(-2.2*t)':s={sr}:d={d},aecho=0.8:0.8:250|500:0.4|0.25",
+    'door': "aevalsrc='0.9*sin(2*PI*62*t)*exp(-6*t)+0.25*sin(2*PI*180*t)*exp(-14*t)':s={sr}:d={d},aecho=0.7:0.5:90:0.3",
+    'heart': "aevalsrc='0.8*(sin(2*PI*55*t)*exp(-14*mod(t,1.05))+0.6*sin(2*PI*50*t)*exp(-14*mod(t-0.32,1.05))*gte(mod(t,1.05),0.32))':s={sr}:d={d}",
+    'bird_cry': "aevalsrc='0.45*sin(2*PI*(2100-1100*t+60*sin(2*PI*28*t))*t)*exp(-2.6*t)*gte(t,0)':s={sr}:d={d},highpass=f=900,aecho=0.6:0.5:300:0.25",
+    # тёмный фон: ре минор, медленно дышит; epic — с квинтой сверху, tense — ниже и тише
+    'drone_epic': "aevalsrc='0.10*sin(2*PI*73.42*t)*(0.7+0.3*sin(2*PI*0.06*t))+0.08*sin(2*PI*110*t)*(0.6+0.4*sin(2*PI*0.09*t+1))"
+                  "+0.06*sin(2*PI*146.83*t)*(0.5+0.5*sin(2*PI*0.04*t+2))+0.05*sin(2*PI*220*t)*(0.4+0.6*sin(2*PI*0.05*t+3))"
+                  "+0.03*sin(2*PI*293.66*t)*(0.3+0.7*sin(2*PI*0.07*t))':s={sr}:d={d},lowpass=f=1400,aecho=0.8:0.85:400|800:0.35|0.2",
+    'drone_tense': "aevalsrc='0.10*sin(2*PI*55*t)*(0.7+0.3*sin(2*PI*0.05*t))+0.07*sin(2*PI*65.41*t)*(0.6+0.4*sin(2*PI*0.08*t+1))"
+                   "+0.04*sin(2*PI*110*t+0.3*sin(2*PI*0.2*t))*(0.5+0.5*sin(2*PI*0.03*t))':s={sr}:d={d},lowpass=f=700,aecho=0.8:0.8:300:0.3",
+    'drone_dark': "aevalsrc='0.11*sin(2*PI*36.71*t)*(0.7+0.3*sin(2*PI*0.04*t))+0.08*sin(2*PI*73.42*t)*(0.6+0.4*sin(2*PI*0.06*t+2))"
+                  "+0.05*sin(2*PI*77.78*t)*(0.4+0.6*sin(2*PI*0.03*t+1))':s={sr}:d={d},lowpass=f=600,aecho=0.8:0.85:500:0.35",
+}
+
+
+def take_file(M, tid):
+    t = next((x for x in M.get('takes', []) if x['id'] == tid), None)
+    if not t:
+        sys.exit(f'Нет дубля {tid}')
+    return P(t['file'])
+
+
+def probe_size(path):
+    out = subprocess.run([shutil.which('ffprobe') or 'ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height',
+                          '-of', 'csv=p=0', path], capture_output=True, text=True).stdout.strip()
+    w, h = map(int, out.split(',')[:2])
+    return w, h
+
+
+def esc(t):
+    return t.replace('\\', '\\\\').replace(':', '\\:').replace("'", "\u2019").replace('%', '\\%')
+
+
+def render_piece(M, v, out):
+    d = v['out'] - v['in'] if 'take' in v else v['dur']
+    grade = 'eq=contrast=1.04:saturation=1.06,vignette=angle=PI/5'
+    if 'card' in v:
+        lines = v['card']
+        sizes = [int(H * 0.028), int(H * 0.085), int(H * 0.035)]
+        ys = ['h*0.36', 'h*0.43', 'h*0.58']
+        dt = ','.join(f"drawtext=fontfile='{FONT}':text='{esc(t)}':fontcolor=0xF2E6E0:fontsize={sizes[i % 3]}:x=(w-text_w)/2:y={ys[i % 3]}"
+                      f":alpha='min(1,max(0,(t-{0.3 + 0.35 * i})/0.8))*min(1,max(0,({d}-t)/0.6))'" for i, t in enumerate(lines))
+        run([FF, '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=0x0b0708:s={W}x{H}:r={FPS}:d={d}', '-vf', f'{dt},vignette=angle=PI/4',
+             '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
+        return d
+    src = take_file(M, v['take'])
+    sw, sh = probe_size(src)
+    logo = f'delogo=x={sw - 160}:y={sh - 50}:w={136}:h={30}'
+    fit = f'scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={FPS}'
+    z = v.get('zoom')
+    if z:  # медленный наезд внутри куска
+        n = int(d * FPS)
+        fit += f",zoompan=z='1+({z}-1)*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS}"
+    if v.get('speed'):
+        fit += f",setpts=PTS/{v['speed']}"
+        d = d / v['speed']
+    run([FF, '-loglevel', 'error', '-y', '-ss', f"{v['in']:.3f}", '-t', f"{v['out'] - v['in']:.3f}", '-i', src, '-an',
+         '-vf', f'{logo},{fit},{grade}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
+    return d
+
+
+XF = {'dissolve': 'dissolve', 'fadeblack': 'fadeblack', 'fadewhite': 'fadewhite', 'whip': 'smoothleft', 'zoomin': 'zoomin', 'fade': 'fade'}
+
+
+def main():
+    M = json.load(open(P(f'studio/data/montage/{EP}.json'), encoding='utf-8'))
+    C = json.load(open(P(f'studio/data/montage/{EP}.cut.json'), encoding='utf-8'))
+    V = C['video']
+    if opt('--only'):
+        a, b = (opt('--only').split('-') + [None])[:2]
+        ids = [v['id'] for v in V]
+        V = V[ids.index(a):ids.index(b or a) + 1]
+    tmp = tempfile.mkdtemp()
+    files, durs = [], []
+    for n, v in enumerate(V):
+        f = os.path.join(tmp, f'{n:03d}.mp4')
+        print(f"{v['id']:>8}  {v.get('take', 'титр')} {v.get('in', '')}–{v.get('out', '')}  {v.get('trans', 'cut')}")
+        durs.append(render_piece(M, v, f))
+        files.append(f)
+    # склейка: cut — встык, остальное — xfade с перекрытием; считаем, где начинается каждый кусок
+    fc = [f'[{n}:v]settb=AVTB,fps={FPS},format=yuv420p[s{n}]' for n in range(len(V))]
+    starts, t, last = [], 0.0, '[s0]'
+    for n in range(len(V)):
+        tr = V[n].get('trans', 'cut') if n else 'cut'
+        td = min(V[n].get('td', 0.5), durs[n] / 2, (durs[n - 1] / 2) if n else 0)
+        if n == 0:
+            starts.append(0.0)
+            t = durs[0]
+            continue
+        if tr in XF:
+            starts.append(t - td)
+            fc.append(f'{last}[s{n}]xfade=transition={XF[tr]}:duration={td:.3f}:offset={t - td:.3f}[x{n}]')
+            t = t - td + durs[n]
+        else:
+            starts.append(t)
+            fc.append(f'{last}[s{n}]concat=n=2:v=1:a=0[x{n}]')
+            t += durs[n]
+        last = f'[x{n}]'
+    total = t
+    first_tr = V[0].get('trans')
+    fade_in = f",fade=t=in:d={V[0].get('td', 1)}" if first_tr in ('fadeblack', 'fade') else ''
+    fc.append(f"{last}fade=t=out:st={total - C.get('tail', 1.2):.3f}:d={C.get('tail', 1.2)}{fade_in}[vout]")
+    video = os.path.join(tmp, 'video.mp4')
+    ins = sum([['-i', f] for f in files], [])
+    run([FF, '-loglevel', 'error', '-y', *ins, '-filter_complex', ';'.join(fc), '-map', '[vout]', '-c:v', 'libx264', '-preset', 'medium',
+         '-crf', '17', '-pix_fmt', 'yuv420p', '-r', str(FPS), video])
+    # звук по листу
+    pos = {v['id']: (starts[i], starts[i] + durs[i]) for i, v in enumerate(V)}
+    ains, chains = [], []
+    for a in C.get('audio', []):
+        if a['from'] not in pos:
+            continue
+        st = pos[a['from']][0] + a.get('at', 0)
+        to = a.get('to', a['from'])
+        en = st + a['dur'] if 'dur' in a else (pos[to][1] if to in pos else total) + a.get('tail', 0)
+        d = max(0.2, min(en, total) - st)
+        src = a['src']
+        k = len(chains)
+        if src in SFX:
+            ains += ['-f', 'lavfi', '-i', SFX[src].format(d=f'{d:.3f}', sr=SR, h=f'{d / 2:.3f}', h2=f'{max(0.1, d - 0.15):.3f}')]
+        else:
+            ains += ['-i', P(src)]
+        fi, fo = a.get('fin', 0.05), a.get('fout', 0.3)
+        chains.append(f"[{k + 1}:a]aformat=sample_rates={SR}:channel_layouts=stereo,atrim=0:{d:.3f},asetpts=PTS-STARTPTS,"
+                      f"afade=t=in:d={fi},afade=t=out:st={max(0, d - fo):.3f}:d={fo},volume={a.get('gain', 0.5)},"
+                      f"adelay={int(st * 1000)}|{int(st * 1000)}[a{k}]")
+    os.makedirs(P(f'studio/export/{EP}'), exist_ok=True)
+    out = P(f'studio/export/{EP}/Склейка_{time.strftime("%Y-%m-%d_%H-%M")}.mp4')
+    if chains:
+        mix = ''.join(f'[a{k}]' for k in range(len(chains)))
+        fca = ';'.join(chains) + f';{mix}amix=inputs={len(chains)}:normalize=0,atrim=0:{total:.3f},loudnorm=I=-19:TP=-1.5:LRA=14,afade=t=out:st={total - 1.5:.3f}:d=1.5,alimiter=limit=0.9[aout]'
+        run([FF, '-loglevel', 'error', '-y', '-i', video, *ains, '-filter_complex', fca, '-map', '0:v', '-map', '[aout]',
+             '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', out])
+    else:
+        shutil.copy(video, out)
+    print('склейка:', os.path.relpath(out, ROOT), f'{total:.1f} с')
+    json.dump({v['id']: round(starts[i], 2) for i, v in enumerate(V)}, open(os.path.join(tmp, '..', f'{EP}_starts.json'), 'w'))
+    if '--preview' in A:
+        pv = P(f'studio/media/{EP}/renders/{os.path.basename(out)}')
+        os.makedirs(os.path.dirname(pv), exist_ok=True)
+        run([FF, '-loglevel', 'error', '-y', '-i', out, '-vf', 'scale=1280:-2', '-c:v', 'libx264', '-crf', '23', '-preset', 'medium',
+             '-c:a', 'aac', '-b:a', '160k', pv])
+        print('превью:', os.path.relpath(pv, ROOT), f'{os.path.getsize(pv) / 1e6:.1f} МБ')
+    shutil.rmtree(tmp, ignore_errors=True)
+
+
+if __name__ == '__main__':
+    main()
