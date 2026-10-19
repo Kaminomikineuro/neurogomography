@@ -281,18 +281,18 @@
   {
    "src": "drone_epic",
    "from": "E1",
-   "to": "E5",
+   "to": "title",
    "gain": 0.55,
    "fin": 3,
-   "fout": 2
+   "fout": 2.5
   },
   {
    "src": "wind_soft",
    "from": "E1",
-   "to": "E5",
+   "to": "title",
    "gain": 0.45,
    "fin": 2,
-   "fout": 1.5
+   "fout": 3
   },
   {
    "src": "surf",
