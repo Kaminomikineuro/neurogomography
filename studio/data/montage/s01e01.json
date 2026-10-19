@@ -1,0 +1,86 @@
+{
+ "takes": [
+  {
+   "id": "T001",
+   "file": "studio/media/s01e01/takes/T001.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_4245_0.mp4",
+   "dur": 18.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T002",
+   "file": "studio/media/s01e01/takes/T002.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_4210_0.mp4",
+   "dur": 22.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T003",
+   "file": "studio/media/s01e01/takes/T003.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_4168_0.mp4",
+   "dur": 15.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T004",
+   "file": "studio/media/s01e01/takes/T004.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_4142_0.mp4",
+   "dur": 23.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T005",
+   "file": "studio/media/s01e01/takes/T005.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_4269_0.mp4",
+   "dur": 25.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T006",
+   "file": "studio/media/s01e01/takes/T006.mp4",
+   "name": "kling_20261019_VIDEO_SCENE_CONT_3737_0.mp4",
+   "dur": 21.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T007",
+   "file": "studio/media/s01e01/takes/T007.mp4",
+   "name": "kling_20261019_VIDEO_2D_anime_v_3540_0.mp4",
+   "dur": 4.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T008",
+   "file": "studio/media/s01e01/takes/T008.mp4",
+   "name": "kling_20261019_VIDEO_Use__Image_3540_0.mp4",
+   "dur": 4.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T009",
+   "file": "studio/media/s01e01/takes/T009.mp4",
+   "name": "kling_20261018_VIDEO_2D_anime_v_2055_0.mp4",
+   "dur": 10.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  },
+  {
+   "id": "T010",
+   "file": "studio/media/s01e01/takes/T010.mp4",
+   "name": "kling_20261019_VIDEO_Use__Image_3302_0.mp4",
+   "dur": 7.04,
+   "at": "2026-10-19 09:17:03",
+   "note": ""
+  }
+ ],
+ "place": {},
+ "trans": {}
+}

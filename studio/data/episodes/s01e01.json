@@ -533,7 +533,7 @@
      "id": "1.5a",
      "dur": 5,
      "camera": "Сверхкрупный",
-     "tool": "Pixverse",
+     "tool": "Kling",
      "cut": false,
      "optional": false,
      "frame": "доклад продолжается за кадром, а камера — на глазах Бельфи. Усталый взгляд медленно опускается к карте: старик уже понимает, к чему всё идёт. Приём «говорит один — смотрим на другого».",
@@ -589,7 +589,7 @@
      "id": "1.6",
      "dur": 4,
      "camera": "Крупный",
-     "tool": "Pixverse",
+     "tool": "Kling",
      "cut": false,
      "optional": false,
      "frame": "командир Ардан, резкая. Смотрит не на карту, а на Бельфи.",
@@ -637,14 +637,14 @@
      "id": "1.7",
      "dur": 4,
      "camera": "Средний → наклон вниз",
-     "tool": "Pixverse",
+     "tool": "Kling",
      "cut": false,
      "optional": false,
-     "frame": "Бельфи у края стола, ссутулился. Камера опускается к костяшкам: так упёрлись в камень, что побелели.",
+     "frame": "Бельфи у края стола, ссутулился. Камера опускается к кулакам в латных перчатках: так упёрлись в камень, что кожа скрипит.",
      "sound": "тишина, ветер.",
-     "img": "medium shot of an old stooped drayk general standing at the edge of the stone table, tired worn face, knuckles pressed hard on the stone, PAL-COUNCIL, STYLE",
+     "img": "medium shot of an old stooped drayk general standing at the edge of the stone table, tired worn face, gauntleted fists pressed hard on the stone, PAL-COUNCIL, STYLE",
      "imgFrom": null,
-     "vid": "slow tilt down from his face to his whitened knuckles",
+     "vid": "slow tilt down from his face to his gauntleted fists pressed hard on the stone, leather creaking",
      "characters": [
       "BELFI"
      ],
@@ -686,7 +686,7 @@
      "id": "1.8",
      "dur": 4,
      "camera": "Восьмёрка Ардан / Рой",
-     "tool": "Seedance",
+     "tool": "Kling",
      "cut": false,
      "optional": false,
      "frame": "",
@@ -742,7 +742,7 @@
      "id": "1.9",
      "dur": 4,
      "camera": "Крупный",
-     "tool": "Pixverse",
+     "tool": "Kling",
      "cut": false,
      "optional": false,
      "frame": "Бельфи говорит впервые за совет. Тихо.",
@@ -1063,7 +1063,29 @@
      "prompt": "wide master shot of a dim stone council room carved in red rock, a long heavy stone table runs from left to right with an old parchment map in the middle; at the RIGHT head of the table young white-haired Liam sits in a heavy carved stone chair with tall narrow windows behind him, red sand beating on the glass and red-tinted light streaming over his shoulders across the table; at the far LEFT end old stooped general Belfi stands leaning on the table with both fists; on the far side of the table stern female commander Ardan stands and looks sideways at Belfi; on the near side young captain Roy stands reporting over the map; a heavy stone door in the near-left wall; dust in the light beams, dim stuffy stone room, light through dusty windows tinted red by sandstorm, warm brown and rust tones, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- captain Roy: captain Roy, young drayk captain, uncertain and dutiful, plain drayk officer uniform (see reference)\n- general Belfi: general Belfi, old stooped drayk general, tired worn face (see reference)\n- commander Ardan: commander Ardan, stern female drayk commander, sharp face, military bearing (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nЗал совета, вырубленный в красной скале. Длинный тяжёлый каменный стол стоит слева направо, на нём старая карта. СПРАВА во главе стола в резном каменном кресле сидит Лиам; за его спиной высокие узкие окна, о стёкла бьёт красный песок, красноватый свет падает на стол справа (контровой свет на Лиаме). СЛЕВА у дальнего конца стола стоит ссутулившийся генерал Бельфи, упираясь кулаками в камень. У ДАЛЬНЕЙ стороны стола стоит командир Ардан и косится на Бельфи. У БЛИЖНЕЙ стороны стола посередине стоит капитан Рой и докладывает над картой. Тяжёлая дверь — в ближней стене слева. Все офицеры в одной комнате одновременно; когда камера смотрит на одного, другие видны размытыми на своих местах.\n\nLocation (environment only): dusty stone council room carved in red rock, long heavy stone table with an old worn parchment map, heavy stone chairs, tall thin old windows with red sand outside, one heavy door.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "Council hall carved into red rock. A long heavy stone table runs from frame-left to frame-right with an old map on it. Liam sits at the RIGHT head of the table in a carved stone chair; tall narrow windows behind him, red sand beating on the glass, reddish light falls across the table from frame-right (rim light on Liam). General Belfi stands stooped at the far LEFT end of the table, gauntleted fists pressed on the stone. Commander Ardan stands on the FAR long side and glances sideways at Belfi. Captain Roy stands on the NEAR long side in the middle, reporting over the map. A heavy door in the near wall on the left. All four are in the room at once; when the camera is on one, the others stay blurred in their places.",
+   "clips": [
+    {
+     "id": "C1.5a",
+     "shots": [
+      "1.5a",
+      "1.6",
+      "1.7",
+      "1.8",
+      "1.9"
+     ],
+     "tool": "Kling",
+     "opts": {
+      "model": "kling4",
+      "dur": 0,
+      "lips": true,
+      "lastFrame": false,
+      "wishes": "",
+      "lineText": true
+     }
+    }
+   ]
   },
   {
    "n": 2,
@@ -1456,7 +1478,8 @@
      "prompt": "wide master shot of a huge hangar carved into a red rock fortress, a wide opening on the RIGHT side straight into the rust-red sky, a row of saddled giant giant riding bird birds standing along the back wall, drayk knights in dark armor checking saddle straps and tossing dried meat into a beak, an arch on the LEFT leading into the fortress through which young white-haired Liam enters, red dust in the air, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- giant riding bird: giant riding bird, sandy-ochre plumage with brown spots, heat- and sandstorm-adapted feathers, saddle and girth straps (see reference)\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nАнгар (кадры 2.1–2.4): большой зал, вырубленный в скале крепости. Справа — широкий проём прямо в красное небо, через него птицы взлетают. Вдоль дальней стены в ряд стоят осёдланные птицы Рух, рыцари проверяют подпруги и кормят птиц. Лиам входит слева через арку из крепости. Полёт (2.5–2.10): клин из десятка птиц Рух летит над пустыней слева направо (так во всех кадрах полёта), Лиам — во главе клина; красное солнце высоко впереди справа. Ангара в небе НЕТ.\n\nLocation (environment only): open hangar carved into a red rock desert fortress, wide opening to the red sky, wooden-free stone perches, saddles and straps on stone racks, red dust.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "Hangar (2.1–2.4): a large hall carved into the fortress rock; on the right a wide opening straight into the red sky, the birds take off through it. Saddled giant Rukh birds stand in a row along the far wall; knights check girths and feed them. Liam enters from the left through an arch from the fortress. Flight (2.5–2.10): a wedge of about ten Rukh birds flies over the red desert from frame-left to frame-right in every flight shot, Liam leads the wedge; the red sun is high ahead on the right. No hangar in the sky."
   },
   {
    "n": 3,
@@ -1713,8 +1736,10 @@
      "sound": "",
      "img": "wide shot of a battlefield square, surviving human soldiers on one side and drayk defenders on the other, everyone frozen and looking up, PAL-DESERT, STYLE",
      "imgFrom": null,
-     "vid": "static camera, only dust and banners move",
-     "characters": [],
+     "vid": "locked-off wide shot. A wedge of about ten giant Rukh birds with riders appears far away high in the sky above the right ridges and flies toward the camera, staying high above the field; below, the exhausted crowds breathe heavily and sway, wounded lean on spears, banners and torn cloaks whip in the hot wind, heads turn up one after another, a horse tosses its head; as the flock passes high overhead and its shadows sweep the field, everyone freezes, staring up",
+     "characters": [
+      "RUKH"
+     ],
      "location": "battlefield-mound",
      "status": "approved",
      "versions": [
@@ -1730,7 +1755,7 @@
      "selected": 0,
      "lines": [],
      "linesFrom": "",
-     "continuity": "wide: the mound in the middle with the Lord on top; human survivors frozen on the left edge, drayks on the right edge, all looking up at the sky"
+     "continuity": "Alliance survivors on the LEFT edge of the square, drayks on the RIGHT; the Rukh wedge comes from the far right, high in the sky, toward the camera"
     },
     {
      "id": "3.9",
@@ -1929,7 +1954,8 @@
      "prompt": "wide master shot of a red stone battlefield square paved with fallen bodies in shadow; a huge dark mound of the fallen on the LEFT side; on its flat top the tall black-haired the Dragon Lord in human form stands calmly with a black sword; high in the sky on the RIGHT a wedge of giant riding birds approaches; frozen survivors at both edges of the square; harsh midday red sun high above, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime stylized, no gore detail, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nПлощадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.\n\nLocation (environment only): the same red stone battlefield square with a huge dark mound of the fallen and old bones in the middle distance, a flat rocky top, its slopes in deep shadow, bodies only as dark silhouettes, low red ridges around standing, anime stylized, no gore detail.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "The Dragon Lord stands on top of the mound; Liam arrives from the right. A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
   },
   {
    "n": 4,
@@ -2355,7 +2381,8 @@
      "prompt": "wide master shot of a red stone battlefield: the dark mound of the fallen on the far LEFT; in front of its foot the Dragon Lord in human form stands on the LEFT and white-haired Liam on the RIGHT facing each other, Liam half a head shorter; far on the left human cavalry rides away, on the right drayks carry the wounded toward a low ridge; harsh midday light, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime stylized, no gore detail, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nПлощадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.\n\nLocation (environment only): vast open battlefield square in a red stone desert between low red ridges, flat cracked red rock ground littered with broken weapons, scattered fallen bodies small and in shadow, scorched patches, brown and silver stains, red dust in the air, NO mound standing, anime stylized, no gore detail.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
   },
   {
    "n": 5,
@@ -2891,7 +2918,8 @@
      "prompt": "wide shot of the duel on an open red stone battlefield: the Dragon Lord in human form on the LEFT and Liam on the RIGHT crossing swords, red dust, harsh high midday sun, the mound of the fallen far in the background on the left, blazing red sun, rust-red sky with dazzling white clouds, red rocky desert, rust-colored sand, red dust in the air, harsh contrast, anime stylized, no gore detail, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nПлощадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.\n\nLocation (environment only): vast open battlefield square in a red stone desert between low red ridges, flat cracked red rock ground littered with broken weapons, scattered fallen bodies small and in shadow, scorched patches, brown and silver stains, red dust in the air, NO mound standing, anime stylized, no gore detail.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
   },
   {
    "n": 6,
@@ -3446,7 +3474,8 @@
      "prompt": "wide shot of the red stone battlefield under black storm clouds swallowing the red sun: a giant black tear in the air on the RIGHT like a maw; Liam on the right being pulled toward it, the Dragon Lord in human form standing firm on the LEFT, frost on the red sand, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime stylized, no gore detail, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nПРИГОВОР (6.1–6.8) идёт ДО разлома: небо ещё ясное, красное солнце, никакой черноты в воздухе. В 6.5–6.7 только трясётся земля, в 6.8 набегают чёрные тучи. Разлом впервые появляется в 6.9, и только с этого кадра он в фоне. Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.\n\nLocation (environment only): the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "SENTENCE (6.1–6.8) happens BEFORE the rift: clear rust-red sky, red sun, no darkness in the air; in 6.5–6.7 only the ground shakes; in 6.8 black clouds roll in. The rift first appears in 6.9 and stays in the background from then on: a black tear in the air on the RIGHT, behind Liam, so he is pulled backwards to the right. A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
   },
   {
    "n": 7,
@@ -3954,7 +3983,8 @@
      "prompt": "extreme wide shot of the battlefield under black clouds: the black rift on the RIGHT pulsing, dark silhouettes of the dead rising everywhere like broken puppets, the Dragon Lord in human form motionless in the center-left, Liam on the right gripping a sword, black storm clouds swallowing the red sun, grey frost on red sand, cold desaturated light, white breath vapor, anime stylized, bodies in silhouette, anime TV series style, clean cel shading, crisp lineart, soft limited gradients, cinematic 16:9 composition, xianxia fantasy, detailed painted background, high quality key animation frame\n\nCharacters:\n- Liam: Liam, young drayk lord, 17-18 years old, slender not fully grown body, long white hair, violet-green eyes (see reference)\n- the Dragon Lord in human form: the Dragon Lord in human form, looks about 22-23, tall and composed, long black hair, a pair of silver hairpins, black fitted suit instead of armor, heavy black boots, obsidian-black eyes (see reference)\n\nScene staging — keep it identical in every shot of this scene (positions of characters and objects, where the light comes from, screen direction):\nПлощадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо.\n\nLocation (environment only): the same red stone battlefield under black storm clouds swallowing the red sun, grey frost on red sand, a giant black tear in the air like a maw above the field.\n\nAvoid: morphing, melting face, extra fingers, extra limbs, distorted anatomy, blurry, flickering, inconsistent hair color, realistic 3D render, photorealism, text, watermark."
     }
    ],
-   "selected": 0
+   "selected": 0,
+   "stagingEn": "A black rift hangs in the air on the RIGHT, behind Liam; black storm clouds swallow the red sun, grey frost on the red sand. A square by the Eastern Post paved with the fallen (bodies only as dark silhouettes in shadow, no gore). A mound of the fallen stands on the LEFT side of the square; an open field and a low ridge on the right, the east beyond it. Noon: red sun high in a rust-red sky with white clouds, harsh light from above. In the duel (scenes 4–5) the Dragon Lord is ALWAYS on frame-left (he came down from the mound) and Liam ALWAYS on frame-right; the camera never crosses the axis between them. The mound appears only in wide shots, never in medium or close shots. Surviving Alliance soldiers retreat to the left (west); drayks carry the wounded to the right, toward the ridge."
   }
  ]
 }
