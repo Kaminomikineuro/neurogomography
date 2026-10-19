@@ -115,7 +115,7 @@ def main():
         durs.append(render_piece(M, v, f))
         files.append(f)
     # склейка: cut — встык, остальное — xfade с перекрытием; считаем, где начинается каждый кусок
-    fc = [f'[{n}:v]settb=AVTB,fps={FPS},format=yuv420p[s{n}]' for n in range(len(V))]
+    fc = [f'[{n}:v]fps={FPS},settb=1/{FPS},format=yuv420p[s{n}]' for n in range(len(V))]
     starts, t, last = [], 0.0, '[s0]'
     for n in range(len(V)):
         tr = V[n].get('trans', 'cut') if n else 'cut'
@@ -130,7 +130,7 @@ def main():
             t = t - td + durs[n]
         else:
             starts.append(t)
-            fc.append(f'{last}[s{n}]concat=n=2:v=1:a=0[x{n}]')
+            fc.append(f'{last}[s{n}]concat=n=2:v=1:a=0,settb=1/{FPS}[x{n}]')
             t += durs[n]
         last = f'[x{n}]'
     total = t
