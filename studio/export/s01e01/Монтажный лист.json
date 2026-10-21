@@ -1,0 +1,63 @@
+{
+  "episode": "s01e01",
+  "status": "playable_browser_cut",
+  "clips": [
+    {
+      "id": "E1",
+      "dur": 5,
+      "dialogue": false
+    },
+    {
+      "id": "F1",
+      "dur": 6,
+      "dialogue": false
+    },
+    {
+      "id": "E2",
+      "dur": 5,
+      "dialogue": false
+    },
+    {
+      "id": "E5",
+      "dur": 4,
+      "dialogue": false
+    },
+    {
+      "id": "1.2",
+      "dur": 3,
+      "dialogue": false
+    },
+    {
+      "id": "1.3",
+      "dur": 4,
+      "dialogue": false
+    },
+    {
+      "id": "1.4",
+      "dur": 4,
+      "dialogue": false
+    },
+    {
+      "id": "1.5",
+      "dur": 4,
+      "dialogue": true
+    },
+    {
+      "id": "1.5a",
+      "dur": 5,
+      "dialogue": true
+    },
+    {
+      "id": "1.6",
+      "dur": 4,
+      "dialogue": true
+    },
+    {
+      "id": "1.7",
+      "dur": 4,
+      "dialogue": false
+    }
+  ],
+  "music": "Музыка — тревожный совет.wav",
+  "note": "Воспроизведение и экспорт в отдельном HTML. Вкладка студии не изменена. Длительность реплик сохраняется по исходным видео."
+}
