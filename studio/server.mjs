@@ -21,7 +21,7 @@ const LIBRARY = path.join(ROOT, 'Аниме', 'Иллюстрации книги
 const IMG_RX = /\.(png|jpe?g|webp)$/i;
 
 // Версия кода: по ней студия узнаёт, что в фоне работает старая копия, и закрывает её
-const VERSION = '2026-10-27.1';
+const VERSION = '2026-10-28.1';
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
 const abs = (r) => path.join(ROOT, ...r.split('/'));
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -1192,6 +1192,19 @@ function voiceLines(ep) {
   }
   return out;
 }
+// готовые склейки: превью из Git (media/<серия>/renders) и полные версии с этого компьютера (export/<серия>), новые сверху
+function rendersOf(ep) {
+  const out = [];
+  for (const dir of [`studio/media/${safe(ep)}/renders`, `studio/export/${safe(ep)}`]) {
+    if (!fs.existsSync(abs(dir))) continue;
+    for (const f of fs.readdirSync(abs(dir))) {
+      if (!/\.(mp4|webm|mov)$/i.test(f)) continue;
+      const st = fs.statSync(path.join(abs(dir), f));
+      out.push({ file: `${dir}/${f}`, name: f, mb: +(st.size / 1e6).toFixed(1), at: st.mtimeMs, full: dir.startsWith('studio/export') });
+    }
+  }
+  return out.sort((a, b) => b.at - a.at);
+}
 function voiceScript(ep) {
   const lines = voiceLines(ep);
   const voices = readJSON(path.join(STUDIO, 'canon', 'voice', 'voices.json'), {});
@@ -1215,7 +1228,7 @@ const routes = {
   'POST /api/agent/new': () => agent.newThread(),
   'POST /api/agent/thread': (q, b) => agent.switchThread(b.id),
   // ---- монтаж: дубли, переходы, озвучка ----
-  'GET /api/montage': (q) => ({ ...montageData(q.get('ep')), voices: voiceLines(q.get('ep')) }),
+  'GET /api/montage': (q) => ({ ...montageData(q.get('ep')), voices: voiceLines(q.get('ep')), renders: rendersOf(q.get('ep')) }),
   'GET /api/voice/script': (q) => ({ text: voiceScript(q.get('ep')) }),
   'POST /api/montage/place': (q, b) => {
     const m = montageData(b.ep);

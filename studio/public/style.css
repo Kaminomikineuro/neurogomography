@@ -372,3 +372,5 @@ pre.vprompt { max-height: 420px; }
 .screen .flash.dissolve.go { background: #000; animation: mflash .4s ease-out; opacity: 0; }
 .screen .flash.whip.go { backdrop-filter: blur(14px); animation: mflash .25s ease-out; }
 @keyframes mflash { from { opacity: 1; } to { opacity: 0; } }
+.bin.ready { margin: 0 0 14px; border-style: solid; }
+.bin.ready .rvideo { width: 100%; max-height: 62vh; background: #000; border-radius: 8px; }

@@ -51,7 +51,7 @@ const shotRef = (id) => ({ kind: 'shot', ep: S.ep.id, id });
 const noteOf = (id) => S.notes[dkey(shotRef(id), 'note')] || '';
 
 // ---------- загрузка ----------
-const UI_VERSION = '2026-10-27.1';
+const UI_VERSION = '2026-10-28.1';
 async function loadState() {
   S.state = await GET('/api/state');
   if (S.state.version !== UI_VERSION && !S.warnedVersion) {
@@ -1187,7 +1187,18 @@ async function renderMontage(startAt = 0) {
       h('td', {}, h('code', {}, v.name)), h('td', {}, v.whoName), h('td', { class: 'muted' }, [MODE[v.mode] || v.mode, v.manner].filter(Boolean).join(', ')), h('td', {}, v.text),
       h('td', {}, v.file ? h('button', { class: 'ghost', onclick: () => new Audio(fileUrl(v.file)).play() }, '▶') : h('span', { class: 'muted' }, '—'))))));
 
+  // готовые склейки (собирает Claude): последняя — сразу в плеере
+  const R = M.renders || [];
+  let rsel = 0;
+  const rvideo = h('video', { controls: true, preload: 'metadata', class: 'rvideo', src: R[0] ? fileUrl(R[0].file) : null });
+  const rlist = h('select', { onchange: (e) => { rsel = +e.target.value; rvideo.src = fileUrl(R[rsel].file); } },
+    ...R.map((r, i) => h('option', { value: i }, `${r.name}${r.full ? ' · полная' : ' · превью'} · ${r.mb} МБ`)));
+  const ready = R.length ? h('div', { class: 'bin ready' },
+    h('div', { class: 'bin-head' }, h('b', {}, '🎬 Готовая склейка'), rlist, h('span', { class: 'grow' }),
+      h('button', { onclick: () => POST('/api/open', { path: R[rsel].file.replace(/\/[^/]+$/, '') }).then(() => toast('Открыла папку с роликом')).catch(() => toast('Не получилось открыть папку')) }, '📂 Открыть папку')),
+    rvideo) : null;
   $('#main').replaceChildren(h('div', { class: 'montage' },
+    ready,
     h('div', { class: 'bar' },
       h('span', { class: 'muted' }, `Черновой монтаж: ${items.length} кадров, ${fmt(total)}. Свои дубли — ${cnt.take}, видео — ${cnt.video - cnt.take}, картинки вместо видео — ${cnt.img}, пусто — ${items.length - cnt.video - cnt.img}.`)),
     screen,
