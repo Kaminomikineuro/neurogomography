@@ -6,6 +6,7 @@
             {"id": "title", "card": ["ХРОНИКИ РОДА ЭЛЬТАР", "БЕЛАЯ КРОВЬ", "Серия 1 · Это Грань?"], "dur": 4.5}]
     trans — переход В этот кусок: cut, dissolve, fadeblack, fadewhite (вспышка), whip (смазанная панорама), zoomin; td — его длина.
     speed — скорость (0.8 — замедление), hold — секунд стоп-кадра в начале (с медленным наездом, если есть zoom), hold_end — в конце,
+    "title": {"lines": [3 строки], "at": [от, до]} на весь лист — титр поверх склейки по общему времени (идёт через переходы);
     text + text_at — титр поверх кадра (3 строки, как у card) и когда он виден: [от, до] в секундах куска.
   "audio": [{"src": "wind_soft", "from": "E1", "to": "E5", "gain": 0.4, "fin": 2, "fout": 2, "at": 0.5}, …]
     src — звук из SFX ниже (синтез ffmpeg, файлы не нужны) или путь к mp3/wav (музыка, озвучка);
@@ -197,6 +198,12 @@ def main():
     total = t
     first_tr = V[0].get('trans')
     fade_in = f",fade=t=in:d={V[0].get('td', 1)}" if first_tr in ('fadeblack', 'fade') else ''
+    if C.get('title') and not opt('--only'):  # общий титр: под ним кадр темнеет, надпись идёт через переходы
+        t0, t1 = C['title']['at']
+        k = f'min(1,max(0,(T-{t0 - 0.3})/0.9))*min(1,max(0,({t1 + 0.4}-T)/0.9))'
+        fc.append(f"{last}split[ta][tb];[tb]eq=brightness=-0.13:saturation=0.85:contrast=0.92[tdk];"
+                  f"[ta][tdk]blend=all_expr='A+(B-A)*{k}',{titles(C['title']['lines'], t0, t1)}[titled]")
+        last = '[titled]'
     fc.append(f"{last}fade=t=out:st={total - C.get('tail', 1.2):.3f}:d={C.get('tail', 1.2)}{fade_in}[vout]")
     video = os.path.join(tmp, 'video.mp4')
     ins = sum([['-i', f] for f in files], [])
