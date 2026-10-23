@@ -5,13 +5,14 @@
   "video": [{"id": "1.4", "take": "T012", "in": 0, "out": 4.17, "trans": "cut", "td": 0.4, "zoom": 1.08}, …,
             {"id": "title", "card": ["ХРОНИКИ РОДА ЭЛЬТАР", "БЕЛАЯ КРОВЬ", "Серия 1 · Это Грань?"], "dur": 4.5}]
     trans — переход В этот кусок: cut, dissolve, fadeblack, fadewhite (вспышка), whip (смазанная панорама), zoomin; td — его длина.
-    speed — скорость (0.8 — замедление), hold — секунд стоп-кадра в начале (с медленным наездом, если есть zoom),
+    speed — скорость (0.8 — замедление), hold — секунд стоп-кадра в начале (с медленным наездом, если есть zoom), hold_end — в конце,
     text + text_at — титр поверх кадра (3 строки, как у card) и когда он виден: [от, до] в секундах куска.
   "audio": [{"src": "wind_soft", "from": "E1", "to": "E5", "gain": 0.4, "fin": 2, "fout": 2, "at": 0.5}, …]
     src — звук из SFX ниже (синтез ffmpeg, файлы не нужны) или путь к mp3/wav (музыка, озвучка);
     from/to — id кусков (от начала from до конца to), at — сдвиг от начала from, dur — длина вместо to, ss — с какой секунды файла.
-    voice: true — реплика: одна громкость для всех голосов, лёгкое эхо каменного зала, музыка и шумы под ней приглушаются;
-    fx: "far" — голос издалека (через окно).
+    src "take" — родной звук дубля из куска from (Kling кладёт ветер, крылья, шаги); ss — сдвиг от его in.
+    voice: true — реплика: все голоса выводятся на одну громкость (без эффектов), музыка и шумы под ней приглушаются.
+Свои звуки и музыка: файл studio/media/<серия>/sfx/<имя>.mp3|wav заменяет синтез с тем же именем (список — studio/canon/voice/<серия>_звуки.md).
 Водяной знак Kling в правом нижнем углу затирается (delogo), кроме дублей с "clean": true. Звука в дублях нет — вся звуковая дорожка из листа.
 """
 import json, os, re, shutil, subprocess, sys, tempfile, time
@@ -23,9 +24,12 @@ opt = lambda k, d=None: A[A.index(k) + 1] if k in A and A.index(k) + 1 < len(A) 
 W, H = map(int, opt('--size', '1920x1080').split('x'))
 FPS = 24
 FF = shutil.which('ffmpeg') or 'ffmpeg'
+P = lambda r: os.path.join(ROOT, *r.split('/'))
 FONT = next((f for f in ['/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
                          'C:/Windows/Fonts/georgia.ttf', 'C:/Windows/Fonts/arial.ttf'] if os.path.exists(f)), '')
-P = lambda r: os.path.join(ROOT, *r.split('/'))
+# титр: Cormorant SC (кириллица, OFL) из studio/assets/fonts; ffmpeg на Windows понимает путь только с / и экранированным «:»
+TFONT = [P(f'studio/assets/fonts/CormorantSC-{w}.ttf') for w in ('SemiBold', 'Bold', 'SemiBold')]
+TFONT = [f.replace('\\', '/').replace(':', '\\:') if os.path.exists(f) else FONT for f in TFONT]
 run = lambda cmd: subprocess.run(cmd, check=True)
 
 # ---- звуки: синтез ffmpeg (lavfi), {d} — длительность ----
@@ -44,6 +48,7 @@ SFX = {
     'heart': "aevalsrc='0.8*(sin(2*PI*55*t)*exp(-14*mod(t,1.05))+0.6*sin(2*PI*50*t)*exp(-14*mod(t-0.32,1.05))*gte(mod(t,1.05),0.32))':s={sr}:d={d}",
     'taps': "aevalsrc='0.55*sin(2*PI*820*t)*exp(-70*mod(t,0.17))*lt(mod(t,0.85),0.68)+0.25*sin(2*PI*260*t)*exp(-50*mod(t,0.17))*lt(mod(t,0.85),0.68)':s={sr}:d={d},lowpass=f=2600,aecho=0.6:0.4:35:0.25",
     'scrape': 'anoisesrc=c=brown:a=0.9:r={sr}:d={d},bandpass=f=260:width_type=h:w=300,tremolo=f=23:d=0.5,afade=t=in:d=0.08,afade=t=out:st={h}:d={h},volume=2',
+    'window': "aevalsrc='0.7*sin(2*PI*95*t)*exp(-9*t)+0.3*sin(2*PI*420*t)*exp(-25*t)':s={sr}:d={d},aecho=0.6:0.4:60:0.25",
     'bird_cry': "aevalsrc='0.45*sin(2*PI*(2100-1100*t+60*sin(2*PI*28*t))*t)*exp(-2.6*t)*gte(t,0)':s={sr}:d={d},highpass=f=900,aecho=0.6:0.5:300:0.25",
     # тёмный фон: ре минор, медленно дышит; epic — с квинтой сверху, tense — ниже и тише
     'drone_epic': "aevalsrc='0.10*sin(2*PI*73.42*t)*(0.7+0.3*sin(2*PI*0.06*t))+0.08*sin(2*PI*110*t)*(0.6+0.4*sin(2*PI*0.09*t+1))"
@@ -54,6 +59,24 @@ SFX = {
     'drone_dark': "aevalsrc='0.11*sin(2*PI*36.71*t)*(0.7+0.3*sin(2*PI*0.04*t))+0.08*sin(2*PI*73.42*t)*(0.6+0.4*sin(2*PI*0.06*t+2))"
                   "+0.05*sin(2*PI*77.78*t)*(0.4+0.6*sin(2*PI*0.03*t+1))':s={sr}:d={d},lowpass=f=600,aecho=0.8:0.85:500:0.35",
 }
+
+
+# музыка: пока нет файлов автора, играет синтезированный фон
+ALIAS = {'music_open': 'drone_epic', 'music_council': 'drone_tense', 'music_decision': 'drone_dark', 'music_end': 'drone_epic'}
+
+
+def sfx_file(name):
+    d = P(f'studio/media/{EP}/sfx')
+    for ext in ('.wav', '.mp3', '.ogg', '.m4a'):
+        if os.path.exists(os.path.join(d, name + ext)):
+            return os.path.join(d, name + ext)
+
+
+def loudness(path):
+    """Средняя громкость файла (LUFS) — по ней голоса выводятся на один уровень без компрессии и эха."""
+    err = subprocess.run([FF, '-hide_banner', '-nostats', '-i', path, '-af', 'ebur128', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    m = re.findall(r'I:\s+(-?[\d.]+) LUFS', err)
+    return float(m[-1]) if m else -20.0
 
 
 def take_of(M, tid):
@@ -75,12 +98,14 @@ def esc(t):
 
 
 def titles(lines, t0, t1):
-    """Три строки титра (мелкая, крупная, мелкая), проявляются по очереди и гаснут к t1."""
-    sizes = [int(H * 0.028), int(H * 0.085), int(H * 0.035)]
-    ys = ['h*0.36', 'h*0.43', 'h*0.58']
-    return ','.join(f"drawtext=fontfile='{FONT}':text='{esc(t)}':fontcolor=0xF2E6E0:fontsize={sizes[i % 3]}:x=(w-text_w)/2:y={ys[i % 3]}"
-                    f":shadowcolor=0x000000@0.6:shadowx=2:shadowy=2"
-                    f":alpha='min(1,max(0,(t-{t0 + 0.3 + 0.35 * i})/0.8))*min(1,max(0,({t1}-t)/0.6))'" for i, t in enumerate(lines))
+    """Три строки титра (мелкая, крупная, мелкая): разрядка, тёплый цвет, тёмная обводка; проявляются по очереди, гаснут к t1."""
+    sizes = [int(H * 0.032), int(H * 0.110), int(H * 0.044)]
+    ys = ['h*0.335', 'h*0.395', 'h*0.555']
+    colors = ['0xD9B98A', '0xF6EBDD', '0xE8D6BC']
+    spaced = lambda t, k: ('\u2009' * k).join(t) if k else t  # разрядка тонкими пробелами
+    return ','.join(f"drawtext=fontfile='{TFONT[i % 3]}':text='{esc(spaced(t, (2, 1, 0)[i % 3]))}':fontcolor={colors[i % 3]}:fontsize={sizes[i % 3]}"
+                    f":x=(w-text_w)/2:y={ys[i % 3]}:borderw={(2, 3, 2)[i % 3]}:bordercolor=0x1a0606@0.55:shadowcolor=0x000000@0.7:shadowx=3:shadowy=3"
+                    f":alpha='min(1,max(0,(t-{t0 + 0.45 * i})/0.9))*min(1,max(0,({t1}-t)/0.7))'" for i, t in enumerate(lines))
 
 
 def render_piece(M, v, out):
@@ -100,6 +125,9 @@ def render_piece(M, v, out):
     if hold:  # стоп-кадр в начале
         fit += f',tpad=start_mode=clone:start_duration={hold}'
         d += hold
+    if v.get('hold_end'):  # стоп-кадр в конце (последний кадр серии держится под затемнение)
+        fit += f",tpad=stop_mode=clone:stop_duration={v['hold_end']}"
+        d += v['hold_end']
     z = v.get('zoom')
     if z:  # медленный наезд внутри куска
         n = int(d * FPS)
@@ -107,7 +135,12 @@ def render_piece(M, v, out):
     if v.get('speed'):
         fit += f",setpts=PTS/{v['speed']},fps={FPS}"
         d = d / v['speed']
-    text = f",{titles(v['text'], *v.get('text_at', [0, d]))}" if v.get('text') else ''
+    text = ''
+    if v.get('text'):  # под титром кадр плавно темнеет, чтобы надпись не терялась
+        t0, t1 = v.get('text_at', [0, d])
+        k = f'min(1,max(0,(T-{t0 - 0.3})/0.9))*min(1,max(0,({t1 + 0.4}-T)/0.9))'
+        text = (f",split[a][b];[b]eq=brightness=-0.13:saturation=0.85:contrast=0.92[dk];[a][dk]blend=all_expr='A+(B-A)*{k}',"
+                f"{titles(v['text'], t0, t1)}")
     run([FF, '-loglevel', 'error', '-y', '-ss', f"{v['in']:.3f}", '-t', f"{v['out'] - v['in']:.3f}", '-i', src, '-an',
          '-vf', f'{logo}{fit},{grade}{text}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
     return real_dur(out) or d
@@ -181,17 +214,23 @@ def main():
         d = max(0.2, min(en, total) - st)
         src = a['src']
         k = len(chains)
-        if src in SFX:
-            ains += ['-f', 'lavfi', '-i', SFX[src].format(d=f'{d:.3f}', sr=SR, h=f'{d / 2:.3f}', h2=f'{max(0.1, d - 0.15):.3f}')]
-        else:
-            ains += ['-i', P(src)]
-        fi, fo = a.get('fin', 0.05), a.get('fout', 0.3)
         ss = a.get('ss', 0)
-        # голос: ровная громкость, чистка низа, лёгкое эхо каменного зала; «far» — глуше и дальше (через окно)
-        vfx = ''
-        if a.get('voice'):
-            vfx = f'highpass=f=85,loudnorm=I=-16:TP=-2:LRA=7,aresample={SR},'
-            vfx += 'lowpass=f=3400,aecho=0.8:0.6:60|110:0.3|0.2,' if a.get('fx') == 'far' else 'aecho=0.85:0.5:38|71:0.13|0.07,'
+        if src == 'take':  # родной звук дубля этого куска
+            piece = next(v for v in V if v['id'] == a['from'])
+            ains += ['-i', P(take_of(M, piece['take'])['file'])]
+            ss += piece.get('in', 0)
+        elif sfx_file(src):
+            ains += ['-stream_loop', '-1', '-i', sfx_file(src)]
+        elif src in SFX or src in ALIAS:
+            ains += ['-f', 'lavfi', '-i', SFX[ALIAS.get(src, src)].format(d=f'{d:.3f}', sr=SR, h=f'{d / 2:.3f}', h2=f'{max(0.1, d - 0.15):.3f}')]
+        elif os.path.exists(P(src)):
+            ains += ['-i', P(src)]
+        else:
+            print('  нет звука', src, '— пропускаю')
+            continue
+        fi, fo = a.get('fin', 0.05), a.get('fout', 0.3)
+        # голос: как записан, только громкость к общему уровню и чистка самого низа
+        vfx = f'highpass=f=70,volume={max(-12, min(12, -17 - loudness(P(src)))):.1f}dB,' if a.get('voice') else ''
         chains.append(f"[{k + 1}:a]aformat=sample_rates={SR}:channel_layouts=stereo,{vfx}atrim={ss:.3f}:{ss + d:.3f},asetpts=PTS-STARTPTS,"
                       f"afade=t=in:d={fi},afade=t=out:st={max(0, d - fo):.3f}:d={fo},volume={a.get('gain', 1.0 if a.get('voice') else 0.5)},"
                       f"adelay={int(st * 1000)}|{int(st * 1000)}[a{k}]")
