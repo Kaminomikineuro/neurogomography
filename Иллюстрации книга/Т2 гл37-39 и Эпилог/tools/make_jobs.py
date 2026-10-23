@@ -36,7 +36,7 @@ LORD_C = ("THE DRAGON LORD (Liar): looks 22-23, tall and composed; very long str
  "his blood in human form is dark bordeaux. ")
 MRAK_C = "MRAK: the Lord's beast form — a colossal black dragon on FOUR legs plus two wings, scales absorbing light and fraying into black mist at the edges, yellow eyes with vertical pupils, smooth neck spikes, BLACK flame. "
 MIRA_C = "MIRA: dragoness in human form, adult, strong athletic build (not frail), tanned skin, long dark hair, a clean WHITE EYE PATCH over her LEFT eye (injured), proud military bearing. "
-TWINS_C = "LALI (girl) and LU (boy): dragon twins about 12 years old, light-brown hair with a reddish sheen, grey eyes, thick bangs over one eye, clothes thrown on carelessly. Their dragon forms (Rain and Rayna) are ASH-GREY, half Mrak's size. "
+TWINS_C = "LALI (girl) and LU (boy): dragon twins about 12 years old, light-brown hair with a reddish sheen, greyish eyes (everything about them leans grey at this age), thick bangs over one eye, clothes thrown on carelessly. Their dragon forms (Rain and Rayna) are ASH-GREY, half Mrak's size. "
 NOX_C = "NOX: deathly pale young man, short black hair, cold green eyes, dark navy uniform of the Crown Prince's order, katana. "
 DANTE_C = "DANTE: ordinary human swordsman, ash-blond wavy hair, hawk-like eyes, white mantle, energetic. "
 AKARI_C = "AKARI: the Goddess of Death in a young woman's form — beautiful brunette with long curly black hair and large eyes, black dress. "

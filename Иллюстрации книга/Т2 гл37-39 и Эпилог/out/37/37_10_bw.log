@@ -1,0 +1,46 @@
+You are the illustrator of a printed fantasy novel. Use your built-in image generation tool to create exactly ONE image.
+Use the attached images strictly for the responsibility written next to each one; never copy a pose, background, crop or costume a reference is not responsible for.
+Attached references, in order:
+  Image 1: STYLE ONLY for monochrome inserts: ink line, grey wash, smoky halo, isolated object on white. Do NOT copy the book object.
+
+Before saving, look at the result yourself and check: correct number of people; five fingers on every visible hand; eye colors and hair (white with black roots for Liam, black with three silver hairpins on the left for the Lord); the Lord wears black gloves; no text or letters; an isolated object on white, not a scene.
+If something fails, regenerate once with a corrected prompt. Keep the better version.
+Save the final image as PNG to this exact path (create folders if needed):
+  C:\Users\user\Documents\GitHub\neurogomography\Иллюстрации книга\Т2 гл37-39 и Эпилог\out\37\37_10_bw.png
+If the tool saved it somewhere else (for example C:\Users\user/.codex/generated_images), copy it to that path.
+Do not change any other files. Do not commit. Your final answer is just the saved path and one line on what you checked.
+
+IMAGE PROMPT:
+STYLE: monochrome book insert — black ink and grey wash on pure white paper, fine pen hatching, a restrained smoky ink-bleed halo around the subject that fades to clean white. This is an ISOLATED OBJECT or compact object group, NOT a miniature scene: no room, no landscape, no staged characters. FORMAT: square 1:1 (1024x1024), small insert inside the text column. SCENE: An ornate cloak clasp on a fold of dark layered fabric, a single very long black hair caught and tangled in it. EXCLUDE: text, letters, captions, signatures, watermarks, panel borders, extra people, extra fingers or merged hands, duplicated limbs, wrong eye colors, modern objects, heavy gore. 
+
+----- ВЫВОД КОДЕКСА -----
+Reading prompt from stdin...
+2026-10-19T16:22:10.153414Z ERROR codex_models_manager::manager: failed to load models cache: EOF while parsing a value at line 1 column 0
+OpenAI Codex v0.163.0
+--------
+workdir: C:\Users\user\Documents\GitHub\neurogomography
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+reasoning summaries: none
+session id: 01a154f8-6962-73f0-8ad2-3b4514a7f893
+--------
+user
+You are the illustrator of a printed fantasy novel. Use your built-in image generation tool to create exactly ONE image.
+Use the attached images strictly for the responsibility written next to each one; never copy a pose, background, crop or costume a reference is not responsible for.
+Attached references, in order:
+  Image 1: STYLE ONLY for monochrome inserts: ink line, grey wash, smoky halo, isolated object on white. Do NOT copy the book object.
+
+Before saving, look at the result yourself and check: correct number of people; five fingers on every visible hand; eye colors and hair (white with black roots for Liam, black with three silver hairpins on the left for the Lord); the Lord wears black gloves; no text or letters; an isolated object on white, not a scene.
+If something fails, regenerate once with a corrected prompt. Keep the better version.
+Save the final image as PNG to this exact path (create folders if needed):
+  C:\Users\user\Documents\GitHub\neurogomography\Иллюстрации книга\Т2 гл37-39 и Эпилог\out\37\37_10_bw.png
+If the tool saved it somewhere else (for example C:\Users\user/.codex/generated_images), copy it to that path.
+Do not change any other files. Do not commit. Your final answer is just the saved path and one line on what you checked.
+
+IMAGE PROMPT:
+STYLE: monochrome book insert — black ink and grey wash on pure white paper, fine pen hatching, a restrained smoky ink-bleed halo around the subject that fades to clean white. This is an ISOLATED OBJECT or compact object group, NOT a miniature scene: no room, no landscape, no staged characters. FORMAT: square 1:1 (1024x1024), small insert inside the text column. SCENE: An ornate cloak clasp on a fold of dark layered fabric, a single very long black hair caught and tangled in it. EXCLUDE: text, letters, captions, signatures, watermarks, panel borders, extra people, extra fingers or merged hands, duplicated limbs, wrong eye colors, modern objects, heavy gore. 
+ERROR: You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 9:04 PM.
+ERROR: You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 9:04 PM.
