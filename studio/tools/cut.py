@@ -1,14 +1,18 @@
 """Режиссёрская склейка серии по монтажному листу: куски дублей, переходы, титры, звук.
 
-Запуск:  python studio/tools/cut.py s01e01 [--size 1920x1080] [--preview] [--only 1.4-1.9]
-Монтажный лист: studio/data/montage/<серия>.cut.json
+Запуск:  python studio/tools/cut.py s01e01 [--sheet v1] [--size 1920x1080] [--preview] [--only 1.4-1.9]
+Монтажный лист: studio/data/montage/<серия>.cut.json (с --sheet v1 — <серия>.v1.cut.json)
   "video": [{"id": "1.4", "take": "T012", "in": 0, "out": 4.17, "trans": "cut", "td": 0.4, "zoom": 1.08}, …,
             {"id": "title", "card": ["ХРОНИКИ РОДА ЭЛЬТАР", "БЕЛАЯ КРОВЬ", "Серия 1 · Это Грань?"], "dur": 4.5}]
     trans — переход В этот кусок: cut, dissolve, fadeblack, fadewhite (вспышка), whip (смазанная панорама), zoomin; td — его длина.
+    speed — скорость (0.8 — замедление), hold — секунд стоп-кадра в начале (с медленным наездом, если есть zoom),
+    text + text_at — титр поверх кадра (3 строки, как у card) и когда он виден: [от, до] в секундах куска.
   "audio": [{"src": "wind_soft", "from": "E1", "to": "E5", "gain": 0.4, "fin": 2, "fout": 2, "at": 0.5}, …]
     src — звук из SFX ниже (синтез ffmpeg, файлы не нужны) или путь к mp3/wav (музыка, озвучка);
-    from/to — id кусков (от начала from до конца to), at — сдвиг от начала from, dur — длина вместо to.
-Водяной знак Kling в правом нижнем углу затирается (delogo). Звука в дублях нет — вся звуковая дорожка из листа.
+    from/to — id кусков (от начала from до конца to), at — сдвиг от начала from, dur — длина вместо to, ss — с какой секунды файла.
+    voice: true — реплика: одна громкость для всех голосов, лёгкое эхо каменного зала, музыка и шумы под ней приглушаются;
+    fx: "far" — голос издалека (через окно).
+Водяной знак Kling в правом нижнем углу затирается (delogo), кроме дублей с "clean": true. Звука в дублях нет — вся звуковая дорожка из листа.
 """
 import json, os, re, shutil, subprocess, sys, tempfile, time
 
@@ -38,6 +42,8 @@ SFX = {
     'hit': "aevalsrc='0.5*(sin(2*PI*660*t)+0.6*sin(2*PI*990*t)+0.4*sin(2*PI*1485*t))*exp(-2.2*t)':s={sr}:d={d},aecho=0.8:0.8:250|500:0.4|0.25",
     'door': "aevalsrc='0.9*sin(2*PI*62*t)*exp(-6*t)+0.25*sin(2*PI*180*t)*exp(-14*t)':s={sr}:d={d},aecho=0.7:0.5:90:0.3",
     'heart': "aevalsrc='0.8*(sin(2*PI*55*t)*exp(-14*mod(t,1.05))+0.6*sin(2*PI*50*t)*exp(-14*mod(t-0.32,1.05))*gte(mod(t,1.05),0.32))':s={sr}:d={d}",
+    'taps': "aevalsrc='0.55*sin(2*PI*820*t)*exp(-70*mod(t,0.17))*lt(mod(t,0.85),0.68)+0.25*sin(2*PI*260*t)*exp(-50*mod(t,0.17))*lt(mod(t,0.85),0.68)':s={sr}:d={d},lowpass=f=2600,aecho=0.6:0.4:35:0.25",
+    'scrape': 'anoisesrc=c=brown:a=0.9:r={sr}:d={d},bandpass=f=260:width_type=h:w=300,tremolo=f=23:d=0.5,afade=t=in:d=0.08,afade=t=out:st={h}:d={h},volume=2',
     'bird_cry': "aevalsrc='0.45*sin(2*PI*(2100-1100*t+60*sin(2*PI*28*t))*t)*exp(-2.6*t)*gte(t,0)':s={sr}:d={d},highpass=f=900,aecho=0.6:0.5:300:0.25",
     # тёмный фон: ре минор, медленно дышит; epic — с квинтой сверху, tense — ниже и тише
     'drone_epic': "aevalsrc='0.10*sin(2*PI*73.42*t)*(0.7+0.3*sin(2*PI*0.06*t))+0.08*sin(2*PI*110*t)*(0.6+0.4*sin(2*PI*0.09*t+1))"
@@ -50,11 +56,11 @@ SFX = {
 }
 
 
-def take_file(M, tid):
+def take_of(M, tid):
     t = next((x for x in M.get('takes', []) if x['id'] == tid), None)
     if not t:
         sys.exit(f'Нет дубля {tid}')
-    return P(t['file'])
+    return t
 
 
 def probe_size(path):
@@ -68,32 +74,53 @@ def esc(t):
     return t.replace('\\', '\\\\').replace(':', '\\:').replace("'", "\u2019").replace('%', '\\%')
 
 
+def titles(lines, t0, t1):
+    """Три строки титра (мелкая, крупная, мелкая), проявляются по очереди и гаснут к t1."""
+    sizes = [int(H * 0.028), int(H * 0.085), int(H * 0.035)]
+    ys = ['h*0.36', 'h*0.43', 'h*0.58']
+    return ','.join(f"drawtext=fontfile='{FONT}':text='{esc(t)}':fontcolor=0xF2E6E0:fontsize={sizes[i % 3]}:x=(w-text_w)/2:y={ys[i % 3]}"
+                    f":shadowcolor=0x000000@0.6:shadowx=2:shadowy=2"
+                    f":alpha='min(1,max(0,(t-{t0 + 0.3 + 0.35 * i})/0.8))*min(1,max(0,({t1}-t)/0.6))'" for i, t in enumerate(lines))
+
+
 def render_piece(M, v, out):
     d = v['out'] - v['in'] if 'take' in v else v['dur']
     grade = 'eq=contrast=1.04:saturation=1.06,vignette=angle=PI/5'
     if 'card' in v:
-        lines = v['card']
-        sizes = [int(H * 0.028), int(H * 0.085), int(H * 0.035)]
-        ys = ['h*0.36', 'h*0.43', 'h*0.58']
-        dt = ','.join(f"drawtext=fontfile='{FONT}':text='{esc(t)}':fontcolor=0xF2E6E0:fontsize={sizes[i % 3]}:x=(w-text_w)/2:y={ys[i % 3]}"
-                      f":alpha='min(1,max(0,(t-{0.3 + 0.35 * i})/0.8))*min(1,max(0,({d}-t)/0.6))'" for i, t in enumerate(lines))
-        run([FF, '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=0x0b0708:s={W}x{H}:r={FPS}:d={d}', '-vf', f'{dt},vignette=angle=PI/4',
-             '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
+        run([FF, '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=0x0b0708:s={W}x{H}:r={FPS}:d={d}', '-vf',
+             f'{titles(v["card"], 0, d)},vignette=angle=PI/4', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
         return d
-    src = take_file(M, v['take'])
+    t = take_of(M, v['take'])
+    src = P(t['file'])
     sw, sh = probe_size(src)
-    logo = f'delogo=x={sw - 160}:y={sh - 50}:w={136}:h={30}'
+    clean = t.get('clean') or v.get('clean')
+    logo = '' if clean else f'delogo=x={sw - 160}:y={sh - 50}:w={136}:h={30},'
     fit = f'scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={FPS}'
+    hold = v.get('hold', 0)
+    if hold:  # стоп-кадр в начале
+        fit += f',tpad=start_mode=clone:start_duration={hold}'
+        d += hold
     z = v.get('zoom')
     if z:  # медленный наезд внутри куска
         n = int(d * FPS)
         fit += f",zoompan=z='1+({z}-1)*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS}"
     if v.get('speed'):
-        fit += f",setpts=PTS/{v['speed']}"
+        fit += f",setpts=PTS/{v['speed']},fps={FPS}"
         d = d / v['speed']
+    text = f",{titles(v['text'], *v.get('text_at', [0, d]))}" if v.get('text') else ''
     run([FF, '-loglevel', 'error', '-y', '-ss', f"{v['in']:.3f}", '-t', f"{v['out'] - v['in']:.3f}", '-i', src, '-an',
-         '-vf', f'{logo},{fit},{grade}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
-    return d
+         '-vf', f'{logo}{fit},{grade}{text}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
+    return real_dur(out) or d
+
+
+def real_dur(path):
+    """Настоящая длина куска (замедление и стоп-кадр округляются до кадров) — по ней ставится звук."""
+    out = subprocess.run([shutil.which('ffprobe') or 'ffprobe', '-v', 'error', '-select_streams', 'v:0', '-count_frames',
+                          '-show_entries', 'stream=nb_read_frames', '-of', 'csv=p=0', path], capture_output=True, text=True).stdout.strip()
+    try:
+        return int(out.split(',')[0]) / FPS
+    except ValueError:
+        return 0
 
 
 XF = {'dissolve': 'dissolve', 'fadeblack': 'fadeblack', 'fadewhite': 'fadewhite', 'whip': 'smoothleft', 'zoomin': 'zoomin', 'fade': 'fade'}
@@ -101,7 +128,8 @@ XF = {'dissolve': 'dissolve', 'fadeblack': 'fadeblack', 'fadewhite': 'fadewhite'
 
 def main():
     M = json.load(open(P(f'studio/data/montage/{EP}.json'), encoding='utf-8'))
-    C = json.load(open(P(f'studio/data/montage/{EP}.cut.json'), encoding='utf-8'))
+    sheet = f'{EP}.{opt("--sheet")}.cut.json' if opt('--sheet') else f'{EP}.cut.json'
+    C = json.load(open(P(f'studio/data/montage/{sheet}'), encoding='utf-8'))
     V = C['video']
     if opt('--only'):
         a, b = (opt('--only').split('-') + [None])[:2]
@@ -143,7 +171,7 @@ def main():
          '-crf', '17', '-pix_fmt', 'yuv420p', '-r', str(FPS), video])
     # звук по листу
     pos = {v['id']: (starts[i], starts[i] + durs[i]) for i, v in enumerate(V)}
-    ains, chains = [], []
+    ains, chains, voices = [], [], []
     for a in C.get('audio', []):
         if a['from'] not in pos:
             continue
@@ -158,16 +186,33 @@ def main():
         else:
             ains += ['-i', P(src)]
         fi, fo = a.get('fin', 0.05), a.get('fout', 0.3)
-        chains.append(f"[{k + 1}:a]aformat=sample_rates={SR}:channel_layouts=stereo,atrim=0:{d:.3f},asetpts=PTS-STARTPTS,"
-                      f"afade=t=in:d={fi},afade=t=out:st={max(0, d - fo):.3f}:d={fo},volume={a.get('gain', 0.5)},"
+        ss = a.get('ss', 0)
+        # голос: ровная громкость, чистка низа, лёгкое эхо каменного зала; «far» — глуше и дальше (через окно)
+        vfx = ''
+        if a.get('voice'):
+            vfx = f'highpass=f=85,loudnorm=I=-16:TP=-2:LRA=7,aresample={SR},'
+            vfx += 'lowpass=f=3400,aecho=0.8:0.6:60|110:0.3|0.2,' if a.get('fx') == 'far' else 'aecho=0.85:0.5:38|71:0.13|0.07,'
+        chains.append(f"[{k + 1}:a]aformat=sample_rates={SR}:channel_layouts=stereo,{vfx}atrim={ss:.3f}:{ss + d:.3f},asetpts=PTS-STARTPTS,"
+                      f"afade=t=in:d={fi},afade=t=out:st={max(0, d - fo):.3f}:d={fo},volume={a.get('gain', 1.0 if a.get('voice') else 0.5)},"
                       f"adelay={int(st * 1000)}|{int(st * 1000)}[a{k}]")
+        voices.append(bool(a.get('voice')))
     os.makedirs(P(f'studio/export/{EP}'), exist_ok=True)
     out = P(f'studio/export/{EP}/Склейка_{time.strftime("%Y-%m-%d_%H-%M")}.mp4')
     if chains:
-        mix = ''.join(f'[a{k}]' for k in range(len(chains)))
-        fca = ';'.join(chains) + f';{mix}amix=inputs={len(chains)}:normalize=0,atrim=0:{total:.3f},loudnorm=I=-19:TP=-1.5:LRA=14,afade=t=out:st={total - 1.5:.3f}:d=1.5,alimiter=limit=0.9[aout]'
+        vo = [k for k in range(len(chains)) if voices[k]]
+        bed = [k for k in range(len(chains)) if not voices[k]]
+        # loudnorm съедает хвост — добиваем тишиной до полной длины, иначе обрежется и видео
+        tail = (f'atrim=0:{total:.3f},loudnorm=I=-19:TP=-1.5:LRA=14,aresample={SR},apad=whole_dur={total:.3f},atrim=0:{total:.3f},'
+                f'afade=t=out:st={total - 1.5:.3f}:d=1.5,alimiter=limit=0.9[aout]')
+        if vo and bed:  # музыка и шумы уходят вниз, пока говорят
+            fca = ';'.join(chains) + (f";{''.join(f'[a{k}]' for k in vo)}amix=inputs={len(vo)}:normalize=0,asplit[vo][key]"
+                                      f";{''.join(f'[a{k}]' for k in bed)}amix=inputs={len(bed)}:normalize=0[bed]"
+                                      f";[bed][key]sidechaincompress=threshold=0.04:ratio=5:attack=30:release=500[duck]"
+                                      f";[duck][vo]amix=inputs=2:normalize=0,{tail}")
+        else:
+            fca = ';'.join(chains) + f";{''.join(f'[a{k}]' for k in range(len(chains)))}amix=inputs={len(chains)}:normalize=0,{tail}"
         run([FF, '-loglevel', 'error', '-y', '-i', video, *ains, '-filter_complex', fca, '-map', '0:v', '-map', '[aout]',
-             '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', out])
+             '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-t', f'{total:.3f}', out])
     else:
         shutil.copy(video, out)
     print('склейка:', os.path.relpath(out, ROOT), f'{total:.1f} с')

@@ -1252,7 +1252,8 @@ const routes = {
   'POST /api/montage/take/delete': (q, b) => {
     const m = montageData(b.ep);
     const t = m.takes.find((x) => x.id === b.id);
-    if (t) { try { fs.rmSync(abs(t.file), { force: true }); } catch {} }
+    // файл стираем, только если он лежит в корзине дублей; ролики из папок автора (Аниме/…) не трогаем
+    if (t && t.file.startsWith(`studio/media/${safe(b.ep)}/takes/`)) { try { fs.rmSync(abs(t.file), { force: true }); } catch {} }
     m.takes = m.takes.filter((x) => x.id !== b.id);
     for (const k of Object.keys(m.place)) if (m.place[k].take === b.id) delete m.place[k];
     writeJSON(montagePath(b.ep), m);
