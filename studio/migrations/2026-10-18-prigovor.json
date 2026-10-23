@@ -1,0 +1,141 @@
+{
+ "id": "2026-10-18-prigovor",
+ "title": "Приговор отдельно от разлома (6.1–6.8 без разлома); прыжок Лиама ногами вперёд (3.9–4.1)",
+ "ops": [
+  {
+   "op": "scene",
+   "ep": "s01e01",
+   "n": 6,
+   "set": {
+    "staging": "ПРИГОВОР (6.1–6.8) идёт ДО разлома: небо ещё ясное, красное солнце, никакой черноты в воздухе. В 6.5–6.7 только трясётся земля, в 6.8 набегают чёрные тучи. Разлом впервые появляется в 6.9, и только с этого кадра он в фоне. Площадь у Восточного поста, вымощенная телами. Курган из павших стоит в ЛЕВОЙ части площади; справа — открытое поле и низкий хребет, за ним восток. Солнце высоко, полдень, свет резкий сверху. В сцене 3 Повелитель стоит на вершине кургана, Лиам прилетает справа. В дуэли (сцены 4–5) Повелитель ВСЕГДА слева в кадре (он спустился с кургана), Лиам ВСЕГДА справа — правило 180°. Курган виден только в общих планах, в средних и крупных его нет. Уцелевшие люди Альянса уходят влево (на запад, откуда придёт Бастиан), драйки уносят раненых вправо, к хребту. В сценах 6–7 разлом открывается в воздухе СПРАВА, за спиной Лиама — поэтому его утягивает спиной вперёд вправо."
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.1",
+   "set": {
+    "location": "battlefield"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.2",
+   "set": {
+    "location": "battlefield",
+    "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord on the LEFT raises his hand toward Liam on the RIGHT"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.3",
+   "set": {
+    "location": "battlefield",
+    "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; only the hand fills the frame; background a soft red blur"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.4",
+   "set": {
+    "location": "battlefield",
+    "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord's fingers (from the LEFT) touch Liam's chest; Liam faces left"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.5",
+   "set": {
+    "location": "battlefield",
+    "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the ground shakes, dust jumps off the stones; the Lord on the LEFT, Liam on the RIGHT, the mound far left"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.6",
+   "set": {
+    "location": "battlefield",
+    "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord jerks his head up and looks to the sky on frame-RIGHT; the glow under his fingers dies"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.7",
+   "set": {
+    "location": "battlefield",
+    "continuity": "before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; cracks run through red ground, sand pours into them"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.8",
+   "set": {
+    "location": "battlefield"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.8",
+   "set": {
+    "location": "battlefield",
+    "continuity": "camera tilts up from the battlefield to the sky: black storm clouds roll in fast from the RIGHT (east) and start to swallow the red sun; still NO tear in the air"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "6.9",
+   "set": {
+    "continuity": "FIRST appearance of the rift: the air tears open on frame-RIGHT above the battlefield, behind where Liam stands; black clouds overhead, red sun gone"
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.9",
+   "set": {
+    "img": "[LIAM] dropping off a flying [RUKH] FEET FIRST, body upright, legs down, cloak and white hair whipping upward, high in the sky, only rust-red sky and white clouds behind him, ground not visible, PAL-DESERT, STYLE",
+    "continuity": "high in the air, far from the ground: Liam drops off his bird FEET FIRST (body upright, legs down), the bird above/behind him; only sky in the background, no ground; within a second he will lean forward into the pose of the attached reference",
+    "frame": "Лиам срывается со спины летящей птицы ногами вперёд и падает вниз; через секунду наклоняется вперёд, в позу с рефа «лиам прыгает». Высоко, за ним только небо.",
+    "vid": "he drops off the bird feet first and falls, within a second leaning forward into a flying pose, camera follows the fall, only sky around",
+    "refs": [
+     {
+      "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg",
+      "note": "this is his pose a SECOND LATER (shot 3.10); in this shot he still drops feet first — match only his look and the sky"
+     }
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.10",
+   "set": {
+    "img": "[LIAM] high in the sky a second later, body leaning forward almost horizontal, one arm flung forward right after hurling [LIAM SWORD] down, motion blur, speed lines, only red sky and clouds around, ground far below or not visible, STYLE",
+    "continuity": "about a second after the jump: Liam leans forward almost horizontal like in the reference «лиам прыгает» — arm thrown forward after the throw, legs trailing; only sky around, ground far below or out of frame",
+    "refs": [
+     {
+      "file": "Аниме/Иллюстрации книги/лиам прыгает.jpg",
+      "note": "match this flying pose"
+     }
+    ]
+   }
+  },
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "4.1",
+   "set": {
+    "continuity": "Liam lands FEET FIRST in a crouch on frame-RIGHT of the mound, one hand on the stones, cloak settling; his sword stands in the cracked stone near the Lord"
+   }
+  }
+ ]
+}
