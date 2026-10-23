@@ -14,6 +14,8 @@
     src "take" — родной звук дубля из куска from (Kling кладёт ветер, крылья, шаги); ss — сдвиг от его in.
     voice: true — реплика: все голоса выводятся на одну громкость (без эффектов), музыка и шумы под ней приглушаются.
 Свои звуки и музыка: файл studio/media/<серия>/sfx/<имя>.mp3|wav заменяет синтез с тем же именем (список — studio/canon/voice/<серия>_звуки.md).
+"clean": true на весь лист — чистая картинка как в аниме: без цветокора и виньетки, без затемнения под титром,
+без синтезированных звуков (звучат только реплики, родной звук Kling и файлы автора из sfx/).
 Водяной знак Kling в правом нижнем углу затирается (delogo), кроме дублей с "clean": true. Звука в дублях нет — вся звуковая дорожка из листа.
 """
 import json, os, re, shutil, subprocess, sys, tempfile, time
@@ -80,6 +82,9 @@ def loudness(path):
     return float(m[-1]) if m else -20.0
 
 
+CLEAN = False
+
+
 def take_of(M, tid):
     t = next((x for x in M.get('takes', []) if x['id'] == tid), None)
     if not t:
@@ -105,16 +110,16 @@ def titles(lines, t0, t1):
     colors = ['0xD9B98A', '0xF6EBDD', '0xE8D6BC']
     spaced = lambda t, k: ('\u2009' * k).join(t) if k else t  # разрядка тонкими пробелами
     return ','.join(f"drawtext=fontfile='{TFONT[i % 3]}':text='{esc(spaced(t, (2, 1, 0)[i % 3]))}':fontcolor={colors[i % 3]}:fontsize={sizes[i % 3]}"
-                    f":x=(w-text_w)/2:y={ys[i % 3]}:borderw={(2, 3, 2)[i % 3]}:bordercolor=0x1a0606@0.55:shadowcolor=0x000000@0.7:shadowx=3:shadowy=3"
+                    f":x=(w-text_w)/2:y={ys[i % 3]}:borderw={(2, 3, 2)[i % 3] + (1 if CLEAN else 0)}:bordercolor=0x1a0606@{0.8 if CLEAN else 0.55}:shadowcolor=0x000000@0.7:shadowx=3:shadowy=3"
                     f":alpha='min(1,max(0,(t-{t0 + 0.45 * i})/0.9))*min(1,max(0,({t1}-t)/0.7))'" for i, t in enumerate(lines))
 
 
 def render_piece(M, v, out):
     d = v['out'] - v['in'] if 'take' in v else v['dur']
-    grade = 'eq=contrast=1.04:saturation=1.06,vignette=angle=PI/5'
+    grade = '' if CLEAN else ',eq=contrast=1.04:saturation=1.06,vignette=angle=PI/5'
     if 'card' in v:
         run([FF, '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', f'color=c=0x0b0708:s={W}x{H}:r={FPS}:d={d}', '-vf',
-             f'{titles(v["card"], 0, d)},vignette=angle=PI/4', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
+             f'{titles(v["card"], 0, d)}' + ('' if CLEAN else ',vignette=angle=PI/4'), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
         return d
     t = take_of(M, v['take'])
     src = P(t['file'])
@@ -137,13 +142,15 @@ def render_piece(M, v, out):
         fit += f",setpts=PTS/{v['speed']},fps={FPS}"
         d = d / v['speed']
     text = ''
-    if v.get('text'):  # под титром кадр плавно темнеет, чтобы надпись не терялась
+    if v.get('text') and CLEAN:
+        text = f",{titles(v['text'], *v.get('text_at', [0, d]))}"
+    elif v.get('text'):  # под титром кадр плавно темнеет, чтобы надпись не терялась
         t0, t1 = v.get('text_at', [0, d])
         k = f'min(1,max(0,(T-{t0 - 0.3})/0.9))*min(1,max(0,({t1 + 0.4}-T)/0.9))'
         text = (f",split[a][b];[b]eq=brightness=-0.13:saturation=0.85:contrast=0.92[dk];[a][dk]blend=all_expr='A+(B-A)*{k}',"
                 f"{titles(v['text'], t0, t1)}")
     run([FF, '-loglevel', 'error', '-y', '-ss', f"{v['in']:.3f}", '-t', f"{v['out'] - v['in']:.3f}", '-i', src, '-an',
-         '-vf', f'{logo}{fit},{grade}{text}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
+         '-vf', f'{logo}{fit}{grade}{text}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out])
     return real_dur(out) or d
 
 
@@ -164,6 +171,8 @@ def main():
     M = json.load(open(P(f'studio/data/montage/{EP}.json'), encoding='utf-8'))
     sheet = f'{EP}.{opt("--sheet")}.cut.json' if opt('--sheet') else f'{EP}.cut.json'
     C = json.load(open(P(f'studio/data/montage/{sheet}'), encoding='utf-8'))
+    global CLEAN
+    CLEAN = bool(C.get('clean'))
     V = C['video']
     if opt('--only'):
         a, b = (opt('--only').split('-') + [None])[:2]
@@ -198,7 +207,10 @@ def main():
     total = t
     first_tr = V[0].get('trans')
     fade_in = f",fade=t=in:d={V[0].get('td', 1)}" if first_tr in ('fadeblack', 'fade') else ''
-    if C.get('title') and not opt('--only'):  # общий титр: под ним кадр темнеет, надпись идёт через переходы
+    if C.get('title') and not opt('--only') and CLEAN:
+        fc.append(f"{last}{titles(C['title']['lines'], *C['title']['at'])}[titled]")
+        last = '[titled]'
+    elif C.get('title') and not opt('--only'):  # общий титр: под ним кадр темнеет, надпись идёт через переходы
         t0, t1 = C['title']['at']
         k = f'min(1,max(0,(T-{t0 - 0.3})/0.9))*min(1,max(0,({t1 + 0.4}-T)/0.9))'
         fc.append(f"{last}split[ta][tb];[tb]eq=brightness=-0.13:saturation=0.85:contrast=0.92[tdk];"
@@ -228,6 +240,8 @@ def main():
             ss += piece.get('in', 0)
         elif sfx_file(src):
             ains += ['-stream_loop', '-1', '-i', sfx_file(src)]
+        elif CLEAN and (src in SFX or src in ALIAS):
+            continue  # чистый режим: синтез не звучит, пока нет файла автора
         elif src in SFX or src in ALIAS:
             ains += ['-f', 'lavfi', '-i', SFX[ALIAS.get(src, src)].format(d=f'{d:.3f}', sr=SR, h=f'{d / 2:.3f}', h2=f'{max(0.1, d - 0.15):.3f}')]
         elif os.path.exists(P(src)):
