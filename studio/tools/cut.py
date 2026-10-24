@@ -257,7 +257,7 @@ def main():
                       f"adelay={int(st * 1000)}|{int(st * 1000)}[a{k}]")
         voices.append(bool(a.get('voice')))
     os.makedirs(P(f'studio/export/{EP}'), exist_ok=True)
-    out = P(f'studio/export/{EP}/Склейка_{time.strftime("%Y-%m-%d_%H-%M")}.mp4')
+    out = P(f'studio/export/{EP}/{C.get("name", "Склейка")}_{time.strftime("%Y-%m-%d_%H-%M")}.mp4')
     if chains:
         vo = [k for k in range(len(chains)) if voices[k]]
         bed = [k for k in range(len(chains)) if not voices[k]]
