@@ -1,0 +1,18 @@
+{
+ "id": "2026-10-19-shot-3-8",
+ "title": "Кадр 3.8: Рух со всадниками летят издалека высоко, люди после битвы живые, в конце замирают",
+ "ops": [
+  {
+   "op": "shot",
+   "ep": "s01e01",
+   "id": "3.8",
+   "set": {
+    "vid": "locked-off wide shot. A wedge of about ten giant Rukh birds with riders appears far away high in the sky above the right ridges and flies toward the camera, staying high above the field; below, the exhausted crowds breathe heavily and sway, wounded lean on spears, banners and torn cloaks whip in the hot wind, heads turn up one after another, a horse tosses its head; as the flock passes high overhead and its shadows sweep the field, everyone freezes, staring up",
+    "characters": [
+     "RUKH"
+    ],
+    "continuity": "Alliance survivors on the LEFT edge of the square, drayks on the RIGHT; the Rukh wedge comes from the far right, high in the sky, toward the camera"
+   }
+  }
+ ]
+}

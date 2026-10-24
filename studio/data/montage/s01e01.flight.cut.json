@@ -1,0 +1,264 @@
+{
+ "name": "Вылет",
+ "note": "Серия 1: вылет — ангар, Лиам садится, взлёт, полёт, тёмное пятно впереди. Без реплик.",
+ "clean": true,
+ "tail": 1.6,
+ "video": [
+  {
+   "id": "hangar",
+   "take": "T036",
+   "in": 0,
+   "out": 3.0,
+   "trans": "fadeblack",
+   "td": 1.0,
+   "note": "ангар: птицы, рыцари, красное солнце"
+  },
+  {
+   "id": "row",
+   "take": "T037",
+   "in": 1.0,
+   "out": 3.45,
+   "note": "ряд птиц за колонной"
+  },
+  {
+   "id": "walk_back",
+   "take": "T037",
+   "in": 7.12,
+   "out": 8.85,
+   "note": "Лиам идёт вдоль ряда (спиной)"
+  },
+  {
+   "id": "walk_in",
+   "take": "T036",
+   "in": 3.1,
+   "out": 6.25,
+   "note": "крыло проходит у камеры — Лиам идёт к нам"
+  },
+  {
+   "id": "by_bird",
+   "take": "T037",
+   "in": 3.55,
+   "out": 7.0,
+   "note": "Лиам у своей птицы, рыцари проверяют ремни; крыло-вытеснение"
+  },
+  {
+   "id": "saddle_hand",
+   "take": "T036",
+   "in": 6.42,
+   "out": 8.66,
+   "note": "рука на седле"
+  },
+  {
+   "id": "mount",
+   "take": "T038",
+   "in": 0,
+   "out": 4.05,
+   "note": "вскакивает в седло, за ним садятся всадники"
+  },
+  {
+   "id": "reins",
+   "take": "T037",
+   "in": 10.08,
+   "out": 11.0,
+   "note": "рука сжимает поводья"
+  },
+  {
+   "id": "liam_close",
+   "take": "T036",
+   "in": 8.92,
+   "out": 11.6,
+   "note": "Лиам крупно, ветер в волосах"
+  },
+  {
+   "id": "takeoff",
+   "take": "T038",
+   "in": 4.12,
+   "out": 11.05,
+   "note": "выход из ворот, взлёт с обрыва, крыло — строй над каньоном"
+  },
+  {
+   "id": "sun",
+   "take": "T037",
+   "in": 12.4,
+   "out": 15.0,
+   "trans": "dissolve",
+   "td": 0.4,
+   "note": "птица уходит к солнцу"
+  },
+  {
+   "id": "formation",
+   "take": "T038",
+   "in": 11.12,
+   "out": 14.95,
+   "trans": "dissolve",
+   "td": 0.4,
+   "note": "строй улетает над каньоном"
+  },
+  {
+   "id": "ride",
+   "take": "T039",
+   "in": 0,
+   "out": 4.2,
+   "note": "Лиам в строю"
+  },
+  {
+   "id": "ride_close",
+   "take": "T039",
+   "in": 4.48,
+   "out": 7.42,
+   "note": "Лиам крупно в полёте"
+  },
+  {
+   "id": "smoke",
+   "take": "T039",
+   "in": 7.5,
+   "out": 10.5,
+   "note": "впереди дым"
+  },
+  {
+   "id": "stain",
+   "take": "T039",
+   "in": 10.56,
+   "out": 14.95,
+   "note": "тёмное пятно на песке — затемнение"
+  }
+ ],
+ "audio": [
+  {
+   "src": "take",
+   "from": "hangar",
+   "to": "hangar",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "row",
+   "to": "row",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "walk_back",
+   "to": "walk_back",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "walk_in",
+   "to": "walk_in",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "by_bird",
+   "to": "by_bird",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "saddle_hand",
+   "to": "saddle_hand",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "mount",
+   "to": "mount",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "reins",
+   "to": "reins",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "liam_close",
+   "to": "liam_close",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "takeoff",
+   "to": "takeoff",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "sun",
+   "to": "sun",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "formation",
+   "to": "formation",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "ride",
+   "to": "ride",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "ride_close",
+   "to": "ride_close",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "smoke",
+   "to": "smoke",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "take",
+   "from": "stain",
+   "to": "stain",
+   "gain": 1.0,
+   "fin": 0.06,
+   "fout": 0.12
+  },
+  {
+   "src": "music_flight",
+   "from": "hangar",
+   "to": "stain",
+   "gain": 0.5,
+   "fin": 2,
+   "fout": 2.5
+  }
+ ]
+}

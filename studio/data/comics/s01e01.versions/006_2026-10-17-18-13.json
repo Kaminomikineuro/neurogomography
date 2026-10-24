@@ -1,0 +1,4381 @@
+{
+ "format": "manga",
+ "arts": {
+  "hero_1.11": {
+   "versions": [],
+   "selected": null,
+   "fromShot": "1.11",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "full-body figure of [LIAM] — the same moment as shot 1.11: Лиам встаёт.. Dramatic manga hero pose, full body from head to toe, slight low angle, wind in hair and cloak, isolated on a pure flat white background, no scenery, no ground, no shadow"
+  },
+  "hero_3.3": {
+   "versions": [],
+   "selected": null,
+   "fromShot": "3.3",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": "full-body figure of [LORD] — the same moment as shot 3.3: Повелитель на вершине. Спокоен, будто стих дождь. Волосы треплет ветер, с клинка стекает белая кровь.. Dramatic manga hero pose, full body from head to toe, slight low angle, wind in hair and cloak, isolated on a pure flat white background, no scenery, no ground, no shadow"
+  },
+  "hero_4.1": {
+   "versions": [],
+   "selected": null,
+   "fromShot": "4.1",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "full-body figure of [LIAM] — the same moment as shot 4.1: Лиам приземляется недалеко от кургана. На дальнем плане рыцари снижаются к уцелевшим.. Dramatic manga hero pose, full body from head to toe, slight low angle, wind in hair and cloak, isolated on a pure flat white background, no scenery, no ground, no shadow"
+  },
+  "hero_7.12": {
+   "versions": [],
+   "selected": null,
+   "fromShot": "7.12",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "full-body figure of [LIAM] — the same moment as shot 7.12: Лиам выставляет меч перед собой.. Dramatic manga hero pose, full body from head to toe, slight low angle, wind in hair and cloak, isolated on a pure flat white background, no scenery, no ground, no shadow"
+  },
+  "panel_5li8pg": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "1.5",
+   "characters": [
+    "ROY"
+   ],
+   "prompt": "medium shot of a young drayk captain reporting at the map table, uncertain young voice expression, PAL-COUNCIL, STYLE Один кадр без текста."
+  },
+  "panel_947cbt": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "1.8",
+   "characters": [
+    "ROY",
+    "ARDAN"
+   ],
+   "prompt": "Один ключевой кадр аниме. Ардан требует бросить все силы; Рой рядом опустил глаза. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей.  Один кадр без текста."
+  },
+  "panel_mgigyy": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "1.10",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "close-up of [LIAM]'s bare slender fingers drumming on a carved stone armrest, the narrow dark sleeve and brown leather bracer at his wrist, PAL-COUNCIL, STYLE Один кадр без текста."
+  },
+  "panel_hqw0b5": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "1.11",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "low angle shot of [LIAM] rising from the chair, the window light behind him, PAL-COUNCIL, STYLE Один кадр без текста."
+  },
+  "panel_76o834": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "3.1",
+   "characters": [],
+   "prompt": "aerial wide shot descending over a vast battlefield in a red stone desert, broken weapons, scorched patches, ground stained brown and silver, bodies small and in shadow, anime stylized, no gore detail, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_p7lwq4": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "3.2",
+   "characters": [],
+   "prompt": "low angle, a huge mound of the fallen and old bones in silhouette, bodies in shadow, a lone tall figure on top against the red sun, anime stylized, no gore detail, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_krnfce": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "3.9",
+   "characters": [
+    "LIAM",
+    "RUKH"
+   ],
+   "prompt": "[LIAM] dropping off a flying [RUKH] FEET FIRST, body upright, legs down, cloak and white hair whipping upward, high in the sky, only rust-red sky and white clouds behind him, ground not visible, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_5lluxt": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "3.10",
+   "characters": [
+    "LIAM",
+    "LIAM SWORD"
+   ],
+   "prompt": "[LIAM] high in the sky a second later, body leaning forward almost horizontal, one arm flung forward right after hurling [LIAM SWORD] down, motion blur, speed lines, only red sky and clouds around, ground far below or not visible, STYLE Один кадр без текста."
+  },
+  "panel_meaj58": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "3.11",
+   "characters": [
+    "LIAM SWORD",
+    "LORD"
+   ],
+   "prompt": "[LIAM SWORD] stabbed into red stone, a web of cracks spreading, dust shockwave, impact frame, STYLE Один кадр без текста."
+  },
+  "panel_o7guw2": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "4.1",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "[LIAM] landing in a crouch near the mound, cloak settling, riders descending far in the background, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_84uexu": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "4.2",
+   "characters": [
+    "LORD",
+    "LIAM SWORD"
+   ],
+   "prompt": "[LORD] walking down the dark mound with a long confident stride, [LIAM SWORD] in his hand, the slope in deep shadow, anime stylized, no gore detail, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_4kxgpu": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "4.4",
+   "characters": [
+    "LIAM",
+    "LORD"
+   ],
+   "prompt": "close two-shot, [LORD] and [LIAM] standing very close facing each other, Liam half a head shorter and slender, both holding eye contact, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_f287xy": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "4.5",
+   "characters": [
+    "LIAM",
+    "LIAM SWORD"
+   ],
+   "prompt": "extreme close-up of [LIAM]'s bare fingers touching the red ruby on the hilt of [LIAM SWORD], brown leather bracer and narrow dark sleeve at his wrist, STYLE Один кадр без текста."
+  },
+  "panel_yno3pl": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "4.8",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "extreme wide shot, an empty red battlefield, two tiny figures facing each other, red sun, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_13oppl": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "4.9",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "Один ключевой кадр аниме. Крупный план Повелителя, мягко обращается к Лиаму. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей.  Один кадр без текста."
+  },
+  "panel_ah8f2p": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "4.10",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "medium shot of [LIAM] bowing his head with hands joined in a formal martial salute, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_quulwf": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "4.11",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": "Один ключевой кадр аниме. лёгкая усмешка, уголок губ поднимается. Затем пальцы перехватывают рукоять собственного меча. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей.  Один кадр без текста."
+  },
+  "panel_x3p89b": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "5.1",
+   "characters": [
+    "LIAM",
+    "LORD"
+   ],
+   "prompt": "two swords clashing between [LORD] and [LIAM], sparks, impact frame, speed lines, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_id0pjx": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "5.2",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "[LIAM] sliding backward across sand from a heavy blow, feet carving grooves, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_fiag0n": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "5.7",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "close-up of [LIAM] mid-duel, sweat and dust on his face, eyes calculating, PAL-DESERT, STYLE Один кадр без текста."
+  },
+  "panel_i85omi": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "5.3",
+   "characters": [
+    "LIAM",
+    "LORD"
+   ],
+   "prompt": "Один ключевой кадр аниме. Лиам пытается пройти под руку — Повелитель просто отступает на полшага. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun Один кадр без текста."
+  },
+  "panel_p50gkq": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "5.4",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "Один ключевой кадр аниме. Повелитель отбивает едва уловимыми, ювелирными движениями, почти лениво. Лиам рядом угловатый. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun Один кадр без текста."
+  },
+  "panel_s35wh4": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "7.12",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "[LIAM] raising his sword in front of him, shouting, the black rift behind the horde, PAL-RIFT, STYLE Один кадр без текста."
+  },
+  "panel_dr1bkx": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "2.9",
+   "characters": [
+    "LIAM",
+    "RUKH"
+   ],
+   "prompt": "[LIAM] in the saddle turning back to shout to riders behind him, PAL-DESERT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_iyp6gp": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "5.5",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "slow motion, a black blade passing just above [LIAM] face as he leans back, a few white hairs cut and floating, PAL-DESERT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_sywcrz": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "5.9",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "Один ключевой кадр аниме. сверху — в бок — в колено. Два отбиты, от третьего уход корпусом, следующий выпад встречен гардой. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. duel on the open field: the Lord is always on frame-LEFT, Liam always on frame-RIGHT; no mound in medium and close framing; harsh high midday sun — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_nl2ydk": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "5.13",
+   "characters": [
+    "LORD",
+    "LORD SWORD"
+   ],
+   "prompt": "close-up of [LORD SWORD] in [LORD]'s black leather gloved hand, black coat cuff, the blade turning into dark smoke, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_77c28c": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "6.4",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "close-up, [LORD]'s black-gloved fingertips resting on [LIAM]'s chest over his dark tunic and burgundy scarf, faint fiery glow spreading under the fabric, PAL-DESERT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_oong4p": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "6.5",
+   "characters": [],
+   "prompt": "Один ключевой кадр аниме. земля содрогается, хребты стонут. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the ground shakes, dust jumps off the stones; the Lord on the LEFT, Liam on the RIGHT, the mound far left — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_qyw8ha": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "6.6",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": "Один ключевой кадр аниме. Повелитель резко вскидывает голову, прерывая технику. Свечение гаснет. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord jerks his head up and looks to the sky on frame-RIGHT; the glow under his fingers dies — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_wqmimb": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.1",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "dozens of dead hands reaching out from a dark pile grabbing [LIAM] boots and cloak, anime stylized, no gore detail, PAL-RIFT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_1xdue1": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.3",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "burst of white energy exploding beneath [LIAM], hands thrown away, impact frame, PAL-RIFT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_dj4tc3": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.4",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "Один ключевой кадр аниме. его отшвыривает далеко влево, он катится по камням и бьётся больным боком. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. the energy blast throws Liam far to frame-LEFT, away from the rift; he rolls over the stones — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_ia8ry8": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.9",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": " — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_bmv6qf": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.10",
+   "characters": [],
+   "prompt": "Один ключевой кадр аниме. тьма обретает форму — пульсирующая пасть, из которой хлещут эманации смерти. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_8kyfs6": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.11",
+   "characters": [],
+   "prompt": "Один ключевой кадр аниме. мертвец шагает, наступает на собственную сломанную ногу, падает — и снова начинает подниматься. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_6emu3y": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "F1",
+   "characters": [
+    "KATNAR"
+   ],
+   "prompt": "wide shot of a red stone ridge, a huge boulder on the crest that is actually a massive desert beast with rough rock-like weathered hide, bony growths, heavy legs and large curved tusks, rust-red sky with white clouds, PAL-DESERT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_o8vrv3": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "3.2",
+   "characters": [],
+   "prompt": "low angle, a huge mound of the fallen and old bones in silhouette, bodies in shadow, a lone tall figure on top against the red sun, anime stylized, no gore detail, PAL-DESERT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_hvdykf": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "F2",
+   "characters": [
+    "ZERR"
+   ],
+   "prompt": "low angle close to the ground on a rust-colored sand dune, a slender white-and-brown desert predator with a long flexible body, long tail, strong hind legs and large sensitive horn-like ears, half emerging from the sand, PAL-DESERT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_swa6jt": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "3.2",
+   "characters": [],
+   "prompt": "low angle, a huge mound of the fallen and old bones in silhouette, bodies in shadow, a lone tall figure on top against the red sun, anime stylized, no gore detail, PAL-DESERT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_jrt3bi": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "1.5a",
+   "characters": [
+    "BELFI"
+   ],
+   "prompt": "extreme close-up of the tired eyes of an old stooped drayk general, heavy lids, deep wrinkles, light through dusty windows, PAL-COUNCIL, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_34sahy": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "1.6",
+   "characters": [
+    "ARDAN"
+   ],
+   "prompt": "close-up of a stern female drayk commander, sharp face, looking sideways at someone, not at the map, PAL-COUNCIL, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_m76q56": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "1.8",
+   "characters": [
+    "ROY",
+    "ARDAN"
+   ],
+   "prompt": "Один ключевой кадр аниме. Ардан требует бросить все силы; Рой рядом опустил глаза. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей.  — recomposed for a square comic panel"
+  },
+  "panel_3qnq8a": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "1.11",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "low angle shot of [LIAM] rising from the chair, the window light behind him, PAL-COUNCIL, STYLE — recomposed for a square comic panel"
+  },
+  "panel_c8ne2i": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "1.13",
+   "characters": [
+    "LIAM",
+    "BELFI",
+    "ROY",
+    "ARDAN"
+   ],
+   "prompt": "medium two-shot, [LIAM] turned toward the old general, a short nod toward the map, PAL-COUNCIL, STYLE — recomposed for a square comic panel"
+  },
+  "panel_a3gam2": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "1.14",
+   "characters": [
+    "LIAM",
+    "ROY",
+    "ARDAN",
+    "BELFI"
+   ],
+   "prompt": "medium shot of [LIAM] walking toward a heavy door, officers behind him at the table, PAL-COUNCIL, STYLE — recomposed for a square comic panel"
+  },
+  "panel_emwxxz": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "1.15",
+   "characters": [
+    "ROY",
+    "ARDAN",
+    "BELFI"
+   ],
+   "prompt": "wide shot of the council room after someone left, three officers frozen around the map table, a closed door, PAL-COUNCIL, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_34xvjz": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "2.9",
+   "characters": [
+    "LIAM",
+    "RUKH"
+   ],
+   "prompt": "[LIAM] in the saddle turning back to shout to riders behind him, PAL-DESERT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_q50kn8": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "2.10",
+   "characters": [],
+   "prompt": "Лиам снова смотрит вперёд. Спокойное лицо. — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_uvb1eo": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "3.2",
+   "characters": [],
+   "prompt": "low angle, a huge mound of the fallen and old bones in silhouette, bodies in shadow, a lone tall figure on top against the red sun, anime stylized, no gore detail, PAL-DESERT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_qdkb1f": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "3.4",
+   "characters": [],
+   "prompt": "extreme close-up of a pair of silver hairpins in long black hair, sun glint, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_wm45jg": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "3.5",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": "extreme close-up of [LORD] obsidian-black eyes looking straight up into the camera, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_3bqrhq": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "3.7",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "close-up of [LIAM] trembling, wide eyes full of awe rather than fear, heavy air distortion around him, anime pressure lines, PAL-DESERT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_kaydpn": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "3.11",
+   "characters": [
+    "LIAM SWORD",
+    "LORD"
+   ],
+   "prompt": "[LIAM SWORD] stabbed into red stone, a web of cracks spreading, dust shockwave, impact frame, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_dpwk3w": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "3.10",
+   "characters": [
+    "LIAM",
+    "LIAM SWORD"
+   ],
+   "prompt": "[LIAM] high in the sky a second later, body leaning forward almost horizontal, one arm flung forward right after hurling [LIAM SWORD] down, motion blur, speed lines, only red sky and clouds around, ground far below or not visible, STYLE — recomposed for a square comic panel"
+  },
+  "panel_pfnfwt": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "3.9",
+   "characters": [
+    "LIAM",
+    "RUKH"
+   ],
+   "prompt": "[LIAM] dropping off a flying [RUKH] FEET FIRST, body upright, legs down, cloak and white hair whipping upward, high in the sky, only rust-red sky and white clouds behind him, ground not visible, PAL-DESERT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_26e3ok": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "4.2",
+   "characters": [
+    "LORD",
+    "LIAM SWORD"
+   ],
+   "prompt": "[LORD] walking down the dark mound with a long confident stride, [LIAM SWORD] in his hand, the slope in deep shadow, anime stylized, no gore detail, PAL-DESERT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_quspuq": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "4.3",
+   "characters": [
+    "LIAM",
+    "LORD",
+    "LIAM SWORD"
+   ],
+   "prompt": "medium two-shot in profile, [LORD] holding out [LIAM SWORD] hilt-first to [LIAM], PAL-DESERT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_bv7jgg": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "4.7",
+   "characters": [
+    "LORD",
+    "LIAM",
+    "RUKH"
+   ],
+   "prompt": "two figures in the foreground slightly out of focus, behind them drayks carrying wounded toward a ridge and human cavalry starting a chase, PAL-DESERT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_07yp69": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "4.8",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "extreme wide shot, an empty red battlefield, two tiny figures facing each other, red sun, PAL-DESERT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_ujs17w": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "5.13",
+   "characters": [
+    "LORD",
+    "LORD SWORD"
+   ],
+   "prompt": "close-up of [LORD SWORD] in [LORD]'s black leather gloved hand, black coat cuff, the blade turning into dark smoke, STYLE — recomposed for a square comic panel"
+  },
+  "panel_kpg5da": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "6.1",
+   "characters": [
+    "LIAM",
+    "LORD"
+   ],
+   "prompt": "[LIAM] standing disarmed, looking past the camera toward a crimson horizon, [LORD] stepping closer in the foreground out of focus, PAL-DESERT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_fn3mx4": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "6.4",
+   "characters": [
+    "LORD",
+    "LIAM"
+   ],
+   "prompt": "close-up, [LORD]'s black-gloved fingertips resting on [LIAM]'s chest over his dark tunic and burgundy scarf, faint fiery glow spreading under the fabric, PAL-DESERT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_quxdxk": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "6.5",
+   "characters": [],
+   "prompt": "Один ключевой кадр аниме. земля содрогается, хребты стонут. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the ground shakes, dust jumps off the stones; the Lord on the LEFT, Liam on the RIGHT, the mound far left — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_f9gma0": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "6.6",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": "Один ключевой кадр аниме. Повелитель резко вскидывает голову, прерывая технику. Свечение гаснет. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. before the rift: NO black tear in the air, NO black clouds, clear rust-red sky and the red sun; the Lord jerks his head up and looks to the sky on frame-RIGHT; the glow under his fingers dies — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_0ut1ka": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "6.9",
+   "characters": [],
+   "prompt": "a huge tear in the air above the battlefield opening like a gigantic maw of viscous blackness, trembling ragged edges clinging to reality, PAL-RIFT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_v45bzx": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "6.12",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "dutch angle, [LIAM] being yanked backward off his feet toward a black tear in the air, PAL-RIFT, STYLE — recomposed for a square comic panel"
+  },
+  "panel_t3qn7j": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.3",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "burst of white energy exploding beneath [LIAM], hands thrown away, impact frame, PAL-RIFT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_a9ijwt": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "7.4",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "Один ключевой кадр аниме. его отшвыривает далеко влево, он катится по камням и бьётся больным боком. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. the energy blast throws Liam far to frame-LEFT, away from the rift; he rolls over the stones — recomposed for a 16:9 horizontal comic panel"
+  },
+  "panel_bocilk": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "7.6",
+   "characters": [
+    "LIAM",
+    "LIAM SWORD"
+   ],
+   "prompt": "Один ключевой кадр аниме. поднимается на дрожащих руках. Рядом чудом оказался меч. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_i1ns73": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "7.5",
+   "characters": [
+    "LIAM"
+   ],
+   "prompt": "[LIAM] on all fours on red stone, coughing silver blood, clutching his side, PAL-RIFT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_0gzyzv": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "2:3 vertical",
+   "fromShot": "7.7",
+   "characters": [
+    "LORD"
+   ],
+   "prompt": "extreme wide shot, dark figures of the dead rising all over the battlefield like broken puppets, [LORD] standing motionless in the center, anime stylized, bodies in silhouette, PAL-RIFT, STYLE — recomposed for a 2:3 vertical comic panel"
+  },
+  "panel_s9z996": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "square",
+   "fromShot": "7.11",
+   "characters": [],
+   "prompt": "Один ключевой кадр аниме. мертвец шагает, наступает на собственную сломанную ногу, падает — и снова начинает подниматься. Сохранить лица, костюмы и свет из готовых референсов. Без текста и панелей. the rift (black tear in the air) is on frame-RIGHT, behind Liam; the Lord stands on the LEFT; black clouds, frost — recomposed for a square comic panel"
+  },
+  "panel_q1znrm": {
+   "versions": [],
+   "selected": null,
+   "kind": "panel",
+   "aspect": "16:9 horizontal",
+   "fromShot": "6.8",
+   "characters": [],
+   "prompt": "sky above a red desert, black storm clouds rapidly swallowing the red sun, PAL-RIFT, STYLE — recomposed for a 16:9 horizontal comic panel"
+  }
+ },
+ "pages": [
+  {
+   "id": "767vwv",
+   "w": 1000,
+   "h": 1414,
+   "webtoon": false,
+   "cover": true,
+   "panels": [
+    {
+     "id": "o8vrv3",
+     "shot": "3.2",
+     "poly": [
+      [
+       0,
+       0
+      ],
+      [
+       1000,
+       0
+      ],
+      [
+       1000,
+       1414
+      ],
+      [
+       0,
+       1414
+      ]
+     ],
+     "crop": {
+      "s": 1.15,
+      "x": 0.45911799858231034,
+      "y": 0.4813251414427157
+     },
+     "border": false,
+     "fx": "dark"
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "3vswk8",
+     "kind": "title",
+     "text": "Это Грань?",
+     "x": 500,
+     "y": 226.24,
+     "size": 34
+    },
+    {
+     "id": "o3vknj",
+     "kind": "caption-dark",
+     "text": "Т2, гл. 1 «Это Грань?» · Серия 1",
+     "x": 842.6228637695312,
+     "y": 1335.9753662109376,
+     "size": 20
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_1",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "wm18mb",
+     "shot": "E1",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "border": true,
+     "fx": ""
+    },
+    {
+     "id": "6emu3y",
+     "shot": "E2",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "label_E1",
+     "kind": "caption",
+     "text": "Эльтарион",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_4",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "woue2r",
+     "shot": "E4",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "cng0ad",
+     "shot": "E5",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "label_E5",
+     "kind": "caption",
+     "text": "Замок Эльтариона",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_5",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "1swxmn",
+     "shot": "1.2",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "lb5zrc",
+     "shot": "1.3",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "yq692x",
+     "kind": "sfx",
+     "text": "ДЗЗЫНЬ",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_6",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "cov5v2",
+     "shot": "1.4",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "5li8pg",
+     "shot": "1.5",
+     "poly": [
+      [
+       44,
+       877
+      ],
+      [
+       956,
+       877
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "label_1.4",
+     "kind": "caption",
+     "text": "Молодой лорд",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "label_1.5",
+     "kind": "caption",
+     "text": "Командир Рой",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "9ady2u",
+     "kind": "speak",
+     "text": "Бастиан отбил западный удар. Потери — около сорока",
+     "x": 500,
+     "y": 822,
+     "tail": null,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_7",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "t2jnbd",
+     "shot": "1.5a",
+     "poly": [
+      [
+       44,
+       206
+      ],
+      [
+       956,
+       206
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "wsaaa8",
+     "shot": "1.6",
+     "poly": [
+      [
+       44,
+       877
+      ],
+      [
+       956,
+       877
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "label_1.5a",
+     "kind": "caption",
+     "text": "Генерал Бельфи",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "go6my1",
+     "kind": "speak",
+     "text": "Альянс отступает, но разведка говорит, что это отвлечение",
+     "x": 500,
+     "y": 151,
+     "tail": [
+      500,
+      202
+     ],
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "label_1.6",
+     "kind": "caption",
+     "text": "Командир Ардан",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "mlr00l",
+     "kind": "speak",
+     "text": "Потому что восток уже горит. Пока мы здесь стоим",
+     "x": 500,
+     "y": 822,
+     "tail": null,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_8",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "va1u8s",
+     "shot": "1.7",
+     "poly": [
+      [
+       44,
+       142
+      ],
+      [
+       956,
+       142
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "947cbt",
+     "shot": "1.8",
+     "poly": [
+      [
+       44,
+       877
+      ],
+      [
+       956,
+       877
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "1qqbus",
+     "kind": "speak",
+     "text": "Ближайшие силы — штаб. Мои драйки",
+     "x": 500,
+     "y": 87,
+     "tail": null,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "wnvxfp",
+     "kind": "speak",
+     "text": "Нужно бросить туда все, что есть",
+     "x": 500,
+     "y": 758,
+     "tail": [
+      500,
+      809
+     ],
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "hidcsy",
+     "kind": "speak",
+     "text": "Все, что есть",
+     "x": 500,
+     "y": 833,
+     "tail": [
+      500,
+      873
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_9",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "mgigyy",
+     "shot": "1.10",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "hqw0b5",
+     "shot": "1.11",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "0u8jyx",
+     "kind": "sfx",
+     "text": "тук… тук…",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "jgonvq",
+     "kind": "speak",
+     "text": "Я возьму первый отряд",
+     "x": 896.095703125,
+     "y": 816.3167724609375,
+     "tail": [
+      896.095703125,
+      856.3167724609375
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_10",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "92onja",
+     "shot": "1.12",
+     "poly": [
+      [
+       44,
+       142
+      ],
+      [
+       956,
+       142
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "koet16",
+     "shot": "1.13",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "5bu75g",
+     "kind": "speak",
+     "text": "Это не ваше дело, Молодой Лорд… Вы не сможете…",
+     "x": 500,
+     "y": 87,
+     "tail": [
+      500,
+      138
+     ],
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "mqq9r9",
+     "kind": "speak",
+     "text": "Ваши люди нужны здесь",
+     "x": 500,
+     "y": 747,
+     "tail": [
+      500,
+      787
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_11",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "j2ergj",
+     "shot": "1.14",
+     "poly": [
+      [
+       44,
+       270
+      ],
+      [
+       956,
+       270
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "43fsli",
+     "shot": "1.15",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "up8ibi",
+     "kind": "speak",
+     "text": "Рой, когда будут готовы птицы?",
+     "x": 500,
+     "y": 76,
+     "tail": [
+      500,
+      116
+     ],
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "rnv5j3",
+     "kind": "speak",
+     "text": "Полчаса",
+     "x": 500,
+     "y": 140,
+     "tail": [
+      500,
+      180
+     ],
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "lgu6gx",
+     "kind": "speak",
+     "text": "Через двадцать минут я буду у ангара",
+     "x": 500,
+     "y": 215,
+     "tail": [
+      500,
+      266
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_12",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "ukfccx",
+     "shot": "2.1",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "hj99wi",
+     "shot": "2.2",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "label_2.1",
+     "kind": "caption",
+     "text": "Ангар",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_13",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "fp5twn",
+     "shot": "2.3",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "oc34fs",
+     "shot": "2.4",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "qgfjam",
+     "kind": "sfx",
+     "text": "ВУХ!",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_14",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "dcpu3r",
+     "shot": "2.5",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "vzcn9q",
+     "shot": "2.6",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_15",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "ym0an7",
+     "shot": "2.7",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "7wb9tf",
+     "shot": "2.8",
+     "poly": [
+      [
+       44,
+       877
+      ],
+      [
+       956,
+       877
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "96r3jy",
+     "kind": "speak",
+     "text": "Он там",
+     "x": 500,
+     "y": 747,
+     "tail": null,
+     "size": 33,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_16",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "dr1bkx",
+     "shot": "2.9",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.44135726093518735,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "6leb7v",
+     "shot": "2.10",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "5houf7",
+     "kind": "yell",
+     "text": "Забираете выживших и отходите к Бастиану!",
+     "x": 311.8545684814453,
+     "y": 62.342552185058594,
+     "size": 21,
+     "tail": [
+      336.11537170410156,
+      167.59800720214844
+     ],
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_17",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "76o834",
+     "shot": "3.1",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "p7lwq4",
+     "shot": "3.2",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "border": true,
+     "fx": ""
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "label_3.1",
+     "kind": "caption",
+     "text": "Восточный пост",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_18",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "vb9aaa",
+     "shot": "3.3",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "ag1lg5",
+     "shot": "3.4",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_19",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "5e48lw",
+     "shot": "3.5",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "pzrg3s",
+     "shot": "3.6",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "sdsb29",
+     "kind": "sfx",
+     "text": "КРРА!",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_20",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "fr0ou2",
+     "shot": "3.7",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "z9iwt9",
+     "shot": "3.8",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "bkstbz",
+     "kind": "speak",
+     "text": "Он?",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "tail": null,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_21",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "krnfce",
+     "shot": "3.9",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "5lluxt",
+     "shot": "3.10",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "focus",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_22",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "meaj58",
+     "shot": "3.11",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "focus",
+     "border": true
+    },
+    {
+     "id": "wnttv2",
+     "shot": "3.13",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "chj15u",
+     "kind": "sfx",
+     "text": "КРАК!",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_23",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "o7guw2",
+     "shot": "4.1",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "84uexu",
+     "shot": "4.2",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_24",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "r75hsd",
+     "shot": "4.3",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "4kxgpu",
+     "shot": "4.4",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_25",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "f287xy",
+     "shot": "4.5",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "8x70mw",
+     "shot": "4.6",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_26",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "k6lu3b",
+     "shot": "4.7",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "yno3pl",
+     "shot": "4.8",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "border": true,
+     "fx": ""
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_27",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "13oppl",
+     "shot": "4.9",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "ah8f2p",
+     "shot": "4.10",
+     "poly": [
+      [
+       44,
+       813
+      ],
+      [
+       956,
+       813
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "tk4jpo",
+     "kind": "speak",
+     "text": "Молодой Лорд Эльтариона",
+     "x": 500,
+     "y": 76,
+     "tail": null,
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "p1ctwg",
+     "kind": "speak",
+     "text": "Ваше Величество Повелитель драконов.",
+     "x": 500,
+     "y": 758,
+     "size": 20,
+     "tail": null,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_28",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "quulwf",
+     "shot": "4.11",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "x3p89b",
+     "shot": "5.1",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "focus",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "sweugk",
+     "kind": "sfx",
+     "text": "ДЗАНГ!",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_29",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "id0pjx",
+     "shot": "5.2",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "speed",
+     "border": true
+    },
+    {
+     "id": "i85omi",
+     "shot": "5.3",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_30",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "p50gkq",
+     "shot": "5.4",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "iyp6gp",
+     "shot": "5.5",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_31",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "oe1srq",
+     "shot": "5.6",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "fiag0n",
+     "shot": "5.7",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "94dwxg",
+     "kind": "whisper",
+     "text": "Мало",
+     "x": 500,
+     "y": 747,
+     "tail": [
+      530,
+      847
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_32",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "yoynhp",
+     "shot": "5.8",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "sywcrz",
+     "shot": "5.9",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_33",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "3nu2sy",
+     "shot": "5.10",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "2ryuqj",
+     "shot": "5.11",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "vqjziq",
+     "kind": "speak",
+     "text": "Неплохо",
+     "x": 500,
+     "y": 76,
+     "tail": [
+      500,
+      116
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_34",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "8soua9",
+     "shot": "5.12",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "speedv",
+     "border": true
+    },
+    {
+     "id": "nl2ydk",
+     "shot": "5.13",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1.4693280767999997,
+      "x": 0.7130897052529235,
+      "y": 0.20387230428770026
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "j78job",
+     "kind": "sfx",
+     "text": "ХРУСТЬ!",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_35",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "uf4kkq",
+     "shot": "6.1",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "cuhvsj",
+     "shot": "6.2",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "6qv06d",
+     "kind": "whisper",
+     "text": "Успеет ли Бастиан?",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0,
+     "tail": null
+    },
+    {
+     "id": "d1yn4u",
+     "kind": "whisper",
+     "text": "Все закончится здесь",
+     "x": 759.4426879882812,
+     "y": 768.7852172851562,
+     "tail": null,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_36",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "22infp",
+     "shot": "6.3",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "77c28c",
+     "shot": "6.5",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_37",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "oong4p",
+     "shot": "6.6",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1.1663999999999997,
+      "x": 0,
+      "y": 0
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "qyw8ha",
+     "shot": "6.4",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "7kmgog",
+     "kind": "sfx",
+     "text": "ГР-Р-РОХ",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_38",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "0qkhty",
+     "shot": "6.7",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "q1znrm",
+     "shot": "6.10",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "qhs047",
+     "kind": "sfx",
+     "text": "У-У-УРР",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_40",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "z8zqzc",
+     "shot": "6.11",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "uuk4wq",
+     "shot": "6.12",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_41",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "ipu9pw",
+     "shot": "6.13",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "rm3qou",
+     "shot": "6.15",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "jny8vh",
+     "kind": "sfx",
+     "text": "ХРУСТЬ",
+     "x": 500,
+     "y": 76,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_42",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "et7gql",
+     "shot": "6.14",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "wqmimb",
+     "shot": "7.1",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "ik33uc",
+     "kind": "sfx",
+     "text": "скри-и-ип",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_43",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "anrl4e",
+     "shot": "7.2",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "1xdue1",
+     "shot": "7.3",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "zwlvzt",
+     "kind": "sfx",
+     "text": "БУ-У-УМ!",
+     "x": 500,
+     "y": 747,
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_44",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "dj4tc3",
+     "shot": "7.4",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1.2597119999999997,
+      "x": 0,
+      "y": 0.5729727649833626
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "tmmvxy",
+     "shot": "7.5",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "sutcw6",
+     "kind": "whisper",
+     "text": "Сломал",
+     "x": 500,
+     "y": 747,
+     "tail": [
+      500,
+      787
+     ],
+     "size": 20,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_45",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "1e64sv",
+     "shot": "7.6",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "gzo6mp",
+     "shot": "7.7",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "border": true,
+     "fx": ""
+    }
+   ],
+   "bubbles": [],
+   "marks": []
+  },
+  {
+   "id": "revision_46",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "nqdap2",
+     "shot": "7.8",
+     "poly": [
+      [
+       44,
+       120
+      ],
+      [
+       956,
+       120
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "ia8ry8",
+     "shot": "7.10",
+     "poly": [
+      [
+       44,
+       791
+      ],
+      [
+       956,
+       791
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 1,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "aa6o7l",
+     "kind": "speak",
+     "text": "У вас что, появился некромант?",
+     "x": 500,
+     "y": 76,
+     "tail": [
+      500,
+      116
+     ],
+     "size": 20,
+     "rot": 0
+    },
+    {
+     "id": "y0pdt8",
+     "kind": "speak",
+     "text": "Опять оно…",
+     "x": 177.181884765625,
+     "y": 900.0851135253906,
+     "size": 28,
+     "tail": [
+      217.181884765625,
+      1010.0851135253906
+     ],
+     "rot": 0
+    }
+   ],
+   "marks": []
+  },
+  {
+   "id": "revision_47",
+   "w": 1000,
+   "h": 1414,
+   "panels": [
+    {
+     "id": "bmv6qf",
+     "shot": "7.11",
+     "poly": [
+      [
+       44,
+       56
+      ],
+      [
+       956,
+       56
+      ],
+      [
+       956,
+       683
+      ],
+      [
+       44,
+       683
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.5,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    },
+    {
+     "id": "8kyfs6",
+     "shot": "7.12",
+     "poly": [
+      [
+       44,
+       727
+      ],
+      [
+       956,
+       727
+      ],
+      [
+       956,
+       1354
+      ],
+      [
+       44,
+       1354
+      ]
+     ],
+     "crop": {
+      "s": 1,
+      "x": 0.0001623161791294847,
+      "y": 0.5
+     },
+     "fx": "",
+     "border": true
+    }
+   ],
+   "bubbles": [
+    {
+     "id": "fpvjz2",
+     "kind": "yell",
+     "text": "Это грань?!",
+     "x": 765.3841552734375,
+     "y": 935.733642578125,
+     "size": 42,
+     "tail": null,
+     "rot": 0
+    }
+   ],
+   "marks": []
+  }
+ ],
+ "versionName": "версия 1 испр",
+ "versionAt": "2026-10-17 18:13:36"
+}
