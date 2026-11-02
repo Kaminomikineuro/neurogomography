@@ -1,0 +1,91 @@
+# Звук: музыка, SFX, синхронизация, мастеринг
+
+Половина впечатления от моушена — звук. В mg-styles-15 весь звук тоже написан кодом (Python-синтез + CC0-сэмплы)
+и привязан к тому же cue sheet, что и картинка. Рубрика оценивает его отдельной осью `sound_sync`.
+
+## 1. Два инструмента
+
+| | `scripts/audio_kit.py` (в скилле) | **mgaudio** (mg-styles-15, `lib/audio`) |
+|---|---|---|
+| Зависимости | numpy + ffmpeg | numpy, numba, pedalboard, pyloudnorm, librosa… + 103 CC0-сэмпла |
+| Музыка | эмбиент-пэд, пульс (бочка/хэт), чиптюн | 15 жанровых рецептов с формой intro/build/drop/outro, аккордами, барабанами |
+| SFX | ~20 базовых (whoosh, riser, impact, pop, shimmer, chime, pen, glitch, HUD…) | ~100 (жидкость, бумага, ретро-медиа, HUD, 8-bit, мультяшные, восточные инструменты) |
+| Когда | быстрый старт, черновики, минималистичный звук | финальный продакшн, жанровая музыка |
+
+```bash
+# быстрый путь
+python3 .claude/skills/motion-design/scripts/audio_kit.py motion/<slug>/cues.json motion/<slug>/out/audio.wav
+# продакшн путь (один раз)
+git clone --depth 1 https://github.com/Vincentwei1021/mg-styles-15 /tmp/mg && pip install -r /tmp/mg/requirements.txt
+```
+```python
+import sys; sys.path.insert(0, '/tmp/mg/lib/audio')
+import mgaudio as mg
+from mgaudio import recipes, sfx
+m = recipes.synthwave(drop=4.0, outro=8.0)          # музыка уже аранжирована; бар 0 начинается ровно на drop
+m.sfx(sfx.impact('cinematic'), at=4.0, gain=2)      # sync-точка = время визуального события
+m.sfx(sfx.whoosh(.7), at=3.6)                        # whoosh: синк на пике пролёта
+m.sfx(sfx.riser(2.0), at=4.0)                        # riser: синк на КОНЦЕ (удар)
+res = m.export('out/audio.wav', lufs=-14, tp=-1, spectrogram='out/spec.png')  # посмотри спектрограмму и warnings
+```
+
+## 2. Жанр под стиль (рецепты mgaudio → эквивалент в audio_kit)
+
+| Стиль | Жанр, BPM | audio_kit `music.kind` |
+|---|---|---|
+| Flat vector, 3D | EDM-поп 110–130, supersaw-дроп | `pulse` |
+| Line art, aurora glass, 3D-продукт | эмбиент 72–100, пэды, фортепиано | `ambient` |
+| Cel/boil, collage, grain | lo-fi 70–96 (rhodes, винил, boom-bap) | `ambient` + SFX |
+| Liquid, morph | future bass 130–165 | `pulse` |
+| Bauhaus | минимал-техно 118–132, клики | `pulse` |
+| Synthwave | synthwave 84–118, gated snare, арп-бас | `pulse` |
+| HUD/FUI | darksynth 96–124, фригийский лад | `pulse` |
+| Pixel | чиптюн 120–170 | `chiptune` |
+| Sticker explainer, isometric | маримба-тех 100–124 | `ambient`/`pulse` |
+| Variety captions | прыгучий варьете 112–128, пиццикато, укулеле | `pulse` |
+| Kinetic type | trap 130–160, 808 на удары | `pulse` |
+| Glitch | glitch-hop 95–115 | `pulse` + `glitch` |
+| Ink wash, guofeng | пентатоника 76–110, гучжэн, флейта, тайко | `ambient` (лучше mgaudio `guofeng`) |
+| Anime OP | J-rock/эпик 150–170 | свой трек пользователя или mgaudio `pop`/`trap` |
+
+## 3. SFX-палитры по стилям
+
+- **Flat/explainer:** pop, boing, whoosh, click, ding на каждое появление.
+- **Line art:** перо по бумаге (громкость ~ скорости пера), мягкий колокольчик на заливке.
+- **3D:** мягкие thud, squish, пузырьки, воздушный пэд.
+- **Liquid:** gloop, drip, splash, bubbles, pour, басовый swell.
+- **Collage:** бумага (rustle/flip), ножницы, шлепки, скотч, треск винила.
+- **HUD:** бипы, свипы сканирования, `lock_on`, тревога, печатание данных.
+- **Pixel:** coin, jump, powerup, 8-bit взрыв.
+- **Synthwave/VHS:** VHS-шум, head switch, tape stop, большой аккорд + крэш на титре.
+- **Kinetic/anime:** text slam, impact, whoosh на каждом кате, riser к названию, sub drop на hero.
+
+## 4. Синхронизация
+
+- **Один cue sheet.** Все времена событий — в `cues.json` (`beats` + список `sfx`). Картинка читает `beats`,
+  звук — `sfx`. Сдвинул момент — поменял одно число.
+- **Sync-точка, а не начало файла.** impact/pop — транзиент; whoosh — пик пролёта (~62 % длины); riser/swell/
+  reverse cymbal/lock_on — **конец** (удар). В `at` всегда пишется время визуального события.
+- Музыкальная форма: bar 0 = drop; hero-момент картинки = drop музыки (60–75 % ролика).
+- Реактивные титры появляются на 2–3 кадра позже звука; удары/столкновения — кадр в кадр.
+- Музыка «ныряет» на ~3 дБ вокруг каждого SFX (ducking), SFX на ~2 дБ громче бэда.
+- Проверка: `qc.sh` + послушать; в mgaudio — спектрограмма и `analyze()['stereo_corr'] > 0.3` (моно-совместимость для телефонов).
+
+## 5. Мастеринг и спецификация
+
+- −14 LUFS integrated (±1), true peak ≤ −1 dBTP, 48 кГц стерео, AAC 320 кбит/с в MP4.
+- Fade-in 4 мс, fade-out 250 мс; длительность звука = длительность видео до сэмпла.
+- Расширение стерео только M/S, не Haas (на моно телефоне Haas «съедает» звук).
+
+## 6. Своя музыка / голос пользователя
+
+```bash
+# найти доли в треке, чтобы поставить на них удары (librosa)
+python3 -c "import librosa,sys; y,sr=librosa.load(sys.argv[1]); t,b=librosa.beat.beat_track(y=y,sr=sr,units='time'); print(round(float(t),1),'BPM'); print([round(x,3) for x in b])" track.mp3
+# вырезать 10 с с нужного места, отмастерить
+ffmpeg -ss 42.0 -t 10 -i track.mp3 -af "afade=t=in:d=0.05,afade=t=out:st=9.7:d=0.3,loudnorm=I=-14:TP=-1.5:LRA=11" -ar 48000 out/audio.wav
+```
+Доли трека вписывай в `cues.json` → картинка встаёт в ритм. Для голоса (диктор): сначала озвучка, затем
+транскрипт с таймкодами (whisper, см. reference-analysis.md) → каждая фраза = новый визуальный элемент.
+
+**Лицензии:** только своя музыка, CC0/PD, или трек с правом коммерческого использования. Записывай источник в `CREDITS.md`.
