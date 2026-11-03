@@ -45,6 +45,31 @@ FR=$(ffmpeg -hide_banner -nostats -i "$V" -vf "freezedetect=n=0.001:d=1.5" -an -
 HEAD=$(ffmpeg -hide_banner -nostats -t 0.5 -i "$V" -vf "blackdetect=d=0.3:pix_th=0.06" -an -f null - 2>&1 | grep -c black_start || true)
 [ "$HEAD" = "0" ] && pass "hook: no ≥0.3 s of black at the head" || bad "opens on ≥0.3 s of black — hook must land in 0.5 s"
 
+# dead air (HyperFrames session-story): any stretch > 1.2 s quieter than −45 dBFS = a moment with no cue on it
+if [ -n "$AC" ]; then
+  DA=$(ffmpeg -hide_banner -nostats -i "$V" -map 0:a:0 -af "silencedetect=n=-45dB:d=1.2" -f null - 2>&1 | grep -o 'silence_start: [0-9.]*' | awk '{print $2}' | paste -sd' ' - || true)
+  [ -z "$DA" ] && pass "no dead air (> 1.2 s under −45 dBFS)" || info "dead air starting at: $DA s (fine only for a deliberate silence / final fade)"
+fi
+# dead time (HyperFrames vox-explainer): still runs > 3 s measured at 640×360 with TWO metrics —
+# mean abs diff < 0.25 AND fewer than 150 pixels changed by > 12 levels (MAD alone misses slow creeps)
+if python3 -c "import numpy" 2>/dev/null; then
+  DT=$(ffmpeg -hide_banner -loglevel error -i "$V" -vf "scale=640:360,format=gray" -f rawvideo - | python3 -c "
+import sys, numpy as np
+fps=float(eval('$R')); n=640*360; prev=None; run=0; worst=(0,0); runs=[]; i=0
+while True:
+    b=sys.stdin.buffer.read(n)
+    if len(b)<n: break
+    f=np.frombuffer(b,np.uint8).astype(np.int16)
+    if prev is not None:
+        d=np.abs(f-prev); still=(d.mean()<0.25) and ((d>12).sum()<150)
+        run = run+1 if still else 0
+        if run/fps>3.0 and (not runs or runs[-1][1]!=i-run): runs.append((round((i-run)/fps,2), i-run))
+    prev=f; i+=1
+print(' '.join(str(r[0]) for r in runs))
+" 2>/dev/null)
+  [ -z "$DT" ] && pass "no still run > 3 s (two-metric dead-time sweep)" || info "still runs > 3 s start at: $DT s (ok only for a declared hold)"
+fi
+
 SHEET="${V%.*}.sheet.png"
 N=$(python3 -c "import math; print(max(1, math.ceil(float('$FMT_D')/0.5)))"); COLS=5; ROWS=$(( (N + COLS - 1) / COLS ))
 ffmpeg -hide_banner -loglevel error -y -i "$V" -vf "fps=2,scale=384:-2,drawtext=text='%{pts\:hms}':x=6:y=6:fontsize=16:fontcolor=white:box=1:boxcolor=black@0.5,tile=${COLS}x${ROWS}:padding=4:color=black" -frames:v 1 "$SHEET" 2>/dev/null \

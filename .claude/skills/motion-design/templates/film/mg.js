@@ -37,6 +37,28 @@ export const E = {
   expoOut: x => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x)),
   in: bezier(0.55, 0, 1, 0.45),          // exits / falling under gravity
   steps: n => x => Math.floor(clamp(x) * n) / n, // pixel art / mechanical counters
+  expo: bezier(0.16, 1, 0.3, 1),         // expo out: reveals ≥ 0.8 s (claude-motion / taste-skill)
+  exit: bezier(0.6, 0, 0.9, 0.35),       // exits, ~half the entrance length
+  quartInOut: bezier(0.76, 0, 0.24, 1),  // wipes, panels travelling on screen
+  overlap: bezier(0.857, 0, 0.143, 1),   // two-stage moves with 39 % overlap (vox-explainer); peak/mean speed 7×
+};
+
+// Elements move in micro-holds over a smooth ease (12 fps look), the camera stays smooth (vox-explainer).
+// stepEase(E.out, dur, 12)(p) → eased progress quantised to the 12 fps grid of a move lasting `dur` seconds.
+export const stepEase = (ease, dur, fps = 12) => { const n = Math.max(1, Math.round(dur * fps)); return p => ease(Math.floor(clamp(p) * n) / n); };
+
+// Two-stage move on one element: stage 2 starts when stage 1 is 61 % through (39 % overlap). Returns [p1, p2].
+export function stages(t, t0, d1, d2, overlap = 0.39, ease = E.overlap) {
+  const t2 = t0 + d1 * (1 - overlap);
+  return [ease(invLerp(t0, t0 + d1, t)), ease(invLerp(t2, t2 + d2, t))];
+}
+
+// Keyed randomness (day-in-my-life): a value that depends only on its key (and the boil index), never on how much
+// randomness was used upstream — still things stay identical within one drawing.
+export const keyRng = (key, boilIndex = 0) => {
+  let h = 2166136261; const s = `${key}|${boilIndex}`;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return rng(h >>> 0);
 };
 
 // eased progress of t inside [a, b]

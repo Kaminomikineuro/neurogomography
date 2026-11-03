@@ -132,7 +132,14 @@ try {
       if (typeof window.renderAt === 'function') await window.renderAt(t);
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     }, t);
-    const shot = () => page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: W0, height: H0 }, animations: 'allow', caret: 'initial' });
+    // Fast path: CDP Page.captureScreenshot with optimizeForSpeed (idea from buildfast motion-studio, ~2-3× faster);
+    // falls back to page.screenshot if CDP is unavailable or MG_SLOW_CAPTURE=1.
+    let cdp = null;
+    if (!process.env.MG_SLOW_CAPTURE) { try { cdp = await page.context().newCDPSession(page); } catch {} }
+    const shot = cdp
+      ? async () => Buffer.from((await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true, captureBeyondViewport: false,
+          clip: { x: 0, y: 0, width: W0, height: H0, scale: 1 } })).data, 'base64')
+      : () => page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: W0, height: H0 }, animations: 'allow', caret: 'initial' });
     return { page, seek, shot };
   }
 
