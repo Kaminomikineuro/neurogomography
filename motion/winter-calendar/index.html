@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Зимний маршрут — календарь</title>
+<link rel="stylesheet" href="fonts.css">
+<style>html,body,#stage{margin:0;padding:0;background:#E9DFCC;overflow:hidden}#stage{position:relative}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+// «Зимний маршрут», version 2: a risograph tear-off calendar. ?fmt=916 (default) or ?fmt=169.
+import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, hash, rng, spring } from './lib/mg.js';
+import { paperOverlay } from './lib/draw.js';
+import { INK, plate, paperHole, light, stamp, speckle, q, reg } from './lib/riso.js';
+import { layout, padTransform, drawPadBack, drawBinding, drawPage, SERIF, SANS } from './lib/calendar.js';
+import * as P from './scenes/pages.js';
+
+const fmt = new URLSearchParams(location.search).get('fmt') || '916';
+const [W, H] = fmt === '169' ? [1920, 1080] : [1080, 1920];
+const cues = await (await fetch('./cues.json')).json();
+const D = cues.duration, FPS = cues.fps;
+window.DEMO = { width: W, height: H, fps: FPS, duration: D };
+const stage = document.getElementById('stage'); stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const ctx = makeCanvas(W, H, stage); ctx.imageSmoothingQuality = 'high';
+await Promise.all([`700 80px "Cormorant Garamond"`, `600 80px Rubik`, `400 30px Rubik`].map(f => document.fonts.load(f, 'Зимний маршрут ДЕКАБРЬ ЯНВАРЬ 0123456789–→')));
+const L = layout(W, H);
+const TD = 0.75; // tear duration
+
+function snowflakeNum(ctx, L, t) { // the cover's big ornament instead of a date
+  const { x, y, size } = L.num, r = size * 0.5, cy = y - size * 0.34, rot = Math.floor(t * 4) * 0.08;
+  for (const [ink, off] of [['r', 6], ['k', 0]]) plate(ctx, t, ink, () => { ctx.save(); ctx.translate(x + off, cy + off); ctx.rotate(rot); ctx.lineWidth = size * 0.05; ctx.lineCap = 'round';
+    for (let i = 0; i < 6; i++) { ctx.rotate(TAU / 6); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -r); ctx.moveTo(0, -r * 0.55); ctx.lineTo(-r * 0.22, -r * 0.75); ctx.moveTo(0, -r * 0.55); ctx.lineTo(r * 0.22, -r * 0.75); ctx.stroke(); }
+    ctx.restore(); }, { amp: 2 });
+}
+const PAGES = [
+  { id: 'cover', t1: 4.3, month: '18.12 — 06.01', num: '', numFn: snowflakeNum, city: 'Зимний маршрут', sub: 'по зимней Европе', scene: P.cover },
+  { id: 'rostock', t1: 12.4, month: 'ДЕКАБРЬ', num: '18–20', city: 'Росток', sub: 'колесо обозрения · глинтвейн', scene: P.rostock },
+  { id: 'berlin', t1: 14.6, month: 'ДЕКАБРЬ', num: '21', city: 'Берлин', sub: 'огни ярмарок', scene: P.berlin },
+  { id: 'dresden', t1: 19.6, month: 'ДЕКАБРЬ', num: '22–23', city: 'Дрезден', sub: 'Фрауэнкирхе · штоллен', scene: P.dresden },
+  { id: 'prague', t1: 29.6, month: 'ДЕКАБРЬ', num: '23–26', city: 'Прага', sub: 'привидения · ужин при свечах', scene: P.prague },
+  { id: 'vienna', t1: 34.4, month: 'ДЕКАБРЬ', num: '26–27', city: 'Вена', sub: 'колесо Пратера · Шёнбрунн', scene: P.vienna },
+  { id: 'bratislava', t1: 39.6, month: 'ДЕКАБРЬ', num: '28–29', city: 'Братислава', sub: 'замок над Дунаем', scene: P.bratislava },
+  { id: 'night', t1: 43.6, month: 'ДЕКАБРЬ', num: '29→30', city: 'Ночной поезд', sub: 'до Кёльна', scene: P.night, dark: true },
+  { id: 'cologne', t1: 48.6, month: 'ДЕКАБРЬ', num: '30–31', city: 'Кёльн', sub: 'собор · мост над Рейном', scene: P.cologne, over: countdown },
+  { id: 'newyear', t1: 52.4, month: 'ЯНВАРЬ', num: '01', city: 'С Новым годом!', sub: 'салют над Рейном', scene: P.newYear, over: confetti },
+  { id: 'rolls', t1: 56.0, month: 'ЯНВАРЬ', num: '02–04', city: 'Кёльн', sub: 'кто взял последний ролл?', scene: P.rolls },
+  { id: 'park', t1: 68.0, month: 'ЯНВАРЬ', num: '04–06', city: 'Фантазиаленд', sub: 'каток · шоколадный тир · башня', scene: P.park },
+  { id: 'finale', t1: 999, month: 'ЯНВАРЬ', num: '06', city: 'до встречи', sub: 'в следующей главе', subBig: true, scene: P.finale, over: confetti },
+];
+PAGES.forEach((p, i) => { p.t0 = i ? PAGES[i - 1].t1 : 0; p.i = i; });
+
+function countdown(ctx, L, t, lt) {
+  const w = L.win, cx = w.x + w.w / 2, cy = w.y + w.h * 0.42, r = Math.min(w.w, w.h) * 0.16;
+  const T = cues.beats;
+  stamp(ctx, t, T.count3, cx - r * 1.25, cy - r * 0.2, r, '3', { rot: -0.2 });
+  stamp(ctx, t, T.count2, cx + r * 1.2, cy - r * 0.45, r, '2', { rot: 0.15, ink: 'v' });
+  stamp(ctx, t, T.count1, cx, cy + r * 0.55, r * 1.25, '1', { rot: -0.05 });
+}
+function confetti(ctx, L, t, lt) {
+  const r = rng(77), tq = q(t);
+  for (let i = 0; i < 60; i++) { const x = r() * L.PW, sp = 60 + r() * 120, y = ((r() * L.PH + lt * sp) % (L.PH + 100)) - 50, rot = tq * (1 + r() * 3) + r() * 6, ink = ['r', 'v', 'y', 'b'][i % 4];
+    plate(ctx, t, ink, () => { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillRect(-7, -4, 14, 8 * Math.abs(Math.cos(rot))); ctx.restore(); }); }
+}
+
+// pages that already flew off land around the pad (simplified thumbnails)
+function fallen(t) {
+  const spots = L.portrait
+    ? [[-0.05, 0.98, -0.5], [1.02, 0.95, 0.45], [0.1, 1.04, 0.2], [0.92, 1.03, -0.3], [-0.06, 0.08, 0.6], [1.06, 0.12, -0.7]]
+    : [[0.08, 0.82, -0.3], [0.9, 0.78, 0.35], [0.14, 0.3, 0.4], [0.86, 0.26, -0.45], [0.06, 0.55, 0.1], [0.94, 0.52, -0.15]];
+  PAGES.forEach((p, i) => {
+    const land = p.t1 + TD; if (t < land || p.id === 'finale') return;
+    const s = spots[i % spots.length], k = seg(t, land, land + 0.4, E.out);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.translate(W * s[0], H * s[1] + (1 - k) * -80); ctx.rotate(s[2] + i * 0.07);
+    const sc = (L.portrait ? 0.3 : 0.28) * Math.min(W, H) / 1000; ctx.scale(sc, sc);
+    ctx.fillStyle = 'rgba(43,39,41,0.18)'; ctx.fillRect(-470, -720, 980, 1500);
+    ctx.fillStyle = p.dark ? INK.k : INK.paper; ctx.fillRect(-490, -740, 980, 1500);
+    ctx.font = `600 230px ${SANS}`; ctx.textAlign = 'center'; plate(ctx, t, 'r', () => ctx.fillText(p.num || '✱', 8, -260));
+    ctx.font = `700 120px ${SERIF}`; plate(ctx, t, p.dark ? 'y' : 'k', () => ctx.fillText(p.city.split(' ')[0], 0, 520));
+    ctx.restore();
+  });
+}
+function background(t) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#ECE3D1'; ctx.fillRect(0, 0, W, H);
+  const r = rng(5), tq = q(t);
+  for (let i = 0; i < 26; i++) { // big printed snowflakes drifting on the wall
+    const x = r() * W, y = ((r() * (H + 200) + tq * (18 + r() * 26)) % (H + 200)) - 100, s = 18 + r() * 40, rot = r() * 6 + tq * 0.3;
+    plate(ctx, t, i % 5 === 0 ? 'r' : 'b', () => { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.lineWidth = s * 0.12; ctx.lineCap = 'round'; for (let k = 0; k < 6; k++) { ctx.rotate(TAU / 6); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -s); ctx.stroke(); } ctx.restore(); }, { alpha: 0.32 });
+  }
+}
+
+window.renderAt = async (t) => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.letterSpacing = '0px';
+  background(t);
+  fallen(t);
+  // the pad drops in (frame 0 already shows it entering) and settles with a spring; a small thump on every tear
+  const drop = spring(t + 0.12, 1.6, 0.45), tearBump = PAGES.reduce((a, p) => a + (t > p.t1 ? Math.exp(-(t - p.t1) * 9) * Math.sin((t - p.t1) * 30) * 6 * (t - p.t1 < 0.5 ? 1 : 0) : 0), 0);
+  const extra = { dx: 0, dy: (1 - Math.min(drop, 1.2)) * -H * 0.55 + tearBump, sc: 1, rot: (1 - Math.min(1, drop)) * -0.05 };
+  padTransform(ctx, L, extra);
+  const cur = PAGES.findIndex(p => t < p.t1 + TD);
+  const left = PAGES.length - Math.max(0, cur);
+  drawPadBack(ctx, L, t, left);
+  const env = { t, W, H };
+  const pg = PAGES[cur], tearing = t >= pg.t1;
+  if (tearing && PAGES[cur + 1]) { padTransform(ctx, L, extra); drawPage(ctx, L, PAGES[cur + 1], t, env, 0); }
+  padTransform(ctx, L, extra); drawPage(ctx, L, pg, t, env, tearing ? invLerp(pg.t1, pg.t1 + TD, t) : 0);
+  padTransform(ctx, L, extra); drawBinding(ctx, L, t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  paperOverlay(ctx, W, H, 0.16, t);
+  speckle(ctx, W, H, t, 0.8);
+  const fo = seg(t, D - 0.5, D); if (fo > 0) { ctx.fillStyle = `rgba(236,227,209,${0.6 * fo})`; ctx.fillRect(0, 0, W, H); }
+};
+await window.renderAt(0);
+window.__ready = true;
+</script>
+</body>
+</html>

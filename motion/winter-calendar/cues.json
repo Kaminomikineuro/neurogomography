@@ -1,0 +1,27 @@
+{
+  "title": "Зимний маршрут — отрывной календарь (ризограф)",
+  "fps": 24,
+  "duration": 75,
+  "bpm": 100,
+  "tears": [4.3, 12.4, 14.6, 19.6, 29.6, 34.4, 39.6, 43.6, 48.6, 52.4, 56.0, 68.0],
+  "beats": {
+    "padDrop": 0.6,
+    "rostockPoint": 7.0,
+    "mugGive": 9.3,
+    "stollenBite": 16.6,
+    "ghost": 22.3,
+    "zidian": 22.95,
+    "pragueWipe": 24.6,
+    "toast": 27.3,
+    "viennaWipe": 31.6,
+    "count3": 46.2,
+    "count2": 47.0,
+    "count1": 47.8,
+    "newYear": 48.6,
+    "stolen": 54.4,
+    "parkWipe1": 59.4,
+    "parkWipe2": 63.4,
+    "drop": 66.0,
+    "bell": 72.4
+  }
+}
