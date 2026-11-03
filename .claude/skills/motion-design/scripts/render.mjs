@@ -19,6 +19,7 @@
 //   --mb 4 --shutter 0.5                           motion blur: N sub-frames over a 180° shutter, averaged
 //   --workers 4                                    parallel browser pages (default: min(4, CPUs))
 //   --crf 16  --preset slow                        x264 quality
+//   --query fmt=169                                append a query string to the page URL (e.g. a second format)
 //   --gif                                          also write <out>.gif (palette-optimised, max 720 px wide)
 // Env: MG_CHROME=/path/to/chrome (else Playwright's bundled Chromium; /opt/pw-browsers/chromium is tried too)
 
@@ -82,7 +83,8 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(p).pipe(res);
 });
 await new Promise(r => server.listen(0, '127.0.0.1', r));
-const url = `http://127.0.0.1:${server.address().port}/${path.relative(ROOT, path.join(dir, pageName)).split(path.sep).map(encodeURIComponent).join('/')}`;
+const url0 = `http://127.0.0.1:${server.address().port}/${path.relative(ROOT, path.join(dir, pageName)).split(path.sep).map(encodeURIComponent).join('/')}`;
+const url = args.query ? url0 + '?' + String(args.query) : url0;
 
 function ffmpeg(a, opts = {}) {
   const p = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { stdio: ['pipe', 'inherit', 'inherit'], ...opts });

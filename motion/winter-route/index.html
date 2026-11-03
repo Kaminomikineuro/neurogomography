@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Зимний маршрут</title>
+<link rel="stylesheet" href="fonts.css">
+<style>html,body,#stage{margin:0;padding:0;background:#17142B;overflow:hidden}#stage{position:relative}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+// «Зимний маршрут» — Lan Xichen & Jiang Wanyin across winter Europe. ?fmt=916 (1080×1920, default) or ?fmt=169.
+// Contract for render.mjs: window.DEMO, window.renderAt(t) (pure function of t), window.__ready.
+import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, hash } from './lib/mg.js';
+import { C, SERIF, SANS, snow, paperOverlay, vignette, text, glow, sparkle, measure } from './lib/draw.js';
+import { drawMap, mapView, CITY, routeAt, MAP_CENTER } from './lib/map.js';
+import { drawChibi, blinkAt, umbrella } from './lib/chars.js';
+import * as SC from './scenes/cities.js';
+
+const fmt = new URLSearchParams(location.search).get('fmt') || '916';
+const [W, H] = fmt === '169' ? [1920, 1080] : [1080, 1920];
+const portrait = H > W;
+const cues = await (await fetch('./cues.json')).json();
+const A = cues.beats, D = cues.duration, FPS = cues.fps;
+window.DEMO = { width: W, height: H, fps: FPS, duration: D };
+const stage = document.getElementById('stage'); stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const ctx = makeCanvas(W, H, stage); ctx.imageSmoothingQuality = 'high';
+await Promise.all([`600 80px "Cormorant Garamond"`, `700 80px "Cormorant Garamond"`, `italic 500 40px "Cormorant Garamond"`, `500 40px Rubik`, `600 40px Rubik`]
+  .map(f => document.fonts.load(f, 'Зимний маршрут 0123456789.·—–→ Росток Кёльн')));
+
+const SHOTS = cues.shots.map(s => ({ ...s, scene: SC[s.id], exit: { berlinDresden: 'dresden', viennaBratislava: 'bratislava' }[s.id] || s.city }));
+const IN = 0.55, OUT = 0.45;
+
+// ---------- map camera (map units, zoom) ----------
+const P = id => ({ x: CITY[id].p[0], y: CITY[id].p[1] });
+const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+const CEN = portrait ? { x: MAP_CENTER.x, y: MAP_CENTER.y } : { x: MAP_CENTER.x, y: MAP_CENTER.y };
+const ZC = 6.5;
+const CAM = [
+  [0, CEN, 1.0], [3.7, CEN, 1.0], [5.1, P('rostock'), ZC],
+  [12.0, P('rostock'), ZC], [12.45, P('rostock'), 4.0], [12.75, mid(P('rostock'), P('berlin')), 2.6], [13.55, P('berlin'), ZC],
+  [19.1, P('dresden'), ZC], [19.55, P('dresden'), 4.0], [19.8, mid(P('dresden'), P('prague')), 3.0], [20.55, P('prague'), ZC],
+  [29.1, P('prague'), ZC], [29.55, P('prague'), 4.0], [29.8, mid(P('prague'), P('vienna')), 2.5], [30.55, P('vienna'), ZC],
+  [39.0, P('bratislava'), ZC], [39.45, P('bratislava'), 4.0], [40.7, { x: 470, y: 470 }, 1.05], [43.1, { x: 470, y: 470 }, 1.05], [44.5, P('cologne'), ZC],
+  [55.1, P('cologne'), ZC], [55.55, P('cologne'), 4.6], [55.8, mid(P('cologne'), P('phantasia')), 4.2], [56.55, P('phantasia'), ZC],
+  [67.1, P('phantasia'), ZC], [67.55, P('phantasia'), 4.0], [69.2, CEN, 1.0], [D, CEN, 1.0],
+];
+function camAt(t) {
+  if (t <= CAM[0][0]) return { ...CAM[0][1], z: CAM[0][2] };
+  for (let i = 1; i < CAM.length; i++) if (t <= CAM[i][0]) {
+    const [t0, a, z0] = CAM[i - 1], [t1, b, z1] = CAM[i], e = E.inOut(invLerp(t0, t1, t));
+    return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), z: Math.exp(lerp(Math.log(z0), Math.log(z1), e)) };
+  }
+  const L = CAM[CAM.length - 1]; return { ...L[1], z: L[2] };
+}
+const RT = routeAt;
+const ROUTE_K = [[0, 0], [12.25, 0], [13.3, RT.berlin], [19.35, RT.berlin], [20.3, RT.prague], [29.35, RT.prague], [30.3, RT.vienna], [39.25, RT.vienna], [39.85, RT.bratislava], [40.6, RT.bratislava], [43.2, RT.cologne], [55.35, RT.cologne], [56.2, RT.phantasia]];
+const keyv = (t, ks, e = E.inOut) => { if (t <= ks[0][0]) return ks[0][1]; for (let i = 1; i < ks.length; i++) if (t <= ks[i][0]) return lerp(ks[i - 1][1], ks[i][1], e(invLerp(ks[i - 1][0], ks[i][0], t))); return ks[ks.length - 1][1]; };
+
+// ---------- scene env ----------
+function makeEnv(t, zf = 1) {
+  return { t, W, H, portrait, screen: () => ctx.setTransform(1, 0, 0, 1, 0, 0),
+    cam: (c) => { const s = Math.max(W / 2400, H / 1600) * c.z * zf; ctx.setTransform(s, 0, 0, s, W / 2 - c.cx * s, H / 2 - c.cy * s); } };
+}
+function drawScene(shot, t, zf) { ctx.save(); shot.scene.draw(ctx, t - shot.t0, makeEnv(t, zf)); ctx.restore(); ctx.setTransform(1, 0, 0, 1, 0, 0); }
+
+// ---------- captions ----------
+function caption(name, dates, t0, t1, t) {
+  const a = seg(t, t0, t0 + 0.5, E.out) * (1 - seg(t, t1 - 0.35, t1, E.in)); if (a <= 0) return;
+  const b = seg(t, t0 + 0.15, t0 + 0.65, E.out) * (1 - seg(t, t1 - 0.35, t1, E.in));
+  const g = ctx.createLinearGradient(0, 0, 0, H * (portrait ? 0.24 : 0.32)); g.addColorStop(0, `rgba(15,13,30,${0.6 * a})`); g.addColorStop(1, 'rgba(15,13,30,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * (portrait ? 0.24 : 0.32));
+  const y1 = portrait ? H * 0.098 : H * 0.135, s1 = portrait ? 104 : 86, y2 = portrait ? H * 0.142 : H * 0.205, s2 = portrait ? 44 : 38;
+  text(ctx, name, W / 2, y1 + (1 - a) * 24, { size: s1, weight: 600, color: C.cream, alpha: a, track: 1 });
+  const dw = measure(ctx, dates, s2, 500, SANS, 5);
+  text(ctx, dates, W / 2, y2 + (1 - b) * 18, { font: SANS, size: s2, weight: 500, color: C.gold, alpha: b, track: 5 });
+  ctx.fillStyle = `rgba(230,184,92,${0.85 * b})`; const lw = 70 * b; ctx.fillRect(W / 2 - dw / 2 - 26 - lw, y2 - s2 * 0.36, lw, 2); ctx.fillRect(W / 2 + dw / 2 + 26, y2 - s2 * 0.36, lw, 2);
+  sparkle(ctx, W / 2 - dw / 2 - 26 - lw - 12, y2 - s2 * 0.36 + 1, 9 * b, b); sparkle(ctx, W / 2 + dw / 2 + 26 + lw + 12, y2 - s2 * 0.36 + 1, 9 * b, b);
+}
+
+// ---------- overlays on the map ----------
+function heroesIntro(t) { // standing with their backs to us, looking at the map
+  const dive = seg(t, A.dive, A.dive + 1.25, E.in);
+  const hh = portrait ? 430 : 360, y = H * 0.99 + dive * H * 0.7, sc = 1 + dive * 0.6;
+  const x1 = portrait ? W * 0.36 : W * 0.15, x2 = portrait ? W * 0.62 : W * 0.29;
+  ctx.save(); ctx.translate(W / 2, y); ctx.scale(sc, sc); ctx.translate(-W / 2, -y);
+  // snowy knoll they stand on
+  ctx.fillStyle = C.cream; ctx.beginPath(); ctx.moveTo(-50, H + 400); ctx.lineTo(-50, y - 40); ctx.quadraticCurveTo(W * (portrait ? 0.5 : 0.22), y - (portrait ? 140 : 110), W * (portrait ? 1.05 : 0.48), y + 40); ctx.lineTo(W + 50, H + 400); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(185,166,224,0.35)'; ctx.fillRect(-50, y + 30, W + 100, 400);
+  const pt = seg(t, 1.9, 2.3, E.back) * (1 - seg(t, 3.2, 3.6));
+  drawChibi(ctx, { who: 'jc', x: x1, y, h: hh, back: true, t, wind: 0.3, windDir: 1, armL: { a: 0.15 }, armR: { a: 0.15 }, bob: Math.sin(t * 1.6) * 0.4 });
+  const hx = drawChibi(ctx, { who: 'xc', x: x2, y, h: hh, back: true, t, wind: 0.45, windDir: 1, armR: { a: lerp(0.2, 2.75, pt) }, armL: { a: 0.15 }, bob: Math.sin(t * 1.6 + 1) * 0.4 });
+  ctx.restore();
+}
+function nightPorthole(t) {
+  const a = seg(t, 40.1, 40.7, E.out) * (1 - seg(t, 43.2, 43.8, E.in)); if (a <= 0) return;
+  const w = portrait ? W * 0.86 : W * 0.34, h = portrait ? H * 0.25 : H * 0.44, x = portrait ? (W - w) / 2 : W * 0.06, y = (portrait ? H * 0.72 : H * 0.5) + (1 - a) * 120;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.fillStyle = '#3B2A22'; ctx.beginPath(); ctx.roundRect(x - 18, y - 18, w + 36, h + 36, 46); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, w, h, 34); ctx.clip();
+  const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#0E0C1E'); g.addColorStop(1, '#231D45'); ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  for (let i = 0; i < 9; i++) { const px = x + (((hash(i, 2) * w * 1.6 - t * 380 * (0.5 + hash(i, 3))) % (w * 1.6)) + w * 1.6) % (w * 1.6) - w * 0.3, py = y + h * (0.18 + hash(i, 4) * 0.3); glow(ctx, px, py, 26, '255,214,140', 0.7); }
+  ctx.fillStyle = '#4A3570'; ctx.fillRect(x, y + h * 0.55, w, h * 0.45); ctx.fillStyle = '#5A3F82'; ctx.fillRect(x, y + h * 0.55, w, 14);
+  const hh = h * 0.9, by = y + h * 1.08, cx = x + w / 2;
+  drawChibi(ctx, { who: 'jc', x: cx - hh * 0.2, y: by, h: hh, turn: 0.25, t, expr: { eyes: 'sleep', mouth: 'sleep' }, headTilt: 0.2, armL: { a: 0.1 }, armR: { a: 0.3 }, zz: 1, blush: 0.6, noShadow: true });
+  drawChibi(ctx, { who: 'xc', x: cx + hh * 0.2, y: by, h: hh, turn: -0.25, t, expr: { eyes: 'sleep', mouth: 'smile' }, headTilt: -0.24, armL: { a: 0.3 }, armR: { a: 0.1 }, noShadow: true });
+  ctx.restore(); ctx.restore();
+}
+function heroesFinale(t) {
+  const a = seg(t, 70.4, 71.1, E.out); if (a <= 0) return;
+  const hh = portrait ? 380 : 330, y = H * 0.985 + (1 - a) * 300, x1 = portrait ? W * 0.39 : W * 0.15, x2 = portrait ? W * 0.61 : W * 0.29;
+  ctx.fillStyle = C.cream; ctx.beginPath(); ctx.moveTo(-50, H + 10); ctx.lineTo(-50, y - 30); ctx.quadraticCurveTo(portrait ? W * 0.5 : W * 0.22, y - 120, portrait ? W + 50 : W * 0.5, y + 30); ctx.lineTo(W + 50, H + 10); ctx.closePath(); ctx.fill();
+  const wave = Math.sin((t - 71) * 7) * 0.25 * seg(t, 71.2, 71.5) * (1 - seg(t, 73.6, 74.0));
+  const ring = seg(t, A.bell, A.bell + 0.15) * (1 - seg(t, A.bell + 1.4, A.bell + 2.2));
+  const j = drawChibi(ctx, { who: 'jc', x: x1, y, h: hh, turn: 0.3, t, blink: blinkAt(t, 7), expr: { eyes: t > A.bell ? 'happy' : 'open', mouth: t > A.bell ? 'smile' : 'pout' }, blush: 0.8, armL: { a: 0.15 }, armR: { a: lerp(0.15, 1.5, ring) } });
+  const x = drawChibi(ctx, { who: 'xc', x: x2, y, h: hh, turn: -0.3, t, blink: blinkAt(t, 3), expr: { eyes: 'happy', mouth: 'grin' }, armR: { a: 2.7 }, armL: { a: 2.3 + wave } });
+  umbrella(ctx, x.handR, { x: (x1 + x2) / 2 + (portrait ? 10 : 0), y: y - hh * 1.36 }, hh * 0.66, t, -0.05);
+  if (ring > 0 && j.bell) { glow(ctx, j.bell.x, j.bell.y, 120 * ring, '246,241,231', 0.8 * ring); for (let i = 0; i < 3; i++) { const u = ((t - A.bell) * 0.9 + i / 3) % 1; ctx.strokeStyle = `rgba(246,241,231,${(1 - u) * ring})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(j.bell.x, j.bell.y, 20 + u * 90, -2.2, -0.9); ctx.stroke(); } }
+}
+function introTitle(t) {
+  const a = seg(t, 0.25, 1.1, E.out) * (1 - seg(t, A.dive - 0.1, A.dive + 0.4, E.in)), b = seg(t, 0.75, 1.5, E.out) * (1 - seg(t, A.dive - 0.1, A.dive + 0.4, E.in));
+  if (a <= 0) return;
+  if (portrait) { const g = ctx.createLinearGradient(0, 0, 0, H * 0.3); g.addColorStop(0, `rgba(15,13,30,${0.65 * a})`); g.addColorStop(1, 'rgba(15,13,30,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * 0.3); }
+  const x = portrait ? W / 2 : W * 0.22, y1 = portrait ? H * 0.105 : H * 0.3, s1 = portrait ? 128 : 86, y2 = portrait ? H * 0.15 : H * 0.385;
+  text(ctx, 'Зимний маршрут', x, y1 + (1 - a) * 30, { size: s1, weight: 700, color: C.cream, alpha: a });
+  text(ctx, '18.12 — 06.01', x, y2 + (1 - b) * 20, { font: SANS, size: portrait ? 50 : 44, weight: 500, color: C.gold, alpha: b, track: 6 });
+  for (const sx of [-1, 1]) sparkle(ctx, x + sx * (portrait ? 230 : 205), y2 - 16, 12 * b, b);
+}
+function finaleCaption(t) {
+  const a = seg(t, A.caption, A.caption + 0.7, E.out), b = seg(t, A.caption + 0.35, A.caption + 1.1, E.out); if (a <= 0) return;
+  if (portrait) { const g = ctx.createLinearGradient(0, 0, 0, H * 0.3); g.addColorStop(0, `rgba(15,13,30,${0.6 * a})`); g.addColorStop(1, 'rgba(15,13,30,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * 0.3); }
+  const fx = portrait ? W / 2 : W * 0.245;
+  text(ctx, '06.01', fx, (portrait ? H * 0.085 : H * 0.27) + (1 - a) * 20, { font: SANS, size: portrait ? 58 : 50, weight: 600, color: C.gold, alpha: a, track: 6 });
+  if (portrait) text(ctx, 'до встречи в следующей главе', fx, H * 0.135 + (1 - b) * 24, { size: 70, weight: 600, style: 'italic', color: C.cream, alpha: b });
+  else { text(ctx, 'до встречи', fx, H * 0.36 + (1 - b) * 24, { size: 66, weight: 600, style: 'italic', color: C.cream, alpha: b }); text(ctx, 'в следующей главе', fx, H * 0.43 + (1 - b) * 24, { size: 66, weight: 600, style: 'italic', color: C.cream, alpha: b }); }
+}
+
+// ---------- the frame ----------
+window.renderAt = async (t) => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.letterSpacing = '0px';
+  const shot = SHOTS.find(s => t >= s.t0 && t < s.t1);
+  const inside = shot && t >= shot.t0 + IN && t <= shot.t1 - OUT;
+  if (inside) drawScene(shot, t, 1);
+  else {
+    const cam = camAt(t);
+    const v = drawMap(ctx, W, H, t, cam, { routeD: keyv(t, ROUTE_K), showStart: t > 2.3, dark: keyv(t, [[39.6, 0], [40.6, 1], [43.2, 1], [43.9, 0]]), routeGlow: keyv(t, [[40.3, 0], [40.9, 1], [43.3, 1], [43.9, 0]]), heart: keyv(t, [[69.3, 0], [72.1, 1]]) + (t > 72.1 ? 1 : 0), labels: t < 40.2 || t > 43.0 ? 1 : 0.6 });
+    if (t > 2.3 && t < 4.4) { const [x, y] = v.toScreen(...CITY.rostock.p), u = ((t - 2.3) % 1); ctx.strokeStyle = `rgba(230,184,92,${1 - u})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y, 10 + u * 50, 0, TAU); ctx.stroke(); }
+    if (t < A.dive + 1.4) heroesIntro(t);
+    nightPorthole(t);
+    if (t > 69) heroesFinale(t);
+    if (shot) { // iris in / out
+      const entering = t < shot.t0 + IN, p = entering ? invLerp(shot.t0, shot.t0 + IN, t) : invLerp(shot.t1 - OUT, shot.t1, t);
+      const [cx, cy] = v.toScreen(...CITY[entering ? shot.city : shot.exit].p), R = Math.hypot(W, H) * 1.05;
+      const r = entering ? R * E.inOut(p) : R * (1 - E.in(p));
+      if (r > 1) {
+        ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.clip();
+        drawScene(shot, t, entering ? lerp(1.3, 1, E.out(p)) : lerp(1, 0.82, E.in(p)));
+        ctx.restore();
+        ctx.save(); ctx.strokeStyle = C.gold; ctx.lineWidth = 6; glow(ctx, cx, cy, 0, '0,0,0', 0); ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.stroke(); ctx.strokeStyle = 'rgba(255,226,163,0.35)'; ctx.lineWidth = 18; ctx.stroke(); ctx.restore();
+      }
+    }
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // snow (none indoors: the dinner is outdoors, the rolls and the cart are inside)
+  const indoor = (t > 52.45 && t < 55.4) || (t > 59.05 && t < 62.6);
+  const wind = t > 35.1 && t < 39.6 ? -1.6 : 0.12;
+  snow(ctx, W, H, t, { a: indoor ? 0 : 1, wind, n: portrait ? 230 : 260 });
+  // captions
+  if (t < A.dive + 0.5) introTitle(t);
+  for (const s of SHOTS) caption(s.cap[0], s.cap[1], s.t0 + 0.3, s.t1 - 0.3, t);
+  caption('Ночной переезд', '29–30.12', 40.1, 43.6, t);
+  if (t > A.caption - 0.1) finaleCaption(t);
+  paperOverlay(ctx, W, H, 0.12, t);
+  vignette(ctx, W, H, 0.4);
+  // fade in / out of the film
+  const fo = seg(t, D - 0.6, D); if (fo > 0) { ctx.fillStyle = `rgba(15,13,30,${0.55 * fo})`; ctx.fillRect(0, 0, W, H); }
+};
+
+await window.renderAt(0);
+window.__ready = true;
+</script>
+</body>
+</html>
