@@ -1,1 +1,4 @@
 tools/node_modules
+# личные файлы и пакеты — никогда в репозиторий
+private/
+*.zip

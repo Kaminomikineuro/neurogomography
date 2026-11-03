@@ -167,6 +167,15 @@ async function importZipFlow() {
   } catch (e) {
     return toast(e.message || 'Не удалось прочитать файл', 4000);
   }
+  if (z.manifest.kind === 'pack') {
+    const ok = await confirmBox('Пакет документов',
+      `${z.manifest.title || 'Файлы и данные броней'}: файлов ${z.docs.length}, правок плана ${Object.keys(z.overlay?.patches || {}).length}. ` +
+      'Всё добавится к тому, что уже есть на телефоне: ваши правки и отметки останутся. Повторный импорт того же пакета не создаст дублей.',
+      { ok: 'Добавить' });
+    if (!ok) return;
+    await M.applyZip(z);
+    return toast(`Добавлено файлов: ${z.docs.length}`);
+  }
   const mine = M.S.settings.pinHash && !z.manifest.withSecrets;
   const ok = await confirmBox('Импортировать?',
     `План rev ${z.manifest.revision}, файлов: ${z.docs.length}, создан ${new Date(z.manifest.created).toLocaleString('ru-RU')}. ${z.manifest.withSecrets ? 'С секретами.' : 'Без секретов.'} ` +

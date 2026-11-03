@@ -352,7 +352,23 @@ export async function readZip(file) {
   return { manifest, base: j('trip-base.json'), overlay: j('overlay.json'), checks: j('checks.json'), docs: j('docs/index.json') || [], secret: j('secret-settings.json'), files };
 }
 
+/** Пакет от Claude: только добавляет файлы и правки, ничего на телефоне не заменяет. */
+async function applyPack(z) {
+  const P = S.overlay.patches;
+  for (const [key, patch] of Object.entries((z.overlay && z.overlay.patches) || {})) P[key] = { ...(P[key] || {}), ...patch };
+  await db.kvSet('overlay', S.overlay);
+  for (const d of z.docs) {
+    const bytes = z.files['docs/' + d.id];
+    if (!bytes) continue;
+    await db.docPut({ ...d, added: d.added || Date.now() }, bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+  }
+  invalidate();
+  S.docs = await db.docList();
+  emit('all');
+}
+
 export async function applyZip(z, { replaceDocs = false } = {}) {
+  if (z.manifest && z.manifest.kind === 'pack') return applyPack(z);
   if (z.base) {
     S.base = z.base;
     S.baseInfo = { source: 'import', at: Date.now() };
