@@ -127,7 +127,7 @@ export function lotus(ctx, x, y, s, open = 1, o = {}) {
     g.addColorStop(0, rgba(base, 0.96)); g.addColorStop(0.55, rgba(base, 0.9)); g.addColorStop(0.85, rgba(tint, 0.55 + depth * 0.2)); g.addColorStop(1, rgba(tint, 0.9));
     ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(wid, -len * 0.3, wid * 0.9, -len * 0.8, 0, -len); ctx.bezierCurveTo(-wid * 0.9, -len * 0.8, -wid, -len * 0.3, 0, 0); ctx.fill();
     ctx.strokeStyle = rgba(tint, 0.55); ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(0, -len * 0.15); ctx.quadraticCurveTo(wid * 0.15, -len * 0.6, 0, -len * 0.95); ctx.stroke();
-    ctx.strokeStyle = rgba(C.ink, 0.35); ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(wid, -len * 0.3, wid * 0.9, -len * 0.8, 0, -len); ctx.stroke();
+    ctx.strokeStyle = rgba(tint, 0.3); ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(wid, -len * 0.3, wid * 0.9, -len * 0.8, 0, -len); ctx.stroke();
     ctx.restore();
   };
   const spread = lerp(0.12, 1, op);

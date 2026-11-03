@@ -147,7 +147,7 @@ if HAS_VOICE:
     for name in ('pad', 'guzheng', 'xiao', 'bass', 'train', 'air'): m.tracks[name].duck(by='voice', mode='env', depth=7, attack=0.05, release=0.5, thresh=-40)
 
 out = os.path.join(HERE, 'out', 'audio.wav')
-res = m.export(out, lufs=-14, tp=-1, spectrogram=os.path.join(HERE, 'out', 'spectrogram.png'))
+res = m.export(out, lufs=-14, tp=-1.6, spectrogram=os.path.join(HERE, 'out', 'spectrogram.png'))
 # fade the tail over the last 0.6 s so the final bells don't get cut
 import soundfile as sf
 y, sr = sf.read(out, always_2d=True); n = int(0.6 * sr); y[-n:] *= np.linspace(1, 0, n)[:, None] ** 1.5; sf.write(out, y, sr, subtype='PCM_24')

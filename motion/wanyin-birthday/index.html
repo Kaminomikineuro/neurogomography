@@ -101,7 +101,9 @@ function lotusBloom(t, tD, x, y, s, a = 1) {
     wash(ctx, x, y - 40, 40 + 60 * b, C.purpleD, 0.6 * fade, { seed: 59, lobes: 3, rim: 0.3 });
     const r = rng(7); for (let i = 0; i < 28; i++) { const an = r() * TAU, L = (160 + r() * 260) * b, P = []; for (let k = 0; k <= 8; k++) { const q = k / 8; P.push([x + Math.cos(an) * L * q + Math.sin(q * 6 + i) * 14 * q, y - 40 + Math.sin(an) * L * q * 0.62]); } line(ctx, P, 1.3, C.lav, 0.28 * fade); } }
   const op = seg(t, tD + 0.75, tD + 3.4, E.out);
-  if (op > 0) lotus(ctx, x, y, s * (0.75 + 0.25 * op), op, { tint: C.purpleL, base: '#EEE8F7', glowA: 0.3 * op, seed: 5, alpha: seg(t, tD + 0.5, tD + 1.2) });
+  const br = 1 + 0.035 * Math.sin(t * 1.7) * op;
+  if (op > 0) lotus(ctx, x, y, s * (0.75 + 0.25 * op) * br, op, { tint: C.purpleL, base: '#EEE8F7', glowA: (0.3 + 0.12 * Math.sin(t * 2.3)) * op, seed: 5, alpha: seg(t, tD + 0.5, tD + 1.2), rotA: Math.sin(t * 0.8) * 0.04 });
+  if (op > 0.3) { const r = rng(91); for (let i = 0; i < 34; i++) { const sp = 45 + r() * 70, ph = r(), q = ((t - tD) * sp / 520 + ph) % 1, px = x + (r() - 0.5) * 260 + Math.sin(q * 6 + i) * 30, py = y - 60 - q * 520; glow(ctx, px, py, 7 + r() * 8, i % 3 ? C.lav : C.goldL, 0.7 * Math.sin(q * Math.PI) * (op - 0.3) * 1.4); } }
   ctx.restore();
 }
 function prologue(t) {
