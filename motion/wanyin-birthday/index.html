@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Письмо из Облачных Глубин</title>
+<link rel="stylesheet" href="fonts.css">
+<style>html,body,#stage{margin:0;padding:0;background:#241F2E;overflow:hidden}#stage{position:relative}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+// «Письмо из Облачных Глубин»: a birthday letter from Lan Xichen to Jiang Wanyin, painted in ink on one long
+// handscroll. 2:08 exactly (128 s): 8 s prologue + 8 scenes × 15 s. The camera travels along the scroll; mist
+// separates the paintings; the letter is written by hand into the empty sky of each painting.
+import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, rng } from './lib/mg.js';
+import { C, rgba, paperTexture, wash, glow, brush, line, writeLine, textWidth, seal } from './lib/ink.js';
+import { lotus } from './lib/figures.js';
+import * as S from './scenes/sections.js';
+
+const W = 1920, H = 1080, SW = 2200;
+const cues = await (await fetch('./cues.json')).json();
+const D = cues.duration, FPS = cues.fps, T0 = cues.scenes, PAN = cues.pan;
+window.DEMO = { width: W, height: H, fps: FPS, duration: D };
+const stage = document.getElementById('stage'); stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const ctx = makeCanvas(W, H, stage); ctx.imageSmoothingQuality = 'high';
+const SCRIPT = n => `400 ${n}px "Marck Script"`, SERIF = (n, w = 600) => `${w} ${n}px "Cormorant Garamond"`;
+await Promise.all([SCRIPT(54), SERIF(96), SERIF(60, 700)].map(f => document.fonts.load(f, 'Цзян Ваньинь Ваньиню ёЁ — 02:08 Abc')));
+const tex = paperTexture(W, H);
+
+const SC = [null, S.s1, S.s2, S.s3, S.s4, S.s5, S.s6, S.s7, S.s8];
+const Tk = k => T0[k - 1], cx = k => (k - 1) * SW + 960;
+const LEFT = cx(1) - SW / 2, RIGHT = cx(8) + SW / 2, ROD = RIGHT + 150;
+
+// ---- letters: line start times (lt, seconds into the scene) ----
+const LET = {};
+for (const B of cues.letters) {
+  const cps = B.cps || 15; let t = (B.t0 ?? 0) - Tk(B.scene);
+  B.times = B.lines.map((s, i) => { const o = { start: B.at ? B.at[i] : t, dur: s.length / cps }; t = o.start + o.dur + 0.5 + (/[.!?]$/.test(s) ? 0.3 : 0); return o; });
+  B.size = B.size || 54; B.lh = B.lh || 1.42; LET[B.scene] = B;
+}
+window.__letters = cues.letters.map(B => ({ scene: B.scene, lines: B.lines.map((s, i) => [+(Tk(B.scene) + B.times[i].start).toFixed(2), s]) }));
+function letters(k, lt, t) {
+  const B = LET[k]; if (!B) return;
+  const next = k < 8 ? Tk(k + 1) : 999, a = k < 8 ? 1 - seg(t, next - 1.9, next - 1.0, E.inOut) : 1 - seg(t, cues.outro.zoom[0] + 0.6, cues.outro.zoom[0] + 1.6);
+  if (a <= 0) return;
+  const col = B.color === 'paper' ? C.paper : C.ink;
+  B.lines.forEach((s, i) => {
+    const big = B.big === i, size = big ? B.size * 1.3 : B.size, y = B.y + B.size * B.lh * i + (big ? B.size * 0.35 : 0) + (B.big !== undefined && i > B.big ? B.size * 0.5 : 0);
+    const p = clamp((lt - B.times[i].start) / B.times[i].dur);
+    writeLine(ctx, s, B.x, y, size, SCRIPT(size), big ? C.purple : col, p, a, B.align || 'left');
+  });
+  if (B.seal !== false) { const n = B.lines.length - 1, last = B.times[n], ts = last.start + last.dur + 0.45, y = B.y + B.size * B.lh * n;
+    seal(ctx, B.x + textWidth(ctx, B.lines[n], SCRIPT(B.size)) + 56, y - B.size * 0.32, 50, 'Л', lt - ts, { alpha: a, rot: -0.05 + k * 0.01 }); }
+}
+
+// ---- camera along the scroll ----
+const drift = (k, t) => 3.2 * (t - (Tk(k) + 7.5));
+function camAt(t) {
+  let k = 1; while (k < 8 && t >= Tk(k + 1) - PAN) k++;
+  let x = cx(k) + drift(k, t);
+  if (k > 1 && t < Tk(k) + PAN) x = lerp(cx(k - 1) + drift(k - 1, t), x, E.quartInOut(invLerp(Tk(k) - PAN, Tk(k) + PAN, t)));
+  let z = 1, P = 1;
+  const [z0, z1] = cues.outro.zoom;
+  if (t > z0) { const p = seg(t, z0, z1, E.inOut), zz = lerp(1, 0.42, p); x = lerp(x, ROD - 760 / 0.42, p); z = zz; P = 1 - seg(t, z0, z0 + 0.6); }
+  return { x, z, P, k };
+}
+
+// ---- scroll mounting, rod ----
+function rod(x, y0, y1, w) {
+  const g = ctx.createLinearGradient(x - w / 2, 0, x + w / 2, 0); g.addColorStop(0, '#2A1D17'); g.addColorStop(0.35, '#7A5A43'); g.addColorStop(0.55, '#5A3F2E'); g.addColorStop(1, '#1E1511');
+  ctx.fillStyle = g; ctx.fillRect(x - w / 2, y0, w, y1 - y0);
+  for (const yy of [y0, y1]) { ctx.fillStyle = '#E8E3D6'; ctx.beginPath(); ctx.roundRect(x - w * 0.7, yy - (yy === y0 ? 40 : 0), w * 1.4, 40, 10); ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 2; ctx.stroke(); }
+}
+function mounting() {
+  ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(LEFT + 30, 40, ROD - LEFT, 1110); // shadow on the table
+  for (const [y, h] of [[-80, 80], [1080, 80]]) { ctx.fillStyle = '#2E3A56'; ctx.fillRect(LEFT - 160, y, ROD - LEFT + 160, h); ctx.strokeStyle = rgba(C.goldL, 0.45); ctx.lineWidth = 3; ctx.strokeRect(LEFT - 160, y + 10, ROD - LEFT + 160, h - 20);
+    for (let x = LEFT - 120; x < ROD; x += 160) { ctx.strokeStyle = rgba(C.blueL, 0.35); ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(x, y + h / 2, 14, Math.PI, TAU * 0.95); ctx.stroke(); } }
+  ctx.fillStyle = '#4A2F6E'; ctx.fillRect(RIGHT, -80, 130, 1240); ctx.strokeStyle = rgba(C.goldL, 0.4); ctx.lineWidth = 3; ctx.strokeRect(RIGHT + 12, -70, 106, 1220);
+  rod(ROD, -100, 1180, 54);
+}
+function gutters(cam) {
+  for (let k = 1; k < 8; k++) {
+    const gx = cx(k) + SW / 2; if (Math.abs(gx - cam.x) > W / 2 / cam.z + 400) continue;
+    const g = ctx.createLinearGradient(gx - 300, 0, gx + 300, 0); g.addColorStop(0, rgba(C.paper, 0)); g.addColorStop(0.32, rgba(C.paper, 0.9)); g.addColorStop(0.5, rgba(C.paper, 1)); g.addColorStop(0.68, rgba(C.paper, 0.9)); g.addColorStop(1, rgba(C.paper, 0));
+    ctx.fillStyle = g; ctx.fillRect(gx - 300, 0, 600, H);
+    const r = rng(k * 7); for (let i = 0; i < 7; i++) glow(ctx, gx + (r() - 0.5) * 260, r() * H, 160 + r() * 120, C.paper, 0.9, { sx: 1.4 });
+  }
+}
+
+// ---- prologue on dark: a drop of ink becomes a purple lotus ----
+function darkBg(t) { ctx.fillStyle = C.night; ctx.fillRect(0, 0, W, H); const g = ctx.createRadialGradient(W / 2, H * 0.45, 100, W / 2, H / 2, W * 0.7); g.addColorStop(0, 'rgba(70,52,96,0.35)'); g.addColorStop(1, 'rgba(10,8,14,0.6)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const r = rng(3); for (let i = 0; i < 60; i++) { const x = r() * W, y = (r() * H - t * (6 + r() * 10) + H * 2) % H, a = 0.15 + 0.25 * Math.sin(t * 0.8 + i); ctx.fillStyle = rgba(C.lav, a * 0.6); ctx.beginPath(); ctx.arc(x, y, 1 + r() * 1.6, 0, TAU); ctx.fill(); } }
+function lotusBloom(t, tD, x, y, s, a = 1) {
+  ctx.save(); ctx.globalAlpha = a;
+  for (let i = 0; i < 3; i++) { const tr = t - tD - i * 0.4; if (tr <= 0 || tr > 3.2) continue; ctx.strokeStyle = rgba(C.lav, 0.55 * (1 - tr / 3.2)); ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(x, y + 10, 30 + tr * 300 * (1 - tr / 8), (30 + tr * 300 * (1 - tr / 8)) * 0.3, 0, 0, TAU); ctx.stroke(); }
+  const b = seg(t, tD, tD + 2.6, E.expo), fade = 1 - 0.55 * seg(t, tD + 2.5, tD + 5);
+  if (b > 0) { // ink diffusing in water: uneven lobes that spread at different speeds, a dense core
+    const r0 = rng(41);
+    for (let i = 0; i < 9; i++) { const an = r0() * TAU, sp = 0.4 + r0() * 0.9, d = (40 + r0() * 170) * b * sp, rr = (50 + r0() * 170) * Math.pow(b, 0.8) * sp, col = [C.purple, C.purpleD, C.purpleL][i % 3];
+      wash(ctx, x + Math.cos(an) * d, y - 40 + Math.sin(an) * d * 0.7, rr, col, (0.5 - (i % 3) * 0.1) * fade, { seed: 50 + i, lobes: 3, rim: 0.5, sx: 1 + r0() * 0.5, rot: an }); }
+    wash(ctx, x, y - 40, 40 + 60 * b, C.purpleD, 0.6 * fade, { seed: 59, lobes: 3, rim: 0.3 });
+    const r = rng(7); for (let i = 0; i < 28; i++) { const an = r() * TAU, L = (160 + r() * 260) * b, P = []; for (let k = 0; k <= 8; k++) { const q = k / 8; P.push([x + Math.cos(an) * L * q + Math.sin(q * 6 + i) * 14 * q, y - 40 + Math.sin(an) * L * q * 0.62]); } line(ctx, P, 1.3, C.lav, 0.28 * fade); } }
+  const op = seg(t, tD + 0.75, tD + 3.4, E.out);
+  if (op > 0) lotus(ctx, x, y, s * (0.75 + 0.25 * op), op, { tint: C.purpleL, base: '#EEE8F7', glowA: 0.3 * op, seed: 5, alpha: seg(t, tD + 0.5, tD + 1.2) });
+  ctx.restore();
+}
+function prologue(t) {
+  darkBg(t);
+  const tD = cues.beats.drop;
+  if (t < tD) { const p = t / tD, y = lerp(150, 430, E.in(p)); line(ctx, [[960, y - 160 * p], [960, y - 10]], 2, C.lav, 0.25); ctx.fillStyle = rgba(C.purpleL, 0.95); ctx.beginPath(); ctx.ellipse(960, y, 8, 15, 0, 0, TAU); ctx.fill(); glow(ctx, 960, y, 40, C.lav, 0.4); glow(ctx, 960, 480, 160, C.purple, 0.25 + 0.2 * p); }
+  lotusBloom(t, tD, 960, 520, 5.6);
+  writeLine(ctx, 'Цзян Ваньиню', 960, 760, 96, SERIF(96), C.paper, seg(t, cues.beats.title, cues.beats.title + 1.5, E.inOut), 1, 'center');
+  writeLine(ctx, 'письмо из Облачных Глубин', 960, 838, 44, SCRIPT(44), C.lav, seg(t, cues.beats.sub, cues.beats.sub + 1.3, E.linear), 1, 'center');
+}
+// ---- epilogue: ink floods the scroll; the lotus again; birthday wishes; the 02:08 seal ----
+// the letter rolls back up into its rod, right to left (the prologue unrolled it left to right)
+function rollX(t, cam) { const [r0, r1] = cues.outro.roll, p = invLerp(r0, r1, t); if (p <= 0) return null; const sx = (ROD - cam.x) * cam.z + W / 2; return lerp(sx, -160, E.inOut(p)); }
+function epilogue(t) {
+  const O = cues.outro, a = seg(t, O.roll[1] - 0.4, O.roll[1] + 0.8);
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a;
+  const br = 1 + 0.02 * Math.sin(t * 1.3);
+  glow(ctx, 960, 330, 380, C.purple, 0.35); lotus(ctx, 960, 400, 3.6 * br, 1, { tint: C.purpleL, base: '#EEE8F7', glowA: 0.3, seed: 5 });
+  ctx.restore();
+  const [[t1, s1], [t2, s2], [t3, s3]] = O.lines;
+  writeLine(ctx, s1, 960, 620, 84, SCRIPT(84), C.paper, seg(t, t1, t1 + 1.0, E.linear), 1, 'center');
+  writeLine(ctx, s2, 960, 745, 108, SERIF(108), C.paper, seg(t, t2, t2 + 1.1, E.inOut), 1, 'center');
+  writeLine(ctx, s3, 960, 870, 74, SCRIPT(74), C.lav, seg(t, t3, t3 + 1.0, E.linear), 1, 'center');
+  const w3 = textWidth(ctx, s3, SCRIPT(74));
+  seal(ctx, 960 + w3 / 2 + 120, 850, 132, '02:08', t - O.stamp, { rot: -0.07, fs: 0.36 });
+  const r = rng(23); // petals
+  for (let i = 0; i < 16; i++) { const q = ((t - O.roll[1]) * (0.05 + r() * 0.05) + r()) % 1, x = lerp(-60, W + 60, r()) + Math.sin(q * 7 + i) * 60, y = lerp(-40, H + 40, q);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(q * 7 + i); wash(ctx, 0, 0, 9, i % 2 ? C.lav : C.pink, 0.7 * a, { sy: 0.5, lobes: 2, seed: i }); ctx.restore(); }
+}
+
+window.renderAt = async (t) => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  const cam = camAt(t), unroll = cues.beats.unroll, prologueOn = t < unroll + 1.6;
+  if (prologueOn) prologue(t);
+  if (cam.z < 1 || t > cues.outro.roll[0]) darkBg(t);
+  if (t >= unroll) {
+    const rx = rollX(t, cam), rodX = t < unroll + 1.5 ? lerp(-60, W + 90, E.inOut(invLerp(unroll, unroll + 1.5, t))) : rx !== null ? rx - 28 * cam.z : 1e9;
+    ctx.save(); if (rodX < 1e8) { ctx.beginPath(); ctx.rect(0, 0, rodX, H); ctx.clip(); }
+    ctx.translate(W / 2, H / 2); ctx.scale(cam.z, cam.z); ctx.translate(-cam.x, -H / 2);
+    if (cam.z < 1) mounting();
+    const vx0 = cam.x - W / 2 / cam.z, vx1 = cam.x + W / 2 / cam.z;
+    ctx.save(); ctx.beginPath(); ctx.rect(LEFT, 0, RIGHT - LEFT, H); ctx.clip();
+    for (let x = Math.floor(Math.max(LEFT, vx0) / W) * W; x < Math.min(RIGHT, vx1); x += W) ctx.drawImage(tex, x, 0);
+    for (let k = 1; k <= 8; k++) {
+      const dx = cam.x - cx(k); if (Math.abs(dx) > W / 2 / cam.z + SW / 2) continue;
+      ctx.save(); ctx.beginPath(); ctx.rect(cx(k) - SW / 2, 0, SW, H); ctx.clip(); ctx.translate(cx(k) - 960, 0);
+      const lt = t - Tk(k), L = (f, fn) => { ctx.save(); ctx.translate(-(f - 1) * dx * cam.P, 0); fn(); ctx.restore(); };
+      SC[k](ctx, lt, { L, dx, P: cam.P, t, lines: LET[k] ? LET[k].times.map(o => o.start) : [] });
+      letters(k, lt, t);
+      ctx.restore();
+    }
+    gutters(cam);
+    ctx.restore(); ctx.restore();
+    if (rx !== null) { if (rx > -150) { const g = ctx.createLinearGradient(rx - 90 * cam.z, 0, rx, 0); g.addColorStop(0, 'rgba(30,20,15,0)'); g.addColorStop(1, 'rgba(30,20,15,0.35)'); ctx.fillStyle = g; ctx.fillRect(rx - 90 * cam.z, H / 2 - 540 * cam.z, 90 * cam.z, 1080 * cam.z); ctx.save(); ctx.translate(rx, H / 2); ctx.scale(cam.z, cam.z); rod(0, -640, 640, 54 + 40 * invLerp(cues.outro.roll[0], cues.outro.roll[1], t)); ctx.restore(); } }
+    else if (rodX < 1e8) { const g = ctx.createLinearGradient(rodX - 80, 0, rodX, 0); g.addColorStop(0, 'rgba(30,20,15,0)'); g.addColorStop(1, 'rgba(30,20,15,0.35)'); ctx.fillStyle = g; ctx.fillRect(rodX - 80, 0, 80, H); rod(rodX + 24, -60, H + 60, 52); }
+  }
+  epilogue(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, W * 0.62); v.addColorStop(0, 'rgba(40,28,20,0)'); v.addColorStop(1, 'rgba(40,28,20,0.22)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+};
+await window.renderAt(0);
+window.__ready = true;
+</script>
+</body>
+</html>
