@@ -1,6 +1,6 @@
 ---
 name: motion-design
-description: "Полный цикл motion design и создания видео: MG-ролики (explainer, логотипы, титры, интро, кинетическая типографика, вертикальные Reels/TikTok/Shorts), анимация персонажей, саунд-дизайн под кадр, рендер кода в MP4, разбор референсных видео, генерация видео нейросетями (Veo, Kling, Seedance, Sora, Wan через polza.ai). Внутри: 22 стиля с рецептами (flat vector, line art, isometric, 3D, line boil, collage, liquid, morph, Bauhaus, synthwave/VHS, aurora glass, pixel, HUD, аниме-опенинг и др.), законы движения и easing в цифрах, детерминированный HTML→MP4 рендерер, синтез звука с мастерингом −14 LUFS, рубрика жюри. Используй ВСЕГДА, когда просят видео, анимацию, моушн, ролик, интро, заставку, титры, логотип в движении, тизер, GIF, оживить картинку или персонажа, разобрать или повторить чужой ролик, написать промпт для видеонейросети, а также для UI/web-анимации (GSAP, Framer Motion, Three.js)."
+description: "Полный цикл motion design и видео: MG-ролики (explainer, логотипы, титры, интро, аниме-опенинги, кинетическая типографика, Reels/TikTok/Shorts), 3D-симуляторы машин «разбери и посмотри, как работает» (teardown), продуктовые ролики и живые демо-окна приложений, саунд-дизайн под кадр, рендер кода в MP4, разбор чужих видео, генерация видео нейросетями (Veo, Kling, Seedance, Sora через polza.ai). Внутри: 22+ стиля с рецептами, законы движения и easing в цифрах, детерминированный HTML→MP4 рендерер, синтез звука −14 LUFS, петля ревью и рубрика жюри. Используй ВСЕГДА, когда просят видео, анимацию, моушн, ролик, интро, заставку, титры, логотип в движении, тизер, GIF, симулятор/разрез/exploded view механизма, промо продукта, оживить картинку или персонажа, повторить чужой ролик, промпт для видеонейросети, а также UI/web-анимацию (GSAP, Framer Motion, Three.js)."
 ---
 
 # Motion Design — единый скилл
@@ -8,9 +8,12 @@ description: "Полный цикл motion design и создания видео
 Задача: на выходе — **готовый ролик уровня студии** (Buck, ManvsMachine, Territory, Apple keynote), а не «шаблон из
 After Effects». Чистый, но безликий результат = провал.
 
-Скилл собран из пяти источников (см. `references/sources.md`): 15 стилей и пайплайн рендера из **mg-styles-15**,
-визуальная система и правила движения из **elayadesign/ai-design-skills**, просмотр видео из **claude-video (/watch)**,
-генерация видео нейросетями через **polza.ai**, библиотеки промптов для web-motion (**prompt-motion** и аналоги).
+Скилл собран из ~14 источников (см. `references/sources.md`): 15 стилей и пайплайн рендера — **mg-styles-15**;
+3D-симуляторы «разбери машину» — **teardown** (статья Elvar) и его основа **claude-motion** (числа вкуса, петля
+ревью, звук на таймлайне); продуктовые ролики — **product-film**, живые демо-окна — **html-demo** (MengTo);
+арт-дирекция сайтов — **taste-skill**, **elayadesign/ai-design-skills**; просмотр видео — **claude-video (/watch)**;
+нейросети — **polza.ai**, **buildfast generative-film**; каталоги — **awesome-claude-video-skills**,
+**HyperFrames community skills**, prompt-motion. Что ставить отдельно — `references/catalog.md`.
 
 ## 0. Выбор маршрута (сначала это)
 
@@ -20,7 +23,10 @@ After Effects». Чистый, но безликий результат = про
 | «Оживить» арт/персонажа, кинематографичный кадр, живое видео, фотореализм | **B. Видеонейросеть** (Veo/Kling/Seedance/Sora) | `references/ai-video-generation.md` |
 | Анимация в интерфейсе, лендинге, скролле, 3D-сайт | **C. Web-motion** | `references/web-motion.md` |
 | «Посмотри этот ролик / сделай как здесь» | **D. Разбор референса** → затем A/B/C | `references/reference-analysis.md` |
+| «Как работает машина/механизм», симулятор, разрез, exploded view, интерактивный 3D-урок | **E. Симулятор (teardown)** → страница + фильм | `references/simulators.md` |
+| Ролик о продукте/приложении/SaaS, промо, лендинг-луп, живое окно приложения на сайте | **F. Продуктовый фильм / html-demo** | `references/product-film.md` |
 | Комбо: нейросеть-футаж + MG-графика поверх | **B → A** (футаж как слой в HTML) | оба |
+| Нужен инструмент, которого тут нет (Remotion, HyperFrames, субтитры, клипы из подкаста) | **Каталог** | `references/catalog.md` |
 
 Маршрут A детерминирован, даёт идеальную типографику и точный тайминг. Маршрут B даёт «живую» картинку, но текст,
 логотипы и точный тайминг у нейросетей плохие — их всегда доделывай маршрутом A поверх.
@@ -55,8 +61,9 @@ After Effects». Чистый, но безликий результат = про
 6. **Финальный рендер** (`scripts/render.mjs`, motion blur где уместно) → **QC** (`scripts/qc.sh`): точная
    длительность, разрешение, fps, звук и громкость, нет чёрных кадров, нет fallback-шрифтов/«тофу», ничего не
    обрезано краями, нет мерцания тонких линий и бандинга градиентов. Смотри contact sheet глазами.
-7. **Самооценка по рубрике** (`references/review-rubric.md`), 1–10 по 7 осям. Цель — 9. Чини самую слабую ось
-   первой. Для важных работ — независимое ревью вторым агентом (Agent tool) и ещё один круг правок.
+7. **Петля ревью + самооценка** (`references/review-rubric.md`): лист по битам `--stills beats`, волна с битами
+   `wave.sh`, 1–10 по 7 осям. Цель — 9. Чини самую слабую ось первой. Никогда не говори «готово», не посмотрев
+   листы кадров текущего рендера. Для важных работ — независимое ревью вторым агентом и ещё один круг правок.
 
 Стартовый проект — `templates/film/` (рабочее демо в стиле Line Art: заставка «Хроники рода Эльтар — Белая
 кровь»; `index.html` с контрактом `renderAt`, `mg.js` с кривыми/пружинами/seeded random, `cues.json`). Скопируй и
@@ -66,10 +73,12 @@ After Effects». Чистый, но безликий результат = про
 SK=.claude/skills/motion-design
 mkdir -p motion && cp -r $SK/templates/film motion/<slug>
 node $SK/scripts/render.mjs motion/<slug> --stills 0.5,2,5,7,9.5        # стоп-кадры → out/stills/
+node $SK/scripts/render.mjs motion/<slug> --stills beats                 # лист: кадр 0 + каждый бит из cues.json
 node $SK/scripts/render.mjs motion/<slug> --scale 0.5 --noaudio          # быстрое превью
 python3 $SK/scripts/audio_kit.py motion/<slug>/cues.json motion/<slug>/out/audio.wav
 node $SK/scripts/render.mjs motion/<slug> --mb 4                         # финал с motion blur + звук
 bash $SK/scripts/qc.sh motion/<slug>/out/video.mp4 10                    # проверки + contact sheet
+bash $SK/scripts/wave.sh motion/<slug>/out/video.mp4 motion/<slug>/cues.json  # волна + линии битов
 ```
 
 ## 3. Железные правила
@@ -88,6 +97,8 @@ bash $SK/scripts/qc.sh motion/<slug>/out/video.mp4 10                    # пр�
 - Squash & stretch ~10 % (морфинг 10–15 %, smear-кадр 150–300 % на 1 кадр).
 - Переходы несут элементы (shape wipe, объект вылетает и «тащит» склейку), а не кроссфейд.
 - В UI анимируй только `transform` и `opacity`; уважай `prefers-reduced-motion`.
+- Выход ≈ половина входа; сцены перекрываются; читаемое держится ≥ 1 с + 0,25 с на слово сверх трёх; кадр 0 —
+  настоящая картинка (превью в ленте); один упругий акцент и один impact на ролик (claude-motion).
 
 **Дизайн:** 3–6 конкретных HEX-цветов на ролик; один гарнитурный род + моно для данных; никаких Inter/Roboto/Arial
 по умолчанию; никаких «висячих» слов; текст ≥ 5 % от краёв; на кириллице — проверяй, что шрифт содержит глифы
@@ -113,6 +124,9 @@ bash $SK/scripts/qc.sh motion/<slug>/out/video.mp4 10                    # пр�
 | `references/ai-video-generation.md` | Видеонейросети через polza.ai: API, модели, структура промпта, image-to-video по артам |
 | `references/web-motion.md` | UI/scroll/3D-сайты: GSAP, ScrollTrigger, Framer Motion, Three.js, промпт-компоненты |
 | `references/reference-analysis.md` | Как «посмотреть» видео: кадры + транскрипт, разбор референса в beat sheet |
+| `references/simulators.md` | Маршрут E: 3D-симулятор машины (teardown) — 9 шагов с промптами, структура, ловушки three.js |
+| `references/product-film.md` | Маршрут F: продуктовый фильм (интервью, панчлайны, magic moves, музыка по тактам) и html-demo |
+| `references/catalog.md` | Экосистема: что ещё установить (команды), каталог видео-скиллов, HyperFrames, buildfast |
 | `references/sources.md` | Источники, лицензии, что и откуда взято |
 
 ## 5. Отчёт пользователю (всегда)

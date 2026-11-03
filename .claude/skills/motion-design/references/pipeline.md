@@ -39,7 +39,9 @@ mkdir -p motion && cp -r .claude/skills/motion-design/templates/film motion/<slu
 | Команда | Что |
 |---|---|
 | `node render.mjs <dir> --stills 0.5,2,5` | PNG-кадры в `out/stills/` — **смотри их через Read** |
+| `node render.mjs <dir> --stills beats` | лист ревью: кадр 0 + плитка через 0,3 с после каждого бита `cues.json` → `out/beats.png` |
 | `node render.mjs <dir> --sheet 0.5` | contact sheet всего ролика одним PNG |
+| `bash wave.sh out/video.mp4 cues.json` | волна звука с линиями битов и метками SFX + LUFS/true peak |
 | `node render.mjs <dir> --scale 0.5 --noaudio` | быстрое превью `out/preview.mp4` |
 | `node render.mjs <dir> --from 5 --to 7` | перерендер отрезка |
 | `node render.mjs <dir> --mb 4` | финал с motion blur (4 подкадра, затвор 180°) |

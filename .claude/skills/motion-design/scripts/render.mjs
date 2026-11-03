@@ -140,11 +140,33 @@ try {
   if (args.stills) {
     const { seek, shot } = await openPage();
     const sdir = path.join(outDir, 'stills'); fs.mkdirSync(sdir, { recursive: true });
-    for (const s of String(args.stills).split(',').map(Number)) {
-      await seek(s);
-      const f = path.join(sdir, `t_${s.toFixed(3)}.png`);
-      fs.writeFileSync(f, await shot());
+    // --stills beats: frame 0 + one still 0.3 s after every beat in cues.json (motion has settled), tiled into out/beats.png
+    const beatsMode = args.stills === 'beats';
+    let shots;
+    if (beatsMode) {
+      const c = JSON.parse(fs.readFileSync(path.join(dir, 'cues.json'), 'utf8'));
+      shots = [{ t: 0, label: 'frame 0' }, ...Object.entries(c.beats || {}).sort((a, b) => a[1] - b[1])
+        .map(([k, v]) => ({ t: Math.min(v + 0.3, DUR - 1 / FPS), label: `${k}  t=${(v + 0.3).toFixed(2)}` }))];
+    } else shots = String(args.stills).split(',').map(Number).map(t => ({ t, label: `t=${t}` }));
+    const files = [];
+    for (const s of shots) {
+      await seek(s.t);
+      const f = path.join(sdir, `t_${s.t.toFixed(3)}.png`);
+      fs.writeFileSync(f, await shot()); files.push([f, s.label]);
       console.log('still', path.relative(process.cwd(), f));
+    }
+    if (beatsMode) {
+      const tmp = fs.mkdtempSync(path.join(outDir, 'beats-'));
+      for (let i = 0; i < files.length; i++) {
+        const [f, label] = files[i], o = path.join(tmp, `b${String(i).padStart(4, '0')}.png`);
+        const txt = label.replace(/[:'\\]/g, ' ');
+        try { await ffmpeg(['-i', f, '-vf', `scale=480:-2,drawtext=text='${txt}':x=8:y=8:fontsize=18:fontcolor=white:box=1:boxcolor=black@0.6`, o]).done; }
+        catch { await ffmpeg(['-i', f, '-vf', 'scale=480:-2', o]).done; }
+      }
+      const cols = 4, rows = Math.ceil(files.length / cols), sheet = path.join(outDir, 'beats.png');
+      await ffmpeg(['-framerate', '1', '-i', path.join(tmp, 'b%04d.png'), '-vf', `tile=${cols}x${rows}:padding=4:color=black`, '-frames:v', '1', sheet]).done;
+      fs.rmSync(tmp, { recursive: true });
+      console.log('beat sheet', path.relative(process.cwd(), sheet), `(${files.length} tiles) — open it and read every tile`);
     }
   }
   // ----- contact sheet -----
