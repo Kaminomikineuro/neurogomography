@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="22%" r="85%">
+      <stop offset="0" stop-color="#3A2A6E"/>
+      <stop offset=".55" stop-color="#211A42"/>
+      <stop offset="1" stop-color="#17142B"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F3D28A"/>
+      <stop offset="1" stop-color="#D9A441"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g fill="#F6F1E7" opacity=".55">
+    <circle cx="92" cy="120" r="5"/><circle cx="410" cy="96" r="4"/><circle cx="440" cy="250" r="3"/>
+    <circle cx="70" cy="300" r="3.5"/><circle cx="160" cy="70" r="3"/><circle cx="360" cy="180" r="2.5"/>
+  </g>
+  <!-- маршрут -->
+  <path d="M120 372 C 170 300, 230 400, 286 330 S 380 250, 404 300" fill="none" stroke="url(#gold)" stroke-width="14" stroke-linecap="round" stroke-dasharray="1 30"/>
+  <circle cx="120" cy="372" r="18" fill="#17142B" stroke="url(#gold)" stroke-width="9"/>
+  <circle cx="286" cy="330" r="15" fill="url(#gold)"/>
+  <circle cx="404" cy="300" r="18" fill="#17142B" stroke="url(#gold)" stroke-width="9"/>
+  <!-- снежинка -->
+  <g transform="translate(256 176)" stroke="#E9BE66" stroke-width="15" stroke-linecap="round" fill="none">
+    <g id="arm">
+      <line x1="0" y1="0" x2="0" y2="-92"/>
+      <polyline points="-24,-70 0,-48 24,-70"/>
+      <polyline points="-16,-96 0,-82 16,-96" stroke-width="11"/>
+    </g>
+    <use href="#arm" transform="rotate(60)"/>
+    <use href="#arm" transform="rotate(120)"/>
+    <use href="#arm" transform="rotate(180)"/>
+    <use href="#arm" transform="rotate(240)"/>
+    <use href="#arm" transform="rotate(300)"/>
+    <circle r="16" fill="#17142B" stroke-width="10"/>
+  </g>
+</svg>
