@@ -80,6 +80,8 @@ export function drawPage(ctx, L, pg, t, env, tearP = 0) {
   ctx.lineWidth = 5; ctx.strokeStyle = fg; ctx.beginPath(); ctx.roundRect(wn.x, wn.y, wn.w, wn.h, 26); ctx.stroke();
   // city + subtitle
   ctx.textAlign = 'center'; ctx.font = `700 ${L.city.size}px ${SERIF}`;
+  const maxW = L.portrait ? 860 : 560, cw = ctx.measureText(pg.city).width; // long titles shrink to fit the text column
+  if (cw > maxW) ctx.font = `700 ${Math.floor(L.city.size * maxW / cw)}px ${SERIF}`;
   if (pg.dark) paperHole(ctx, () => ctx.fillText(pg.city, L.city.x, L.city.y)); else plate(ctx, t, 'k', () => ctx.fillText(pg.city, L.city.x, L.city.y), { amp: 1.4 });
   if (pg.sub) { const big = pg.subBig; ctx.font = big ? `italic 500 ${L.city.size * 0.62}px ${SERIF}` : `400 ${L.sub.size}px ${SANS}`; ctx.letterSpacing = big ? '0px' : '2px'; const sy = big ? L.sub.y + L.city.size * 0.12 : L.sub.y; const sf = () => ctx.fillText(pg.sub, L.sub.x, sy);
     if (pg.dark) { paperHole(ctx, sf); plate(ctx, t, 'y', sf, { amp: 1.4 }); } else plate(ctx, t, big ? 'r' : 'v', sf, { amp: 1.4 }); ctx.letterSpacing = '0px'; }
