@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Зимний маршрут</title>
+  <meta name="description" content="Офлайн-путеводитель Ками и Ани: билеты, брони, маршрут, лента и напоминания">
+  <meta name="theme-color" content="#17142B">
+  <meta name="color-scheme" content="dark light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Маршрут">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script>window.__t0 = performance.now();</script>
+</head>
+<body>
+  <div id="splash" aria-hidden="true">
+    <div class="snow">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="splash-center">
+      <img src="icons/icon.svg" alt="" width="96" height="96">
+      <div class="splash-title">Наш зимний маршрут</div>
+      <div class="splash-sub">Ками &amp; Аня · 18.12 — 06.01</div>
+      <div id="splash-msg" class="splash-msg"></div>
+    </div>
+  </div>
+
+  <div id="app">
+    <div class="topbar">
+      <div class="brand">❄ <span>Зимний маршрут</span></div>
+      <button id="btn-reminders" class="icon-btn" aria-label="Напоминания">🔔</button>
+      <button id="btn-settings" class="icon-btn" aria-label="Настройки">⚙️</button>
+    </div>
+    <main>
+      <section id="view-feed" class="view active" aria-label="Лента"></section>
+      <section id="view-map" class="view" aria-label="Карта"></section>
+      <section id="view-docs" class="view" aria-label="Документы"></section>
+      <section id="view-cities" class="view" aria-label="Города"></section>
+    </main>
+    <nav class="tabbar" role="tablist">
+      <button class="tab" data-tab="feed" role="tab" aria-selected="true"><span class="tab-ic">🗓️</span><span>Лента</span></button>
+      <button class="tab" data-tab="map" role="tab"><span class="tab-ic">🗺️</span><span>Карта</span></button>
+      <button class="tab" data-tab="docs" role="tab"><span class="tab-ic">🎫</span><span>Документы</span></button>
+      <button class="tab" data-tab="cities" role="tab"><span class="tab-ic">🏙️</span><span>Города</span></button>
+    </nav>
+  </div>
+
+  <noscript>Включите JavaScript.</noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

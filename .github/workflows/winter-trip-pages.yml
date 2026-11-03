@@ -1,0 +1,42 @@
+# Публикует приложение «Зимний маршрут» (папка winter-trip/app) на GitHub Pages.
+# Публикуется ТОЛЬКО winter-trip/app — остальные файлы репозитория на сайт не попадают.
+name: Зимний маршрут → GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'winter-trip/**'
+      - '.github/workflows/winter-trip-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Проверить trip.json
+        run: node winter-trip/tools/check-trip.mjs
+      - name: Собрать офлайн-кэш (sw.js)
+        run: node winter-trip/tools/gen-sw.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: winter-trip/app
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,16 @@
+{
+  "name": "winter-trip-tools",
+  "private": true,
+  "type": "module",
+  "description": "Инструменты сборки: карта, service worker, иконки. Для работы приложения не нужны.",
+  "scripts": {
+    "check": "node check-trip.mjs",
+    "sw": "node gen-sw.mjs",
+    "map": "node build-map.mjs",
+    "icons": "node render-icons.mjs"
+  },
+  "devDependencies": {
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
+  }
+}
