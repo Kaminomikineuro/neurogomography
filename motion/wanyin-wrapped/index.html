@@ -14,7 +14,7 @@
 import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, rng, spring } from './lib/mg.js';
 
 const W = 1080, H = 1920;
-const D = 40, FPS = 30;
+const D = 42, FPS = 30;
 window.DEMO = { width: W, height: H, fps: FPS, duration: D };
 const stage = document.getElementById('stage'); stage.style.width = W + 'px'; stage.style.height = H + 'px';
 const ctx = makeCanvas(W, H, stage);
@@ -22,8 +22,8 @@ const SANS = (n, w = 600) => `${w} ${n}px Rubik`, SERIF = (n, w = 600, it = fals
 await Promise.all([SANS(100), SANS(40, 500), SANS(40, 400), SERIF(80, 700), SERIF(80, 500, true)].map(f => document.fonts.load(f, 'Ваньинь ГОД ёЁ 0123456789 ∞ % — 02:08')));
 const K = { ink: '#17142B', cream: '#F6F1E7', purple: '#6B3FA0', red: '#E0362E', gold: '#E6B85C', lilac: '#C8B6E2', blue: '#5E7FA8' };
 const SL = [ // [t0, t1, bg]
-  [0, 3, K.purple], [3, 6.5, K.cream], [6.5, 10, K.ink], [10, 13.5, K.red], [13.5, 17, K.ink], [17, 22.5, K.cream],
-  [22.5, 26, K.purple], [26, 29.5, K.gold], [29.5, 32.5, K.ink], [32.5, 35.5, K.red], [35.5, 40, K.purple]];
+  [0, 3, K.purple], [3, 6.5, K.cream], [6.5, 10, K.red], [10, 13.5, K.ink], [13.5, 19, K.cream], [19, 22.5, K.ink],
+  [22.5, 26, K.gold], [26, 31.5, K.cream], [31.5, 34.5, K.ink], [34.5, 37.5, K.red], [37.5, 42, K.purple]];
 const B = 0.5; // one beat at 120 BPM
 
 function txt(s, x, y, font, color, a = 1, align = 'center', track = 0) { if (a <= 0) return; ctx.save(); ctx.globalAlpha *= a; ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.letterSpacing = `${track}px`; ctx.fillText(s, x + (align === 'center' ? track / 2 : 0), y); ctx.restore(); }
@@ -61,25 +61,17 @@ S[0] = (t, t0) => { // hook: 2026 + confetti
 S[1] = (t, t0) => {
   rise('Этот год ты провёл как', W / 2, 640, SANS(54, 500), K.ink, t, t0 + 0.1);
   const p = pop(t, t0 + 0.9, 0.3); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1000); ctx.rotate(-0.08); ctx.scale(p * (t < t0 + 0.95 ? 1.3 : 1), p);
-    ctx.strokeStyle = K.red; ctx.lineWidth = 14; ctx.strokeRect(-420, -150, 840, 300); txt('ГЛАВА ОРДЕНА', 0, -10, SANS(96, 600), K.red, 1, 'center', 4); txt('ЮНЬМЭН ЦЗЯН', 0, 95, SANS(62, 500), K.red, 1, 'center', 14); ctx.restore(); }
+    ctx.strokeStyle = K.red; ctx.lineWidth = 14; ctx.strokeRect(-430, -150, 860, 300); txt('ЛЮБИМЫЙ', 0, -18, SANS(104, 600), K.red, 1, 'center', 6); txt('МУЖ', 0, 100, SANS(104, 600), K.red, 1, 'center', 10); ctx.restore(); }
   if (t > t0 + 1.6) lotus(W / 2, 1420, 2.4 * pop(t, t0 + 1.6), K.purple);
-  rise('(и самый любимый муж)', W / 2, 1560, SERIF(60, 500, true), K.purple, t, t0 + 2.2);
+  rise('(а ещё — глава ордена Юньмэн Цзян)', W / 2, 1560, SERIF(56, 500, true), K.purple, t, t0 + 2.2);
 };
 S[2] = (t, t0) => {
-  rise('Дней вместе этой зимой', W / 2, 640, SANS(56, 500), K.lilac, t, t0 + 0.1);
-  txt(String(count(t, t0 + 0.5, t0 + 2.0, 20)), W / 2, 1180, SANS(520, 600), K.gold, seg(t, t0 + 0.4, t0 + 0.6));
-  rise('18.12 — 06.01', W / 2, 1380, SANS(72, 500), K.cream, t, t0 + 1.6, 'center', 8);
-  rise('и ни одного — без тебя', W / 2, 1500, SERIF(64, 500, true), K.lilac, t, t0 + 2.2);
+  rise('Дней вместе в путешествии', W / 2, 640, SANS(56, 500), K.cream, t, t0 + 0.1);
+  txt(String(count(t, t0 + 0.5, t0 + 2.0, 14)), W / 2, 1180, SANS(520, 600), K.cream, seg(t, t0 + 0.4, t0 + 0.6));
+  rise('февраль · две недели', W / 2, 1380, SANS(72, 500), K.cream, t, t0 + 1.6, 'center', 4);
+  rise('и каждый — мало', W / 2, 1500, SERIF(64, 500, true), K.ink, t, t0 + 2.2);
 };
 S[3] = (t, t0) => {
-  rise('Городов', W / 2, 560, SANS(64, 500), K.cream, t, t0 + 0.1);
-  const n = count(t, t0 + 0.4, t0 + 1.4, 7); txt(String(n), W / 2, 1040, SANS(520, 600), K.cream, seg(t, t0 + 0.3, t0 + 0.5));
-  const C = ['Росток', 'Берлин', 'Дрезден', 'Прага', 'Вена', 'Братислава', 'Кёльн'], line = C.join(' · ') + ' · ';
-  ctx.save(); ctx.font = SANS(54, 500); const w = ctx.measureText(line).width; ctx.restore();
-  for (const [y, dir] of [[1230, 1], [1310, -1]]) { const off = ((t - t0) * 260 * dir) % w; for (let k = -1; k < 3; k++) txt(line, -off + k * w * dir * dir + (dir < 0 ? -w : 0), y, SANS(54, 500), dir > 0 ? K.ink : K.cream, seg(t, t0 + 1.2, t0 + 1.5), 'left'); }
-  rise('+ один ночной поезд и один замок с привидениями', W / 2, 1460, SERIF(52, 500, true), K.cream, t, t0 + 2.0);
-};
-S[4] = (t, t0) => {
   const r = rng(44); for (let i = 0; i < 80; i++) circle(r() * W, r() * H, 1.5 + r() * 2.5, `rgba(246,241,231,${0.4 + 0.5 * Math.sin(t * 3 + i) ** 2})`);
   for (let k = 0; k < 3; k++) { const q = ((t - t0) * 0.6 + k * 0.33) % 1, x = lerp(1100, -100, q), y = lerp(200 + k * 120, 700 + k * 120, q); const g = ctx.createLinearGradient(x + 220, y - 110, x, y); g.addColorStop(0, 'rgba(255,240,200,0)'); g.addColorStop(1, 'rgba(255,240,200,0.9)'); ctx.strokeStyle = g; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(x + 220, y - 110); ctx.lineTo(x, y); ctx.stroke(); }
   rise('Самое редкое явление года', W / 2, 760, SANS(56, 500), K.lilac, t, t0 + 0.1);
@@ -87,44 +79,53 @@ S[4] = (t, t0) => {
   const sp = seg(t, t0 + 1.3, t0 + 1.6, E.inOut); if (sp > 0) { ctx.strokeStyle = K.red; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(140, 940); ctx.lineTo(140 + 800 * sp, 940); ctx.stroke(); }
   const p = pop(t, t0 + 1.8, 0.4); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1320); ctx.scale(p, p); ctx.shadowColor = K.lilac; ctx.shadowBlur = 80; txt('ты', 0, 0, SERIF(420, 700), K.gold); ctx.restore(); star(W / 2 + 240, 1060, 40 * p, t, K.gold); }
 };
-S[5] = (t, t0) => {
+S[4] = (t, t0) => {
   rise('Твой топ-6 имён', W / 2, 400, SANS(72, 600), K.ink, t, t0 + 0.05);
-  const N = [['Колючка', K.red], ['Чеширский кот', K.purple], ['Инкубчик', K.ink], ['Апельсинка', '#E58A2E'], ['Черничка', '#3A4378'], ['Ролл', '#2F5D46']];
-  N.forEach(([name, c], i) => { const ti = t0 + 0.5 + i * 0.5, p = seg(t, ti, ti + 0.4, E.back), y = 560 + i * 200;
+  const N = [['Котик', K.purple], ['Инкубчик', K.ink], ['Черничка', '#3A4378'], ['Апельсинка', '#E58A2E'], ['Чеширский котик', '#8E63D2'], ['Колючка', K.red]];
+  N.forEach(([name, c], i) => { const ti = t0 + 0.5 + i * 0.55, p = seg(t, ti, ti + 0.4, E.back), y = 560 + i * 200;
     if (p <= 0) return; ctx.save(); ctx.translate((1 - p) * -1100, 0);
     ctx.fillStyle = c; ctx.beginPath(); ctx.roundRect(80, y, 920, 160, 80); ctx.fill();
-    txt(String(i + 1), 170, y + 115, SANS(96, 600), K.cream, 1); txt(name, 270, y + 106, SANS(66, 600), K.cream, 1, 'left');
-    // tiny icons
-    const ix = 900, iy = y + 80;
-    if (i === 0) { ctx.fillStyle = K.cream; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(ix - 40 + k * 30, iy + 20); ctx.lineTo(ix - 28 + k * 30, iy - 30); ctx.lineTo(ix - 16 + k * 30, iy + 20); ctx.fill(); } }
-    if (i === 1) { ctx.strokeStyle = K.cream; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(ix, iy - 20, 46, 0.25 * Math.PI, 0.75 * Math.PI); ctx.stroke(); }
-    if (i === 2) { ctx.fillStyle = K.red; for (const k of [-1, 1]) { ctx.beginPath(); ctx.moveTo(ix + k * 18, iy + 10); ctx.quadraticCurveTo(ix + k * 30, iy - 30, ix + k * 46, iy - 44); ctx.quadraticCurveTo(ix + k * 26, iy - 10, ix + k * 34, iy + 12); ctx.fill(); } }
+    txt(String(i + 1), 170, y + 115, SANS(96, 600), K.cream, 1); txt(name, 270, y + 106, SANS(name.length > 12 ? 58 : 66, 600), K.cream, 1, 'left');
+    const ix = 935, iy = y + 80;
+    if (i === 0) { ctx.fillStyle = K.cream; ctx.beginPath(); ctx.arc(ix, iy + 6, 34, 0, TAU); ctx.fill(); for (const k of [-1, 1]) { ctx.beginPath(); ctx.moveTo(ix + k * 30, iy - 10); ctx.lineTo(ix + k * 26, iy - 48); ctx.lineTo(ix + k * 6, iy - 26); ctx.fill(); } circle(ix - 12, iy + 2, 5, K.purple); circle(ix + 12, iy + 2, 5, K.purple); }
+    if (i === 1) { ctx.fillStyle = K.red; for (const k of [-1, 1]) { ctx.beginPath(); ctx.moveTo(ix + k * 18, iy + 10); ctx.quadraticCurveTo(ix + k * 30, iy - 30, ix + k * 46, iy - 44); ctx.quadraticCurveTo(ix + k * 26, iy - 10, ix + k * 34, iy + 12); ctx.fill(); } }
+    if (i === 2) { circle(ix - 20, iy + 6, 30, '#6E7BC2'); circle(ix + 22, iy - 10, 26, '#8A96D8'); }
     if (i === 3) { circle(ix, iy, 42, '#F7B865'); ctx.fillStyle = '#3F4A3C'; ctx.beginPath(); ctx.ellipse(ix + 14, iy - 46, 22, 9, -0.5, 0, TAU); ctx.fill(); }
-    if (i === 4) { circle(ix - 20, iy + 6, 30, '#6E7BC2'); circle(ix + 22, iy - 10, 26, '#8A96D8'); }
-    if (i === 5) { ctx.fillStyle = '#10140F'; ctx.beginPath(); ctx.arc(ix, iy, 44, 0, TAU); ctx.fill(); circle(ix, iy, 32, K.cream); circle(ix, iy, 12, K.red); }
+    if (i === 4) { ctx.strokeStyle = K.cream; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(ix, iy - 20, 46, 0.25 * Math.PI, 0.75 * Math.PI); ctx.stroke(); }
+    if (i === 5) { ctx.fillStyle = K.cream; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(ix - 40 + k * 30, iy + 20); ctx.lineTo(ix - 28 + k * 30, iy - 30); ctx.lineTo(ix - 16 + k * 30, iy + 20); ctx.fill(); } }
     ctx.restore(); });
 };
-S[6] = (t, t0) => {
+S[5] = (t, t0) => { // prickliness 82 % (purple) — warmth under the thorns: the bar fills, overflows the frame, ∞ (gold)
   rise('Уровень колючести', W / 2, 620, SANS(64, 600), K.cream, t, t0 + 0.05);
-  const b1 = 0.87 * seg(t, t0 + 0.4, t0 + 1.4, E.out); ctx.fillStyle = 'rgba(246,241,231,0.25)'; ctx.beginPath(); ctx.roundRect(100, 680, 880, 90, 45); ctx.fill(); ctx.fillStyle = K.red; ctx.beginPath(); ctx.roundRect(100, 680, Math.max(90, 880 * b1), 90, 45); ctx.fill();
-  txt(`${Math.round(b1 * 100)}%`, W / 2, 900, SANS(120, 600), K.cream, seg(t, t0 + 0.4, t0 + 0.6));
+  const b1 = 0.82 * seg(t, t0 + 0.4, t0 + 1.4, E.out); ctx.fillStyle = 'rgba(246,241,231,0.25)'; ctx.beginPath(); ctx.roundRect(100, 680, 880, 90, 45); ctx.fill(); ctx.fillStyle = '#8E63D2'; ctx.beginPath(); ctx.roundRect(100, 680, Math.max(90, 880 * b1), 90, 45); ctx.fill();
+  txt(`${Math.round(b1 * 100)}%`, W / 2, 900, SANS(120, 600), '#A985E6', seg(t, t0 + 0.4, t0 + 0.6));
   rise('тепла под колючками', W / 2, 1120, SANS(64, 600), K.gold, t, t0 + 1.6);
-  const b2 = seg(t, t0 + 2.0, t0 + 3.2, E.inOut); ctx.fillStyle = 'rgba(246,241,231,0.25)'; ctx.beginPath(); ctx.roundRect(100, 1180, 880, 90, 45); ctx.fill();
-  ctx.fillStyle = K.gold; ctx.beginPath(); ctx.roundRect(100, 1180, Math.max(90, 880 * b2 * 1.35), 90, 45); ctx.fill(); // overflows the frame on purpose
-  txt(`${Math.round(Math.min(1, b2 / 0.74) * 100)}%`, W / 2, 1400, SANS(120, 600), K.gold, seg(t, t0 + 2.0, t0 + 2.2));
-  if (b2 > 0.75) { const p = pop(t, t0 + 2.9); heart(980, 1225, 2.2 * p, K.red); }
+  const b2 = seg(t, t0 + 2.0, t0 + 3.0, E.in); ctx.fillStyle = 'rgba(246,241,231,0.25)'; ctx.beginPath(); ctx.roundRect(100, 1180, 880, 90, 45); ctx.fill();
+  ctx.fillStyle = K.gold; ctx.beginPath(); ctx.roundRect(100, 1180, Math.max(90, 1100 * b2), 90, 45); ctx.fill(); // runs past the edge of the frame
+  if (b2 > 0.8) { const g = seg(t, t0 + 2.8, t0 + 3.4); ctx.save(); ctx.globalAlpha = 0.5 * g; ctx.fillStyle = K.gold; ctx.fillRect(0, 1160 - 30 * g, W, 130 + 60 * g); ctx.restore(); }
+  const inf = pop(t, t0 + 2.8, 0.4); if (inf > 0) { ctx.save(); ctx.translate(W / 2, 1480); ctx.scale(inf, inf); txt('∞', 0, 0, SANS(300, 500), K.gold); ctx.restore(); }
+  else txt(`${Math.round(b2 * 100)}%`, W / 2, 1400, SANS(120, 600), K.gold, seg(t, t0 + 2.0, t0 + 2.2));
 };
-S[7] = (t, t0) => {
+S[6] = (t, t0) => {
   rise('Почесушек за ушком', W / 2, 640, SANS(66, 600), K.ink, t, t0 + 0.05);
   const spin = t < t0 + 1.8; if (spin) { const r = rng(Math.floor(t * 30)); txt(String(Math.floor(r() * 900000 + 100000)), W / 2, 1100, SANS(200, 600), K.ink, seg(t, t0 + 0.3, t0 + 0.5)); }
   else { const p = pop(t, t0 + 1.8, 0.4); ctx.save(); ctx.translate(W / 2, 1060); ctx.scale(p, p); txt('∞', 0, 160, SANS(560, 500), K.ink); ctx.restore(); }
   rise('(кот доволен)', W / 2, 1460, SERIF(70, 500, true), K.purple, t, t0 + 2.3);
 };
+S[7] = (t, t0) => { // the ledger of what there is never enough of
+  rise('А ещё за год', W / 2, 380, SANS(66, 600), K.ink, t, t0 + 0.05);
+  const L = [['Свиданий', 'слишком мало', K.red], ['Поцелуев', 'никогда не достаточно', K.purple], ['Нежности и объятий', 'хочется подарить больше', '#E58A2E'], ['Приятных слов', 'каждый день', '#3A4378'], ['Держание за ручку', 'непрерывно', '#2F5D46']];
+  L.forEach(([k, v, c], i) => { const ti = t0 + 0.5 + i * 0.75, p = seg(t, ti, ti + 0.35, E.out), y = 520 + i * 230; if (p <= 0) return;
+    ctx.save(); ctx.globalAlpha = p; ctx.translate(0, 40 * (1 - p));
+    txt(k, 100, y + 60, SANS(52, 500), K.ink, 1, 'left');
+    ctx.strokeStyle = 'rgba(23,20,43,0.25)'; ctx.setLineDash([4, 10]); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(100, y + 92); ctx.lineTo(980, y + 92); ctx.stroke(); ctx.setLineDash([]);
+    txt(v, 980, y + 160, SERIF(70, 700), c, seg(t, ti + 0.25, ti + 0.5), 'right'); ctx.restore(); });
+};
 S[8] = (t, t0) => {
   rise('Жанр года', W / 2, 680, SANS(64, 600), K.lilac, t, t0 + 0.05);
   rise('романтическая', W / 2, 950, SERIF(130, 700), K.cream, t, t0 + 0.5);
   rise('комедия', W / 2, 1090, SERIF(130, 700), K.cream, t, t0 + 0.8);
-  const p = pop(t, t0 + 1.5); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1290); ctx.rotate(-0.06); ctx.scale(p, p); ctx.fillStyle = K.red; ctx.beginPath(); ctx.roundRect(-280, -80, 560, 120, 60); ctx.fill(); txt('с роллами', 0, 5, SERIF(80, 500, true), K.cream); ctx.restore(); }
+  const p = pop(t, t0 + 1.5); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1290); ctx.rotate(-0.06); ctx.scale(p, p); ctx.fillStyle = K.red; ctx.beginPath(); ctx.roundRect(-300, -80, 600, 120, 60); ctx.fill(); txt('с продолжением', 0, 5, SERIF(76, 500, true), K.cream); ctx.restore(); }
 };
 S[9] = (t, t0) => {
   rise('Ты в топ-1%', W / 2, 760, SANS(110, 600), K.cream, t, t0 + 0.05);

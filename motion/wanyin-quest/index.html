@@ -54,7 +54,8 @@ button:hover { filter: brightness(1.12); }
 .locked .content { display: none; }
 .prize:not(.locked) .lock { display: none; }
 .lock { font: 400 22px/1.4 var(--hand); color: var(--muted); }
-.films { display: grid; gap: 22px; width: 100%; }
+.films { display: grid; gap: 22px; width: 100%; justify-items: center; }
+.films > .bonus, .films > .film { width: 100%; }
 .film { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .film video { width: 100%; max-width: 100%; background: #000; border: 1px solid var(--ink-line); display: block; }
 .film .cap { font: 600 13px/1.3 var(--ui); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
@@ -78,15 +79,14 @@ button:hover { filter: brightness(1.12); }
   <section class="grid" id="grid" aria-label="Загадки"></section>
 
   <section class="prize locked" id="prize" aria-live="polite">
-    <div class="eyebrow">Главный приз</div>
-    <h2>Письмо из Облачных Глубин</h2>
-    <div class="lock">Открой все семь печатей — и свиток развернётся.</div>
+    <div class="eyebrow">Главный приз · премьера</div>
+    <h2>«Глава Цзян»</h2>
+    <div class="lock">Открой все семь печатей — и начнётся премьера.</div>
     <div class="content films">
-      <p>Письмо, которое Сичэнь написал тушью. И два бонуса, которые сняли тайком.</p>
-      <div class="film"><span class="cap">Письмо · 2:08</span><video id="v-letter" controls playsinline preload="metadata" poster="poster-letter.jpg" src="letter.mp4"></video></div>
+      <p>Трейлер фильма о самом колючем и самом любимом Главе. И твой год — в цифрах и именах.</p>
       <div class="bonus">
         <div class="film"><span class="cap">Трейлер «Глава Цзян»</span><video controls playsinline preload="metadata" poster="poster-trailer.jpg" src="trailer.mp4"></video></div>
-        <div class="film"><span class="cap">Итоги года</span><video controls playsinline preload="metadata" poster="poster-wrapped.jpg" src="wrapped.mp4"></video></div>
+        <div class="film"><span class="cap">Твои итоги года</span><video controls playsinline preload="metadata" poster="poster-wrapped.jpg" src="wrapped.mp4"></video></div>
       </div>
       <div class="sign">Во всех жизнях и реальностях — твой Сичэнь</div>
       <div class="big-stamp" aria-label="печать 02:08">02:08</div>
@@ -99,23 +99,30 @@ button:hover { filter: brightness(1.12); }
 // Answers are stored as hashes so the page source does not give them away.
 const norm = s => s.toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-я0-9]/g, '');
 const hash = s => { let x = 2166136261; for (const c of norm(s)) { x ^= c.codePointAt(0); x = Math.imul(x, 16777619); } return (x >>> 0).toString(36); };
+// stem: accepted if the answer contains the stem anywhere (any case, ending or extra words);
+// exact: the whole answer must match (the number codes).
 const R = [
-  { q: 'Я падаю с одежды Главы Гусу Лань. Ты велел меня снять, чтобы он не укололся. Кто я?', a: ['5pekty', '7xbedq', '5gt4s1', '38wb89'], hint: 'Маленькая, острая, с головкой. Держит ткань.',
+  { q: 'Я падаю с одежды Главы Гусу Лань. Ты велел меня снять, чтобы он не укололся. Кто я?', stem: ['1hd21qk'], hint: 'Маленькая, острая, с головкой. Держит ткань.',
     k: 'Купон №1', t: 'Одно ворчание без последствий', v: 'Сичэнь всё равно услышит заботу' },
-  { q: 'В ночь твоего дня рождения небо устраивает звездопад. Как зовут этот метеорный поток?', a: ['xrww5l', '1mtvim0', '13lojq0', '13cyklv', '10ll5j0'], hint: 'Назван в честь созвездия Тельца. Начинается на «Т».',
+  { q: 'В ночь твоего дня рождения небо устраивает звездопад. Как зовут этот метеорный поток?', stem: ['1mtvim0'], hint: 'Назван в честь созвездия Тельца. Начинается на «Т».',
     k: 'Купон №2', t: 'Желание под падающей звездой', v: 'исполняется лично, без очереди' },
-  { q: 'На Хэллоуин я был Безумным Шляпником. А кем был ты?', a: ['ot7gmz', '6fo30k', 'l3c8a9', 'wj712r', '107wnb7', '1ajfdh5', 'vymp37'], hint: 'От него иногда остаётся одна улыбка.',
+  { q: 'На следующий Хэллоуин я буду Безумным Шляпником. А кем будешь ты?', stem: ['l3c8a9', '107wnb7', 'efbzuk'], hint: 'От него иногда остаётся одна улыбка.',
     k: 'Купон №3', t: 'Бесконечное чесание за ушком', v: 'кот доволен — значит, всё правильно' },
-  { q: 'В каком городе нас ждёт Рождество?', a: ['1my4exh', 'oturty', '1lk6egm'], hint: 'Шпили, привидения и ужин при свечах.',
+  { q: 'В каком городе нас ждёт Рождество?', stem: ['168ejuv', '1atpxi5', 'almxip'], hint: 'Шпили, привидения и ужин при свечах.',
     k: 'Купон №4', t: 'Ужин при свечах', v: 'где именно — пусть останется сюрпризом' },
-  { q: 'Где мы встретим Новый год, когда часы пробьют полночь?', a: ['mr6ix2', '1gqzb09', '137h8nd'], hint: 'Собор, мост над Рейном и салют.',
-    k: 'Купон №5', t: 'Поцелуй ровно в полночь', v: 'и ещё несколько — после' },
-  { q: 'Кто взял последний ролл?', any: true, hint: '',
-    k: 'Купон №6', t: 'Последний ролл — всегда твой', v: 'любой ответ верный: ролл и так был твоим' },
-  { q: 'Время, которое значит «мы». Напиши его цифрами.', a: ['qhz0qf', '1g4wyit', '10sjqkr', '13z942j'], hint: 'Им заканчивается письмо. И им же запечатано.',
-    k: 'Печать №7', t: 'Ключ от свитка', v: 'главный приз открыт — листай вниз' },
+  { q: 'Секретный шифр. Влюблённые в Китае говорят «я тебя люблю» цифрами. Скажи так и ты: «люблю тебя — безмерно, бесконечно, безумно, безусловно».', exact: ['1ey3m0y', '198azyz', '1icts2l', 'bmoccm', '17fzswt', '2565ak', '18ife8u', '1l7n2d3', '1kdfuuz', '1tuh1k8', '11n3u7m', '16leb6f', '1jztffq', 'zao812', 'llkvj9', '1fm3ktz', 'eqh89z', 'pguxzr'],
+    hint: 'Самый известный код — три цифры, и он похож на дату 20 мая. Подойдёт любой код со словом «люблю» — и наш собственный тоже.',
+    k: 'Купон №5', t: 'Люблю тебя безмерно, бесконечно, безумно, безусловно', v: 'и ещё: трахни меня' },
+  { q: 'Время, которое значит «мы». Напиши его цифрами.', exact: ['qhz0qf', '1g4wyit'], hint: 'Им заканчивается письмо. И им же запечатано.',
+    k: 'Купон №6', t: 'Ещё одно письмо — когда захочешь', v: 'тушью, кистью и по-настоящему' },
+  { q: 'И последняя, самая трудная. Где мы встретим Новый год, когда часы пробьют полночь?', stem: ['jkx9dv', 'cfg09l', 'cnvpgz'], hint: 'Не город. Не страна. Это место всегда с собой.',
+    k: 'Печать №7', t: 'Поцелуй ровно в полночь', v: 'главный приз открыт — листай вниз' },
 ];
-const KEY = 'wanyin-riddles-v1';
+const check = (r, v) => { const n = norm(v);
+  if (r.exact) return r.exact.includes(hash(n));
+  for (let i = 0; i < n.length; i++) for (let L = 3; L <= 8 && i + L <= n.length; L++) if (r.stem.includes(hash(n.slice(i, i + L)))) return true;
+  return false; };
+const KEY = 'wanyin-riddles-v2';
 let solved = new Set();
 try { solved = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...solved])); } catch (e) {} };
@@ -133,7 +140,7 @@ R.forEach((r, i) => {
   c.querySelector('form').addEventListener('submit', e => {
     e.preventDefault(); const v = c.querySelector('input').value, h = c.querySelector('.hint');
     if (!norm(v)) { h.textContent = 'Напиши ответ.'; h.className = 'hint bad'; return; }
-    if (r.any || r.a.includes(hash(v))) { solved.add(i); save(); c.classList.add('just'); render(); return; }
+    if (check(r, v)) { solved.add(i); save(); c.classList.add('just'); render(); return; }
     tries++; h.className = 'hint bad'; h.textContent = tries >= 2 && r.hint ? 'Подсказка: ' + r.hint : 'Не то. Подумай ещё — Сичэнь верит в тебя.';
   });
 });
