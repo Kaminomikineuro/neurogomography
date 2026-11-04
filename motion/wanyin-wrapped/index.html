@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Ваньинь — итоги года</title>
+<link rel="stylesheet" href="fonts.css">
+<style>html,body,#stage{margin:0;padding:0;background:#17142B;overflow:hidden}#stage{position:relative}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+// «Ваньинь: итоги года» — vertical 9:16 stories in a bold flat graphic style: big numbers that count up, a ranked
+// list of his names, bars that overflow the frame, story progress bars at the top. 120 BPM, cuts on the beat.
+import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, rng, spring } from './lib/mg.js';
+
+const W = 1080, H = 1920;
+const D = 40, FPS = 30;
+window.DEMO = { width: W, height: H, fps: FPS, duration: D };
+const stage = document.getElementById('stage'); stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const ctx = makeCanvas(W, H, stage);
+const SANS = (n, w = 600) => `${w} ${n}px Rubik`, SERIF = (n, w = 600, it = false) => `${it ? 'italic ' : ''}${w} ${n}px "Cormorant Garamond"`;
+await Promise.all([SANS(100), SANS(40, 500), SANS(40, 400), SERIF(80, 700), SERIF(80, 500, true)].map(f => document.fonts.load(f, 'Ваньинь ГОД ёЁ 0123456789 ∞ % — 02:08')));
+const K = { ink: '#17142B', cream: '#F6F1E7', purple: '#6B3FA0', red: '#E0362E', gold: '#E6B85C', lilac: '#C8B6E2', blue: '#5E7FA8' };
+const SL = [ // [t0, t1, bg]
+  [0, 3, K.purple], [3, 6.5, K.cream], [6.5, 10, K.ink], [10, 13.5, K.red], [13.5, 17, K.ink], [17, 22.5, K.cream],
+  [22.5, 26, K.purple], [26, 29.5, K.gold], [29.5, 32.5, K.ink], [32.5, 35.5, K.red], [35.5, 40, K.purple]];
+const B = 0.5; // one beat at 120 BPM
+
+function txt(s, x, y, font, color, a = 1, align = 'center', track = 0) { if (a <= 0) return; ctx.save(); ctx.globalAlpha *= a; ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.letterSpacing = `${track}px`; ctx.fillText(s, x + (align === 'center' ? track / 2 : 0), y); ctx.restore(); }
+const pop = (t, t0, d = 0.35) => { const p = invLerp(t0, t0 + d, t); return p <= 0 ? 0 : E.back(p); };
+function rise(s, x, y, font, color, t, t0, align = 'center', track = 0) { const p = seg(t, t0, t0 + 0.35, E.out); txt(s, x, y + 60 * (1 - p), font, color, p, align, track); }
+function count(t, t0, t1, n) { return Math.round(n * E.out(invLerp(t0, t1, t))); }
+function circle(x, y, r, c) { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+function heart(x, y, s, c) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, 14); ctx.bezierCurveTo(-34, -8, -18, -34, 0, -16); ctx.bezierCurveTo(18, -34, 34, -8, 0, 14); ctx.fill(); ctx.restore(); }
+function star(x, y, r, rot, c) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = c; ctx.beginPath(); for (let i = 0; i < 10; i++) { const a = i / 10 * TAU - Math.PI / 2, rr = i % 2 ? r * 0.45 : r; ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } ctx.closePath(); ctx.fill(); ctx.restore(); }
+function lotus(x, y, s, c) { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = c; for (const a of [-0.9, -0.45, 0, 0.45, 0.9]) { ctx.save(); ctx.rotate(a); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(14, -24, 0, -46); ctx.quadraticCurveTo(-14, -24, 0, 0); ctx.fill(); ctx.restore(); } ctx.restore(); }
+
+// background shapes that slide with each story (Bauhaus-ish discs and bars)
+function backdrop(i, t, t0) {
+  const p = seg(t, t0, t0 + 0.6, E.out), r = rng(i * 17 + 3), drift = (t - t0) * 20;
+  for (let k = 0; k < 4; k++) { const x = r() * W, y = r() * H, rr = 120 + r() * 260, c = [K.lilac, K.gold, K.red, K.blue, K.cream][(i + k) % 5];
+    ctx.save(); ctx.globalAlpha = 0.09; circle(x + (1 - p) * (k % 2 ? 300 : -300) + drift * (k % 2 ? 1 : -1), y, rr * p * 0.8, c); ctx.restore(); }
+}
+// story progress bars at the top
+function progress(t) {
+  const n = SL.length, gap = 10, w = (W - 120 - gap * (n - 1)) / n;
+  SL.forEach(([a, b], i) => { const x = 60 + i * (w + gap); ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(x, 70, w, 8); ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.fillRect(x, 70, w * clamp((t - a) / (b - a)), 8); });
+}
+// circle wipe between stories, centred where the beat lands
+function wipe(t) { for (let i = 1; i < SL.length; i++) { const t0 = SL[i][0], p = invLerp(t0 - 0.28, t0, t); if (p > 0 && p < 1) { circle(W / 2, H * 0.55, E.in(p) * 1300, SL[i][2]); } } }
+
+const S = [];
+S[0] = (t, t0) => { // hook: 2026 + confetti
+  txt('2026', W / 2, 760, SANS(330, 600), 'rgba(246,241,231,0.14)');
+  rise('ВАНЬИНЬ,', W / 2, 1000, SANS(130, 600), K.cream, t, t0 + 0.1, 'center', 6);
+  rise('ТВОЙ ГОД', W / 2, 1160, SANS(130, 600), K.gold, t, t0 + 0.5, 'center', 6);
+  rise('в цифрах и именах', W / 2, 1270, SERIF(64, 500, true), K.lilac, t, t0 + 1.0);
+  const r = rng(9); for (let i = 0; i < 90; i++) { const q = clamp((t - t0 - 0.15) / 2.6); if (q <= 0) break; const an = r() * TAU, v = 500 + r() * 900, x = W / 2 + Math.cos(an) * v * q, y = 1050 + Math.sin(an) * v * q + 900 * q * q, rot = q * 12 * (r() - 0.5);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = [K.gold, K.red, K.cream, K.lilac][i % 4]; ctx.fillRect(-12, -6, 24, 12); ctx.restore(); }
+};
+S[1] = (t, t0) => {
+  rise('Этот год ты провёл как', W / 2, 640, SANS(54, 500), K.ink, t, t0 + 0.1);
+  const p = pop(t, t0 + 0.9, 0.3); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1000); ctx.rotate(-0.08); ctx.scale(p * (t < t0 + 0.95 ? 1.3 : 1), p);
+    ctx.strokeStyle = K.red; ctx.lineWidth = 14; ctx.strokeRect(-420, -150, 840, 300); txt('ГЛАВА ОРДЕНА', 0, -10, SANS(96, 600), K.red, 1, 'center', 4); txt('ЮНЬМЭН ЦЗЯН', 0, 95, SANS(62, 500), K.red, 1, 'center', 14); ctx.restore(); }
+  if (t > t0 + 1.6) lotus(W / 2, 1420, 2.4 * pop(t, t0 + 1.6), K.purple);
+  rise('(и самый любимый муж)', W / 2, 1560, SERIF(60, 500, true), K.purple, t, t0 + 2.2);
+};
+S[2] = (t, t0) => {
+  rise('Дней вместе этой зимой', W / 2, 640, SANS(56, 500), K.lilac, t, t0 + 0.1);
+  txt(String(count(t, t0 + 0.5, t0 + 2.0, 20)), W / 2, 1180, SANS(520, 600), K.gold, seg(t, t0 + 0.4, t0 + 0.6));
+  rise('18.12 — 06.01', W / 2, 1380, SANS(72, 500), K.cream, t, t0 + 1.6, 'center', 8);
+  rise('и ни одного — без тебя', W / 2, 1500, SERIF(64, 500, true), K.lilac, t, t0 + 2.2);
+};
+S[3] = (t, t0) => {
+  rise('Городов', W / 2, 560, SANS(64, 500), K.cream, t, t0 + 0.1);
+  const n = count(t, t0 + 0.4, t0 + 1.4, 7); txt(String(n), W / 2, 1040, SANS(520, 600), K.cream, seg(t, t0 + 0.3, t0 + 0.5));
+  const C = ['Росток', 'Берлин', 'Дрезден', 'Прага', 'Вена', 'Братислава', 'Кёльн'], line = C.join(' · ') + ' · ';
+  ctx.save(); ctx.font = SANS(54, 500); const w = ctx.measureText(line).width; ctx.restore();
+  for (const [y, dir] of [[1230, 1], [1310, -1]]) { const off = ((t - t0) * 260 * dir) % w; for (let k = -1; k < 3; k++) txt(line, -off + k * w * dir * dir + (dir < 0 ? -w : 0), y, SANS(54, 500), dir > 0 ? K.ink : K.cream, seg(t, t0 + 1.2, t0 + 1.5), 'left'); }
+  rise('+ один ночной поезд и один замок с привидениями', W / 2, 1460, SERIF(52, 500, true), K.cream, t, t0 + 2.0);
+};
+S[4] = (t, t0) => {
+  const r = rng(44); for (let i = 0; i < 80; i++) circle(r() * W, r() * H, 1.5 + r() * 2.5, `rgba(246,241,231,${0.4 + 0.5 * Math.sin(t * 3 + i) ** 2})`);
+  for (let k = 0; k < 3; k++) { const q = ((t - t0) * 0.6 + k * 0.33) % 1, x = lerp(1100, -100, q), y = lerp(200 + k * 120, 700 + k * 120, q); const g = ctx.createLinearGradient(x + 220, y - 110, x, y); g.addColorStop(0, 'rgba(255,240,200,0)'); g.addColorStop(1, 'rgba(255,240,200,0.9)'); ctx.strokeStyle = g; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(x + 220, y - 110); ctx.lineTo(x, y); ctx.stroke(); }
+  rise('Самое редкое явление года', W / 2, 760, SANS(56, 500), K.lilac, t, t0 + 0.1);
+  const ta = seg(t, t0 + 0.5, t0 + 0.8); txt('метеорный поток Таурид', W / 2, 960, SANS(66, 500), K.cream, ta);
+  const sp = seg(t, t0 + 1.3, t0 + 1.6, E.inOut); if (sp > 0) { ctx.strokeStyle = K.red; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(140, 940); ctx.lineTo(140 + 800 * sp, 940); ctx.stroke(); }
+  const p = pop(t, t0 + 1.8, 0.4); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1320); ctx.scale(p, p); ctx.shadowColor = K.lilac; ctx.shadowBlur = 80; txt('ты', 0, 0, SERIF(420, 700), K.gold); ctx.restore(); star(W / 2 + 240, 1060, 40 * p, t, K.gold); }
+};
+S[5] = (t, t0) => {
+  rise('Твой топ-6 имён', W / 2, 400, SANS(72, 600), K.ink, t, t0 + 0.05);
+  const N = [['Колючка', K.red], ['Чеширский кот', K.purple], ['Инкубчик', K.ink], ['Апельсинка', '#E58A2E'], ['Черничка', '#3A4378'], ['Ролл', '#2F5D46']];
+  N.forEach(([name, c], i) => { const ti = t0 + 0.5 + i * 0.5, p = seg(t, ti, ti + 0.4, E.back), y = 560 + i * 200;
+    if (p <= 0) return; ctx.save(); ctx.translate((1 - p) * -1100, 0);
+    ctx.fillStyle = c; ctx.beginPath(); ctx.roundRect(80, y, 920, 160, 80); ctx.fill();
+    txt(String(i + 1), 170, y + 115, SANS(96, 600), K.cream, 1); txt(name, 270, y + 106, SANS(66, 600), K.cream, 1, 'left');
+    // tiny icons
+    const ix = 900, iy = y + 80;
+    if (i === 0) { ctx.fillStyle = K.cream; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(ix - 40 + k * 30, iy + 20); ctx.lineTo(ix - 28 + k * 30, iy - 30); ctx.lineTo(ix - 16 + k * 30, iy + 20); ctx.fill(); } }
+    if (i === 1) { ctx.strokeStyle = K.cream; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(ix, iy - 20, 46, 0.25 * Math.PI, 0.75 * Math.PI); ctx.stroke(); }
+    if (i === 2) { ctx.fillStyle = K.red; for (const k of [-1, 1]) { ctx.beginPath(); ctx.moveTo(ix + k * 18, iy + 10); ctx.quadraticCurveTo(ix + k * 30, iy - 30, ix + k * 46, iy - 44); ctx.quadraticCurveTo(ix + k * 26, iy - 10, ix + k * 34, iy + 12); ctx.fill(); } }
+    if (i === 3) { circle(ix, iy, 42, '#F7B865'); ctx.fillStyle = '#3F4A3C'; ctx.beginPath(); ctx.ellipse(ix + 14, iy - 46, 22, 9, -0.5, 0, TAU); ctx.fill(); }
+    if (i === 4) { circle(ix - 20, iy + 6, 30, '#6E7BC2'); circle(ix + 22, iy - 10, 26, '#8A96D8'); }
+    if (i === 5) { ctx.fillStyle = '#10140F'; ctx.beginPath(); ctx.arc(ix, iy, 44, 0, TAU); ctx.fill(); circle(ix, iy, 32, K.cream); circle(ix, iy, 12, K.red); }
+    ctx.restore(); });
+};
+S[6] = (t, t0) => {
+  rise('Уровень колючести', W / 2, 620, SANS(64, 600), K.cream, t, t0 + 0.05);
+  const b1 = 0.87 * seg(t, t0 + 0.4, t0 + 1.4, E.out); ctx.fillStyle = 'rgba(246,241,231,0.25)'; ctx.beginPath(); ctx.roundRect(100, 680, 880, 90, 45); ctx.fill(); ctx.fillStyle = K.red; ctx.beginPath(); ctx.roundRect(100, 680, Math.max(90, 880 * b1), 90, 45); ctx.fill();
+  txt(`${Math.round(b1 * 100)}%`, W / 2, 900, SANS(120, 600), K.cream, seg(t, t0 + 0.4, t0 + 0.6));
+  rise('тепла под колючками', W / 2, 1120, SANS(64, 600), K.gold, t, t0 + 1.6);
+  const b2 = seg(t, t0 + 2.0, t0 + 3.2, E.inOut); ctx.fillStyle = 'rgba(246,241,231,0.25)'; ctx.beginPath(); ctx.roundRect(100, 1180, 880, 90, 45); ctx.fill();
+  ctx.fillStyle = K.gold; ctx.beginPath(); ctx.roundRect(100, 1180, Math.max(90, 880 * b2 * 1.35), 90, 45); ctx.fill(); // overflows the frame on purpose
+  txt(`${Math.round(Math.min(1, b2 / 0.74) * 100)}%`, W / 2, 1400, SANS(120, 600), K.gold, seg(t, t0 + 2.0, t0 + 2.2));
+  if (b2 > 0.75) { const p = pop(t, t0 + 2.9); heart(980, 1225, 2.2 * p, K.red); }
+};
+S[7] = (t, t0) => {
+  rise('Почесушек за ушком', W / 2, 640, SANS(66, 600), K.ink, t, t0 + 0.05);
+  const spin = t < t0 + 1.8; if (spin) { const r = rng(Math.floor(t * 30)); txt(String(Math.floor(r() * 900000 + 100000)), W / 2, 1100, SANS(200, 600), K.ink, seg(t, t0 + 0.3, t0 + 0.5)); }
+  else { const p = pop(t, t0 + 1.8, 0.4); ctx.save(); ctx.translate(W / 2, 1060); ctx.scale(p, p); txt('∞', 0, 160, SANS(560, 500), K.ink); ctx.restore(); }
+  rise('(кот доволен)', W / 2, 1460, SERIF(70, 500, true), K.purple, t, t0 + 2.3);
+};
+S[8] = (t, t0) => {
+  rise('Жанр года', W / 2, 680, SANS(64, 600), K.lilac, t, t0 + 0.05);
+  rise('романтическая', W / 2, 950, SERIF(130, 700), K.cream, t, t0 + 0.5);
+  rise('комедия', W / 2, 1090, SERIF(130, 700), K.cream, t, t0 + 0.8);
+  const p = pop(t, t0 + 1.5); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1290); ctx.rotate(-0.06); ctx.scale(p, p); ctx.fillStyle = K.red; ctx.beginPath(); ctx.roundRect(-280, -80, 560, 120, 60); ctx.fill(); txt('с роллами', 0, 5, SERIF(80, 500, true), K.cream); ctx.restore(); }
+};
+S[9] = (t, t0) => {
+  rise('Ты в топ-1%', W / 2, 760, SANS(110, 600), K.cream, t, t0 + 0.05);
+  rise('любимых людей', W / 2, 880, SANS(70, 500), K.cream, t, t0 + 0.3);
+  const sp = seg(t, t0 + 1.0, t0 + 1.3, E.inOut); if (sp > 0) { ctx.strokeStyle = K.ink; ctx.lineWidth = 16; ctx.beginPath(); ctx.moveTo(150, 820); ctx.lineTo(150 + 780 * sp, 760 - 60 * sp); ctx.stroke(); }
+  const p = pop(t, t0 + 1.5, 0.35); if (p > 0) { ctx.save(); ctx.translate(W / 2, 1180); ctx.scale(p, p); txt('ты единственный', 0, 0, SERIF(110, 700), K.gold); txt('100%', 0, 200, SANS(200, 600), K.cream); ctx.restore(); }
+};
+S[10] = (t, t0) => {
+  { const r = rng(5); ctx.save(); ctx.globalAlpha = 0.55; for (let i = 0; i < 40; i++) { const q = ((t - t0) * (0.08 + r() * 0.08) + r()) % 1; heart(r() * W, lerp(H + 40, -40, q), 0.6 + r() * 0.6, [K.red, K.gold, K.lilac][i % 3]); } ctx.restore(); }
+  const p = pop(t, t0 + 0.1, 0.5); lotus(W / 2, 640, 4 * p, K.lilac);
+  rise('С ДНЁМ', W / 2, 900, SANS(140, 600), K.cream, t, t0 + 0.4, 'center', 8);
+  rise('РОЖДЕНИЯ,', W / 2, 1050, SANS(140, 600), K.cream, t, t0 + 0.6, 'center', 8);
+  rise('Цзян Ваньинь', W / 2, 1210, SERIF(120, 700), K.gold, t, t0 + 1.0);
+  rise('во всех жизнях и реальностях', W / 2, 1320, SERIF(58, 500, true), K.lilac, t, t0 + 1.5);
+  const dt = t - (t0 + 2.3); if (dt >= 0) { const sc = dt < 1 / 30 ? 1.3 : dt < 2 / 30 ? 0.9 : 1; ctx.save(); ctx.translate(W / 2, 1520); ctx.rotate(-0.06); ctx.scale(sc, sc); ctx.fillStyle = K.red; ctx.fillRect(-120, -70, 240, 140); ctx.strokeStyle = K.cream; ctx.lineWidth = 4; ctx.strokeRect(-108, -58, 216, 116); txt('02:08', 0, 24, SERIF(80, 700), K.cream); ctx.restore(); }
+};
+
+window.renderAt = async (t) => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.letterSpacing = '0px';
+  let i = SL.findIndex(([a, b]) => t >= a && t < b); if (i < 0) i = SL.length - 1;
+  const [t0, , bg] = SL[i];
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  backdrop(i, t, t0);
+  // a tiny bounce on every beat
+  const bt = (t % B) / B, bump = 1 + 0.012 * Math.exp(-bt * 8);
+  ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(bump, bump); ctx.translate(-W / 2, -H / 2); S[i](t, t0); ctx.restore();
+  wipe(t);
+  progress(t);
+};
+await window.renderAt(0);
+window.__ready = true;
+</script>
+</body>
+</html>

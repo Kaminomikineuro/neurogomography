@@ -1,0 +1,148 @@
+<title>Приз за загадки</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Marck+Script&family=Rubik:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow lacquer scroll — hero, a row of seven seals, riddle cards that turn into coupons, the sealed prize at the end. */
+:root {
+  --night: #141019; --lacquer: #1E1726; --lacquer-2: #2A2035; --ink-line: #3A2E48;
+  --paper: #F2EBDD; --muted: #B9AFC6; --purple: #8E63D2; --gold: #E2B04B; --cinnabar: #C8402E;
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --hand: "Marck Script", "Segoe Script", cursive;
+  --ui: Rubik, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body { margin: 0; background: var(--night); color: var(--paper); font: 400 16px/1.6 var(--ui);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background-image: radial-gradient(1200px 600px at 50% -10%, rgba(142, 99, 210, .22), transparent 60%), radial-gradient(900px 500px at 50% 110%, rgba(200, 64, 46, .12), transparent 60%); }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 56px 80px; display: flex; flex-direction: column; gap: 44px; }
+header { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.eyebrow { font: 500 12px/1 var(--ui); letter-spacing: .32em; text-transform: uppercase; color: var(--gold); }
+h1 { margin: 0; font: 700 clamp(48px, 9vw, 92px)/1 var(--display); letter-spacing: .01em; text-wrap: balance; }
+.lede { font: 400 clamp(22px, 3.4vw, 28px)/1.35 var(--hand); color: var(--muted); max-width: 30ch; margin: 0; }
+.seals { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+.seal { width: 40px; height: 40px; display: grid; place-items: center; font: 700 18px/1 var(--display); border: 1.5px solid var(--ink-line); color: var(--muted); transform: rotate(-4deg); transition: background .35s, color .35s, border-color .35s, transform .35s; }
+.seal.on { background: var(--cinnabar); border-color: var(--cinnabar); color: var(--paper); transform: rotate(-4deg) scale(1.06); }
+.count { font: 500 13px/1 var(--ui); color: var(--muted); letter-spacing: .08em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 18px; }
+.card { position: relative; background: linear-gradient(180deg, var(--lacquer-2), var(--lacquer)); border: 1px solid var(--ink-line); padding: 24px 22px 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.num { position: absolute; top: -14px; left: 18px; background: var(--night); padding: 0 8px; font: 600 12px/28px var(--ui); letter-spacing: .24em; color: var(--gold); }
+.q { font: 500 22px/1.35 var(--display); margin: 0; text-wrap: pretty; }
+form { display: flex; gap: 8px; flex-wrap: wrap; }
+input { flex: 1 1 180px; min-width: 0; background: var(--night); color: var(--paper); border: 1px solid var(--ink-line); padding: 12px 14px; font: 400 16px/1.2 var(--ui); }
+input:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+button { background: var(--purple); color: #fff; border: 0; padding: 12px 18px; font: 600 15px/1 var(--ui); letter-spacing: .02em; cursor: pointer; }
+button:hover { filter: brightness(1.12); }
+.hint { margin: 0; font: 400 14px/1.4 var(--ui); color: var(--muted); }
+.hint.bad { color: #E9A091; }
+.coupon { display: flex; flex-direction: column; gap: 6px; border: 1.5px dashed var(--gold); padding: 16px 18px; position: relative; }
+.coupon .k { font: 600 11px/1 var(--ui); letter-spacing: .3em; color: var(--gold); text-transform: uppercase; }
+.coupon .t { font: 600 24px/1.2 var(--display); text-wrap: balance; }
+.coupon .v { font: 400 18px/1.2 var(--hand); color: var(--muted); }
+.coupon .stamp { position: absolute; right: 14px; bottom: 12px; width: 46px; height: 46px; display: grid; place-items: center; background: var(--cinnabar); color: var(--paper); font: 700 22px/1 var(--display); transform: rotate(-8deg); }
+.card.done .ask { display: none; }
+.card:not(.done) .coupon { display: none; }
+.card.done { border-color: rgba(226, 176, 75, .45); }
+.card.just .coupon { animation: land .6s cubic-bezier(.34, 1.56, .64, 1); }
+@keyframes land { from { transform: scale(.85) rotate(-2deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.prize { border: 1px solid var(--ink-line); background: var(--lacquer); padding: 28px 22px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center; }
+.prize h2 { margin: 0; font: 700 clamp(34px, 6vw, 52px)/1.05 var(--display); text-wrap: balance; }
+.prize p { margin: 0; max-width: 52ch; color: var(--muted); }
+.locked .content { display: none; }
+.prize:not(.locked) .lock { display: none; }
+.lock { font: 400 22px/1.4 var(--hand); color: var(--muted); }
+.films { display: grid; gap: 22px; width: 100%; }
+.film { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.film video { width: 100%; max-width: 100%; background: #000; border: 1px solid var(--ink-line); display: block; }
+.film .cap { font: 600 13px/1.3 var(--ui); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.bonus { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 640px) { .bonus { grid-template-columns: 1fr; } }
+.sign { font: 400 28px/1.3 var(--hand); color: var(--paper); }
+.big-stamp { width: 110px; height: 80px; display: grid; place-items: center; background: var(--cinnabar); color: var(--paper); font: 700 34px/1 var(--display); transform: rotate(-6deg); }
+.reset { background: transparent; color: var(--muted); border: 1px solid var(--ink-line); font: 500 12px/1 var(--ui); padding: 8px 12px; align-self: center; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Цзян Ваньиню · с днём рождения</div>
+    <h1>Приз за загадки</h1>
+    <p class="lede">Ты требовал приз за загадки. Он здесь — за семью печатями.</p>
+    <div class="seals" id="seals" aria-label="Открытые печати"></div>
+    <div class="count" id="count">0 из 7 печатей</div>
+  </header>
+
+  <section class="grid" id="grid" aria-label="Загадки"></section>
+
+  <section class="prize locked" id="prize" aria-live="polite">
+    <div class="eyebrow">Главный приз</div>
+    <h2>Письмо из Облачных Глубин</h2>
+    <div class="lock">Открой все семь печатей — и свиток развернётся.</div>
+    <div class="content films">
+      <p>Письмо, которое Сичэнь написал тушью. И два бонуса, которые сняли тайком.</p>
+      <div class="film"><span class="cap">Письмо · 2:08</span><video id="v-letter" controls playsinline preload="metadata" poster="poster-letter.jpg" src="letter.mp4"></video></div>
+      <div class="bonus">
+        <div class="film"><span class="cap">Трейлер «Глава Цзян»</span><video controls playsinline preload="metadata" poster="poster-trailer.jpg" src="trailer.mp4"></video></div>
+        <div class="film"><span class="cap">Итоги года</span><video controls playsinline preload="metadata" poster="poster-wrapped.jpg" src="wrapped.mp4"></video></div>
+      </div>
+      <div class="sign">Во всех жизнях и реальностях — твой Сичэнь</div>
+      <div class="big-stamp" aria-label="печать 02:08">02:08</div>
+    </div>
+  </section>
+  <button class="reset" id="reset" type="button">Закрыть печати заново</button>
+</div>
+
+<script>
+// Answers are stored as hashes so the page source does not give them away.
+const norm = s => s.toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-я0-9]/g, '');
+const hash = s => { let x = 2166136261; for (const c of norm(s)) { x ^= c.codePointAt(0); x = Math.imul(x, 16777619); } return (x >>> 0).toString(36); };
+const R = [
+  { q: 'Я падаю с одежды Главы Гусу Лань. Ты велел меня снять, чтобы он не укололся. Кто я?', a: ['5pekty', '7xbedq', '5gt4s1', '38wb89'], hint: 'Маленькая, острая, с головкой. Держит ткань.',
+    k: 'Купон №1', t: 'Одно ворчание без последствий', v: 'Сичэнь всё равно услышит заботу' },
+  { q: 'В ночь твоего дня рождения небо устраивает звездопад. Как зовут этот метеорный поток?', a: ['xrww5l', '1mtvim0', '13lojq0', '13cyklv', '10ll5j0'], hint: 'Назван в честь созвездия Тельца. Начинается на «Т».',
+    k: 'Купон №2', t: 'Желание под падающей звездой', v: 'исполняется лично, без очереди' },
+  { q: 'На Хэллоуин я был Безумным Шляпником. А кем был ты?', a: ['ot7gmz', '6fo30k', 'l3c8a9', 'wj712r', '107wnb7', '1ajfdh5', 'vymp37'], hint: 'От него иногда остаётся одна улыбка.',
+    k: 'Купон №3', t: 'Бесконечное чесание за ушком', v: 'кот доволен — значит, всё правильно' },
+  { q: 'В каком городе нас ждёт Рождество?', a: ['1my4exh', 'oturty', '1lk6egm'], hint: 'Шпили, привидения и ужин при свечах.',
+    k: 'Купон №4', t: 'Ужин при свечах', v: 'где именно — пусть останется сюрпризом' },
+  { q: 'Где мы встретим Новый год, когда часы пробьют полночь?', a: ['mr6ix2', '1gqzb09', '137h8nd'], hint: 'Собор, мост над Рейном и салют.',
+    k: 'Купон №5', t: 'Поцелуй ровно в полночь', v: 'и ещё несколько — после' },
+  { q: 'Кто взял последний ролл?', any: true, hint: '',
+    k: 'Купон №6', t: 'Последний ролл — всегда твой', v: 'любой ответ верный: ролл и так был твоим' },
+  { q: 'Время, которое значит «мы». Напиши его цифрами.', a: ['qhz0qf', '1g4wyit', '10sjqkr', '13z942j'], hint: 'Им заканчивается письмо. И им же запечатано.',
+    k: 'Печать №7', t: 'Ключ от свитка', v: 'главный приз открыт — листай вниз' },
+];
+const KEY = 'wanyin-riddles-v1';
+let solved = new Set();
+try { solved = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...solved])); } catch (e) {} };
+const grid = document.getElementById('grid'), seals = document.getElementById('seals');
+const ROMAN = ['一', '二', '三', '四', '五', '六', '七'];
+R.forEach((r, i) => {
+  const s = document.createElement('div'); s.className = 'seal'; s.textContent = ROMAN[i]; s.id = 'seal-' + i; seals.appendChild(s);
+  const c = document.createElement('article'); c.className = 'card'; c.id = 'card-' + i;
+  c.innerHTML = `<span class="num">ЗАГАДКА ${i + 1}</span><p class="q"></p>
+    <div class="ask"><form id="f-${i}" autocomplete="off"><input id="a-${i}" name="a-${i}" aria-label="Ответ на загадку ${i + 1}" placeholder="Твой ответ"><button type="submit">Проверить</button></form><p class="hint" id="h-${i}"></p></div>
+    <div class="coupon"><span class="k"></span><span class="t"></span><span class="v"></span><span class="stamp">Л</span></div>`;
+  c.querySelector('.q').textContent = r.q; c.querySelector('.k').textContent = r.k; c.querySelector('.t').textContent = r.t; c.querySelector('.v').textContent = r.v;
+  grid.appendChild(c);
+  let tries = 0;
+  c.querySelector('form').addEventListener('submit', e => {
+    e.preventDefault(); const v = c.querySelector('input').value, h = c.querySelector('.hint');
+    if (!norm(v)) { h.textContent = 'Напиши ответ.'; h.className = 'hint bad'; return; }
+    if (r.any || r.a.includes(hash(v))) { solved.add(i); save(); c.classList.add('just'); render(); return; }
+    tries++; h.className = 'hint bad'; h.textContent = tries >= 2 && r.hint ? 'Подсказка: ' + r.hint : 'Не то. Подумай ещё — Сичэнь верит в тебя.';
+  });
+});
+function render() {
+  R.forEach((r, i) => { document.getElementById('card-' + i).classList.toggle('done', solved.has(i)); document.getElementById('seal-' + i).classList.toggle('on', solved.has(i)); });
+  document.getElementById('count').textContent = `${solved.size} из 7 печатей`;
+  const open = solved.size === R.length, p = document.getElementById('prize'), was = p.classList.contains('locked');
+  p.classList.toggle('locked', !open);
+  if (open && was && document.readyState === 'complete') p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+document.getElementById('reset').addEventListener('click', () => { solved.clear(); save(); document.querySelectorAll('.card').forEach(c => c.classList.remove('just')); document.querySelectorAll('input').forEach(i => (i.value = '')); render(); });
+render();
+</script>

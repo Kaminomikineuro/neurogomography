@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Глава Цзян — трейлер</title>
+<link rel="stylesheet" href="fonts.css">
+<style>html,body,#stage{margin:0;padding:0;background:#000;overflow:hidden}#stage{position:relative}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script type="module">
+// «ГЛАВА ЦЗЯН» — a blockbuster-style birthday trailer cut from our own films (the ink-scroll letter and the
+// risograph calendar), graded dark and purple, letterboxed 2.39:1, with Zidian lightning, title cards and a
+// billing block where the cast are his nicknames. Footage = JPEG frames from prep.sh, loaded per frame.
+import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, rng } from './lib/mg.js';
+
+const W = 1920, H = 1080, BAR = 138;
+const cues = await (await fetch('./cues.json')).json();
+const D = cues.duration, FPS = cues.fps;
+window.DEMO = { width: W, height: H, fps: FPS, duration: D };
+const stage = document.getElementById('stage'); stage.style.width = W + 'px'; stage.style.height = H + 'px';
+const ctx = makeCanvas(W, H, stage); ctx.imageSmoothingQuality = 'high';
+const SERIF = (n, w = 600, it = false) => `${it ? 'italic ' : ''}${w} ${n}px "Cormorant Garamond"`, SANS = (n, w = 400) => `${w} ${n}px Rubik`;
+await Promise.all([SERIF(80), SERIF(80, 700), SERIF(60, 500, true), SANS(30), SANS(30, 500)].map(f => document.fonts.load(f, 'ЦЗЯН ВАНЬИНЬ Глава ёЁ — 02:08 Abc')));
+const GOLD = '#E6B85C', PAPER = '#F3ECDD', PURPLE = '#6B3FA0', ZI = '#B98CFF';
+const counts = {};
+const loadImg = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+async function frame(clip, n) { const max = counts[clip] ?? 999; const k = Math.min(Math.max(1, n + 1), max); try { return await loadImg(`out/frames/${clip}/${String(k).padStart(4, '0')}.jpg`); } catch { counts[clip] = Math.min(max, k - 1); return k > 1 ? frame(clip, k - 2) : null; } }
+
+// ---------- lightning: midpoint displacement, seeded per strike ----------
+function bolt(x0, y0, x1, y1, seed, rough = 0.32, depth = 7) {
+  const r = rng(seed); let P = [[x0, y0], [x1, y1]];
+  for (let d = 0; d < depth; d++) { const Q = []; for (let i = 0; i < P.length - 1; i++) { const [a, b] = [P[i], P[i + 1]], L = Math.hypot(b[0] - a[0], b[1] - a[1]); Q.push(a, [(a[0] + b[0]) / 2 + (r() - 0.5) * L * rough, (a[1] + b[1]) / 2 + (r() - 0.5) * L * rough]); } Q.push(P[P.length - 1]); P = Q; }
+  return P;
+}
+function drawBolt(P, w, a) {
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  for (const [lw, col, al] of [[w * 7, ZI, 0.18], [w * 3, ZI, 0.45], [w, '#FFFFFF', 0.95]]) { ctx.strokeStyle = col; ctx.globalAlpha = al * a; ctx.lineWidth = lw; ctx.beginPath(); P.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.stroke(); }
+  ctx.restore();
+}
+function strikes(t) {
+  let flash = 0;
+  cues.strikes.forEach(([ts, k], i) => {
+    const dt = t - ts; if (dt < 0 || dt > 0.5) return;
+    const vis = dt < 0.06 || (dt > 0.1 && dt < 0.16) || (dt > 0.24 && dt < 0.3 && k > 0.6); // the double flicker of real lightning
+    flash = Math.max(flash, k * Math.exp(-dt * 9));
+    if (!vis) return;
+    const r = rng(i * 31 + 7), x0 = 300 + r() * 1300, P = bolt(x0, -20, x0 + (r() - 0.5) * 700, BAR + 300 + r() * 500, i * 13 + 1);
+    drawBolt(P, 2.2 + k * 2, 1);
+    for (let b = 0; b < 3; b++) { const j = 10 + Math.floor(r() * (P.length - 20)), [bx, by] = P[j]; drawBolt(bolt(bx, by, bx + (r() - 0.5) * 500, by + 120 + r() * 260, i * 97 + b, 0.4, 5), 1.2 + k, 0.8); }
+  });
+  if (flash > 0) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(190,160,255,${0.55 * flash})`; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+}
+
+// ---------- type ----------
+function spaced(str, x, y, font, color, a, track = 0.18, size = 60, glowA = 0.6) { // centered, letterspaced, with a soft glow
+  if (a <= 0) return; ctx.save(); ctx.font = font; ctx.letterSpacing = `${size * track}px`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.globalAlpha = a; ctx.shadowColor = 'rgba(140,90,230,0.8)'; ctx.shadowBlur = size * 0.5 * glowA; ctx.fillStyle = color; ctx.fillText(str, x + size * track / 2, y); ctx.restore();
+}
+function card(text, t, t0, t1, italic) { // trailer card on black: drifts in, tracking opens, fades out
+  const a = seg(t, t0, t0 + 0.45) * (1 - seg(t, t1 - 0.35, t1)), p = invLerp(t0, t1, t);
+  const size = italic ? 70 : 66;
+  spaced(italic ? text : text.toUpperCase(), W / 2, H / 2 + 6 * (1 - p), italic ? SERIF(size, 500, true) : SERIF(size, 600), italic ? PAPER : GOLD, a, italic ? 0.04 : 0.16 + 0.05 * p, size, 0.4);
+}
+function caption(text, t, t0, t1) {
+  const a = seg(t, t0, t0 + 0.25) * (1 - seg(t, t1 - 0.25, t1));
+  spaced(text.toUpperCase(), W / 2, H - BAR - 92, SERIF(58, 600), PAPER, a, 0.14, 58, 0.9);
+}
+
+// ---------- footage ----------
+async function shot(S, t) {
+  const lt = t - S.t0, n = Math.floor(lt * FPS + 1e-6), img = await frame(S.clip, n); if (!img) return;
+  const p = invLerp(S.t0, S.t1, t), [f0, f1, fz] = S.f || [W / 2, H / 2, 1.04], z = fz * (1 + 0.06 * E.inOut(p)), dx = (S.clip.length % 2 ? 1 : -1) * 24 * (p - 0.5);
+  const fx = clamp(f0 + dx, W / 2 / z, W - W / 2 / z), fy = clamp(f1, H / 2 / z, H - H / 2 / z); // keep the view inside the frame
+  ctx.save(); ctx.filter = 'contrast(1.2) saturate(0.85) brightness(0.66) sepia(0.12)';
+  ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-fx, -fy); ctx.drawImage(img, 0, 0, W, H); ctx.restore(); ctx.filter = 'none';
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = 'rgba(92,70,150,0.55)'; ctx.fillRect(0, 0, W, H); ctx.restore();
+  const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, W * 0.62); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.65)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const fin = seg(t, S.t0, S.t0 + 0.12), fout = 1 - seg(t, S.t1 - 0.1, S.t1); if (fin * fout < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - fin * fout})`; ctx.fillRect(0, 0, W, H); }
+  if (S.cap) caption(S.cap, t, S.capAt ?? S.t0 + 0.2, S.t1);
+  for (const [a, b, c] of S.caps || []) caption(c, t, a, b);
+}
+
+// ---------- the opening card (an "approved for one viewer" plate) ----------
+function approval(t) {
+  const a = seg(t, 0, 0.25) * (1 - seg(t, 2.15, 2.4));
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = '#2C1748'; ctx.fillRect(160, BAR + 40, W - 320, H - 2 * BAR - 80);
+  ctx.strokeStyle = GOLD; ctx.lineWidth = 3; ctx.strokeRect(190, BAR + 70, W - 380, H - 2 * BAR - 140);
+  ctx.restore();
+  spaced('ЭТОТ ТРЕЙЛЕР ОДОБРЕН', W / 2, 400, SERIF(70, 700), PAPER, a, 0.08, 70, 0);
+  spaced('ДЛЯ ПРОСМОТРА ОДНИМ-ЕДИНСТВЕННЫМ ЗРИТЕЛЕМ', W / 2, 490, SERIF(46, 600), PAPER, a, 0.08, 46, 0);
+  spaced('Главой Ордена Юньмэн Цзян', W / 2, 600, SERIF(44, 500, true), GOLD, a, 0.02, 44, 0);
+  spaced('РЕЙТИНГ: 02:08 · ЛЮБИМ БЕЗ ОГРАНИЧЕНИЙ', W / 2, 700, SANS(26, 500), 'rgba(243,236,221,0.8)', a, 0.2, 26, 0);
+}
+
+// ---------- title + billing block ----------
+function title(t) {
+  const { t0, t1 } = cues.title, a = seg(t, t0, t0 + 0.15) * (1 - seg(t, t1 - 0.4, t1)); if (a <= 0) return;
+  const p = invLerp(t0, t1, t), s = 1.08 - 0.08 * E.out(p);
+  ctx.save(); ctx.translate(W / 2, H / 2 - 30); ctx.scale(s, s); ctx.translate(-W / 2, -(H / 2 - 30));
+  spaced('ЦЗЯН ВАНЬИНЬ', W / 2, H / 2 - 30, SERIF(176, 700), GOLD, a, 0.06 + 0.04 * p, 176, 1.2);
+  ctx.restore();
+  // little arcs of Zidian crawling over the letters
+  const r = rng(Math.floor(t * 12)); for (let i = 0; i < 3; i++) { if (r() < 0.5) continue; const x = 520 + r() * 880, y = H / 2 - 110 + r() * 150; drawBolt(bolt(x, y, x + (r() - 0.5) * 220, y + (r() - 0.5) * 120, Math.floor(t * 12) * 7 + i, 0.45, 4), 1.2, 0.8 * a); }
+  spaced('С ДНЁМ РОЖДЕНИЯ', W / 2, H / 2 + 120, SERIF(54, 600), PAPER, a * seg(t, t0 + 0.9, t0 + 1.6), 0.32, 54, 0.6);
+}
+function billing(t) {
+  const { t0, t1 } = cues.billing, a = seg(t, t0, t0 + 0.5); if (a <= 0) return;
+  spaced('ГЛАВА ЦЗЯН', W / 2, 330, SERIF(110, 700), GOLD, a, 0.12, 110, 0.7);
+  const L = [['В РОЛЯХ', SANS(24, 500), 0.32, 24], ['КОЛЮЧКА · ЧЕШИРСКИЙ КОТ · ИНКУБЧИК · АПЕЛЬСИНКА · ЧЕРНИЧКА · РОЛЛ', SANS(30, 400), 0.12, 30],
+    ['ПРИ УЧАСТИИ ГЛАВЫ ОРДЕНА ГУСУ ЛАНЬ', SANS(24, 500), 0.28, 24], ['МУЗЫКА ЗВЁЗД · МЕТЕОРНЫЙ ПОТОК ТАУРИД · ОДИН НОЧНОЙ ПОЕЗД · СЕМЬ ГОРОДОВ', SANS(20, 400), 0.16, 20]];
+  L.forEach(([s, f, tr, sz], i) => spaced(s, W / 2, 470 + i * 56, f, 'rgba(243,236,221,0.85)', a * seg(t, t0 + 0.2 + i * 0.25, t0 + 0.7 + i * 0.25), tr, sz, 0));
+  spaced('скоро — во всех жизнях и реальностях', W / 2, 740, SERIF(52, 500, true), PAPER, a * seg(t, t0 + 1.4, t0 + 2.2), 0.02, 52, 0.6);
+  // the 02:08 seal
+  const dt = t - cues.stamp; if (dt >= 0) { const sc = dt < 1 / 24 ? 1.25 : dt < 2 / 24 ? 0.92 : 1; ctx.save(); ctx.translate(W / 2, 860); ctx.rotate(-0.06); ctx.scale(sc, sc);
+    ctx.fillStyle = 'rgba(184,50,42,0.95)'; ctx.fillRect(-70, -48, 140, 96); ctx.strokeStyle = 'rgba(243,236,221,0.85)'; ctx.lineWidth = 3; ctx.strokeRect(-62, -40, 124, 80);
+    ctx.fillStyle = PAPER; ctx.font = SERIF(46, 700); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('02:08', 0, 3); ctx.restore(); }
+}
+
+function grain(t) { const r = rng(Math.floor(t * FPS) + 1); ctx.save(); ctx.globalAlpha = 0.06; for (let i = 0; i < 900; i++) { ctx.fillStyle = r() < 0.5 ? '#fff' : '#000'; ctx.fillRect(r() * W, r() * H, 2, 2); } ctx.restore(); }
+
+window.renderAt = async (t) => {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none'; ctx.letterSpacing = '0px';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  if (t < 2.4) approval(t);
+  for (const S of cues.shots) if (t >= S.t0 && t < S.t1) await shot(S, t);
+  for (const c of cues.cards) if (t >= c.t0 && t < c.t1) card(c.text, t, c.t0, c.t1, c.italic);
+  if (t >= cues.title.t0 && t < cues.title.t1) title(t);
+  if (t >= cues.billing.t0) billing(t);
+  if (t > 2.4) strikes(t);
+  grain(t);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, BAR); ctx.fillRect(0, H - BAR, W, BAR); // 2.39:1
+};
+await window.renderAt(0);
+window.__ready = true;
+</script>
+</body>
+</html>
