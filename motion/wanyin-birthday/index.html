@@ -10,7 +10,7 @@
 <div id="stage"></div>
 <script type="module">
 // «Письмо из Облачных Глубин»: a birthday letter from Lan Xichen to Jiang Wanyin, painted in ink on one long
-// handscroll. 2:08 exactly (128 s): 8 s prologue + 8 scenes × 15 s. The camera travels along the scroll; mist
+// handscroll. 2:08 exactly (128 s): prologue, ten paintings, a dive into the fire, the whole scroll, the last words. The camera travels along the scroll; mist
 // separates the paintings; the letter is written by hand into the empty sky of each painting.
 import { E, clamp, lerp, invLerp, seg, makeCanvas, TAU, rng } from './lib/mg.js';
 import { C, rgba, paperTexture, wash, glow, brush, line, writeLine, textWidth, seal } from './lib/ink.js';
@@ -27,42 +27,56 @@ const SCRIPT = n => `400 ${n}px "Marck Script"`, SERIF = (n, w = 600) => `${w} $
 await Promise.all([SCRIPT(54), SERIF(96), SERIF(60, 700)].map(f => document.fonts.load(f, 'Цзян Ваньинь Ваньиню ёЁ — 02:08 Abc')));
 const tex = paperTexture(W, H);
 
-const SC = [null, S.s1, S.s2, S.s3, S.s4, S.s5, S.s6, S.s7, S.s8];
-const Tk = k => T0[k - 1], cx = k => (k - 1) * SW + 960;
-const LEFT = cx(1) - SW / 2, RIGHT = cx(8) + SW / 2, ROD = RIGHT + 150;
+const FN = { pier: S.pier, taurids: S.taurids, sun: S.sun, thorn: S.thorn, cheshire: S.cheshire, incubus: S.incubus, orange: S.orange, berry: S.berryScene, roll: S.roll, home: S.home };
+const N = T0.length, SC = [null, ...T0.map(s => FN[s.id])];
+const Tk = k => T0[k - 1].t, cx = k => (k - 1) * SW + 960;
+const LEFT = cx(1) - SW / 2, RIGHT = cx(N) + SW / 2, ROD = RIGHT + 150;
+const K_HOME = N, FIRE = [cx(K_HOME) - 960 + S.FIRE.x, S.FIRE.y];
 
 // ---- letters: line start times (lt, seconds into the scene) ----
 const LET = {};
-for (const B of cues.letters) {
-  const cps = B.cps || 15; let t = (B.t0 ?? 0) - Tk(B.scene);
-  B.times = B.lines.map((s, i) => { const o = { start: B.at ? B.at[i] : t, dur: s.length / cps }; t = o.start + o.dur + 0.5 + (/[.!?]$/.test(s) ? 0.3 : 0); return o; });
-  B.size = B.size || 54; B.lh = B.lh || 1.42; LET[B.scene] = B;
+function timeLines(B, base) {
+  const cps = B.cps || 15; let t = B.t0 - base;
+  B.times = B.lines.map(s => { const o = { start: t, dur: s.length / cps }; t = o.start + o.dur + 0.5 + (/[.!?]$/.test(s) ? 0.3 : 0); return o; });
+  B.size = B.size || 54; B.lh = B.lh || 1.42;
 }
-window.__letters = cues.letters.map(B => ({ scene: B.scene, lines: B.lines.map((s, i) => [+(Tk(B.scene) + B.times[i].start).toFixed(2), s]) }));
-function letters(k, lt, t) {
-  const B = LET[k]; if (!B) return;
-  const next = k < 8 ? Tk(k + 1) : 999, a = k < 8 ? 1 - seg(t, next - 1.9, next - 1.0, E.inOut) : 1 - seg(t, cues.outro.zoom[0] + 0.6, cues.outro.zoom[0] + 1.6);
+for (const B of cues.letters) { timeLines(B, Tk(B.scene)); (LET[B.scene] = LET[B.scene] || []).push(B); }
+for (const B of cues.screen) timeLines(B, 0);
+function drawBlock(B, lt, a, k = 0) {
   if (a <= 0) return;
   const col = B.color === 'paper' ? C.paper : C.ink;
-  B.lines.forEach((s, i) => {
-    const big = B.big === i, size = big ? B.size * 1.3 : B.size, y = B.y + B.size * B.lh * i + (big ? B.size * 0.35 : 0) + (B.big !== undefined && i > B.big ? B.size * 0.5 : 0);
-    const p = clamp((lt - B.times[i].start) / B.times[i].dur);
-    writeLine(ctx, s, B.x, y, size, SCRIPT(size), big ? C.purple : col, p, a, B.align || 'left');
-  });
-  if (B.seal !== false) { const n = B.lines.length - 1, last = B.times[n], ts = last.start + last.dur + 0.45, y = B.y + B.size * B.lh * n;
-    seal(ctx, B.x + textWidth(ctx, B.lines[n], SCRIPT(B.size)) + 56, y - B.size * 0.32, 50, 'Л', lt - ts, { alpha: a, rot: -0.05 + k * 0.01 }); }
+  B.lines.forEach((s, i) => { const p = clamp((lt - B.times[i].start) / B.times[i].dur); writeLine(ctx, s, B.x, B.y + B.size * B.lh * i, B.size, SCRIPT(B.size), col, p, a, B.align || 'left'); });
+  if (B.seal) { const n = B.lines.length - 1, last = B.times[n], ts = last.start + last.dur + 0.45, y = B.y + B.size * B.lh * n;
+    seal(ctx, B.x + textWidth(ctx, B.lines[n], SCRIPT(B.size)) + B.size * 0.95, y - B.size * 0.32, B.size * 0.9, 'Л', lt - ts, { alpha: a, rot: -0.05 + k * 0.01 }); }
+}
+function letters(k, lt, t) {
+  for (const B of LET[k] || []) {
+    const end = B.fade ?? (k < N ? Tk(k + 1) - PAN : 999), a = 1 - seg(t, end - 0.7, end, E.inOut);
+    drawBlock(B, lt, a, k);
+  }
+}
+function screenLetters(t) {
+  for (const B of cues.screen) { const a = seg(t, B.t0 - 0.3, B.t0) * (1 - seg(t, B.fade - 0.6, B.fade, E.inOut)); if (a <= 0) continue;
+    ctx.save(); ctx.shadowColor = 'rgba(20,12,24,0.7)'; ctx.shadowBlur = 30; drawBlock({ ...B, color: 'paper', align: 'center' }, t, a); ctx.restore(); }
 }
 
-// ---- camera along the scroll ----
-const drift = (k, t) => 3.2 * (t - (Tk(k) + 7.5));
+// ---- camera along the scroll: pans between paintings, a dive into the fire, then the whole scroll ----
+const drift = (k, t) => 3.2 * (t - (Tk(k) + 4));
+const Z_ALL = 1800 / (ROD + 80 - LEFT), X_ALL = (LEFT + ROD) / 2;
+function zoomMove(A, B, p) { // log-zoom with the path weighted by 1/z so the move feels like one continuous dolly
+  const z = Math.exp(lerp(Math.log(A.z), Math.log(B.z), p)), w = Math.abs(1 / A.z - 1 / B.z) < 1e-9 ? p : (1 / A.z - 1 / z) / (1 / A.z - 1 / B.z);
+  return { x: lerp(A.x, B.x, w), y: lerp(A.y, B.y, w), z };
+}
 function camAt(t) {
-  let k = 1; while (k < 8 && t >= Tk(k + 1) - PAN) k++;
+  let k = 1; while (k < N && t >= Tk(k + 1) - PAN) k++;
   let x = cx(k) + drift(k, t);
   if (k > 1 && t < Tk(k) + PAN) x = lerp(cx(k - 1) + drift(k - 1, t), x, E.quartInOut(invLerp(Tk(k) - PAN, Tk(k) + PAN, t)));
-  let z = 1, P = 1;
-  const [z0, z1] = cues.outro.zoom;
-  if (t > z0) { const p = seg(t, z0, z1, E.inOut), zz = lerp(1, 0.42, p); x = lerp(x, ROD - 760 / 0.42, p); z = zz; P = 1 - seg(t, z0, z0 + 0.6); }
-  return { x, z, P, k };
+  let cam = { x, y: H / 2, z: 1 }, P = 1;
+  const [f0, f1] = cues.camera.fireZoom, [a0, a1] = cues.camera.all, FZ = { x: FIRE[0], y: FIRE[1], z: cues.camera.fireZ };
+  if (t > f0) { const start = { x: cx(K_HOME) + drift(K_HOME, f0), y: H / 2, z: 1 }; cam = zoomMove(start, FZ, seg(t, f0, f1, E.inOut)); cam.x += 0.04 * (t - f1) * (t > f1); }
+  if (t > a0) { cam = zoomMove(FZ, { x: X_ALL, y: H / 2, z: Z_ALL }, seg(t, a0, a1, E.inOut)); if (t > a1) cam.z *= 1 - 0.012 * (t - a1); }
+  if (t > f0) P = 0;
+  return { ...cam, P, k };
 }
 
 // ---- scroll mounting, rod ----
@@ -79,7 +93,7 @@ function mounting() {
   rod(ROD, -100, 1180, 54);
 }
 function gutters(cam) {
-  for (let k = 1; k < 8; k++) {
+  for (let k = 1; k < N; k++) {
     const gx = cx(k) + SW / 2; if (Math.abs(gx - cam.x) > W / 2 / cam.z + 400) continue;
     const g = ctx.createLinearGradient(gx - 300, 0, gx + 300, 0); g.addColorStop(0, rgba(C.paper, 0)); g.addColorStop(0.32, rgba(C.paper, 0.9)); g.addColorStop(0.5, rgba(C.paper, 1)); g.addColorStop(0.68, rgba(C.paper, 0.9)); g.addColorStop(1, rgba(C.paper, 0));
     ctx.fillStyle = g; ctx.fillRect(gx - 300, 0, 600, H);
@@ -122,14 +136,12 @@ function epilogue(t) {
   if (a <= 0) return;
   ctx.save(); ctx.globalAlpha = a;
   const br = 1 + 0.02 * Math.sin(t * 1.3);
-  glow(ctx, 960, 330, 380, C.purple, 0.35); lotus(ctx, 960, 400, 3.6 * br, 1, { tint: C.purpleL, base: '#EEE8F7', glowA: 0.3, seed: 5 });
+  glow(ctx, 960, 300, 360, C.purple, 0.35); lotus(ctx, 960, 380, 3.4 * br, 1, { tint: C.purpleL, base: '#EEE8F7', glowA: 0.3, seed: 5 });
   ctx.restore();
-  const [[t1, s1], [t2, s2], [t3, s3]] = O.lines;
-  writeLine(ctx, s1, 960, 620, 84, SCRIPT(84), C.paper, seg(t, t1, t1 + 1.0, E.linear), 1, 'center');
-  writeLine(ctx, s2, 960, 745, 108, SERIF(108), C.paper, seg(t, t2, t2 + 1.1, E.inOut), 1, 'center');
-  writeLine(ctx, s3, 960, 870, 74, SCRIPT(74), C.lav, seg(t, t3, t3 + 1.0, E.linear), 1, 'center');
-  const w3 = textWidth(ctx, s3, SCRIPT(74));
-  seal(ctx, 960 + w3 / 2 + 120, 850, 132, '02:08', t - O.stamp, { rot: -0.07, fs: 0.36 });
+  const ys = [610, 705, 815, 905], sz = [80, 80, 66, 66];
+  O.lines.forEach(([tt, str], i) => writeLine(ctx, str, 960, ys[i], sz[i], SCRIPT(sz[i]), i < 2 ? C.paper : C.lav, seg(t, tt, tt + str.length / 15, E.linear), 1, 'center'));
+  const wl = textWidth(ctx, O.lines[2][1], SCRIPT(66));
+  seal(ctx, 960 + wl / 2 + 120, 880, 124, '02:08', t - O.stamp, { rot: -0.07, fs: 0.36 });
   const r = rng(23); // petals
   for (let i = 0; i < 16; i++) { const q = ((t - O.roll[1]) * (0.05 + r() * 0.05) + r()) % 1, x = lerp(-60, W + 60, r()) + Math.sin(q * 7 + i) * 60, y = lerp(-40, H + 40, q);
     ctx.save(); ctx.translate(x, y); ctx.rotate(q * 7 + i); wash(ctx, 0, 0, 9, i % 2 ? C.lav : C.pink, 0.7 * a, { sy: 0.5, lobes: 2, seed: i }); ctx.restore(); }
@@ -143,16 +155,16 @@ window.renderAt = async (t) => {
   if (t >= unroll) {
     const rx = rollX(t, cam), rodX = t < unroll + 1.5 ? lerp(-60, W + 90, E.inOut(invLerp(unroll, unroll + 1.5, t))) : rx !== null ? rx - 28 * cam.z : 1e9;
     ctx.save(); if (rodX < 1e8) { ctx.beginPath(); ctx.rect(0, 0, rodX, H); ctx.clip(); }
-    ctx.translate(W / 2, H / 2); ctx.scale(cam.z, cam.z); ctx.translate(-cam.x, -H / 2);
+    ctx.translate(W / 2, H / 2); ctx.scale(cam.z, cam.z); ctx.translate(-cam.x, -cam.y);
     if (cam.z < 1) mounting();
     const vx0 = cam.x - W / 2 / cam.z, vx1 = cam.x + W / 2 / cam.z;
     ctx.save(); ctx.beginPath(); ctx.rect(LEFT, 0, RIGHT - LEFT, H); ctx.clip();
-    for (let x = Math.floor(Math.max(LEFT, vx0) / W) * W; x < Math.min(RIGHT, vx1); x += W) ctx.drawImage(tex, x, 0);
-    for (let k = 1; k <= 8; k++) {
+    for (let x = Math.floor(Math.max(LEFT, vx0) / W) * W; x < Math.min(RIGHT, vx1); x += W) ctx.drawImage(tex, x - 1, 0, W + 2, H);
+    for (let k = 1; k <= N; k++) {
       const dx = cam.x - cx(k); if (Math.abs(dx) > W / 2 / cam.z + SW / 2) continue;
       ctx.save(); ctx.beginPath(); ctx.rect(cx(k) - SW / 2, 0, SW, H); ctx.clip(); ctx.translate(cx(k) - 960, 0);
       const lt = t - Tk(k), L = (f, fn) => { ctx.save(); ctx.translate(-(f - 1) * dx * cam.P, 0); fn(); ctx.restore(); };
-      SC[k](ctx, lt, { L, dx, P: cam.P, t, lines: LET[k] ? LET[k].times.map(o => o.start) : [] });
+      SC[k](ctx, lt, { L, dx, P: cam.P, t });
       letters(k, lt, t);
       ctx.restore();
     }
@@ -161,6 +173,7 @@ window.renderAt = async (t) => {
     if (rx !== null) { if (rx > -150) { const g = ctx.createLinearGradient(rx - 90 * cam.z, 0, rx, 0); g.addColorStop(0, 'rgba(30,20,15,0)'); g.addColorStop(1, 'rgba(30,20,15,0.35)'); ctx.fillStyle = g; ctx.fillRect(rx - 90 * cam.z, H / 2 - 540 * cam.z, 90 * cam.z, 1080 * cam.z); ctx.save(); ctx.translate(rx, H / 2); ctx.scale(cam.z, cam.z); rod(0, -640, 640, 54 + 40 * invLerp(cues.outro.roll[0], cues.outro.roll[1], t)); ctx.restore(); } }
     else if (rodX < 1e8) { const g = ctx.createLinearGradient(rodX - 80, 0, rodX, 0); g.addColorStop(0, 'rgba(30,20,15,0)'); g.addColorStop(1, 'rgba(30,20,15,0.35)'); ctx.fillStyle = g; ctx.fillRect(rodX - 80, 0, 80, H); rod(rodX + 24, -60, H + 60, 52); }
   }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); screenLetters(t);
   epilogue(t);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, W * 0.62); v.addColorStop(0, 'rgba(40,28,20,0)'); v.addColorStop(1, 'rgba(40,28,20,0.22)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);

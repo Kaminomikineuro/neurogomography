@@ -1,4 +1,4 @@
-// figures.js — ink-painted figures and motifs: Lan Xichen (white & Gusu blue, forehead ribbon), Jiang Wanyin
+// figures.js — ink-painted figures and motifs: Lan Xichen (black with red accents, red forehead ribbon), Jiang Wanyin
 // (Yunmeng purple, topknot, silver bell), the Cheshire cat, lotus, leaves, plum blossom, lanterns, pumpkins, bats.
 // Figures are faceless, as in classical ink painting. Local units: height 100, feet at (0,0), facing +x.
 import { clamp, lerp, E, TAU, rng } from './mg.js';
@@ -6,70 +6,92 @@ import { C, rgba, brush, wash, glow, line } from './ink.js';
 
 const SHOULDER = [4, -78];
 const rot = (p, a) => [p[0] * Math.cos(a) - p[1] * Math.sin(a), p[0] * Math.sin(a) + p[1] * Math.cos(a)];
-// where the front hand is, in parent coordinates (for hand-holding, scratching the cat, holding a cup)
-export function handPos(o) {
-  const u = o.h / 100, a = o.arm ?? 0.12, hp = rot([2.5, 35], a), sit = o.sit ? 30 : 0;
+// a point on the front arm (sleeve frame: [2.5, 35] = the hand, [5, 62] = chopstick tips), in parent coordinates
+export function armPoint(o, pt = [2.5, 35]) {
+  const u = o.h / 100, a = o.arm ?? 0.12, hp = rot(pt, a), sit = o.sit ? 30 : 0;
   return [o.x + (o.face ?? 1) * u * (SHOULDER[0] + hp[0]), o.y + u * (SHOULDER[1] + sit + hp[1])];
 }
+export const handPos = o => armPoint(o);
 
+// Lan Xichen now wears black with red accents (red forehead ribbon, sash, trim, clouds on the hem).
+const XC = { robe: '#2F2B33', fold: '#5A5462', sleeve: '#4A4552', accent: C.red, ribbon: C.red };
 export function figure(ctx, o) {
-  const { who = 'xc', x, y, h, face = 1, t = 0, arm = 0.12, wind = 1, hat = false, alpha = 1, seed = 1, sit = false, turn = 1, cup = false } = o;
+  const { who = 'xc', x, y, h, face = 1, t = 0, arm = 0.12, wind = 1, hat = false, alpha = 1, seed = 1, sit = false, turn = 1, cup = false,
+    horns = false, wings = 0, tail = false, blush = 0, lean = 0, chop = false } = o;
   if (alpha <= 0) return;
   const u = h / 100, xc = who === 'xc';
-  ctx.save(); ctx.translate(x, y); ctx.scale(face * u * turn, u); ctx.globalAlpha *= alpha;
+  ctx.save(); ctx.translate(x, y); ctx.scale(face * u * turn, u); ctx.rotate(lean); ctx.globalAlpha *= alpha;
   const sw = Math.sin(t * 1.6 + seed) * wind, sw2 = Math.sin(t * 2.2 + seed * 1.7) * wind;
   const B = (pts, w, a = 0.85, extra = {}) => brush(ctx, pts, w, { alpha: a, seed: seed * 13 + pts.length + Math.round(pts[0][0] * 7), step: 0.8, dry: 0.4, ...extra });
-  const robeC = xc ? '#F7F3EA' : C.purple, robeA = xc ? 1 : 0.9, wash2 = xc ? C.blueL : C.purpleD;
+  const robeC = xc ? XC.robe : C.purple, robeA = xc ? 0.97 : 0.9, wash2 = xc ? XC.sleeve : C.purpleD;
   const dy = sit ? 30 : 0; // seated: the upper body sinks, the robe pools
+  // --- incubus wings (behind everything)
+  if (wings > 0) {
+    const fl = Math.sin(t * 3.2) * 0.18;
+    for (const k of [1, 0.8]) { ctx.save(); ctx.translate(-3, -74 + dy); ctx.rotate(-0.35 - fl * k); ctx.scale(k, k);
+      ctx.fillStyle = rgba(C.ink, 0.85 * wings); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-14, -30, -40, -34); ctx.quadraticCurveTo(-36, -22, -42, -14); ctx.quadraticCurveTo(-32, -12, -34, -2); ctx.quadraticCurveTo(-22, -4, -22, 8); ctx.quadraticCurveTo(-12, 2, 0, 8); ctx.closePath(); ctx.fill();
+      ctx.save(); ctx.clip(); wash(ctx, -24, -14, 18, C.purple, 0.6 * wings, { seed: 3 }); ctx.restore();
+      for (const e of [[-40, -34], [-42, -14], [-34, -2]]) line(ctx, [[0, 0], [e[0] * 0.6, e[1] * 0.7], e], 0.7, C.ink, 0.9 * wings);
+      ctx.restore(); }
+  }
   // --- ribbon tails / ponytail behind
-  if (xc) { for (const [k, len] of [[0, 1], [1, 0.85]]) { const P = []; for (let i = 0; i <= 6; i++) { const s = i / 6; P.push([-5.5 - s * 22 * len - k * 2, -93 + dy + s * 16 * len + Math.sin(t * 2.4 + s * 3 + k) * 3 * wind * s + sw * 4 * s]); } brush(ctx, P, 2.6, { color: C.blue, alpha: 0.55, step: 0.8, dry: 0.2, seed: 5 + k }); brush(ctx, P, 1.6, { color: '#FBF8F1', alpha: 1, step: 0.8, dry: 0, bleed: 0, seed: 7 + k }); } }
+  if (xc) { for (const [k, len] of [[0, 1], [1, 0.85]]) { const P = []; for (let i = 0; i <= 6; i++) { const s = i / 6; P.push([-5.5 - s * 22 * len - k * 2, -93 + dy + s * 16 * len + Math.sin(t * 2.4 + s * 3 + k) * 3 * wind * s + sw * 4 * s]); } brush(ctx, P, 2.2, { color: XC.ribbon, alpha: 0.95, step: 0.8, dry: 0.2, seed: 5 + k }); } }
   // --- long hair down the back (xc) / ponytail (jc)
-  ctx.fillStyle = rgba(C.ink, 0.92);
+  ctx.fillStyle = rgba(C.ink, 0.95);
   if (xc) { ctx.beginPath(); ctx.moveTo(-3.5, -96 + dy); ctx.bezierCurveTo(-9, -90 + dy, -9 + sw, -70 + dy, -9 + sw * 2.4, -50 + dy * 0.6); ctx.lineTo(-3 + sw * 2, -52 + dy * 0.6); ctx.bezierCurveTo(-2, -68 + dy, 0, -84 + dy, 2.5, -96 + dy); ctx.closePath(); ctx.fill(); }
   else B([[-1, -99 + dy], [-6, -96 + dy], [-10 - sw, -87 + dy], [-11.5 - sw * 2, -75 + dy], [-10 - sw * 3, -63 + dy * 0.7]], 3.8, 0.92, { end: 0.75, dry: 0.3 });
+  if (tail) { const tw = Math.sin(t * 2.6) * 4; B([[-8, -40], [-20, -30], [-26 + tw, -16], [-22 + tw, -6]], 1.4, 0.95, { dry: 0, end: 0.2 }); ctx.save(); ctx.translate(-22 + tw, -5); ctx.rotate(0.4); ctx.fillStyle = rgba(C.red, 0.95); ctx.beginPath(); ctx.moveTo(0, 3); ctx.bezierCurveTo(-4.5, 0, -2.5, -3.5, 0, -1.5); ctx.bezierCurveTo(2.5, -3.5, 4.5, 0, 0, 3); ctx.fill(); ctx.restore(); }
   // --- back sleeve
   ctx.save(); ctx.translate(-4, -78 + dy); ctx.rotate(0.18 + sw2 * 0.03);
   ctx.fillStyle = rgba(robeC, robeA); ctx.beginPath(); ctx.moveTo(-3, 0); ctx.quadraticCurveTo(-9, 18, -10, 34); ctx.quadraticCurveTo(-3, 38, 4, 33); ctx.quadraticCurveTo(3, 15, 3, 0); ctx.closePath(); ctx.fill();
-  if (!xc) { ctx.fillStyle = rgba(C.purpleD, 0.35); ctx.fill(); }
-  B([[-3, 0], [-9, 18], [-10, 34]], 1.2, 0.7); ctx.restore();
+  ctx.fillStyle = rgba(xc ? XC.fold : C.purpleD, 0.35); ctx.fill();
+  B([[-3, 0], [-9, 18], [-10, 34]], 1.2, 0.7); if (xc) line(ctx, [[-10, 33], [-3, 37], [4, 33]], 0.9, XC.accent, 0.9); ctx.restore();
   // --- robe
   ctx.beginPath();
   if (!sit) { ctx.moveTo(-5, -82); ctx.quadraticCurveTo(-9.5, -70, -10, -56); ctx.quadraticCurveTo(-14, -24, -19 - sw * 3, -1); ctx.quadraticCurveTo(-4, 2.5, 12 + sw, 0); ctx.quadraticCurveTo(9.5, -28, 8.5, -56); ctx.quadraticCurveTo(8.5, -74, 5, -82); }
   else { ctx.moveTo(-5, -82 + dy); ctx.quadraticCurveTo(-11, -66 + dy, -16, -38 + dy); ctx.quadraticCurveTo(-20, -1, -22 - sw * 2, 0); ctx.quadraticCurveTo(0, 3, 22, 0); ctx.quadraticCurveTo(16, -18, 8.5, -46 + dy); ctx.quadraticCurveTo(8.5, -74 + dy, 5, -82 + dy); }
   ctx.closePath(); ctx.fillStyle = rgba(robeC, robeA); ctx.fill();
   ctx.save(); ctx.clip();
-  if (xc) { wash(ctx, -6, -20, 26, C.blueL, 0.5, { sy: 1.4, seed: 3 }); wash(ctx, 8, -60, 12, C.blueL, 0.25, { seed: 4 }); }
+  if (xc) { wash(ctx, -6, -20, 26, XC.fold, 0.55, { sy: 1.4, seed: 3 }); wash(ctx, 8, -60, 12, XC.fold, 0.35, { seed: 4 }); for (const fx of [-6, 0, 5]) line(ctx, [[fx, -54 + dy], [fx - 3 + (sit ? 0 : sw), -2]], 0.6, '#77707F', 0.5); }
   else { wash(ctx, -4, -30, 30, C.purpleD, 0.55, { sy: 1.5, seed: 6 }); ctx.fillStyle = rgba(C.lav, 0.5); ctx.fillRect(4, -56 + dy * 0.5, 8, 56); }
   ctx.restore();
   if (!sit) { B([[5, -82], [8.5, -70], [8.7, -56], [9.5, -28], [12 + sw, 0]], 1.7); B([[-5, -82], [-9.5, -70], [-10, -56], [-14, -24], [-19 - sw * 3, -1]], 1.9); B([[-19 - sw * 3, -1], [-4, 2], [12 + sw, 0]], 1.1, 0.7); }
   else { B([[5, -82 + dy], [8.5, -66 + dy], [14, -22], [22, 0]], 1.6); B([[-5, -82 + dy], [-12, -62 + dy], [-18, -20], [-22, 0]], 1.8); B([[-22, 0], [0, 2.5], [22, 0]], 1.1, 0.7); }
-  if (xc) for (let i = 0; i < 3; i++) { const cx = -12 + i * 8 + (sit ? -2 : 0), cy = -5; line(ctx, [[cx, cy], [cx + 2.5, cy - 2.5], [cx + 4.5, cy - 0.5], [cx + 3, cy + 1], [cx + 1.8, cy - 0.6]], 0.6, C.blue, 0.7); } // Gusu clouds on the hem
+  if (xc) { // red trim on the front edge and hem, red Gusu clouds
+    if (!sit) { line(ctx, [[5.5, -80], [8.4, -60], [9.2, -30], [11.5 + sw, -1.5]], 0.9, XC.accent, 0.95); line(ctx, [[-18.5 - sw * 3, -2.2], [-4, 0.8], [11.5 + sw, -1.2]], 1.0, XC.accent, 0.95); }
+    else line(ctx, [[-21, -1.5], [0, 1.2], [21, -1.5]], 1.0, XC.accent, 0.95);
+    for (let i = 0; i < 3; i++) { const cx = -12 + i * 8 + (sit ? -2 : 0), cy = -6; line(ctx, [[cx, cy], [cx + 2.5, cy - 2.5], [cx + 4.5, cy - 0.5], [cx + 3, cy + 1], [cx + 1.8, cy - 0.6]], 0.6, XC.accent, 0.9); }
+  }
   // collar + sash
-  B([[-3, -82 + dy], [2, -72 + dy], [7, -78 + dy]], 1.0, 0.8, { dry: 0 });
-  ctx.fillStyle = rgba(xc ? C.blue : C.ink, xc ? 0.75 : 0.85); ctx.beginPath(); ctx.moveTo(-9.6, -58 + dy); ctx.lineTo(8.6, -58 + dy); ctx.lineTo(8.8, -54.5 + dy); ctx.lineTo(-10, -54.5 + dy); ctx.closePath(); ctx.fill();
+  B([[-3, -82 + dy], [2, -72 + dy], [7, -78 + dy]], 1.0, 0.8, { dry: 0 }); if (xc) line(ctx, [[-3, -81 + dy], [2, -72 + dy], [7, -77 + dy]], 0.8, XC.accent, 0.95);
+  ctx.fillStyle = rgba(xc ? XC.accent : C.ink, xc ? 0.95 : 0.85); ctx.beginPath(); ctx.moveTo(-9.6, -58 + dy); ctx.lineTo(8.6, -58 + dy); ctx.lineTo(8.8, -54.5 + dy); ctx.lineTo(-10, -54.5 + dy); ctx.closePath(); ctx.fill();
   if (!xc && !sit) { line(ctx, [[6, -55], [6.5, -49]], 0.5, C.inkS, 0.8); ctx.fillStyle = C.silver; ctx.beginPath(); ctx.arc(6.6, -47.5, 1.9, 0, TAU); ctx.fill(); line(ctx, [[6.6, -45.6], [6.3 + sw * 0.5, -40]], 1.1, C.purple, 0.9); } // Qingxin bell
-  if (xc && !sit) line(ctx, [[-8, -55], [-11 + sw * 0.5, -40]], 1.2, C.ink, 0.55); // jade xiao at the waist
+  if (xc && !sit) { line(ctx, [[-8, -55], [-11 + sw * 0.5, -40]], 1.2, '#D9D2C5', 0.8); line(ctx, [[-11 + sw * 0.5, -40], [-11.5 + sw * 0.7, -35]], 0.8, XC.accent, 0.9); } // jade xiao with a red tassel
   // --- front sleeve + hand
   ctx.save(); ctx.translate(SHOULDER[0], SHOULDER[1] + dy); ctx.rotate(arm + sw2 * 0.02);
   ctx.fillStyle = rgba(robeC, robeA); ctx.beginPath(); ctx.moveTo(-4, -1); ctx.quadraticCurveTo(-7, 18, -6, 31); ctx.quadraticCurveTo(3, 37.5, 9, 30); ctx.quadraticCurveTo(6, 14, 4, -2); ctx.closePath(); ctx.fill();
-  ctx.save(); ctx.clip(); wash(ctx, 0, 26, 9, wash2, xc ? 0.35 : 0.5, { seed: 9 }); ctx.restore();
+  ctx.save(); ctx.clip(); wash(ctx, 0, 26, 9, wash2, xc ? 0.5 : 0.5, { seed: 9 }); ctx.restore();
   B([[4, -2], [6, 14], [9, 30]], 1.4); B([[-4, -1], [-7, 18], [-6, 31], [2, 36], [9, 30]], 1.3, 0.8);
+  if (xc) line(ctx, [[-6, 31], [2, 35.5], [9, 30]], 1.0, XC.accent, 0.95);
+  if (chop) { line(ctx, [[1.4, 33], [3.6, 63]], 0.9, '#7A5A43', 0.95); line(ctx, [[3.4, 33], [7, 62]], 0.9, '#7A5A43', 0.95); }
   ctx.fillStyle = C.skin; ctx.beginPath(); ctx.ellipse(2.5, 35, 2.4, 2.9, 0, 0, TAU); ctx.fill(); line(ctx, [[0.6, 34], [1.5, 37.4], [4, 37.2]], 0.45, C.inkS, 0.7);
   if (!xc) { ctx.strokeStyle = rgba(C.purpleL, 0.9); ctx.lineWidth = 0.7; ctx.beginPath(); ctx.arc(2.2, 34.3, 1.3, 0, TAU); ctx.stroke(); } // Zidian ring
-  if (cup) { ctx.fillStyle = '#FBF8F1'; ctx.beginPath(); ctx.moveTo(-0.5, 31.5); ctx.lineTo(6, 31.5); ctx.quadraticCurveTo(5.5, 36, 2.8, 36.5); ctx.quadraticCurveTo(0, 36, -0.5, 31.5); ctx.fill(); line(ctx, [[-0.5, 31.5], [2.8, 36.5], [6, 31.5]], 0.5, C.blue, 0.8); }
+  if (cup) { ctx.fillStyle = '#FBF8F1'; ctx.beginPath(); ctx.moveTo(-0.5, 31.5); ctx.lineTo(6, 31.5); ctx.quadraticCurveTo(5.5, 36, 2.8, 36.5); ctx.quadraticCurveTo(0, 36, -0.5, 31.5); ctx.fill(); line(ctx, [[-0.5, 31.5], [2.8, 36.5], [6, 31.5]], 0.5, C.red, 0.8); }
   ctx.restore();
   // --- head
   const hx = 1.5, hy = -90 + dy;
   ctx.fillStyle = C.skin; ctx.beginPath(); ctx.ellipse(hx, hy, 6, 6.6, 0, 0, TAU); ctx.fill();
+  if (blush > 0) glow(ctx, hx + 3.5, hy + 1.5, 4.5, C.red, 0.55 * blush);
   B([[hx + 5.8, hy - 2], [hx + 5.4, hy + 3], [hx + 2, hy + 6.5]], 0.6, 0.7, { dry: 0 });
   ctx.fillStyle = rgba(C.ink, 0.93); ctx.beginPath(); // hair cap, swept back, ear-side lock
   ctx.moveTo(hx + 6, hy - 1.5); ctx.bezierCurveTo(hx + 6, hy - 9, hx - 6, hy - 9.5, hx - 6.5, hy - 1); ctx.lineTo(hx - 6.5, hy + 6); ctx.quadraticCurveTo(hx - 2, hy + 3, hx - 1.5, hy - 2.5); ctx.quadraticCurveTo(hx + 3, hy - 4.2, hx + 6, hy - 1.5); ctx.fill();
-  if (xc) { ctx.fillStyle = '#FBF8F1'; ctx.beginPath(); ctx.moveTo(hx - 6.6, hy - 3.2); ctx.quadraticCurveTo(hx, hy - 6.6, hx + 6.3, hy - 3.8); ctx.lineTo(hx + 6.3, hy - 2.2); ctx.quadraticCurveTo(hx, hy - 5, hx - 6.6, hy - 1.6); ctx.closePath(); ctx.fill(); line(ctx, [[hx - 6.6, hy - 2.4], [hx, hy - 5.8], [hx + 6.3, hy - 3]], 0.4, C.blue, 0.9); }
+  if (xc) { ctx.fillStyle = rgba(XC.ribbon, 0.97); ctx.beginPath(); ctx.moveTo(hx - 6.6, hy - 3.2); ctx.quadraticCurveTo(hx, hy - 6.6, hx + 6.3, hy - 3.8); ctx.lineTo(hx + 6.3, hy - 2.2); ctx.quadraticCurveTo(hx, hy - 5, hx - 6.6, hy - 1.6); ctx.closePath(); ctx.fill(); }
   else { ctx.beginPath(); ctx.arc(hx - 1, hy - 8.4, 3, 0, TAU); ctx.fill(); ctx.fillStyle = C.silver; ctx.fillRect(hx - 2.6, hy - 12.6, 3.2, 2.2); }
-  if (hat) { // Mad Hatter top hat with a purple band
+  if (horns) for (const k of [-1, 1]) { const bx = hx + k * 3.6; ctx.fillStyle = rgba(C.ink, 0.95); ctx.beginPath(); ctx.moveTo(bx - 1.3, hy - 6.5); ctx.quadraticCurveTo(bx + k * 1.5, hy - 12, bx + k * 4.2, hy - 13.5); ctx.quadraticCurveTo(bx + k * 1.4, hy - 10, bx + 1.3, hy - 6.2); ctx.closePath(); ctx.fill(); }
+  if (hat) { // Mad Hatter top hat with a band in his accent colour
     ctx.fillStyle = rgba(C.ink, 0.94); ctx.beginPath(); ctx.ellipse(hx, hy - 6.2, 10, 2.1, -0.05, 0, TAU); ctx.fill();
     ctx.beginPath(); ctx.moveTo(hx - 6, hy - 6.5); ctx.lineTo(hx - 7.5, hy - 25); ctx.quadraticCurveTo(hx, hy - 27.5, hx + 7.5, hy - 25); ctx.lineTo(hx + 6, hy - 6.5); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = rgba(C.purple, 0.95); ctx.beginPath(); ctx.moveTo(hx - 6.2, hy - 9); ctx.lineTo(hx + 6.2, hy - 9); ctx.lineTo(hx + 6.5, hy - 12.5); ctx.lineTo(hx - 6.5, hy - 12.5); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = rgba(xc ? C.red : C.purple, 0.95); ctx.beginPath(); ctx.moveTo(hx - 6.2, hy - 9); ctx.lineTo(hx + 6.2, hy - 9); ctx.lineTo(hx + 6.5, hy - 12.5); ctx.lineTo(hx - 6.5, hy - 12.5); ctx.closePath(); ctx.fill();
   }
   ctx.restore();
 }
