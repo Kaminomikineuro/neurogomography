@@ -150,10 +150,10 @@ if MUSIC:
 if VOICE:
     m.track('voice', level=-3).add(mg.Sound(load(VOICE), 0.0), at=0)
     for name in ('pad', 'guzheng', 'pipa', 'glock', 'xiao', 'bass', 'air', 'music'):
-        if name in m.tracks: m.tracks[name].duck(by='voice', mode='env', depth=7, attack=0.05, release=0.5, thresh=-40)
+        if name in m.tracks: m.tracks[name].duck(by='voice', mode='env', depth=4, attack=0.05, release=0.5, thresh=-40)
 
 out = os.path.join(HERE, 'out', 'audio.wav')
-res = m.export(out, lufs=-14, tp=-1.6, spectrogram=os.path.join(HERE, 'out', 'spectrogram.png'))
+res = m.export(out, lufs=-14, tp=-1.6, spectrogram=os.path.join(HERE, 'out', 'spectrogram.png'), stems_dir=os.environ.get('STEMS'))
 import soundfile as sf
 y, sr = sf.read(out, always_2d=True); n = int(0.6 * sr); y[-n:] *= np.linspace(1, 0, n)[:, None] ** 1.5; sf.write(out, y, sr, subtype='PCM_24')
 print({k: v for k, v in (res or {}).items() if k in ('lufs', 'true_peak', 'duration', 'warnings')},
