@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Prepare the read letter for the film: clean, a little lower, dry, each phrase placed under its line.
+"""Prepare the read letter for the film: clean, dry, each phrase placed under its line.
 
   python3 motion/wanyin-birthday/voice_prep.py <recording.mp3> [--semitones -2]
   → motion/wanyin-birthday/voice.flac (128 s, 48 kHz), then run audio.py
 
-Chain: high-pass 70 Hz → FFT denoise → pitch −2 semitones with formants preserved (Rubber Band, so it is the
-same voice, only lower) → de-esser → gentle EQ (warmth, less boxiness, a touch of presence) → compressor →
+Chain: high-pass 70 Hz → FFT denoise → (optional --semitones N: pitch shift with formants preserved, Rubber
+Band; the film uses the natural pitch) → de-esser → gentle EQ (warmth, less boxiness, a touch of presence) → compressor →
 limiter. No reverb. Everything between the phrases is true digital silence (short fades at the edges), so
 there is no room tone, hum or breath noise left between lines.
 
@@ -40,12 +40,12 @@ def ff(src, dst, af):
     subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', src, '-ac', '1', '-ar', str(SR), '-af', af, dst], check=True)
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('src'); ap.add_argument('--semitones', type=float, default=-2.0)
+    ap = argparse.ArgumentParser(); ap.add_argument('src'); ap.add_argument('--semitones', type=float, default=0.0)
     ap.add_argument('--out', default=os.path.join(HERE, 'voice.flac')); a = ap.parse_args()
     ratio = 2 ** (a.semitones / 12)
     with tempfile.TemporaryDirectory() as d:
         w = os.path.join(d, 'v.wav')
-        ff(a.src, w, f'highpass=f=70,afftdn=nr=14:nf=-70:tn=1,rubberband=pitch={ratio:.5f}:formant=preserved:pitchq=quality:transients=smooth,'
+        ff(a.src, w, f'highpass=f=70,afftdn=nr=14:nf=-70:tn=1,' + (f'rubberband=pitch={ratio:.5f}:formant=preserved:pitchq=quality:transients=smooth,' if a.semitones else '') +
                      'deesser=i=0.35:m=0.5:f=0.5,lowpass=f=15500')
         y, _ = sf.read(w)
     board = Pedalboard([HighpassFilter(80), LowShelfFilter(180, 2.0, 0.7), PeakFilter(380, -2.0, 1.0), PeakFilter(3200, 0.5, 0.9),

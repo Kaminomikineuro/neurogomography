@@ -1,13 +1,12 @@
 # Начитка письма голосом Сичэня
 
 **Голос уже вставлен.** Запись `voice_source.mp3` обработана скриптом `voice_prep.py` → `voice.flac`:
-очистка (high-pass, FFT-шумодав), тон на 2 полутона ниже с сохранением формант (Rubber Band — тот же голос,
-только ниже), де-эссер, мягкий EQ и компрессор, без реверберации; между фразами — абсолютная тишина. Каждая из
+очистка (high-pass, FFT-шумодав), естественная высота голоса (понижение можно включить флагом `--semitones`), де-эссер, мягкий EQ и компрессор, без реверберации; между фразами — абсолютная тишина. Каждая из
 14 фраз встаёт на момент, когда в кадре начинает писаться её строка (карта `PHRASES` в `voice_prep.py`).
 Музыка приглушается под голос на 4 dB.
 
 ```bash
-python3 motion/wanyin-birthday/voice_prep.py motion/wanyin-birthday/voice_source.mp3          # --semitones -3 — ещё ниже
+python3 motion/wanyin-birthday/voice_prep.py motion/wanyin-birthday/voice_source.mp3          # --semitones -2 — ниже
 MGAUDIO=<mg-styles-15>/lib/audio python3 motion/wanyin-birthday/audio.py
 ```
 
