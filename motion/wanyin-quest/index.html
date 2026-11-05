@@ -133,7 +133,8 @@ const R = [
   { q: 'Секретный шифр. Влюблённые в Китае говорят «я тебя люблю» цифрами. Скажи так и ты: «люблю тебя — безмерно, бесконечно, безумно, безусловно».', exact: ['1ey3m0y', '198azyz', '1icts2l', 'bmoccm', '17fzswt', '2565ak', '18ife8u', '1l7n2d3', '1kdfuuz', '1tuh1k8', '11n3u7m', '16leb6f', '1jztffq', 'zao812', 'llkvj9', '1fm3ktz', 'eqh89z', 'pguxzr'],
     hint: 'Самый известный код — три цифры, и он похож на дату 20 мая. Подойдёт любой код со словом «люблю» — и наш собственный тоже.',
     k: 'Купон №5', t: 'Люблю тебя безмерно, бесконечно, безумно, безусловно', v: 'и ещё: трахни меня' },
-  { q: 'Время, которое значит «мы». Напиши его цифрами.', exact: ['qhz0qf', '1g4wyit', 'pguxzr', 'hni42t'], hint: 'Им заканчивается письмо. И им же запечатано.',
+  { q: 'Время, которое значит «мы». Напиши его цифрами.', digits: ['pguxzr', 'hni42t', '13yfupb', 'qhz0qf', '1g4wyit', '15lsc9j'],
+    exact: ['1rhp8nf', '2ozh4r', '1uysbhw', '1u4tiez', '13z942j', '10sjqkr', '163ewc3', '1n7qj7r', '5sfrgh'], hint: 'Им заканчивается письмо. И им же запечатано.',
     k: 'Купон №6', t: 'Ещё одно письмо — когда захочешь', v: 'тушью, кистью и по-настоящему' },
   { q: 'Твоё самое заветное желание?', exact: ['1k1xzr2', '7qyl3e', 'whg3kg', '1pkku15', 'tbxv38', 'cund17', 'kxibb5', '1c38epz', '1149rdr', '9ly163', 'cvmghn', 'hfg3j1'], stem: ['1v8ygm3', 'vzywkz', 'r43e5x', 'kjr2a6', 'b23o8a', 'c95p2o', '115rb54', 'zxchi0'],
     hint: 'Одно короткое слово. Или одно имя.', k: 'Купон №7', t: 'Желание исполнено', v: 'оно уже рядом — и навсегда твоё' },
@@ -142,6 +143,7 @@ const R = [
 ];
 const check = (r, v) => { const n = norm(v);
   if (r.exact && r.exact.includes(hash(n))) return true;
+  if (r.digits) { const d = n.replace(/\D/g, ''); if (d && r.digits.includes(hash(d))) return true; }
   if (r.stem) for (let i = 0; i < n.length; i++) for (let L = 3; L <= 8 && i + L <= n.length; L++) if (r.stem.includes(hash(n.slice(i, i + L)))) return true;
   return false; };
 const KEY = 'wanyin-riddles-v3';
