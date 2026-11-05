@@ -144,3 +144,27 @@ ffmpeg -i out/audio.wav -af "aresample=48000,asetnsamples=1600,astats=metadata=1
 ```
 (1600 сэмплов = 1 кадр при 30 fps / 48 кГц) → разбери `env.txt` в `env.json` (дБ по кадрам). Для полос (20–150 / 150–800 /
 800–4k / 4k–16k Гц) и онсетов (спектральный поток, медиана + 2σ) — `librosa` или анализатор buildfast `motion-studio`.
+
+## 9. Готовые музыка, SFX и голос: HyperFrames `media-use` (обновление v0.9.15)
+
+Синтез (mgaudio/audio_kit) хорош для точных хитов и временных дорожек, но живая музыка и «настоящие» звуки
+(огонь, бумага, мурчание, толпа) звучат лучше из библиотеки. В HyperFrames v0.9 появился навык `media-use`:
+каталог HeyGen — 10 000+ музыкальных треков и SFX, 75 000+ изображений, озвучка (Voice Turbo, 3 мин/мес бесплатно).
+
+```bash
+npx hyperframes skills update          # ставит навыки hyperframes, hyperframes-cli, hyperframes-registry, media-use
+npx hyperframes auth status            # сначала проверить вход
+npx hyperframes auth login --device    # вход в HeyGen по коду (для облака/headless): человек подтверждает код в браузере
+npx hyperframes media-use resolve --type bgm --intent "tender chinese xiao flute, guzheng, cinematic, 72 bpm" --candidates --project <dir>
+npx hyperframes media-use resolve --type sfx --intent "cozy fireplace crackle" --project <dir>
+npx hyperframes media-use resolve --type voice ...   # озвучка; локально без аккаунта — npx hyperframes tts (Kokoro)
+```
+
+Файл ложится в `<dir>/assets/` с записью в реестре (`resolved <id> → <path>`), рендер ничего не скачивает.
+SFX без аккаунта — Openverse (CC BY, нужна атрибуция в CREDITS.md). Как подключить в наш пайплайн: положить трек
+как `music.*`, звук — как `sfx/<имя>.*` рядом с `audio.py` (см. `motion/wanyin-birthday/audio.py` — подстановка
+файлов вместо синтеза уже встроена; громкость/ducking под голос — там же).
+
+**Облачная среда Claude Code:** нужны хосты `hyperframes.heygen.com`, `api.heygen.com`, `api2.heygen.com`,
+`app.heygen.com` (и `api.openverse.org` для бесплатных SFX) в Allowed domains сетевой политики окружения;
+без них `auth login` падает с «could not reach the authorization server».
