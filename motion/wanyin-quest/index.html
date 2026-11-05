@@ -64,6 +64,18 @@ button:hover { filter: brightness(1.12); }
 .sign { font: 400 28px/1.3 var(--hand); color: var(--paper); }
 .big-stamp { width: 110px; height: 80px; display: grid; place-items: center; background: var(--cinnabar); color: var(--paper); font: 700 34px/1 var(--display); transform: rotate(-6deg); }
 .reset { background: transparent; color: var(--muted); border: 1px solid var(--ink-line); font: 500 12px/1 var(--ui); padding: 8px 12px; align-self: center; }
+/* the finale: fireworks, then the surprise video over the whole screen */
+.party { position: fixed; inset: 0; z-index: 1000; background: rgba(10, 7, 14, .94); display: grid; place-items: center; }
+.party[hidden] { display: none !important; }
+.party canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cheer { position: relative; text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 16px; transition: opacity .4s; }
+.hooray { font: 700 clamp(54px, 12vw, 120px)/1 var(--display); color: var(--gold); text-shadow: 0 0 40px rgba(226, 176, 75, .5); animation: land .7s cubic-bezier(.34, 1.56, .64, 1); }
+.soon { font: 400 clamp(24px, 4vw, 34px)/1.2 var(--hand); color: var(--paper); }
+.party video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; opacity: 0; transition: opacity .5s; pointer-events: none; }
+.party.playing video { opacity: 1; pointer-events: auto; }
+.party.playing .cheer { opacity: 0; }
+.skip { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); background: rgba(20, 16, 25, .7); border: 1px solid var(--ink-line); }
+.replay { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 
@@ -71,9 +83,9 @@ button:hover { filter: brightness(1.12); }
   <header>
     <div class="eyebrow">Цзян Ваньиню · с днём рождения</div>
     <h1>Приз за загадки</h1>
-    <p class="lede">Ты требовал приз за загадки. Он здесь — за семью печатями.</p>
+    <p class="lede">Ты требовал приз за загадки. Он здесь — за восемью печатями.</p>
     <div class="seals" id="seals" aria-label="Открытые печати"></div>
-    <div class="count" id="count">0 из 7 печатей</div>
+    <div class="count" id="count">0 из 8 печатей</div>
   </header>
 
   <section class="grid" id="grid" aria-label="Загадки"></section>
@@ -88,11 +100,19 @@ button:hover { filter: brightness(1.12); }
         <div class="film"><span class="cap">Трейлер «Глава Цзян»</span><video controls playsinline preload="metadata" poster="poster-trailer.jpg" src="trailer.mp4"></video></div>
         <div class="film"><span class="cap">Твои итоги года</span><video controls playsinline preload="metadata" poster="poster-wrapped.jpg" src="wrapped.mp4"></video></div>
       </div>
+      <button class="replay" id="replay" type="button">Пересмотреть сюрприз</button>
       <div class="sign">Во всех жизнях и реальностях — твой Сичэнь</div>
       <div class="big-stamp" aria-label="печать 02:08">02:08</div>
     </div>
   </section>
   <button class="reset" id="reset" type="button">Закрыть печати заново</button>
+</div>
+
+<div class="party" id="party" hidden>
+  <canvas id="fx"></canvas>
+  <div class="cheer" id="cheer"><div class="eyebrow">Восьмая печать открыта</div><div class="hooray">Ура! Ты выиграл!</div><div class="soon">а теперь — сюрприз…</div></div>
+  <video id="surprise" playsinline preload="auto" src="surprise.mp4"></video>
+  <button class="skip" id="skip" type="button">Дальше →</button>
 </div>
 
 <script>
@@ -115,19 +135,21 @@ const R = [
     k: 'Купон №5', t: 'Люблю тебя безмерно, бесконечно, безумно, безусловно', v: 'и ещё: трахни меня' },
   { q: 'Время, которое значит «мы». Напиши его цифрами.', exact: ['qhz0qf', '1g4wyit'], hint: 'Им заканчивается письмо. И им же запечатано.',
     k: 'Купон №6', t: 'Ещё одно письмо — когда захочешь', v: 'тушью, кистью и по-настоящему' },
+  { q: 'Твоё самое заветное желание?', exact: ['1k1xzr2', '7qyl3e', 'whg3kg', '1pkku15', 'tbxv38', 'cund17', 'kxibb5', '1c38epz', '1149rdr', '9ly163', 'cvmghn', 'hfg3j1'], stem: ['1v8ygm3', 'vzywkz', 'r43e5x', 'kjr2a6', 'b23o8a', 'c95p2o', '115rb54', 'zxchi0'],
+    hint: 'Одно короткое слово. Или одно имя.', k: 'Купон №7', t: 'Желание исполнено', v: 'оно уже рядом — и навсегда твоё' },
   { q: 'И последняя, самая трудная. Где мы встретим Новый год, когда часы пробьют полночь?', stem: ['jkx9dv', 'cfg09l', 'cnvpgz'], hint: 'Не город. Не страна. Это место всегда с собой.',
-    k: 'Печать №7', t: 'Поцелуй ровно в полночь', v: 'главный приз открыт — листай вниз' },
+    k: 'Купон №8', t: 'Поцелуй ровно в полночь', v: 'и ещё много-много — после' },
 ];
 const check = (r, v) => { const n = norm(v);
-  if (r.exact) return r.exact.includes(hash(n));
-  for (let i = 0; i < n.length; i++) for (let L = 3; L <= 8 && i + L <= n.length; L++) if (r.stem.includes(hash(n.slice(i, i + L)))) return true;
+  if (r.exact && r.exact.includes(hash(n))) return true;
+  if (r.stem) for (let i = 0; i < n.length; i++) for (let L = 3; L <= 8 && i + L <= n.length; L++) if (r.stem.includes(hash(n.slice(i, i + L)))) return true;
   return false; };
-const KEY = 'wanyin-riddles-v2';
+const KEY = 'wanyin-riddles-v3';
 let solved = new Set();
 try { solved = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...solved])); } catch (e) {} };
 const grid = document.getElementById('grid'), seals = document.getElementById('seals');
-const ROMAN = ['一', '二', '三', '四', '五', '六', '七'];
+const ROMAN = ['一', '二', '三', '四', '五', '六', '七', '八'];
 R.forEach((r, i) => {
   const s = document.createElement('div'); s.className = 'seal'; s.textContent = ROMAN[i]; s.id = 'seal-' + i; seals.appendChild(s);
   const c = document.createElement('article'); c.className = i === R.length - 1 ? 'card final' : 'card'; c.id = 'card-' + i;
@@ -140,17 +162,51 @@ R.forEach((r, i) => {
   c.querySelector('form').addEventListener('submit', e => {
     e.preventDefault(); const v = c.querySelector('input').value, h = c.querySelector('.hint');
     if (!norm(v)) { h.textContent = 'Напиши ответ.'; h.className = 'hint bad'; return; }
-    if (check(r, v)) { solved.add(i); save(); c.classList.add('just'); render(); return; }
+    if (check(r, v)) { const last = solved.size === R.length - 1 && !solved.has(i); if (last) primeSurprise(); solved.add(i); save(); c.classList.add('just'); render(!last); if (last) celebrate(); return; }
     tries++; h.className = 'hint bad'; h.textContent = tries >= 2 && r.hint ? 'Подсказка: ' + r.hint : 'Не то. Подумай ещё — Сичэнь верит в тебя.';
   });
 });
-function render() {
+function render(scroll = true) {
   R.forEach((r, i) => { document.getElementById('card-' + i).classList.toggle('done', solved.has(i)); document.getElementById('seal-' + i).classList.toggle('on', solved.has(i)); });
-  document.getElementById('count').textContent = `${solved.size} из 7 печатей`;
+  document.getElementById('count').textContent = `${solved.size} из 8 печатей`;
   const open = solved.size === R.length, p = document.getElementById('prize'), was = p.classList.contains('locked');
   p.classList.toggle('locked', !open);
-  if (open && was && document.readyState === 'complete') p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (scroll && open && was && document.readyState === 'complete') p.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 document.getElementById('reset').addEventListener('click', () => { solved.clear(); save(); document.querySelectorAll('.card').forEach(c => c.classList.remove('just')); document.querySelectorAll('input').forEach(i => (i.value = '')); render(); });
+const party = document.getElementById('party'), sv = document.getElementById('surprise'), fx = document.getElementById('fx');
+let fxRun = 0;
+function primeSurprise() { // called inside the click: unlocks playback with sound and asks for full screen
+  try { party.requestFullscreen?.().catch(() => {}); } catch (e) {}
+  sv.muted = false; const pr = sv.play(); if (pr && pr.then) pr.then(() => { sv.pause(); sv.currentTime = 0; }).catch(() => {}); else { sv.pause(); }
+}
+function fireworks(ms) {
+  const g = fx.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1), run = ++fxRun;
+  const size = () => { fx.width = fx.clientWidth * dpr; fx.height = fx.clientHeight * dpr; }; size();
+  const cols = ['#E2B04B', '#F4D894', '#8E63D2', '#C8B6E2', '#C8402E', '#F2EBDD'], P = []; const t0 = performance.now(); let last = 0;
+  const burst = () => { const x = fx.width * (0.15 + Math.random() * 0.7), y = fx.height * (0.15 + Math.random() * 0.4), c = cols[Math.floor(Math.random() * cols.length)];
+    for (let i = 0; i < 70; i++) { const a = Math.random() * Math.PI * 2, v = (2 + Math.random() * 5) * dpr; P.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, c }); } };
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const step = now => { if (run !== fxRun) return; const t = now - t0;
+    if (!reduce && t - last > 260 && t < ms) { burst(); last = t; }
+    g.fillStyle = 'rgba(10,7,14,0.25)'; g.fillRect(0, 0, fx.width, fx.height);
+    for (const p of P) { if (p.life <= 0) continue; p.x += p.vx; p.y += p.vy; p.vy += 0.06 * dpr; p.vx *= 0.985; p.life -= 0.012; g.globalAlpha = Math.max(0, p.life); g.fillStyle = p.c; g.fillRect(p.x, p.y, 3 * dpr, 3 * dpr); }
+    g.globalAlpha = 1; if (party.hidden) return; requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function closeParty() {
+  fxRun++; sv.pause(); party.classList.remove('playing'); party.hidden = true;
+  try { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch (e) {}
+  document.getElementById('prize').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function celebrate(gap = 2200) { // fireworks and «Ура!», a two-second breath, then the video over the whole screen
+  party.hidden = false; party.classList.remove('playing'); fireworks(gap + 1500);
+  setTimeout(() => { party.classList.add('playing'); sv.currentTime = 0; sv.muted = false;
+    sv.play().catch(() => { sv.controls = true; }); }, gap);
+}
+sv.addEventListener('ended', () => setTimeout(closeParty, 600));
+document.getElementById('skip').addEventListener('click', closeParty);
+document.getElementById('replay').addEventListener('click', () => { primeSurprise(); celebrate(1200); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !party.hidden) closeParty(); });
 render();
 </script>

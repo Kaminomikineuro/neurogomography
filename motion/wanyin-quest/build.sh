@@ -6,3 +6,4 @@ ffmpeg -loglevel error -y -i ../wanyin-wrapped/out/wanyin-itogi-goda.mp4 -vf sca
 ffmpeg -loglevel error -y -ss 38.5 -i ../wanyin-trailer/out/glava-czyan-trailer.mp4 -frames:v 1 -vf scale=1280:-2 -q:v 4 media/poster-trailer.jpg
 ffmpeg -loglevel error -y -ss 16.0 -i ../wanyin-wrapped/out/wanyin-itogi-goda.mp4 -frames:v 1 -vf scale=720:-2 -q:v 4 media/poster-wrapped.jpg
 ls -la media
+cp surprise.mp4 media/surprise.mp4
