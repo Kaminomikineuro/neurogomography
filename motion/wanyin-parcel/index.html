@@ -111,10 +111,13 @@ h1 { margin: 0; font: 700 clamp(40px, 8vw, 72px)/1 var(--display); text-wrap: ba
 .flip .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
 .flip .front { background: linear-gradient(170deg, #241C2E, #191320); border: 1px solid var(--line); padding: 16px 14px; gap: 10px; align-items: stretch; justify-content: center; }
 .flip .front .turn { margin-top: auto; text-align: center; font: 500 12px/1 var(--ui); color: var(--muted); letter-spacing: .1em; }
-.flip .backf { transform: rotateY(180deg); background: var(--paper); padding: 10px 10px 12px; gap: 8px; color: #2A2236; }
+.flip .backf { transform: rotateY(180deg); background: var(--paper); padding: 10px 10px 12px; gap: 8px; color: #2A2236; overflow: visible; }
 .flip .backf svg { width: 100%; height: auto; border-radius: 8px; display: block; flex: 1; }
 .flip .backf .cap { font: 400 18px/1.25 var(--hand); color: var(--purple-d); text-align: center; }
 .proof { position: absolute; z-index: 3; pointer-events: none; }
+.proof-on { position: absolute; z-index: 4; bottom: 15%; width: 46%; display: flex; flex-direction: column; align-items: center; gap: 4px; pointer-events: none; animation: snapIn .7s cubic-bezier(.34, 1.56, .64, 1) backwards; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .45)); }
+.proof-on svg { width: 100%; height: auto; }
+.ptag { background: #F7E28A; color: #3A2E10; font: 400 17px/1.15 var(--hand); padding: 4px 10px 5px; transform: rotate(-3deg); box-shadow: 0 4px 10px rgba(0, 0, 0, .3); text-align: center; }
 
 /* animation helpers used inside the SVG art */
 @keyframes rise { from { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(-120px); opacity: 0; } }
@@ -237,95 +240,95 @@ const defs = `<defs>
 // q: Telegram quotes [who, date, text, {fwd, reply, out}] — copied from the chat; note: a sticky note where there was no message.
 const TG = (who, date, text, o = {}) => ({ who, date, text, ...o });
 const ITEMS = [
- { id: 'tent', yr: '2027', title: 'Поход с палаткой', kind: 'card', proof: 'panties',
+ { id: 'tent', title: 'Поход с палаткой', kind: 'card', proof: 'panties',
    q: [TG('Анечка', '22.06.2026 18:11', '/ пойти с мужем в поход с палаткой и, чтобы муж меня там взял')],
-   cap: 'Лето 2027. Озеро, светлячки, фонарики — и палатка, из которой всю ночь вылетали сердечки.', art: 'tent', icon: 'tent' },
- { id: 'horse', yr: '2027', title: 'Покататься на лошадях', kind: 'card', proof: 'horseshoe',
+   cap: 'Озеро, светлячки, фонарики — и палатка, из которой всю ночь вылетали сердечки.', art: 'tent', icon: 'tent' },
+ { id: 'horse', title: 'Покататься на лошадях', kind: 'card', proof: 'horseshoe',
    q: [TG('Kami', '22.06.2026 18:10', '/ покататься на лошадях', { out: true })],
    cap: 'Закат, два всадника и подкова на удачу — магнитиком на память.', art: 'horses', icon: 'horseshoe' },
- { id: 'pumpkin', yr: '2027', title: 'Тыква с котом', kind: 'pumpkin',
+ { id: 'pumpkin', title: 'Тыква с котом', kind: 'pumpkin',
    q: [TG('Анечка', '08.11.2025 21:35', 'Вырезать тыкву\nОднажды'), TG('Kami', '09.11.2025 1:51', 'Да, чудесно', { out: true, reply: 'Вырезать тыкву Однажды' })],
-   cap: 'Однажды наступило: октябрь 2027, тыква с мордой чеширского кота. Руки оранжевые до локтя.', ink: 'blue', icon: 'pumpkin' },
- { id: 'hair', yr: '2027', title: 'Причёска для жены', kind: 'pouch', inside: 'hairpin',
+   cap: 'Однажды наступило: тыква с мордой чеширского кота. Руки оранжевые до локтя.', ink: 'blue', icon: 'pumpkin' },
+ { id: 'hair', title: 'Причёска для жены', kind: 'pouch', inside: 'hairpin',
    q: [TG('Анечка', '09.11.2025 21:34', 'Сделать жене прическу')],
    cap: 'Шпилька с лотосом и серебряным колокольчиком. Причёска получилась — жена сияла.', ink: 'purple', icon: 'pouch' },
- { id: 'vysh', yr: '2028', title: 'Украинские костюмы', kind: 'card', proof: 'ribbon',
+ { id: 'vysh', title: 'Украинские костюмы', kind: 'card', proof: 'ribbon',
    q: [TG('Анечка', '08.11.2025 20:57', 'Показать жене украинские костюмы, а то забыли 🤕'), TG('Kami', '09.11.2025 1:51', 'Ещё посмотрю', { out: true, reply: 'Показать жене украинские костюмы, а то забыли 🤕' })],
    cap: 'Показали, примерили, сфотографировались. Ленточка с вышивкой осталась на память.', art: 'vysh', icon: 'vysh' },
- { id: 'artphoto', yr: '2028', title: 'Фото, как арт', kind: 'frame',
+ { id: 'artphoto', title: 'Фото, как арт', kind: 'frame',
    q: [TG('Анечка', '11.11.2025 1:00', '/ надо ...повторить фотографию\n\nИ написать на заднице помадой FUCK', { fwd: 'Kami' }), TG('Анечка', '11.11.2025 1:00', '/ хочу фото, как арт', { fwd: 'Kami' }), TG('Анечка', '11.11.2025 1:00', '/ тортик ещё и подушку\n/ там лента твоя еще', { fwd: 'Анечка' }),
        TG('Анечка', '11.11.2025 1:00', '/ котолапки есть, кстати\n/ крылышки и хвостик тоже\n/ ушки', { fwd: 'Kami' }), TG('Анечка', '11.11.2025 1:00', '/ можно подсветку , чтобы отливали', { fwd: 'Анечка' }), TG('Анечка', '11.11.2025 1:00', '/ вы подарили фиолетовые с кружевом\n/ больше одежды и не нужно', { fwd: 'Анечка' })],
    cap: 'Ушки, котолапки, крылышки с подсветкой, хвостик, лента, тортик и подушка. Больше одежды и не понадобилось.', ink: 'purple', icon: 'frame' },
- { id: 'leash', yr: '2028', title: 'Сичэнь и Чэн на поводке', kind: 'polaroid',
+ { id: 'leash', title: 'Сичэнь и Чэн на поводке', kind: 'polaroid',
    q: [TG('Kami', '18.11.2025 14:59', 'Было бы прикольно сделать фотографии Сичэня и Чэна на поводке 🙈', { fwd: 'Дикий Лотос', out: true })],
    cap: 'Сделали. Кто кого держал на поводке — до сих пор спорим.', ink: 'blue', icon: 'polaroid' },
- { id: 'alice', yr: '2029', title: 'Отель Алисы в Малайзии', kind: 'keycard',
+ { id: 'alice', title: 'Отель Алисы в Малайзии', kind: 'keycard',
    q: [TG('Kami', '16.11.2025 18:11', 'Посетить отель Алисы в Малайзии', { out: true }), TG('Анечка', '16.11.2025 18:13', 'Крутоееее', { reply: 'Посетить отель Алисы в Малайзии...' })],
    cap: 'Комната «Страна чудес». Ключ-карту украли на память — не говори портье.', ink: 'purple', icon: 'keycard' },
- { id: 'maze', yr: '2029', title: 'Лабиринт Алисы в Шанхае', kind: 'maze',
+ { id: 'maze', title: 'Лабиринт Алисы в Шанхае', kind: 'maze',
    q: [TG('Kami', '16.11.2025 18:14', 'И лабиринт в Дисней  Шанхае', { out: true }), TG('Анечка', '16.11.2025 18:15', 'Афигеть😍'), TG('Анечка', '16.11.2025 18:15', 'Шикарный')],
    cap: 'Заблудились нарочно. В центре лабиринта — поцелуй.', ink: 'blue', icon: 'maze' },
- { id: 'globe', yr: '2030', title: 'Город вечного Рождества', kind: 'globe',
+ { id: 'globe', title: 'Город вечного Рождества', kind: 'globe',
    q: [TG('Kami', '15.02.2026 15:46', 'Город, в котором вечно рождество', { out: true }), TG('Анечка', '15.02.2026 15:47', ' Ротенбург-на-Таубере')],
    cap: 'Ротенбург-на-Таубере. Рождество — даже в июле. Встряхни шар.', ink: 'purple', icon: 'globe' },
- { id: 'dragon', yr: '2030', title: 'Драконово ущелье', kind: 'figurine', fig: 'dragon',
+ { id: 'dragon', title: 'Драконово ущелье', kind: 'figurine', fig: 'dragon',
    q: [TG('Kami', '09.03.2026 2:12', 'В городе Айзенах в Германии есть драконово ущелье', { fwd: 'Дикий Лотос', out: true })],
    cap: 'Айзенах. Привезли котика-дракошку: колючий снаружи, тёплый внутри — как кое-кто.', ink: 'blue', icon: 'dragon' },
- { id: 'tin', yr: '2028', title: 'Новый год в Праге', kind: 'tin',
+ { id: 'tin', title: 'Новый год в Праге', kind: 'tin',
    q: [TG('Kami', '09.11.2025 1:51', 'И новый год встретить', { out: true }), TG('Kami', '15.02.2026 15:47', 'Приехать к жене весной/летом\nИ на Новый год в Прагу', { out: true })],
    cap: 'Жестяная банка из Праги, а в ней — предсказания из печенек, собранные за десять лет.', ink: 'purple', icon: 'tin' },
- { id: 'mitts', yr: '2028', title: 'Ручки погреть', kind: 'mittens',
+ { id: 'mitts', title: 'Ручки погреть', kind: 'mittens',
    q: [TG('Kami', '16.02.2026 18:52', 'Жена ручки не греет', { fwd: 'Kami', out: true }), TG('Kami', '16.02.2026 18:52', 'Да 🥺', { fwd: 'Дикий Лотос', out: true }), TG('Kami', '16.02.2026 18:52', 'Ничего, ещё погрею', { fwd: 'Kami', out: true }),
        TG('Kami', '16.02.2026 18:52', 'Хорошо 🥺 Я заполнил обещание', { fwd: 'Дикий Лотос', out: true }), TG('Анечка', '16.02.2026 18:54', 'Правда, летом все наоборот 🤣\nОни горячие и их надо холодить')],
    cap: 'Варежки на одной верёвочке — зимой. Веер — летом. Обещание выполнено круглый год.', ink: 'blue', icon: 'mittens' },
- { id: 'holy', yr: '2029', title: 'Святая вода', kind: 'vial',
+ { id: 'holy', title: 'Святая вода', kind: 'vial',
    q: [TG('Kami', '28.02.2026 14:17', 'Святую воду для изгнания бесов из мелких чёртиков', { out: true })],
    cap: 'Встряхни — мелкие чёртики разбегаются. Главный инкубчик остался: на него не действует.', ink: 'purple', icon: 'vial' },
- { id: 'apron', yr: '2029', title: 'Завтрак в фартучке', kind: 'apron',
+ { id: 'apron', title: 'Завтрак в фартучке', kind: 'apron',
    q: [TG('Kami', '03.03.2026 13:21', '/ жду завтрак в фартучке на голое тело 🥰', { fwd: 'Kami', out: true })],
    cap: 'Завтрак подан. Фартучек — тоже. Больше ничего не было.', ink: 'blue', icon: 'apron' },
- { id: 'pancakes', yr: '2029', title: 'Блины, вафельки, бутербродики', kind: 'recipe',
+ { id: 'pancakes', title: 'Блины, вафельки, бутербродики', kind: 'recipe',
    q: [TG('Kami', '10.03.2026 2:45', 'Блины', { fwd: 'Wildflower', out: true }), TG('Kami', '10.03.2026 2:45', 'Приготовишь мне?', { fwd: 'Kami', out: true }), TG('Kami', '10.03.2026 2:45', 'Хорошо\nИ вафельки\nИ бутербродики', { fwd: 'Wildflower', out: true }), TG('Kami', '10.03.2026 2:45', 'О\nОк, благодарю', { fwd: 'Kami', out: true })],
    cap: 'Рецепт написан фиолетовыми чернилами. Секретный ингредиент подчёркнут дважды.', ink: 'purple', icon: 'recipe' },
- { id: 'kisses', yr: '2027', title: '288 поцелуев', kind: 'jar',
+ { id: 'kisses', title: '288 поцелуев', kind: 'jar',
    q: [TG('Kami', '10.03.2026 3:07', '28 поцелуек🥰', { fwd: 'Wildflower', out: true }), TG('Kami', '10.03.2026 3:07', 'А это мне', { fwd: 'Kami', out: true }), TG('Kami', '10.03.2026 3:28', 'Записываю 288 поцемок на следующую  встречу', { fwd: 'Kami', out: true })],
    cap: 'Банка поцелуев. Нажимай — досчитай до 288. Долг закрыт на встрече, проценты начисляются до сих пор.', ink: 'blue', icon: 'jar' },
- { id: 'roulette', yr: '2027', title: 'Рулетка: куда целовать', kind: 'wheel',
+ { id: 'roulette', title: 'Рулетка: куда целовать', kind: 'wheel',
    q: [TG('Kami', '18.03.2026 1:33', '/ поиграл бы в поцелуи\n/ рулетка - куда целовать', { fwd: 'Kami', out: true }), TG('Kami', '18.03.2026 1:41', '/ а давай ещё кое-что\n/ помимо поцелуя', { fwd: 'Дикий Лотос', out: true }), TG('Kami', '18.03.2026 1:41', '/ да, лизь\n/ ещё отсос куни\n/ пальчики в ротик\n/ и не в ротик', { fwd: 'Kami', out: true }),
        TG('Kami', '18.03.2026 1:41', '/ Кусь еще\n/ и царапки\n/ грудь лапать\n/ попку\nПокормить со рта', { fwd: 'Дикий Лотос', out: true }), TG('Анечка', '18.03.2026 1:44', '/ слизать сливки с губ'), TG('Анечка', '18.03.2026 1:45', '/ или с другого места')],
    cap: 'Сыграли. Каждый сектор — проверен лично. Крути.', ink: 'purple', icon: 'wheel' },
- { id: 'shirts', yr: '2030', title: 'Парные фиолетовые рубашки', kind: 'shirts',
+ { id: 'shirts', title: 'Парные фиолетовые рубашки', kind: 'shirts',
    q: [TG('Kami', '15.04.2026 15:26', '/ хочу фиолетовую рубашку\n/ надену на голое тело\n/ буду приносить в ней утром мужу кофе\n/ со сливками', { fwd: 'Дикий Лотос', out: true }), TG('Kami', '15.04.2026 15:26', '/ Хочу парные 🥰\n/ и чтоб мы их украсили\n/ было бы чудесно', { fwd: 'Дикий Лотос', out: true })],
    cap: 'Две рубашки, расписанные вдвоём: лотос и облака. И кофе со сливками каждое утро.', ink: 'blue', icon: 'shirts' },
- { id: 'tail', yr: '2028', title: 'Танец с хвостиком', kind: 'figurine', fig: 'tail',
+ { id: 'tail', title: 'Танец с хвостиком', kind: 'figurine', fig: 'tail',
    q: [TG('Kami', '23.05.2026 16:12', '/ я тебе станцую с хвостиком', { fwd: 'Дикий Лотос', out: true })],
    cap: 'Станцевал. Хвостик с кисточкой-стрелочкой вилял точно в такт.', ink: 'blue', icon: 'tail' },
- { id: 'lap', yr: '2031', title: 'Весь день на коленях', kind: 'pillow',
+ { id: 'lap', title: 'Весь день на коленях', kind: 'pillow',
    q: [TG('Kami', '19.06.2026 10:34', 'Новая цель: проспать весь день у жены на коленях', { fwd: 'Kami', out: true })],
    cap: 'Цель достигнута: с утра до заката. Подушка «колени жены» — для дней, когда я далеко.', ink: 'purple', icon: 'pillow' },
- { id: 'chair', yr: '2029', title: 'Стул и ленты', kind: 'chair',
+ { id: 'chair', title: 'Стул и ленты', kind: 'chair',
    q: [TG('Kami', '18.02.2026 2:18', '/ в следующий раз посажу мужа на стул и привяжу его руки и ноги к нему\nА сам буду танцевать\nИспытывать терпение мужа', { fwd: 'Дикий Лотос', out: true }), TG('Анечка', '18.02.2026 2:20', '[ Стикер 😏 ]')],
    cap: 'Терпение мужа — испытано. Танцуй ещё: посмотрим, на сколько его хватит.', ink: 'blue', icon: 'chair' },
- { id: 'picnic', yr: '2030', title: 'Рассвет и закат на пикнике', kind: 'picnic',
+ { id: 'picnic', title: 'Рассвет и закат на пикнике', kind: 'picnic',
    q: [TG('Kami', '21.11.2025 9:32', 'В теплое время года будем вместе встречать рассвет и закат на пикнике', { fwd: 'Kami', out: true })],
    cap: 'Встречали. Оба раза в один день — и не уходили между ними.', ink: 'purple', icon: 'basket' },
- { id: 'circus', yr: '2031', title: 'Мы сходили в цирк', kind: 'jack',
+ { id: 'circus', title: 'Мы сходили в цирк', kind: 'jack',
    note: 'Мы сходили в цирк! Ты делал вид, что тебе не интересно, — и держал меня за руку весь вечер.', ink: 'blue', icon: 'jack' },
- { id: 'fest', yr: '2028', title: 'Фестиваль: Шляпник и Чеширский кот', kind: 'figurine', fig: 'fest',
+ { id: 'fest', title: 'Фестиваль: Шляпник и Чеширский кот', kind: 'figurine', fig: 'fest',
    note: 'Фестиваль косплея. Я — Безумный Шляпник, ты — Чеширский кот. Нас сфотографировали сто раз, а фигурки отлили на заказ.', ink: 'purple', icon: 'fest' },
- { id: 'lantern', yr: '2027', title: 'Фонарь из дома с привидениями', kind: 'lantern',
+ { id: 'lantern', title: 'Фонарь из дома с привидениями', kind: 'lantern',
    note: 'Мистический фонарик из дома с привидениями. Включи — призраки танцуют на стене. Ты пищал. (Не пищал.)', ink: 'blue', icon: 'lantern' },
- { id: 'flower', yr: '2032', title: 'Аленький цветочек', kind: 'herbarium',
+ { id: 'flower', title: 'Аленький цветочек', kind: 'herbarium',
    note: 'Муж привёз мне аленький цветочек. Я засушил его, чтобы он остался навсегда.', from: 'Цзян Ваньинь', ink: 'purple', icon: 'flower' },
- { id: 'diary', yr: '2027–2036', title: 'Дневник Сичэня', kind: 'diary', ink: 'blue', icon: 'diary' },
+ { id: 'diary', title: 'Дневник Сичэня', kind: 'diary', ink: 'blue', icon: 'diary' },
 ];
 const EXTRA = [
- { id: 'star', yr: '2027', title: 'Звезда для жены', kind: 'star', q: [TG('Kami', '07.11.2025 21:38', 'Сделать жене звёзду', { out: true })], cap: 'Сертификат: звезда носит твоё имя. Светит даже днём — просто не всем видно.', ink: 'blue', icon: 'star' },
- { id: 'candies', yr: '2027–2036', title: 'Конфетки на двоих', kind: 'candies', note: 'Конфеты на двоих — по одной каждому. Фантики мы сохранили: на каждом что-то написано.', ink: 'purple', icon: 'candy' },
- { id: 'bottles', yr: '2030', title: 'Бутылочки из путешествий', kind: 'bottles', note: 'Сливовица из Праги, глинтвейн из Ротенбурга, рисовое вино из Шанхая. Пили за нас — каждый раз.', ink: 'blue', icon: 'bottles' },
- { id: 'hugs', yr: '2029', title: 'Футболки-обнимашки', kind: 'hugshirts', note: 'Сделали футболки-обнимашки: когда их кладёшь рядом, рукава обнимаются.', ink: 'purple', icon: 'hug' },
- { id: 'markers', yr: '2030', title: 'Маркеры для рисования на теле', kind: 'markers', q: [TG('Kami', '22.04.2026 9:43', '/ а ещё хочу тебе такой рисунок на попке сделать~\n/ надо запастись маркерами для рисования на теле', { fwd: 'Kami', out: true })], cap: 'Запаслись. Холст оказался лучшим в мире. Попробуй нарисовать.', ink: 'blue', icon: 'markers' },
- { id: 'secret', yr: '2027', title: 'Конверт «вскрыть наедине»', kind: 'envelope', q: [TG('Kami', '16.09.2026 11:36', '/*подумал о том, что муж мог бы надеть особые трусики и кое-что розовое. А сам бы мог на это розовое присесть. При этом муж бы мял попу🤤', { fwd: 'Дикий Лотос', out: true }), TG('Kami', '16.09.2026 11:36', '/*подумал о том, что нужно обязательно это опробовать~', { fwd: 'Kami', out: true })], cap: 'Опробовано. ✓ Подробности — только устно.', ink: 'purple', icon: 'envelope' },
+ { id: 'star', title: 'Звезда для жены', kind: 'star', q: [TG('Kami', '07.11.2025 21:38', 'Сделать жене звёзду', { out: true })], cap: 'Сертификат: звезда носит твоё имя. Светит даже днём — просто не всем видно.', ink: 'blue', icon: 'star' },
+ { id: 'candies', title: 'Конфетки на двоих', kind: 'candies', note: 'Конфеты на двоих — по одной каждому. Фантики мы сохранили: на каждом что-то написано.', ink: 'purple', icon: 'candy' },
+ { id: 'bottles', title: 'Бутылочки из путешествий', kind: 'bottles', note: 'Сливовица из Праги, глинтвейн из Ротенбурга, рисовое вино из Шанхая. Пили за нас — каждый раз.', ink: 'blue', icon: 'bottles' },
+ { id: 'hugs', title: 'Футболки-обнимашки', kind: 'hugshirts', note: 'Сделали футболки-обнимашки: когда их кладёшь рядом, рукава обнимаются.', ink: 'purple', icon: 'hug' },
+ { id: 'markers', title: 'Маркеры для рисования на теле', kind: 'markers', q: [TG('Kami', '22.04.2026 9:43', '/ а ещё хочу тебе такой рисунок на попке сделать~\n/ надо запастись маркерами для рисования на теле', { fwd: 'Kami', out: true })], cap: 'Запаслись. Холст оказался лучшим в мире. Попробуй нарисовать.', ink: 'blue', icon: 'markers' },
+ { id: 'secret', title: 'Конверт «вскрыть наедине»', kind: 'envelope', q: [TG('Kami', '16.09.2026 11:36', '/*подумал о том, что муж мог бы надеть особые трусики и кое-что розовое. А сам бы мог на это розовое присесть. При этом муж бы мял попу🤤', { fwd: 'Дикий Лотос', out: true }), TG('Kami', '16.09.2026 11:36', '/*подумал о том, что нужно обязательно это опробовать~', { fwd: 'Kami', out: true })], cap: 'Опробовано. ✓ Подробности — только устно.', ink: 'purple', icon: 'envelope' },
 ];
 const ALL = [...ITEMS, ...EXTRA];
 
@@ -380,25 +383,25 @@ const ART = {
 };
 
 // ===================== proofs attached to the back of a card =====================
+const proofBox = (art, tag, side = 'right') => `<div class="proof-on" style="${side}:4%"><svg viewBox="0 0 160 150" aria-hidden="true">${art}</svg><span class="ptag">${tag}</span></div>`;
 const PROOF = {
- panties: `<svg class="proof" style="right:-10px;top:-4px;width:150px;animation:snapIn .7s .4s backwards" viewBox="0 0 120 110"><path d="M48 6 v24 M64 6 v24" stroke="#B98A5A" stroke-width="7"/><rect x="42" y="2" width="28" height="14" rx="3" fill="#C99B69"/><g class="sw" style="transform-origin:56px 22px"><path d="M14 26 h84 q-6 22 -22 36 q-10 10 -20 30 q-10 -20 -20 -30 q-16 -14 -22 -36Z" fill="#8E63D2"/><path d="M14 26 h84" stroke="#5B3A93" stroke-width="5"/>${[0, 1, 2, 3, 4, 5, 6].map(i => `<circle cx="${20 + i * 12}" cy="${34 + (i % 2) * 3}" r="4" fill="none" stroke="#E2D4FA" stroke-width="1.6"/>`).join('')}<path d="M40 52 q16 12 32 0" stroke="#E2D4FA" stroke-width="1.6" fill="none" stroke-dasharray="3 3"/>${heart(56, 46, 1, '#C8402E')}</g></svg>`,
- horseshoe: `<svg class="proof" style="right:-8px;top:-14px;width:96px;animation:snapIn .6s .5s backwards" viewBox="0 0 96 96">${ICON.horseshoe}<text x="48" y="94" text-anchor="middle" font-family="Rubik" font-weight="600" font-size="8" fill="#F4EDE0">магнит · на удачу</text></svg>`,
- ribbon: `<svg class="proof" style="left:-10px;top:30%;width:70px;animation:snapIn .6s .5s backwards" viewBox="0 0 70 200"><rect x="22" y="0" width="26" height="200" fill="#F4EDE0"/>${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<path d="M35 ${12 + i * 19} l7 7 l-7 7 l-7 -7Z" fill="${i % 2 ? '#231E27' : C.red}"/>`).join('')}<rect x="10" y="8" width="50" height="10" fill="#B9B7C4" opacity=".8"/></svg>`,
+ panties: proofBox(`<rect x="66" y="2" width="28" height="20" rx="3" fill="#C99B69"/><path d="M72 4 v26 M88 4 v26" stroke="#8E6640" stroke-width="5"/><g class="sw" style="transform-origin:80px 26px"><path d="M14 30 h132 q-10 34 -34 54 q-16 14 -32 44 q-16 -30 -32 -44 q-24 -20 -34 -54Z" fill="#8E63D2"/><path d="M14 30 h132" stroke="#5B3A93" stroke-width="7"/>${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<circle cx="${22 + i * 13}" cy="${40 + (i % 2) * 4}" r="5" fill="none" stroke="#E2D4FA" stroke-width="2"/>`).join('')}<path d="M48 66 q32 22 64 0" stroke="#E2D4FA" stroke-width="2" fill="none" stroke-dasharray="4 4"/>${heart(80, 58, 1.6, '#C8402E')}</g>`, 'трусики · фиолетовые, с кружевом'),
+ horseshoe: proofBox(`<g transform="translate(16 6) scale(1.35)">${ICON.horseshoe}</g><circle cx="80" cy="16" r="10" fill="#C8402E"/><circle cx="76" cy="12" r="3" fill="#fff" opacity=".6"/>`, 'магнитик · подкова на удачу'),
+ ribbon: proofBox(`<rect x="4" y="52" width="152" height="40" rx="3" fill="#F4EDE0"/>${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<path d="M${16 + i * 18} 62 l9 10 l-9 10 l-9 -10Z" fill="${i % 2 ? '#231E27' : C.red}"/>`).join('')}<path d="M4 52 h152 M4 92 h152" stroke="#C8402E" stroke-width="3" stroke-dasharray="5 4"/><path d="M146 92 l10 30 l-14 -8 l-10 10 l-2 -32Z" fill="#F4EDE0"/>`, 'ленточка с вышивкой', 'left'),
 };
-
 // ===================== helpers for the views =====================
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function tgHtml(q) { return `<div class="tg">${q.map(m => `<div class="msg${m.out ? ' out' : ''}"><div class="who">${esc(m.who)}</div>${m.fwd ? `<div class="fwd">Переслано от ${esc(m.fwd)}</div>` : ''}${m.reply ? `<div class="reply">${esc(m.reply)}</div>` : ''}${esc(m.text)}<span class="time">${esc(m.date)}</span></div>`).join('')}</div>`; }
 const inkLine = it => it.cap || it.note ? `<div class="note-line ${it.ink === 'purple' ? 'ink-purple' : 'ink-blue'}">${esc(it.cap || it.note)}${it.from ? `<br><small>— ${esc(it.from)}</small>` : (it.ink === 'purple' ? '<br><small>— Ваньинь</small>' : '<br><small>— Сичэнь</small>')}</div>` : '';
-const sticky = it => `<div class="sticky"><small>Заметка · ${esc(it.yr)}</small>${esc(it.note)}</div>`;
+const sticky = it => `<div class="sticky"><small>Заметка</small>${esc(it.note)}</div>`;
 const head = it => it.q ? tgHtml(it.q) : '';
 
 // every kind returns [html, init(stage)]
 const VIEW = {
  card: it => {
   const back = ART[it.art] ? ART[it.art]() : '';
-  return [`<button class="flip" id="flip" type="button" aria-label="Перевернуть карточку"><div class="faces"><div class="face front">${tgHtml(it.q)}<div class="turn">НАЖМИ, ЧТОБЫ ПЕРЕВЕРНУТЬ ↻</div></div><div class="face backf">${back}<div class="cap">${esc(it.cap)}</div></div></div><span id="proofslot"></span></button><p class="hint">Карточку можно переворачивать сколько угодно.</p>`,
-   st => { const f = st.querySelector('#flip'); let once = false; f.addEventListener('click', () => { f.classList.toggle('turned'); SFX.paper(); if (f.classList.contains('turned')) { if (it.id === 'tent') { crickets(true); SFX.heart(); } if (!once && PROOF[it.proof]) { once = true; setTimeout(() => { st.querySelector('#proofslot').innerHTML = PROOF[it.proof]; SFX.click(); }, 700); } } else crickets(false); }); }];
+  return [`<button class="flip" id="flip" type="button" aria-label="Перевернуть карточку"><div class="faces"><div class="face front">${tgHtml(it.q)}<div class="turn">НАЖМИ, ЧТОБЫ ПЕРЕВЕРНУТЬ ↻</div></div><div class="face backf">${back}<div class="cap">${esc(it.cap)}</div><span id="proofslot"></span></div></div></button><p class="hint">Карточку можно переворачивать сколько угодно.</p>`,
+   st => { const f = st.querySelector('#flip'); let once = false; f.addEventListener('click', () => { f.classList.toggle('turned'); SFX.paper(); if (f.classList.contains('turned')) { if (it.id === 'tent') { crickets(true); SFX.heart(); } if (!once && PROOF[it.proof]) { once = true; setTimeout(() => { if (!st.querySelector('#proofslot')) return; st.querySelector('#proofslot').innerHTML = PROOF[it.proof]; SFX.thud(); }, 750); } } else crickets(false); }); }];
  },
  pumpkin: it => [`${head(it)}<button class="act" id="lit" type="button">Зажечь свечу</button>${svg('0 0 300 260', `${defs}<rect width="300" height="260" rx="12" fill="#17121F"/><circle id="pg" cx="150" cy="150" r="140" fill="url(#gGlow)" opacity="0"/><ellipse cx="150" cy="160" rx="100" ry="78" fill="#D9822B"/><path d="M150 82 v156 M96 92 q-28 68 0 136 M204 92 q28 68 0 136" stroke="#B5651C" stroke-width="4" fill="none"/><path d="M146 84 q6 -34 30 -40" stroke="#3F4A3C" stroke-width="12" fill="none" stroke-linecap="round"/>
    <g id="face" fill="#3A2510"><path d="M104 140 l18 -24 l18 24Z M160 140 l18 -24 l18 24Z"/><path d="M98 112 l-8 -22 l22 12Z M202 112 l8 -22 l-22 12Z"/><path d="M104 176 q46 36 92 0 q-10 26 -46 28 q-36 -2 -46 -28Z"/><path d="M118 178 l6 10 l6 -8 l6 10 l6 -8 l6 10 l6 -8 l6 10 l6 -8 l6 10 l6 -10" stroke="#D9822B" stroke-width="3" fill="none"/></g>`)}${inkLine(it)}`,
@@ -414,9 +417,9 @@ const VIEW = {
    <g id="stampDone" opacity="0"><rect x="96" y="44" width="148" height="44" rx="4" fill="none" stroke="${C.red}" stroke-width="4" transform="rotate(-8 170 66)"/><text x="170" y="74" text-anchor="middle" font-family="Rubik" font-weight="600" font-size="22" fill="${C.red}" transform="rotate(-8 170 66)">ГОТОВО</text></g>`, 'art', 'Арт-фото')}
    <div style="width:min(100%,340px)"><div class="hint" id="proc">В обработке… 0%</div><div class="bar" style="width:100%"><i id="pfill"></i></div></div>${inkLine(it)}`,
    st => { let p = 0; const t = setInterval(() => { p = Math.min(100, p + 4); st.querySelector('#pfill').style.width = p + '%'; st.querySelector('#proc').textContent = p < 100 ? `В обработке… ${p}%` : 'Обработка завершена'; if (p >= 100) { clearInterval(t); st.querySelector('#stampDone').setAttribute('opacity', '1'); SFX.thud(); } }, 90); VIEW._timers.push(t); }],
- polaroid: it => [`${tgHtml(it.q)}<div style="width:min(100%,300px);transform:rotate(-3deg)">${svg('0 0 300 350', `${defs}<rect width="300" height="350" rx="4" fill="#FBF8F1"/><rect x="18" y="18" width="264" height="250" fill="#3A2557"/><g id="dev" style="transition:opacity 3s"><rect x="18" y="18" width="264" height="250" fill="url(#gSunset)" opacity=".4"/>${chibi(110, 240, 2.4, 'xc')}${chibi(196, 240, 2.4, 'jc')}<path d="M128 170 q30 30 58 4" stroke="${C.red}" stroke-width="4" fill="none" stroke-dasharray="2 4"/><circle cx="186" cy="174" r="6" fill="none" stroke="${C.gold}" stroke-width="3"/>${heart(150, 80, 3, C.red)}</g><rect id="white" x="18" y="18" width="264" height="250" fill="#F4EDE0" style="transition:opacity 3s"/><text x="150" y="310" text-anchor="middle" font-family="Marck Script" font-size="22" fill="#2B3F6E">на поводке · 2028</text>`, 'art', 'Полароид')}</div><p class="hint">Снимок проявляется…</p>${inkLine(it)}`,
+ polaroid: it => [`${tgHtml(it.q)}<div style="width:min(100%,300px);transform:rotate(-3deg)">${svg('0 0 300 350', `${defs}<rect width="300" height="350" rx="4" fill="#FBF8F1"/><rect x="18" y="18" width="264" height="250" fill="#3A2557"/><g id="dev" style="transition:opacity 3s"><rect x="18" y="18" width="264" height="250" fill="url(#gSunset)" opacity=".4"/>${chibi(110, 240, 2.4, 'xc')}${chibi(196, 240, 2.4, 'jc')}<path d="M128 170 q30 30 58 4" stroke="${C.red}" stroke-width="4" fill="none" stroke-dasharray="2 4"/><circle cx="186" cy="174" r="6" fill="none" stroke="${C.gold}" stroke-width="3"/>${heart(150, 80, 3, C.red)}</g><rect id="white" x="18" y="18" width="264" height="250" fill="#F4EDE0" style="transition:opacity 3s"/><text x="150" y="310" text-anchor="middle" font-family="Marck Script" font-size="22" fill="#2B3F6E">на поводке</text>`, 'art', 'Полароид')}</div><p class="hint">Снимок проявляется…</p>${inkLine(it)}`,
    st => { setTimeout(() => { st.querySelector('#white').style.opacity = 0; SFX.click(); }, 300); }],
- keycard: it => [`${tgHtml(it.q)}<button class="flip" id="flip" type="button" style="aspect-ratio:1.6;width:min(100%,380px)" aria-label="Перевернуть ключ-карту"><div class="faces"><div class="face" style="background:linear-gradient(135deg,#3A2557,#C8402E 60%,#F4B860);padding:18px;color:#fff;justify-content:space-between"><div style="font:700 26px/1 var(--display)">Комната «Страна чудес»</div><div style="font:500 12px/1.4 var(--ui);letter-spacing:.2em">♠ ♥ ♦ ♣ · КЛЮЧ-КАРТА · 2029</div></div><div class="face backf" style="justify-content:center;align-items:center;text-align:center;gap:6px"><div style="font:700 20px/1.2 var(--display)">Добро пожаловать в Страну чудес</div><div class="cap">Номер на двоих. Чай в шесть — всегда.</div><div style="font:600 11px/1 var(--ui);letter-spacing:.2em;color:#7A6B88">МАЛАЙЗИЯ · ЗАСЕЛЕНИЕ ВЫПОЛНЕНО</div></div></div></button>${inkLine(it)}`,
+ keycard: it => [`${tgHtml(it.q)}<button class="flip" id="flip" type="button" style="aspect-ratio:1.6;width:min(100%,380px)" aria-label="Перевернуть ключ-карту"><div class="faces"><div class="face" style="background:linear-gradient(135deg,#3A2557,#C8402E 60%,#F4B860);padding:18px;color:#fff;justify-content:space-between"><div style="font:700 26px/1 var(--display)">Комната «Страна чудес»</div><div style="font:500 12px/1.4 var(--ui);letter-spacing:.2em">♠ ♥ ♦ ♣ · КЛЮЧ-КАРТА</div></div><div class="face backf" style="justify-content:center;align-items:center;text-align:center;gap:6px"><div style="font:700 20px/1.2 var(--display)">Добро пожаловать в Страну чудес</div><div class="cap">Номер на двоих. Чай в шесть — всегда.</div><div style="font:600 11px/1 var(--ui);letter-spacing:.2em;color:#7A6B88">МАЛАЙЗИЯ · ЗАСЕЛЕНИЕ ВЫПОЛНЕНО</div></div></div></button>${inkLine(it)}`,
    st => { const f = st.querySelector('#flip'); f.addEventListener('click', () => { f.classList.toggle('turned'); SFX.click(); }); }],
  maze: it => { const W = 9, cells = [], r0 = []; let seed = 11; const R = () => (seed = (seed * 9301 + 49297) % 233280) / 233280; for (let i = 0; i < W * W; i++) cells.push({ v: false, w: [1, 1, 1, 1] }); const st = [0]; cells[0].v = true; const path = []; while (st.length) { const c = st[st.length - 1], x = c % W, y = Math.floor(c / W), nb = []; [[0, -1, 0, 2], [1, 0, 1, 3], [0, 1, 2, 0], [-1, 0, 3, 1]].forEach(([dx, dy, a, b]) => { const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < W && ny < W && !cells[ny * W + nx].v) nb.push([ny * W + nx, a, b]); }); if (nb.length) { const [n, a, b] = nb[Math.floor(R() * nb.length)]; cells[c].w[a] = 0; cells[n].w[b] = 0; cells[n].v = true; st.push(n); } else st.pop(); }
    // solve with BFS from top-left to centre
@@ -436,11 +439,11 @@ const VIEW = {
    if (it.fig === 'fest') inner = `<rect width="320" height="300" rx="12" fill="#2A2236"/><rect x="14" y="14" width="292" height="272" rx="8" fill="none" stroke="${C.gold}" stroke-width="3"/><rect x="20" y="230" width="280" height="50" fill="#3A2557"/>
      <g class="bob">${chibi(110, 250, 3.6, 'xc')}<path d="M80 74 h60 l-6 -56 h-48Z" fill="#141016"/><path d="M70 74 h80" stroke="#141016" stroke-width="8" stroke-linecap="round"/><rect x="86" y="54" width="48" height="10" fill="${C.red}"/><rect x="112" y="40" width="20" height="12" fill="#F4EDE0" transform="rotate(10 122 46)"/><text x="122" y="50" text-anchor="middle" font-family="Rubik" font-size="7" fill="#141016" transform="rotate(10 122 46)">10/6</text><g transform="translate(152 170)"><path d="M-8 0 h22 q-2 14 -11 14 q-9 0 -11 -14Z" fill="#FBF8F1" stroke="${C.blue}" stroke-width="2"/></g></g>
      <g class="bob" style="animation-delay:.6s"><ellipse cx="226" cy="214" rx="46" ry="30" fill="${C.lav}"/>${[0, 1, 2, 3].map(i => `<path d="M${196 + i * 18} 192 q4 10 0 22" stroke="${C.purpleD}" stroke-width="6" fill="none"/>`).join('')}<circle cx="232" cy="160" r="36" fill="${C.lav}"/><path d="M206 136 l-6 -30 l22 18Z M258 136 l6 -30 l-22 18Z" fill="${C.lav}"/><ellipse cx="220" cy="156" rx="7" ry="9" fill="${C.gold}"/><ellipse cx="244" cy="156" rx="7" ry="9" fill="${C.gold}"/><path d="M220 150 v12 M244 150 v12" stroke="#1C1622" stroke-width="3"/><path d="M208 176 q24 22 48 0 q-24 8 -48 0Z" fill="#1C1622"/><path d="M212 178 q20 14 40 0" stroke="#FBF8F1" stroke-width="4" fill="none"/><path d="M270 222 q30 -10 26 -40" stroke="${C.purpleD}" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="214" cy="188" r="5" fill="#C9C6D2"/></g>
-     <text x="160" y="262" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="14" fill="${C.gold}">ШЛЯПНИК · ЧЕШИРСКИЙ КОТ · 2028</text>`;
+     <text x="160" y="262" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="14" fill="${C.gold}">ШЛЯПНИК · ЧЕШИРСКИЙ КОТ</text>`;
    return [`${it.q ? tgHtml(it.q) : sticky(it)}${svg('0 0 320 300', `${defs}${inner}`, 'art', it.title)}${it.q ? inkLine(it) : ''}`, () => { SFX.pop(); }]; },
  tin: it => { const F = ['У вас всё будет хорошо. (Сбылось.)', 'Вас ждёт путешествие вдвоём.', 'Он снова скажет «люблю» — и не один раз.', 'Год будет тёплым. Руки — тоже.', 'Скоро встреча. Готовь 288 поцелуев.', 'Тот, кого ты выбираешь, выбирает тебя каждый день.', 'Удача любит смелых и колючих.', 'В этом году исполнится загаданное под звездой.', 'Ваш дом там, где вы рядом.', 'Десять лет — только начало.'];
    return [`${tgHtml(it.q)}<div style="position:relative;width:min(100%,300px);height:300px" id="tinbox">${svg('0 0 300 300', `${defs}<rect x="70" y="120" width="160" height="160" rx="14" fill="${C.red}"/>${[0, 1, 2, 3, 4, 5].map(i => `<path d="M${96 + (i % 3) * 52} ${152 + Math.floor(i / 3) * 56} l8 12 l8 -12 l-8 -12Z" fill="#F4EDE0"/>`).join('')}<text x="150" y="268" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="15" fill="${C.gold}">PRAHA · NOVÝ ROK</text><ellipse cx="150" cy="120" rx="82" ry="22" fill="#9E2F21"/><g id="lid" style="transition:transform .8s cubic-bezier(.34,1.56,.64,1);transform-origin:70px 110px"><ellipse cx="150" cy="112" rx="84" ry="24" fill="${C.gold}"/><ellipse cx="150" cy="108" rx="70" ry="16" fill="#F4D894"/></g>`, 'art', 'Жестяная банка')}</div><button class="act" id="open" type="button">Открыть банку</button><div class="row" id="slips"></div>${inkLine(it)}`,
-    st => { st.querySelector('#open').addEventListener('click', e => { e.target.disabled = true; SFX.pop(); st.querySelector('#lid').style.transform = 'translate(70px, -70px) rotate(18deg)'; const box = st.querySelector('#tinbox'); F.forEach((f, i) => { const d = document.createElement('div'); d.textContent = '🥠'; d.style.cssText = `position:absolute;left:46%;top:36%;font-size:28px;--fx:${(Math.random() - .5) * 260}px;--fy:${-120 - Math.random() * 120}px;--fr:${(Math.random() - .5) * 360}deg;animation:flyout 1s ${i * .08}s cubic-bezier(.22,1,.36,1) forwards`; box.appendChild(d); setTimeout(() => { d.remove(); if (!st.querySelector('#slips')) return; const b = document.createElement('button'); b.className = 'sticky'; b.style.cssText = `font-size:17px;transform:rotate(${(Math.random() - .5) * 8}deg);border:0;cursor:pointer;max-width:200px;animation:pop .4s backwards`; b.innerHTML = `<small>Предсказание · ${2027 + i}</small>${esc(f)}`; b.addEventListener('click', SFX.paper); st.querySelector('#slips').appendChild(b); SFX.click(); }, 1100 + i * 90); }); }); }]; },
+    st => { st.querySelector('#open').addEventListener('click', e => { e.target.disabled = true; SFX.pop(); st.querySelector('#lid').style.transform = 'translate(70px, -70px) rotate(18deg)'; const box = st.querySelector('#tinbox'); F.forEach((f, i) => { const d = document.createElement('div'); d.textContent = '🥠'; d.style.cssText = `position:absolute;left:46%;top:36%;font-size:28px;--fx:${(Math.random() - .5) * 260}px;--fy:${-120 - Math.random() * 120}px;--fr:${(Math.random() - .5) * 360}deg;animation:flyout 1s ${i * .08}s cubic-bezier(.22,1,.36,1) forwards`; box.appendChild(d); setTimeout(() => { d.remove(); if (!st.querySelector('#slips')) return; const b = document.createElement('button'); b.className = 'sticky'; b.style.cssText = `font-size:17px;transform:rotate(${(Math.random() - .5) * 8}deg);border:0;cursor:pointer;max-width:200px;animation:pop .4s backwards`; b.innerHTML = `<small>Предсказание</small>${esc(f)}`; b.addEventListener('click', SFX.paper); st.querySelector('#slips').appendChild(b); SFX.click(); }, 1100 + i * 90); }); }); }]; },
  mittens: it => [`${tgHtml(it.q)}${svg('0 0 340 260', `${defs}<rect width="340" height="260" rx="12" fill="#1B2232"/>${stars(30, 340, 120, 3)}<circle id="warm" cx="170" cy="150" r="120" fill="url(#gGlow)" opacity=".15"/><path d="M60 110 q0 -60 46 -60 q46 0 46 60 v80 h-92Z" fill="${C.purple}"/><path d="M60 100 q-24 0 -24 -22 q0 -22 24 -16" fill="${C.purple}"/><path d="M188 110 q0 -60 46 -60 q46 0 46 60 v80 h-92Z" fill="#2A2430"/><path d="M280 100 q24 0 24 -22 q0 -22 -24 -16" fill="#2A2430"/><path d="M60 170 h92 M188 170 h92" stroke="${C.gold}" stroke-width="10"/><path d="M106 190 q64 70 128 0" stroke="#F4EDE0" stroke-width="3" fill="none"/>${heart(106, 120, 2, C.lav)}${heart(234, 120, 2, C.red)}`, 'art', 'Варежки')}<button class="act" id="w" type="button">Погреть ручки</button>${inkLine(it)}`,
    st => { st.querySelector('#w').addEventListener('click', () => { const w = st.querySelector('#warm'); w.style.transition = 'opacity 1.2s'; w.setAttribute('opacity', '.8'); SFX.heart(); }); }],
  vial: it => [`${tgHtml(it.q)}<div style="position:relative;width:min(100%,260px)" id="vb">${svg('0 0 260 300', `${defs}<rect width="260" height="300" rx="12" fill="#1C1A2C"/><rect x="104" y="30" width="52" height="34" rx="6" fill="#7A4A2A"/><path d="M90 70 h80 v150 a40 40 0 0 1 -80 0Z" fill="url(#gGlass)" stroke="#C9D8F0" stroke-width="3"/><path id="water" d="M94 140 h72 v80 a36 36 0 0 1 -72 0Z" fill="#6F9BD6"/><path d="M130 150 v50 M110 170 h40" stroke="#fff" stroke-width="6"/><rect x="70" y="244" width="120" height="30" rx="4" fill="#F4EDE0"/><text x="130" y="264" text-anchor="middle" font-family="Marck Script" font-size="17" fill="${C.purpleD}">Святая вода</text>`, 'art', 'Святая вода')}</div><button class="act" id="sh" type="button">Встряхнуть и побрызгать</button>${inkLine(it)}`,
@@ -473,16 +476,16 @@ const VIEW = {
    st => { st.querySelector('#on').addEventListener('click', e => { const on = e.target.textContent.startsWith('Вкл'); st.querySelector('#ghosts').setAttribute('opacity', on ? 1 : 0); st.querySelector('#lg').setAttribute('opacity', on ? .8 : 0); st.querySelector('#flame').setAttribute('opacity', on ? .9 : .15); e.target.textContent = on ? 'Выключить фонарь' : 'Включить фонарь'; on ? SFX.magic() : SFX.click(); }); }],
  herbarium: it => [`<div style="background:#F4EDE0;padding:18px;max-width:420px;width:100%;transform:rotate(-1deg);box-shadow:0 10px 24px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;gap:8px">${svg('0 0 260 260', `<path d="M130 240 q-14 -80 0 -150" stroke="#5C7A4A" stroke-width="5" fill="none"/><path d="M128 190 q-40 -14 -50 10 q30 8 50 -10Z M132 160 q40 -14 50 10 q-30 8 -50 -10Z" fill="#7C9A5E"/>${[0, 1, 2, 3, 4, 5].map(i => `<ellipse cx="${130 + 22 * Math.cos(i * 1.047)}" cy="${80 + 22 * Math.sin(i * 1.047)}" rx="22" ry="14" transform="rotate(${i * 60} ${130 + 22 * Math.cos(i * 1.047)} ${80 + 22 * Math.sin(i * 1.047)})" fill="${C.red}" opacity=".9"/>`).join('')}<circle cx="130" cy="80" r="12" fill="${C.gold}"/><rect x="96" y="210" width="68" height="12" fill="#E8DDC9" opacity=".9" transform="rotate(-4 130 216)"/>`, 'art', 'Гербарий')}<div class="ink-purple" style="color:#6B3FA0;text-align:center">${esc(it.note)}<br><small>— ${esc(it.from)}</small></div></div>`, () => SFX.paper()],
  diary: it => { const P = [
-    ['2027, июнь', 'Палатка, озеро, светлячки. Муж — самое красивое, что видели эти звёзды. Сердечки летели до утра.', 'Не до утра. До полпятого. (До утра.)'],
-    ['2027, октябрь', 'Вырезали тыкву с мордой кота. Он делал вид, что ему не нравится, и сфотографировал её двадцать раз.', ''],
-    ['2028, 1 января', 'Прага. Полночь. Он греет мне руки и говорит, что это я грею его. Мы оба правы.', 'Я правее.'],
-    ['2029', 'Малайзия, комната Страны чудес. Он смеялся так, что Чеширский кот бы позавидовал.', 'Я не смеялся. (Смеялся.)'],
-    ['2030', 'Айзенах, драконово ущелье. Купили котика-дракошку — похож на мужа: колючий снаружи, тёплый внутри.', 'Это клевета.'],
-    ['2031', 'Цирк. Весь вечер держал меня за руку и смотрел не на арену, а на меня. Я видел.', ''],
-    ['2033', 'Проспал весь день у мужа на коленях. Лучший день десятилетия. Муж прекрасен.', 'Ноги затекли. Не жалею.'],
-    ['2036', 'Десять лет. Всё, что мы хотели, — сбылось. А я люблю его ещё сильнее, чем в первый день. Муж — моё всё.', 'И ты — моё.']];
+    ['', 'Палатка, озеро, светлячки. Муж — самое красивое, что видели эти звёзды. Сердечки летели до утра.', 'Не до утра. До полпятого. (До утра.)'],
+    ['', 'Вырезали тыкву с мордой кота. Он делал вид, что ему не нравится, и сфотографировал её двадцать раз.', ''],
+    ['', 'Прага. Полночь. Он греет мне руки и говорит, что это я грею его. Мы оба правы.', 'Я правее.'],
+    ['', 'Малайзия, комната Страны чудес. Он смеялся так, что Чеширский кот бы позавидовал.', 'Я не смеялся. (Смеялся.)'],
+    ['', 'Айзенах, драконово ущелье. Купили котика-дракошку — похож на мужа: колючий снаружи, тёплый внутри.', 'Это клевета.'],
+    ['', 'Цирк. Весь вечер держал меня за руку и смотрел не на арену, а на меня. Я видел.', ''],
+    ['', 'Проспал весь день у мужа на коленях. Лучший день десятилетия. Муж прекрасен.', 'Ноги затекли. Не жалею.'],
+    ['', 'Десять лет. Всё, что мы хотели, — сбылось. А я люблю его ещё сильнее, чем в первый день. Муж — моё всё.', 'И ты — моё.']];
    return [`<div style="width:min(100%,520px);background:#F4EDE0;color:#2B3F6E;border-radius:6px;padding:20px 22px;min-height:290px;box-shadow:0 14px 30px rgba(0,0,0,.45);position:relative;display:flex;flex-direction:column;gap:10px"><div style="font:600 12px/1 var(--ui);letter-spacing:.2em;color:#7A6B88" id="dd"></div><div class="ink-blue" style="color:#2B5DA6;font-size:24px" id="dt"></div><div class="ink-purple" style="color:#6B3FA0;margin-left:auto;text-align:right" id="dj"></div><div style="margin-top:auto;font:500 12px/1 var(--ui);color:#7A6B88" id="dp"></div></div><div class="row"><button class="back" id="prev" type="button">← Назад</button><button class="act" id="next" type="button">Дальше →</button></div><p class="hint">Синие чернила — Сичэнь, фиолетовые — Ваньинь.</p>`,
-    st => { let i = 0; const show = () => { const [d, t, j] = P[i]; st.querySelector('#dd').textContent = d; st.querySelector('#dt').textContent = t; st.querySelector('#dj').textContent = j; st.querySelector('#dp').textContent = `страница ${i + 1} из ${P.length}`; }; show(); st.querySelector('#next').addEventListener('click', () => { i = (i + 1) % P.length; show(); SFX.paper(); }); st.querySelector('#prev').addEventListener('click', () => { i = (i + P.length - 1) % P.length; show(); SFX.paper(); }); }]; },
+    st => { let i = 0; const show = () => { const [d, t, j] = P[i]; st.querySelector('#dd').textContent = `ЗАПИСЬ ${i + 1}`; st.querySelector('#dt').textContent = t; st.querySelector('#dj').textContent = j; st.querySelector('#dp').textContent = `страница ${i + 1} из ${P.length}`; }; show(); st.querySelector('#next').addEventListener('click', () => { i = (i + 1) % P.length; show(); SFX.paper(); }); st.querySelector('#prev').addEventListener('click', () => { i = (i + P.length - 1) % P.length; show(); SFX.paper(); }); }]; },
  star: it => [`${tgHtml(it.q)}<div style="background:#F4EDE0;color:#2A2236;max-width:440px;width:100%;padding:20px;text-align:center;border:6px double ${C.gold};box-shadow:0 10px 24px rgba(0,0,0,.4)"><div style="font:600 11px/1 var(--ui);letter-spacing:.3em;color:#7A6B88">СЕРТИФИКАТ</div><div style="font:700 30px/1.1 var(--display);margin:6px 0">Звезда «Ваньинь»</div>${svg('0 0 300 150', `<rect width="300" height="150" rx="8" fill="#141026"/>${stars(60, 300, 150, 21)}<path d="M150 50 l8 16 l18 2 l-13 12 l4 18 l-17 -9 l-17 9 l4 -18 l-13 -12 l18 -2Z" fill="${C.gold}" class="tw"/><path d="M60 110 L110 90 L150 75 M150 75 L210 96 L250 70" stroke="#6F9BD6" stroke-width="1" fill="none" stroke-dasharray="3 3"/>`, 'art', 'Карта звёздного неба')}<div class="ink-blue" style="color:#2B5DA6">${esc(it.cap)}</div></div>`, () => SFX.chime()],
  candies: it => { const W = ['Ты моя колючка', 'Муж прекрасен', 'Ещё 288?', 'Котик ♥', 'Один тебе, один мне', 'Скучаю, даже когда рядом', 'Апельсинка', 'Черничка', 'Навсегда твой'];
    return [`${sticky(it)}<div class="row" id="cd">${W.map((w, i) => `<button class="back" data-i="${i}" type="button" style="padding:6px;border-radius:12px;width:88px;height:70px">${svg('0 0 96 96', ICON.candy.replace(new RegExp(C.purple, 'g'), [C.purple, C.red, C.gold][i % 3]), 'icon', 'Конфета')}</button>`).join('')}</div><div class="row" id="wr"></div>`,
@@ -500,20 +503,20 @@ const VIEW = {
 VIEW._timers = [];
 
 // ===================== the box, the views, progress =====================
-const KEY = 'parcel-2036-v1';
+const KEY = 'parcel-2036-v2';
 let seen = new Set(); try { seen = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...seen])); } catch (e) {} };
 function iconSvg(it) { return `<svg viewBox="0 0 96 96" aria-hidden="true">${defs}${ICON[it.icon] || ''}</svg>`; }
 function build(list, el, off = 0) {
   list.forEach((it, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'item' + (seen.has(it.id) ? ' seen' : ''); b.id = 'it-' + it.id; b.style.setProperty('--r', `${((i * 37) % 11) - 5}deg`); b.style.setProperty('--d', `${(i + off) * .045}s`); b.setAttribute('aria-label', it.title);
-    b.innerHTML = `${iconSvg(it)}<span class="tag">${esc(it.title)}</span><span class="yr">${esc(it.yr)}</span>`; b.addEventListener('click', () => openItem(it)); el.appendChild(b); });
+    b.innerHTML = `${iconSvg(it)}<span class="tag">${esc(it.title)}</span>`; b.addEventListener('click', () => openItem(it)); el.appendChild(b); });
 }
 function progress() { const n = ITEMS.filter(it => seen.has(it.id)).length; document.getElementById('cnt').textContent = `${n} из ${ITEMS.length}`; document.getElementById('barfill').style.width = `${n / ITEMS.length * 100}%`; document.getElementById('final').classList.toggle('on', n === ITEMS.length); }
 const view = document.getElementById('view'), stage = document.getElementById('stage');
 let current = null, lastFocus = null;
 function openItem(it) {
   ac(); lastFocus = document.activeElement; current = it; SFX.paper();
-  document.getElementById('vt').textContent = it.title; document.getElementById('vw').textContent = it.yr;
+  document.getElementById('vt').textContent = it.title; document.getElementById('vw').textContent = '';
   const [html, init] = VIEW[it.kind](it); stage.innerHTML = html; view.hidden = false; document.body.style.overflow = 'hidden';
   if (init) init(stage); document.getElementById('close').focus({ preventScroll: true });
   if (!seen.has(it.id)) { seen.add(it.id); save(); const el = document.getElementById('it-' + it.id); el && el.classList.add('seen'); }
