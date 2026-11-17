@@ -7,7 +7,7 @@ const cities = new Set(t.cities.map((c) => c.id));
 const segs = new Set(t.segments.map((s) => s.id));
 const ids = new Set();
 const dup = (id, what) => (ids.has(id) ? errors.push(`Повтор id «${id}» (${what})`) : ids.add(id));
-const dt = /^\d{4}-\d\d-\d\dT\d\d:\d\d$/;
+const dt = /^\d{4}-\d\d-\d\dT\d\d:\d\d([+-]\d\d:\d\d)?$/;
 for (const c of t.cities) {
   dup('city:' + c.id, 'город');
   if (typeof c.lat !== 'number' || typeof c.lng !== 'number') errors.push(`Город ${c.id}: нет координат`);
@@ -27,6 +27,7 @@ for (const d of t.days) {
     if (it.seg && !segs.has(it.seg)) errors.push(`Пункт ${it.id}: нет отрезка «${it.seg}»`);
     if (it.city && !cities.has(it.city)) errors.push(`Пункт ${it.id}: нет города «${it.city}»`);
     if (it.time && !/^\d\d:\d\d$/.test(it.time)) errors.push(`Пункт ${it.id}: время должно быть вида 09:30`);
+    if (it.tz && !/^[+-]\d\d:\d\d$/.test(it.tz)) errors.push(`Пункт ${it.id}: tz должно быть вида +06:00`);
   }
 }
 for (const r of t.reminders || []) {

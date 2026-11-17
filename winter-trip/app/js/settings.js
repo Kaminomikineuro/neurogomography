@@ -174,7 +174,8 @@ async function importZipFlow() {
       { ok: 'Добавить' });
     if (!ok) return;
     await M.applyZip(z);
-    return toast(`Добавлено файлов: ${z.docs.length}`);
+    const nPatches = Object.keys(z.overlay?.patches || {}).length;
+    return toast(z.docs.length ? `Добавлено файлов: ${z.docs.length}` : `Брони добавлены: ${nPatches}`);
   }
   const mine = M.S.settings.pinHash && !z.manifest.withSecrets;
   const ok = await confirmBox('Импортировать?',

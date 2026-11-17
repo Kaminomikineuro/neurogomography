@@ -4,6 +4,17 @@ import { form, confirmBox, toast, sheet } from './ui.js';
 import * as M from './model.js';
 import { liveSheet } from './details.js';
 
+const TZ_NAMES = { '+06:00': 'по Бишкеку', '+03:00': 'по Стамбулу' };
+function tzOf(at) {
+  const m = /([+-]\d\d:\d\d)$/.exec(at || '');
+  return m && m[1] !== '+01:00' ? { off: m[1], name: TZ_NAMES[m[1]] || m[1] } : null;
+}
+/** Время напоминания так, как оно записано: 19:00 по Бишкеку, а не 14:00 по Европе. */
+function remWhen(r, ts) {
+  const z = tzOf(r.at);
+  return z ? `${fmtLocal(r.at.slice(0, 16))} ${z.name}` : fmtLocal(tripLocal(ts));
+}
+
 function relText(r) {
   if (!r.rel) return '';
   const s = M.trip().segById[r.rel.seg];
@@ -41,7 +52,7 @@ function remindersView(close) {
         return h('div.rem' + (done ? '.checked' : '') + (past ? '.past' : '') + (i === firstFuture ? '.next' : ''),
           h('button.item-check', { onclick: () => M.toggleCheck('rem:' + r.id), 'aria-label': 'Отметить' }, done ? '✓' : ''),
           h('button.rem-main', { onclick: () => !m._masked && editReminder(r) },
-            h('div.rem-when', ts ? `${fmtLocal(tripLocal(ts))} · ${fmtRelative(ts)}` : 'время появится, когда станет известно отправление'),
+            h('div.rem-when', ts ? `${remWhen(r, ts)} · ${fmtRelative(ts)}` : 'время появится, когда станет известно отправление'),
             h('div.rem-title', m.title),
             m.details && h('div.rem-details', m.details),
             h('div.item-meta', r.rel && h('span.tag', '⏱ ' + relText(r)), (r.tbd || isTbd(m.details || '')) && h('span.tag.tbd', 'вписать дату'), r._local && h('span.tag.local', 'изменено'))));
@@ -55,7 +66,7 @@ async function editReminder(r) {
   const ts = isNew ? null : M.reminderTs(r);
   const res = await form(isNew ? 'Новое напоминание' : 'Напоминание', [
     { name: 'title', label: 'Текст', value: r.title || '', autofocus: isNew },
-    { name: 'at', label: r.rel ? 'Время (сейчас считается от поезда/рейса; если задать — станет фиксированным)' : 'Когда напомнить', type: 'datetime-local', value: r.rel ? '' : r.at || (ts ? tripLocal(ts) : '') },
+    { name: 'at', label: r.rel ? 'Время (сейчас считается от поезда/рейса; если задать — станет фиксированным)' : 'Когда напомнить', type: 'datetime-local', value: r.rel ? '' : (r.at || (ts ? tripLocal(ts) : '')).slice(0, 16), hint: tzOf(r.at) ? `Время ${tzOf(r.at).name}` : null },
     { name: 'details', label: 'Подробности', type: 'textarea', value: r.details || '' },
     { name: 'secret', label: '🎁 Секрет', type: 'checkbox', value: !!r.secret, hint: 'Скрыто до 04.01 или PIN' },
   ], {
@@ -71,7 +82,7 @@ async function editReminder(r) {
   if (!res.at && !r.rel) return toast('Укажите время');
   const fields = { title: res.title, details: res.details, tbd: false,
     secret: res.secret ? r.secret || { revealAt: '2027-01-04T00:00', placeholder: 'Секретное напоминание 🎁' } : null };
-  if (res.at) Object.assign(fields, { at: res.at, rel: null });
+  if (res.at) Object.assign(fields, { at: res.at + (tzOf(r.at)?.off || ''), rel: null });
   if (isNew) await M.addReminder(fields);
   else await M.patch('rem:' + r.id, fields);
   toast('Сохранено');

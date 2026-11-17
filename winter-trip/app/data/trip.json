@@ -1,40 +1,39 @@
 {
   "schema": 1,
-  "revision": 1,
+  "revision": 2,
   "title": "Наш зимний маршрут",
-  "subtitle": "Германия · Чехия · Австрия · Словакия",
+  "subtitle": "Росток · Прага · Вена · Кёльн · Фантазиаленд",
   "travelers": ["Ками", "Аня"],
   "tz": "+01:00",
   "start": "2026-12-18",
   "end": "2027-01-06",
-  "_comment": "Публичный файл: никаких номеров броней, паспортов и PNR. Личное добавляется в приложении на телефоне. «[уточнить]» = данные ещё не известны.",
+  "_comment": "Публичный файл: никаких номеров броней, PNR, мест, кодов дверей, паспортов, цен и названий секретных отелей. Личное приходит пакетом (.zip) и живёт только на телефоне. «[уточнить]» = данные ещё не известны. Время с +06:00 — Бишкек, +03:00 — Стамбул, остальное — местное европейское.",
 
   "cities": [
     {
       "id": "berlin", "name": "Берлин", "local": "Berlin", "country": "DE", "flag": "🇩🇪",
       "lat": 52.5200, "lng": 13.4050, "kind": "transit",
-      "dates": "18.12 — прилёт; 21.12 — день с мамой Ани",
+      "dates": "18.12 — прилёт; 21.12 — день с мамой Ани и поезд в Прагу",
       "from": "2026-12-18", "to": "2026-12-21", "nights": 0,
       "station": { "name": "Berlin Hauptbahnhof", "lat": 52.5251, "lng": 13.3694 },
       "places": [
-        { "name": "Аэропорт BER", "local": "Flughafen BER, Terminal 1", "lat": 52.3667, "lng": 13.5033, "icon": "✈️" },
-        { "name": "Берлин Hbf", "local": "Berlin Hauptbahnhof", "lat": 52.5251, "lng": 13.3694, "icon": "🚆" },
-        { "name": "Ярмарка на Жандарменмаркт", "local": "WeihnachtsZauber Gendarmenmarkt", "lat": 52.5137, "lng": 13.3925, "icon": "🎄", "note": "Вариант — какие ярмарки, решаем [уточнить]" },
-        { "name": "Ресторан с мамой", "local": "[уточнить]", "lat": null, "lng": null, "icon": "🍽️" }
+        { "name": "Аэропорт BER, терминал 1", "local": "Flughafen BER, Terminal 1", "lat": 52.3667, "lng": 13.5033, "icon": "✈️", "note": "18.12, 10:45 — Аня встречает" },
+        { "name": "Берлин Hbf", "local": "Berlin Hauptbahnhof", "lat": 52.5251, "lng": 13.3694, "icon": "🚆", "note": "21.12, 19:28 — поезд в Прагу (вокзал проверить в билете)" },
+        { "name": "Ярмарка на Жандарменмаркт", "local": "WeihnachtsZauber Gendarmenmarkt", "lat": 52.5137, "lng": 13.3925, "icon": "🎄", "note": "Вариант на 21.12 с мамой" }
       ],
-      "notes": "Транзит: прилёт 18.12 и день с мамой 21.12."
+      "notes": "Транзит: прилёт 18.12 и день с мамой 21.12. Поезда по Германии и проездные для Ками купила Аня."
     },
     {
       "id": "rostock", "name": "Росток", "local": "Rostock", "country": "DE", "flag": "🇩🇪",
       "lat": 54.0887, "lng": 12.1405, "kind": "stay",
       "from": "2026-12-18", "to": "2026-12-21", "nights": 3,
-      "hotel": { "name": "[уточнить]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
+      "hotel": { "name": "У Ани", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
       "station": { "name": "Rostock Hauptbahnhof", "lat": 54.0782, "lng": 12.1311 },
       "places": [
         { "name": "Росток Hbf", "local": "Rostock Hauptbahnhof", "lat": 54.0782, "lng": 12.1311, "icon": "🚆" },
         { "name": "Рождественская ярмарка", "local": "Rostocker Weihnachtsmarkt, Kröpeliner Straße / Neuer Markt", "lat": 54.0887, "lng": 12.1405, "icon": "🎄", "note": "Работает до 22.12" }
       ],
-      "notes": "20.12 — день рождения мамы Ани 🎂"
+      "notes": "20.12 — день рождения мамы Ани 🎂 Подарки маме."
     },
     {
       "id": "hamburg", "name": "Гамбург", "local": "Hamburg", "country": "DE", "flag": "🇩🇪",
@@ -48,47 +47,60 @@
       "notes": "На день, по настроению. ~2 ч в одну сторону."
     },
     {
-      "id": "dresden", "name": "Дрезден", "local": "Dresden", "country": "DE", "flag": "🇩🇪",
-      "lat": 51.0504, "lng": 13.7373, "kind": "stay",
-      "from": "2026-12-21", "to": "2026-12-23", "nights": 2,
-      "hotel": { "name": "[уточнить]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
-      "station": { "name": "Dresden Hauptbahnhof", "lat": 51.0405, "lng": 13.7320 },
-      "places": [
-        { "name": "Дрезден Hbf", "local": "Dresden Hauptbahnhof", "lat": 51.0405, "lng": 13.7320, "icon": "🚆" },
-        { "name": "Штрицельмаркт", "local": "Striezelmarkt, Altmarkt", "lat": 51.0496, "lng": 13.7383, "icon": "🎄" },
-        { "name": "Фрауэнкирхе", "local": "Frauenkirche, Neumarkt", "lat": 51.0519, "lng": 13.7416, "icon": "⛪" },
-        { "name": "Цвингер", "local": "Zwinger, Sophienstraße", "lat": 51.0530, "lng": 13.7337, "icon": "🏛️" }
-      ],
-      "notes": "23.12 вещи оставить на ресепшене до поезда."
-    },
-    {
       "id": "prague", "name": "Прага", "local": "Praha", "country": "CZ", "flag": "🇨🇿",
       "lat": 50.0870, "lng": 14.4210, "kind": "stay",
-      "from": "2026-12-23", "to": "2026-12-26", "nights": 3,
-      "hotel": { "name": "[уточнить]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
+      "from": "2026-12-21", "to": "2026-12-26", "nights": 5,
+      "hotel": {
+        "name": "Hunger Wall Residence, Junior Suite",
+        "addressLocal": "Plaská 615/8, 150 00 Praha 5",
+        "address": "Мала Страна, рядом трамвайная остановка Újezd",
+        "phone": "", "checkIn": "с 14:00, ночью — самостоятельный заезд", "checkOut": "",
+        "lat": null, "lng": null,
+        "info": [
+          { "k": "Ресепшен", "v": "по будням 9:00–16:00" },
+          { "k": "Онлайн-регистрация", "v": "до приезда, на обеих (нужны паспорта)" },
+          { "k": "Багаж", "v": "хранение бесплатно" },
+          { "k": "Бесплатная отмена", "v": "до 19.12 (за 48 ч), позже — штраф 2 ночи" }
+        ]
+      },
       "station": { "name": "Praha hlavní nádraží", "lat": 50.0833, "lng": 14.4353 },
       "places": [
-        { "name": "Прага, главный вокзал", "local": "Praha hlavní nádraží", "lat": 50.0833, "lng": 14.4353, "icon": "🚆" },
-        { "name": "Староместская площадь", "local": "Staroměstské náměstí", "lat": 50.0875, "lng": 14.4213, "icon": "🎄" },
-        { "name": "Вацлавская площадь", "local": "Václavské náměstí", "lat": 50.0814, "lng": 14.4280, "icon": "🎄" },
-        { "name": "Тур по призракам — место встречи", "local": "[уточнить]", "lat": null, "lng": null, "icon": "👻" },
-        { "name": "Ресторан на Сочельник", "local": "[уточнить]", "lat": null, "lng": null, "icon": "🍽️" }
+        { "name": "Прага, главный вокзал", "local": "Praha hlavní nádraží", "lat": 50.0833, "lng": 14.4353, "icon": "🚆", "note": "21.12, 23:37 — приезд, дальше такси Bolt/Uber ~15 мин" },
+        { "name": "Трамвай Újezd", "local": "Újezd, tramvajová zastávka, Praha", "q": "Újezd, Praha 1", "icon": "🚋", "note": "Трамвай 22 — прямо до Náměstí Míru" },
+        { "name": "Ярмарка на Náměstí Republiky", "local": "Náměstí Republiky", "lat": 50.0878, "lng": 14.4283, "icon": "🎄", "note": "Только до 24.12" },
+        { "name": "Староместская площадь", "local": "Staroměstské náměstí", "lat": 50.0875, "lng": 14.4213, "icon": "🎄", "note": "Ярмарка 10:00–22:00, до 6.01" },
+        { "name": "Ярмарка на Náměstí Míru", "local": "Náměstí Míru", "lat": 50.0754, "lng": 14.4378, "icon": "🎄", "note": "Только до 24.12" },
+        { "name": "Magická sova", "local": "Slezská 981/57, 130 00 Praha 3 – Vinohrady", "q": "Slezská 981/57, Praha 3", "icon": "🦉", "note": "22.12, 18:30–20:30. 1–1,5 км пешком от Náměstí Míru" },
+        { "name": "Вацлавская площадь", "local": "Václavské náměstí", "lat": 50.0814, "lng": 14.4280, "icon": "🎄", "note": "Ярмарка 10:00–22:00, до 6.01" }
       ],
-      "notes": "24 и 25 декабря туров по призракам нет. 24.12 магазины закрываются рано."
+      "notes": "24.12 город закрывается около 16:00, большинство ресторанов — с обеда. 25.12 магазины закрыты. Продукты на праздники купить 23.12. Туров по призракам 24 и 25.12 нет."
     },
     {
       "id": "vienna", "name": "Вена", "local": "Wien", "country": "AT", "flag": "🇦🇹",
       "lat": 48.2082, "lng": 16.3738, "kind": "stay",
-      "from": "2026-12-26", "to": "2026-12-29", "nights": 3,
-      "hotel": { "name": "[уточнить]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
+      "from": "2026-12-26", "to": "2026-12-30", "nights": 4,
+      "hotel": {
+        "name": "Habyt Vienna (Green Cube), Premium Studio с балконом",
+        "addressLocal": "Bruno-Marek-Allee 26, 1020 Wien",
+        "address": "Рядом Пратер и станция Praterstern",
+        "phone": "", "checkIn": "около 14:00 (попросили ранний заезд / хранение багажа)", "checkOut": "30.12 около 07:00",
+        "lat": null, "lng": null,
+        "info": [
+          { "k": "Онлайн-регистрация", "v": "до приезда — «Go to reservation» в письме Habyt" },
+          { "k": "На заезде", "v": "паспорт; городской налог 5% — на месте" },
+          { "k": "Отмена", "v": "невозвратно" }
+        ]
+      },
       "station": { "name": "Wien Hauptbahnhof", "lat": 48.1852, "lng": 16.3757 },
       "places": [
-        { "name": "Вена Hbf", "local": "Wien Hauptbahnhof", "lat": 48.1852, "lng": 16.3757, "icon": "🚆" },
-        { "name": "Пратер, колесо обозрения", "local": "Wiener Prater, Riesenradplatz", "lat": 48.2166, "lng": 16.3958, "icon": "🎡", "note": "Поезд-призрак" },
-        { "name": "Шёнбрунн и ярмарка", "local": "Schloss Schönbrunn, Schönbrunner Schloßstraße 47", "lat": 48.1849, "lng": 16.3122, "icon": "🏰" },
-        { "name": "Ярмарка у Ратуши", "local": "Wiener Christkindlmarkt, Rathausplatz", "lat": 48.2108, "lng": 16.3576, "icon": "🎄" }
+        { "name": "Вена Hbf", "local": "Wien Hauptbahnhof", "lat": 48.1852, "lng": 16.3757, "icon": "🚆", "note": "26.12, 13:18 — приезд из Праги" },
+        { "name": "Praterstern", "local": "Wien Praterstern", "lat": 48.2186, "lng": 16.3920, "icon": "🚆", "note": "30.12: S7 или Railjet в аэропорт, 20–25 мин" },
+        { "name": "Пратер и Wintermarkt", "local": "Wiener Prater, Riesenradplatz", "lat": 48.2166, "lng": 16.3958, "icon": "🎡", "note": "Поезд-призрак; ярмарка до 6.01 (по прошлому сезону)" },
+        { "name": "Шёнбрунн и ярмарка", "local": "Schloss Schönbrunn, Schönbrunner Schloßstraße 47", "lat": 48.1849, "lng": 16.3122, "icon": "🏰", "note": "Ярмарка до 6.01 (по прошлому сезону)" },
+        { "name": "Бельведер, ярмарка", "local": "Schloss Belvedere", "lat": 48.1915, "lng": 16.3809, "icon": "🎄", "note": "До 31.12 (по прошлому сезону)" },
+        { "name": "Аэропорт VIE", "local": "Flughafen Wien-Schwechat", "lat": 48.1103, "lng": 16.5697, "icon": "✈️", "note": "30.12 быть к 07:40" }
       ],
-      "notes": "Если выбираем Ryanair 30.12 — нужна ещё одна ночь в Вене (29.12)."
+      "notes": "Ярмарки на Ратушной площади и Штефансплац — только до 26.12. 29.12 — будильник на 6:15."
     },
     {
       "id": "bratislava", "name": "Братислава", "local": "Bratislava", "country": "SK", "flag": "🇸🇰",
@@ -100,21 +112,37 @@
         { "name": "Братиславский град", "local": "Bratislavský hrad", "lat": 48.1421, "lng": 17.1001, "icon": "🏰" },
         { "name": "Главная площадь, старый город", "local": "Hlavné námestie", "lat": 48.1435, "lng": 17.1089, "icon": "🎄" }
       ],
-      "notes": "На день, ~1 ч поездом из Вены."
+      "notes": "На день, около 1 ч поездом из Вены."
     },
     {
       "id": "cologne", "name": "Кёльн", "local": "Köln", "country": "DE", "flag": "🇩🇪",
       "lat": 50.9375, "lng": 6.9603, "kind": "stay",
       "from": "2026-12-30", "to": "2027-01-04", "nights": 5,
-      "hotel": { "name": "[уточнить]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
+      "hotel": {
+        "name": "Meta Hotel, двухместный с ванной и мини-кухней",
+        "addressLocal": "Alteburger Str. 303, 50968 Köln",
+        "address": "Район Bayenthal. Трамвай 16, автобус 106; пекарни в 5 минутах",
+        "phone": "", "checkIn": "с 15:00 (коды доступа — в день заезда около 13:30)", "checkOut": "до 11:00 4.01",
+        "lat": null, "lng": null,
+        "info": [
+          { "k": "Ресепшен", "v": "нет, всё через чат Booking" },
+          { "k": "Оплата", "v": "уточнить в чате: карта или перевод до приезда" },
+          { "k": "Залог", "v": "€200 переводом за 7 дней до заезда (~23.12)" },
+          { "k": "Бесплатная отмена", "v": "до 26.12, 23:59; с 27.12 — €200; с 31.12 — €1000" },
+          { "k": "Уборка, полотенца", "v": "только по запросу в чате" },
+          { "k": "Из отзывов", "v": "мягкий матрас, жёсткие подушки, шум из коридора, нет лифта" }
+        ]
+      },
       "station": { "name": "Köln Hauptbahnhof", "lat": 50.9430, "lng": 6.9589 },
       "places": [
         { "name": "Кёльн Hbf", "local": "Köln Hauptbahnhof", "lat": 50.9430, "lng": 6.9589, "icon": "🚆" },
         { "name": "Кёльнский собор", "local": "Kölner Dom, Domkloster 4", "lat": 50.9413, "lng": 6.9583, "icon": "⛪" },
-        { "name": "Каток Heinzels Wintermärchen", "local": "Heinzels Wintermärchen, Heumarkt", "lat": 50.9363, "lng": 6.9614, "icon": "⛸️", "note": "Даты работы катка в январе — проверить" },
-        { "name": "Набережная Рейна, мост Гогенцоллернов", "local": "Rheinufer / Hohenzollernbrücke", "lat": 50.9414, "lng": 6.9655, "icon": "🎆", "note": "Салют 31.12" }
+        { "name": "Каток Heinzels Wintermärchen", "local": "Heinzels Wintermärchen, Heumarkt", "lat": 50.9363, "lng": 6.9614, "icon": "⛸️", "note": "До 10.01.2027, 11:00–22:00" },
+        { "name": "Набережная Рейна, мост Гогенцоллернов", "local": "Rheinufer / Hohenzollernbrücke", "lat": 50.9414, "lng": 6.9655, "icon": "🎆", "note": "Салют 31.12" },
+        { "name": "Термы Claudius", "local": "Claudius Therme, Sachsenbergstraße 1, 50679 Köln", "q": "Claudius Therme, Sachsenbergstraße 1, Köln", "icon": "♨️", "note": "Вода 33–37 °C, 9:00–24:00; 1.01 в прошлом году работали" },
+        { "name": "Аэропорт Кёльн/Бонн", "local": "Flughafen Köln/Bonn", "lat": 50.8659, "lng": 7.1427, "icon": "✈️", "note": "30.12, 10:40 — прилёт из Вены" }
       ],
-      "notes": "01.01 — праздник, магазины закрыты: продукты купить 31.12 днём."
+      "notes": "01.01 — праздник, всё закрыто: продукты купить 31.12 днём. Свежие полотенца попросить к 1–2.01."
     },
     {
       "id": "dusseldorf", "name": "Дюссельдорф", "local": "Düsseldorf", "country": "DE", "flag": "🇩🇪",
@@ -132,30 +160,43 @@
       "lat": 50.7990, "lng": 6.8790, "kind": "stay",
       "from": "2027-01-04", "to": "2027-01-06", "nights": 2,
       "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Живём в отеле Фантазиаленда 🎁" },
-      "hotel": { "name": "[уточнить — отели парка]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
+      "hotel": { "name": "[в пакете]", "address": "", "addressLocal": "", "phone": "", "checkIn": "", "checkOut": "", "lat": null, "lng": null },
       "station": { "name": "Brühl Bahnhof", "lat": 50.8273, "lng": 6.9036 },
       "places": [
-        { "name": "Фантазиаленд, вход", "local": "Phantasialand, Berggeiststraße 31–41, 50321 Brühl", "lat": 50.7990, "lng": 6.8790, "icon": "🎢" },
+        { "name": "Фантазиаленд, вход", "local": "Phantasialand, Berggeiststraße 31–41, 50321 Brühl", "lat": 50.7990, "lng": 6.8790, "icon": "🎢", "note": "Часы работы уточнить на phantasialand.de за неделю" },
         { "name": "Вокзал Брюль", "local": "Brühl Bahnhof", "lat": 50.8273, "lng": 6.9036, "icon": "🚆" },
-        { "name": "Аэропорт Кёльн/Бонн", "local": "Flughafen Köln/Bonn, Terminal 1", "lat": 50.8659, "lng": 7.1427, "icon": "✈️" }
+        { "name": "Аэропорт Кёльн/Бонн, терминал 2", "local": "Flughafen Köln/Bonn, Terminal 2", "lat": 50.8659, "lng": 7.1427, "icon": "✈️", "note": "6.01 — такси около 30 минут" }
       ],
-      "notes": "Wintertraum: 14.11.2026–24.01.2027. Закрыт 24.12, 25.12, 01.01; 31.12 до 18:00. Бесплатная отмена отеля до 21.12."
+      "notes": "Wintertraum: 14.11.2026–24.01.2027. Закрыт 24.12, 25.12, 01.01; 31.12 до 18:00. Прогноз загруженности 4–5.01 ~73% — с утра сразу на главные аттракционы."
     }
   ],
 
   "segments": [
     {
+      "id": "fly-bsz", "mode": "flight", "from": null, "to": null, "hideOnMap": true,
+      "fromName": "Бишкек BSZ", "toName": "Стамбул SAW",
+      "dep": "2026-12-18T05:40+06:00", "arr": "2026-12-18T08:35+03:00",
+      "number": "Pegasus PC703", "carrier": "Pegasus, тариф Saver Plus", "status": "booked",
+      "info": [
+        { "k": "Онлайн-регистрация", "v": "с 11.12, 05:40 (за 7 дней)" },
+        { "k": "Багаж", "v": "20 кг + ручная кладь 55×40×23 + сумка под сиденье 40×30×15 до 3 кг" },
+        { "k": "Питание", "v": "заказан сэндвич с белым сыром" }
+      ],
+      "notes": "В аэропорту Бишкека к 02:40. Распечатанный посадочный. Перелёты Pegasus — только на Ками."
+    },
+    {
       "id": "fly-in", "mode": "flight", "from": null, "to": "berlin",
-      "fromName": "[откуда — уточнить]", "toName": "Берлин, аэропорт BER",
-      "toLat": 52.3667, "toLng": 13.5033, "stub": { "bearing": 135, "label": "прилёт" },
-      "dep": null, "arr": null, "number": "[уточнить]", "carrier": "", "coach": "", "seat": "",
-      "status": "todo", "notes": "Рейс и время — уточнить."
+      "fromName": "Стамбул SAW", "toName": "Берлин BER, терминал 1",
+      "toLat": 52.3667, "toLng": 13.5033, "stub": { "bearing": 100, "label": "из Стамбула" },
+      "dep": "2026-12-18T09:50+03:00", "arr": "2026-12-18T10:45",
+      "number": "Pegasus PC977", "carrier": "Pegasus", "status": "booked",
+      "notes": "Пересадка в Стамбуле: багаж забирать не нужно, он едет до Берлина. В BER встречает Аня."
     },
     {
       "id": "ber-ros", "mode": "train", "from": "berlin", "to": "rostock",
       "fromName": "Аэропорт BER", "toName": "Rostock Hbf", "fromLat": 52.3667, "fromLng": 13.5033,
-      "dep": null, "arr": null, "duration": "~2,5–3 ч", "number": "[уточнить]",
-      "status": "todo", "notes": "Deutschland Ticket — только RE/RB/S-Bahn, не ICE/IC. Возможна пересадка в Берлине [уточнить]."
+      "dep": "2026-12-18T12:00", "arr": "2026-12-18T15:00", "approx": true, "duration": "~2,5–3 ч",
+      "status": "booked", "notes": "Билеты и проездной для Ками — у Ани. Время примерное."
     },
     {
       "id": "ros-ham", "mode": "train", "from": "rostock", "to": "hamburg", "daytrip": true,
@@ -172,31 +213,26 @@
     {
       "id": "ros-ber", "mode": "train", "from": "rostock", "to": "berlin",
       "fromName": "Rostock Hbf", "toName": "Berlin Hbf",
-      "dep": "2026-12-21T09:45", "arr": "2026-12-21T12:30", "approx": true, "duration": "~2,5–3 ч",
-      "number": "[уточнить]", "status": "todo", "notes": "Время примерное — уточнить по билету."
+      "dep": "2026-12-21T09:30", "arr": "2026-12-21T12:15", "approx": true, "duration": "~2,5–3 ч",
+      "status": "booked", "notes": "Вместе с мамой Ани. Билеты у Ани. Время примерное."
     },
     {
-      "id": "ber-dre", "mode": "train", "from": "berlin", "to": "dresden",
-      "fromName": "Berlin Hbf", "toName": "Dresden Hbf",
-      "dep": "2026-12-21T18:45", "arr": "2026-12-21T20:45", "approx": true, "duration": "~2 ч",
-      "number": "[уточнить]", "status": "todo", "notes": "Вечером. Время примерное."
-    },
-    {
-      "id": "dre-pra", "mode": "train", "from": "dresden", "to": "prague",
-      "fromName": "Dresden Hbf", "toName": "Praha hl.n.",
-      "dep": "2026-12-23T17:00", "arr": "2026-12-23T19:20", "approx": true, "duration": "~2 ч 20 мин",
-      "number": "[уточнить]", "status": "todo", "notes": "Международный поезд: Deutschland Ticket не подходит, нужен отдельный билет."
+      "id": "ber-pra", "mode": "train", "from": "berlin", "to": "prague",
+      "fromName": "Berlin [вокзал — проверить в билете]", "toName": "Praha [вокзал — проверить]",
+      "dep": "2026-12-21T19:28", "arr": "2026-12-21T23:37",
+      "status": "booked", "notes": "Купила Аня. Попросить у неё билеты и QR в телефон, вписать вагон и места."
     },
     {
       "id": "pra-vie", "mode": "train", "from": "prague", "to": "vienna",
-      "fromName": "Praha hl.n.", "toName": "Wien Hbf",
-      "dep": null, "arr": null, "duration": "~4 ч",
-      "status": "decide",
-      "options": [
-        { "label": "RegioJet 16:05", "dep": "2026-12-26T16:05", "arr": null, "price": "от €41,8", "note": "Дешевле, вечером" },
-        { "label": "ÖBB 12:36", "dep": "2026-12-26T12:36", "arr": null, "price": "€89,40", "note": "С возможностью отмены" }
+      "fromName": "Praha (в билете «Prague, MS»)", "toName": "Wien Hbf",
+      "dep": "2026-12-26T09:05", "arr": "2026-12-26T13:18",
+      "number": "RegioJet RJ 1033", "carrier": "RegioJet, тариф Relax", "status": "booked",
+      "info": [
+        { "k": "Регистрация", "v": "не нужна, QR в письме" },
+        { "k": "Отмена", "v": "бесплатно до 15 минут до отправления" },
+        { "k": "Поддержка", "v": "+420 222 222 221" }
       ],
-      "notes": "[выбрать] вариант и вписать время прибытия."
+      "notes": "Накануне проверить в приложении RegioJet, с какого вокзала отправление: в билете станция «Prague, MS»."
     },
     {
       "id": "vie-bts", "mode": "train", "from": "vienna", "to": "bratislava", "daytrip": true,
@@ -211,21 +247,23 @@
       "status": "todo", "notes": "Обратно. Время примерное."
     },
     {
-      "id": "vie-cgn", "mode": "nighttrain", "from": "vienna", "to": "cologne",
-      "fromName": "Wien Hbf", "toName": "Köln Hbf",
-      "dep": null, "arr": null,
-      "status": "decide",
-      "options": [
-        { "label": "А: ночной поезд", "mode": "nighttrain", "dep": "2026-12-29T20:04", "arr": "2026-12-30T06:32", "price": "сидячее €79,90/чел (невозвратный); купе ~€254,90 за место", "note": "Экономит ночь в отеле" },
-        { "label": "Б: Ryanair", "mode": "flight", "dep": "2026-12-30T08:05", "arr": "2026-12-30T09:45", "price": "[уточнить]", "note": "Ручная кладь маленькая, багаж сдавать. Нужна ночь 29.12 в Вене." }
+      "id": "vie-cgn", "mode": "flight", "from": "vienna", "to": "cologne",
+      "fromName": "Вена VIE", "toName": "Кёльн CGN",
+      "fromLat": 48.1103, "fromLng": 16.5697, "toLat": 50.8659, "toLng": 7.1427,
+      "dep": "2026-12-30T09:10", "arr": "2026-12-30T10:40",
+      "number": "Eurowings EW 753", "carrier": "Eurowings (куплено через wowtickets)", "status": "booked",
+      "info": [
+        { "k": "Онлайн-регистрация", "v": "с 27.12, 09:10" },
+        { "k": "Код брони Eurowings", "v": "[уточнить — в PDF заказа wowtickets]" },
+        { "k": "Тариф и багаж", "v": "[уточнить] — если Basic, бесплатно только сумка под сиденье: докупить багаж заранее" }
       ],
-      "notes": "[решаем] — вписать дедлайн решения."
+      "notes": "В аэропорту быть к 07:40. Из отеля выезд в 07:00: S7 или Railjet от Praterstern (20–25 мин) или такси."
     },
     {
       "id": "cgn-dus", "mode": "train", "from": "cologne", "to": "dusseldorf", "daytrip": true,
       "fromName": "Köln Hbf", "toName": "Düsseldorf Hbf",
-      "dep": "2026-12-30T17:00", "arr": "2026-12-30T17:25", "approx": true, "duration": "~25 мин",
-      "status": "todo", "notes": "Региональные поезда — по Deutschland Ticket."
+      "dep": "2026-12-30T17:30", "arr": "2026-12-30T17:55", "approx": true, "duration": "~25 мин",
+      "status": "todo", "notes": "Региональные поезда. Время примерное."
     },
     {
       "id": "dus-cgn", "mode": "train", "from": "dusseldorf", "to": "cologne", "daytrip": true, "hideOnMap": true,
@@ -235,98 +273,119 @@
     },
     {
       "id": "cgn-phl", "mode": "train", "from": "cologne", "to": "phantasialand",
-      "fromName": "Köln Hbf", "toName": "Brühl → Фантазиаленд",
+      "fromName": "Köln", "toName": "Brühl → Фантазиаленд",
       "dep": "2027-01-04T10:00", "arr": "2027-01-04T10:45", "approx": true, "duration": "~45 мин",
-      "status": "todo", "notes": "Поезд до Брюля + автобус/такси до парка [уточнить]."
+      "status": "todo", "notes": "Приехать пораньше: слоты на ужин и завтрак раздают на чек-ине. Поезд до Брюля + автобус/такси [уточнить]."
     },
     {
       "id": "phl-cgn", "mode": "taxi", "from": "phantasialand", "to": "phantasialand",
-      "fromName": "Отель парка", "toName": "Аэропорт Кёльн/Бонн", "toLat": 50.8659, "toLng": 7.1427,
+      "fromName": "Отель парка", "toName": "Аэропорт Кёльн/Бонн, терминал 2", "toLat": 50.8659, "toLng": 7.1427,
       "dep": "2027-01-06T08:15", "arr": "2027-01-06T08:45", "approx": true, "duration": "~30 мин",
-      "status": "todo", "notes": "Такси или поезд — [уточнить]. Быть в аэропорту за 2,5–3 ч."
+      "status": "todo", "notes": "Такси заказать заранее."
     },
     {
       "id": "fly-out", "mode": "flight", "from": "phantasialand", "to": null,
-      "fromName": "Кёльн/Бонн (CGN)", "toName": "Стамбул → дом",
-      "fromLat": 50.8659, "fromLng": 7.1427, "stub": { "bearing": 140, "label": "в Стамбул" },
-      "dep": "2027-01-06T11:25", "arr": null, "number": "[уточнить]",
-      "status": "todo", "notes": "Через Стамбул. Номер рейса — уточнить."
+      "fromName": "Кёльн CGN, терминал 2", "toName": "Стамбул SAW",
+      "fromLat": 50.8659, "fromLng": 7.1427, "stub": { "bearing": 175, "label": "в Стамбул" },
+      "dep": "2027-01-06T11:25", "arr": "2027-01-06T16:30+03:00",
+      "number": "Pegasus PC1012", "carrier": "Pegasus, тариф Saver Plus", "status": "booked",
+      "info": [
+        { "k": "Онлайн-регистрация", "v": "с 30.12, 11:25" },
+        { "k": "Багаж", "v": "20 кг + ручная кладь 55×40×23 + сумка 40×30×15 до 3 кг" }
+      ],
+      "notes": "Только Ками. Виза до 06.01 включительно — запаса на перенос нет."
+    },
+    {
+      "id": "fly-home", "mode": "flight", "from": null, "to": null, "hideOnMap": true,
+      "fromName": "Стамбул SAW", "toName": "Бишкек BSZ",
+      "dep": "2027-01-06T20:30+03:00", "arr": "2027-01-07T04:25+06:00",
+      "number": "Pegasus PC702", "carrier": "Pegasus", "status": "booked",
+      "notes": "Багаж в Стамбуле забирать не нужно."
     }
   ],
 
   "days": [
-    { "date": "2026-12-18", "city": "rostock", "title": "Прилёт и Росток", "items": [
-      { "id": "i1801", "time": null, "type": "flight", "title": "Прилёт в Берлин (BER)", "seg": "fly-in", "tbd": true,
-        "hints": [{ "k": "bag-pick" }] },
-      { "id": "i1802", "time": null, "type": "train", "title": "Поезд BER → Росток", "seg": "ber-ros", "tbd": true,
-        "details": "~2,5–3 ч. Deutschland Ticket — только региональные поезда.",
-        "hints": [{ "k": "transfer", "t": "Пересадка: платформа [уточнить]" }] },
-      { "id": "i1803", "time": null, "type": "hotel", "title": "Заселение в Ростоке", "city": "rostock", "tbd": true },
-      { "id": "i1804", "time": "20:00", "approx": true, "type": "event", "title": "Вечер вдвоём", "city": "rostock" }
+    { "date": "2026-12-18", "city": "rostock", "title": "Прилёт, Аня встречает", "items": [
+      { "id": "i1800", "time": "02:40", "tz": "+06:00", "tzName": "Бишкек", "type": "important", "title": "Аэропорт Бишкека (Манас)",
+        "details": "Распечатанный посадочный, паспорт с визой, страховка.", "hints": [{ "k": "bag-drop" }] },
+      { "id": "i1801", "time": "05:40", "tz": "+06:00", "tzName": "Бишкек", "type": "flight", "title": "Вылет Бишкек → Стамбул, PC703", "seg": "fly-bsz" },
+      { "id": "i1802", "time": "09:50", "tz": "+03:00", "tzName": "Стамбул", "type": "flight", "title": "Стамбул → Берлин, PC977", "seg": "fly-in",
+        "hints": [{ "k": "transfer", "t": "Пересадка в SAW: багаж забирать не нужно" }] },
+      { "id": "i1803", "time": "10:45", "type": "luggage", "title": "Прилёт в BER, терминал 1 — Аня встречает",
+        "place": { "name": "Flughafen BER Terminal 1", "lat": 52.3667, "lng": 13.5033 }, "hints": [{ "k": "bag-pick" }] },
+      { "id": "i1804", "time": "12:00", "approx": true, "type": "train", "title": "Поезд в Росток", "seg": "ber-ros",
+        "details": "~2,5–3 ч. Билеты и проездной — у Ани." },
+      { "id": "i1805", "time": "19:00", "approx": true, "type": "event", "title": "Вечер в Ростоке", "city": "rostock" }
     ]},
-    { "date": "2026-12-19", "city": "rostock", "title": "Гамбург по настроению", "items": [
+    { "date": "2026-12-19", "city": "rostock", "title": "Росток, по настроению Гамбург", "items": [
       { "id": "i1901", "time": "09:30", "approx": true, "type": "train", "title": "Поезд Росток → Гамбург", "seg": "ros-ham", "details": "Если есть настроение. ~2 ч." },
-      { "id": "i1902", "time": "12:00", "approx": true, "type": "event", "title": "Гамбург: ярмарка у Ратуши, Альстер", "city": "hamburg" },
-      { "id": "i1903", "time": "18:00", "approx": true, "type": "train", "title": "Поезд Гамбург → Росток", "seg": "ham-ros" }
+      { "id": "i1902", "time": "10:00", "type": "important", "title": "Последний день бесплатной отмены Hunger Wall",
+        "details": "Прага: позже — штраф 2 ночи. Если всё в силе — ничего не делать." },
+      { "id": "i1903", "time": "12:00", "approx": true, "type": "event", "title": "Гамбург: ярмарка у Ратуши, Альстер", "city": "hamburg" },
+      { "id": "i1904", "time": "18:00", "approx": true, "type": "train", "title": "Поезд Гамбург → Росток", "seg": "ham-ros" }
     ]},
     { "date": "2026-12-20", "city": "rostock", "title": "День рождения мамы Ани", "items": [
-      { "id": "i2001", "time": "10:00", "approx": true, "type": "important", "title": "День рождения мамы Ани 🎂", "details": "Поздравить!" },
+      { "id": "i2001", "time": "10:00", "approx": true, "type": "important", "title": "День рождения мамы Ани 🎂", "details": "Подарки маме." },
       { "id": "i2002", "time": "16:00", "approx": true, "type": "event", "title": "Ростокская рождественская ярмарка", "city": "rostock",
         "place": { "name": "Rostocker Weihnachtsmarkt", "lat": 54.0887, "lng": 12.1405 }, "details": "Работает до 22.12." }
     ]},
-    { "date": "2026-12-21", "city": "dresden", "title": "Росток → Берлин → Дрезден", "items": [
-      { "id": "i2101", "time": "09:00", "approx": true, "type": "hotel", "title": "Выезд из отеля в Ростоке", "city": "rostock" },
-      { "id": "i2102", "time": "09:45", "approx": true, "type": "train", "title": "Поезд Росток → Берлин", "seg": "ros-ber" },
-      { "id": "i2103", "time": "13:30", "approx": true, "type": "event", "title": "Берлин: ярмарки и ресторан с мамой", "city": "berlin", "details": "Ресторан — [уточнить]. Вещи: камера хранения на Hbf или с собой [уточнить]." },
-      { "id": "i2104", "time": "12:00", "type": "important", "title": "Последний день бесплатной отмены отеля в парке",
+    { "date": "2026-12-21", "city": "prague", "title": "Росток → Берлин → Прага", "items": [
+      { "id": "i2101", "time": "09:30", "approx": true, "type": "train", "title": "Поезд Росток → Берлин, с мамой", "seg": "ros-ber" },
+      { "id": "i2102", "time": "13:00", "approx": true, "type": "event", "title": "Берлин: ярмарки с мамой", "city": "berlin" },
+      { "id": "i2103", "time": "18:00", "type": "important", "title": "Последний день бесплатной отмены отеля в парке",
         "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Секретное дело 🎁" } },
-      { "id": "i2105", "time": "18:45", "approx": true, "type": "train", "title": "Поезд Берлин → Дрезден", "seg": "ber-dre" },
-      { "id": "i2106", "time": "21:00", "approx": true, "type": "hotel", "title": "Заселение в Дрездене", "city": "dresden" }
+      { "id": "i2104", "time": "19:28", "type": "train", "title": "Поезд Берлин → Прага", "seg": "ber-pra",
+        "hints": [{ "k": "warn", "t": "Билет и QR — у Ани" }] },
+      { "id": "i2105", "time": "23:37", "type": "hotel", "title": "Прага: такси до Hunger Wall, самостоятельный заезд", "city": "prague",
+        "details": "Bolt/Uber, около 15 минут. Ресепшен ночью не работает — заходим сами. Онлайн-регистрацию сделать заранее.",
+        "place": { "name": "Hunger Wall Residence", "q": "Plaská 615/8, Praha 5" } }
     ]},
-    { "date": "2026-12-22", "city": "dresden", "title": "Дрезден целиком", "items": [
-      { "id": "i2201", "time": "10:30", "approx": true, "type": "event", "title": "Фрауэнкирхе и Цвингер", "city": "dresden",
-        "place": { "name": "Frauenkirche Dresden", "lat": 51.0519, "lng": 13.7416 } },
-      { "id": "i2202", "time": "14:00", "approx": true, "type": "event", "title": "Штрицельмаркт", "city": "dresden",
-        "place": { "name": "Striezelmarkt", "lat": 51.0496, "lng": 13.7383 } },
-      { "id": "i2203", "time": "17:30", "approx": true, "type": "event", "title": "Вечерние огни старого города", "city": "dresden" }
+    { "date": "2026-12-22", "city": "prague", "title": "Ярмарки и Magická sova", "items": [
+      { "id": "i2201", "time": "11:00", "approx": true, "type": "event", "title": "Ярмарки: Náměstí Republiky и Староместская", "city": "prague",
+        "place": { "name": "Náměstí Republiky", "lat": 50.0878, "lng": 14.4283 }, "details": "Republiky и Míru работают только до 24.12." },
+      { "id": "i2202", "time": "15:30", "approx": true, "type": "event", "title": "Náměstí Míru — трамвай 22 от Újezd", "city": "prague",
+        "place": { "name": "Náměstí Míru", "lat": 50.0754, "lng": 14.4378 } },
+      { "id": "i2203", "time": "18:30", "type": "event", "title": "Magická sova 🦉 18:30–20:30", "city": "prague",
+        "details": "Slezská 981/57, Praha 3 – Vinohrady. 1–1,5 км пешком от Náměstí Míru.",
+        "place": { "name": "Magická sova", "q": "Slezská 981/57, Praha 3" } }
     ]},
-    { "date": "2026-12-23", "city": "prague", "title": "Дрезден → Прага", "items": [
-      { "id": "i2301", "time": "11:00", "approx": true, "type": "hotel", "title": "Выезд из отеля в Дрездене", "city": "dresden",
-        "hints": [{ "k": "reception" }] },
-      { "id": "i2302", "time": "11:30", "approx": true, "type": "event", "title": "Утро в Дрездене", "city": "dresden" },
-      { "id": "i2303", "time": "16:00", "approx": true, "type": "luggage", "title": "Забрать вещи с ресепшена", "city": "dresden" },
-      { "id": "i2304", "time": "17:00", "approx": true, "type": "train", "title": "Поезд Дрезден → Прага", "seg": "dre-pra",
-        "hints": [{ "k": "warn", "t": "Deutschland Ticket здесь не действует" }] },
-      { "id": "i2305", "time": "19:50", "approx": true, "type": "hotel", "title": "Заселение в Праге", "city": "prague" },
-      { "id": "i2306", "time": "21:00", "approx": true, "type": "event", "title": "Тур по призракам 👻", "city": "prague", "tbd": true,
-        "details": "Время и место встречи — [уточнить]. 24 и 25 декабря туров нет." }
+    { "date": "2026-12-23", "city": "prague", "title": "Свободный день в Праге", "items": [
+      { "id": "i2301", "time": "12:00", "approx": true, "type": "important", "title": "Купить продукты на 24–25.12", "details": "24.12 город закрывается около 16:00, 25.12 магазины закрыты." },
+      { "id": "i2302", "time": "21:00", "approx": true, "type": "event", "title": "Тур по призракам 👻 (по желанию)", "city": "prague", "tbd": true,
+        "details": "Время и место — [уточнить]. 24 и 25.12 туров нет." }
     ]},
     { "date": "2026-12-24", "city": "prague", "title": "Сочельник", "items": [
       { "id": "i2401", "time": "10:00", "approx": true, "type": "food", "title": "Долгий завтрак" },
-      { "id": "i2402", "time": "13:00", "approx": true, "type": "important", "title": "Магазины закрываются рано", "details": "Всё нужное купить до обеда." },
-      { "id": "i2403", "time": "19:00", "approx": true, "type": "event", "title": "Праздничный ужин в Сочельник 🎄", "city": "prague", "tbd": true,
-        "details": "Ресторан и время — [уточнить]. Столик бронировать заранее." }
+      { "id": "i2402", "time": "15:30", "type": "important", "title": "Город закрывается около 16:00", "details": "Большинство ресторанов закрыты с обеда." },
+      { "id": "i2403", "time": "19:00", "approx": true, "type": "event", "title": "Ужин в Сочельник 🎄", "city": "prague", "tbd": true,
+        "details": "[решить] Открыты, например: Café Imperial, 420, Zlatá Praha на крыше Fairmont (джаз), La Collezione, Alcron. Запасной вариант — ужин дома в Junior Suite." }
     ]},
     { "date": "2026-12-25", "city": "prague", "title": "Рождество", "items": [
-      { "id": "i2501", "time": "11:00", "approx": true, "type": "event", "title": "Староместская площадь", "city": "prague",
-        "place": { "name": "Staroměstské náměstí", "lat": 50.0875, "lng": 14.4213 } },
-      { "id": "i2502", "time": "15:00", "approx": true, "type": "event", "title": "Вацлавская площадь и прогулки", "city": "prague",
-        "place": { "name": "Václavské náměstí", "lat": 50.0814, "lng": 14.4280 } }
+      { "id": "i2501", "time": "11:00", "approx": true, "type": "event", "title": "Ярмарка на Староместской", "city": "prague",
+        "place": { "name": "Staroměstské náměstí", "lat": 50.0875, "lng": 14.4213 }, "details": "10:00–22:00, до 6.01." },
+      { "id": "i2502", "time": "15:00", "approx": true, "type": "event", "title": "Вацлавская площадь", "city": "prague",
+        "place": { "name": "Václavské náměstí", "lat": 50.0814, "lng": 14.4280 } },
+      { "id": "i2503", "time": "20:00", "approx": true, "type": "luggage", "title": "Собрать вещи", "details": "Завтра RegioJet в 09:05." }
     ]},
     { "date": "2026-12-26", "city": "vienna", "title": "Прага → Вена", "items": [
-      { "id": "i2601", "time": "10:30", "approx": true, "type": "hotel", "title": "Выезд из отеля в Праге", "city": "prague" },
-      { "id": "i2602", "time": null, "type": "train", "title": "Поезд Прага → Вена", "seg": "pra-vie", "tbd": true,
-        "details": "Выбрать: RegioJet 16:05 (от €41,8) или ÖBB 12:36 (€89,40, с отменой)." },
-      { "id": "i2603", "time": null, "type": "hotel", "title": "Заселение в Вене", "city": "vienna", "tbd": true },
-      { "id": "i2604", "time": "20:30", "approx": true, "type": "event", "title": "Вечер в Вене", "city": "vienna" }
+      { "id": "i2601", "time": "08:00", "approx": true, "type": "hotel", "title": "Выезд из Hunger Wall, на вокзал", "city": "prague",
+        "details": "Вокзал проверить накануне в приложении RegioJet («Prague, MS»)." },
+      { "id": "i2602", "time": "09:05", "type": "train", "title": "RegioJet RJ 1033 Прага → Вена", "seg": "pra-vie",
+        "hints": [{ "k": "warn", "t": "Регистрация не нужна — QR в письме" }] },
+      { "id": "i2603", "time": "14:00", "type": "hotel", "title": "Заселение в Habyt Vienna", "city": "vienna",
+        "details": "Ранний заезд или хранение багажа уже попросили. Нужен паспорт.",
+        "place": { "name": "Habyt Vienna", "q": "Bruno-Marek-Allee 26, 1020 Wien" } },
+      { "id": "i2604", "time": "18:00", "approx": true, "type": "event", "title": "Вечер в Вене", "city": "vienna" }
     ]},
     { "date": "2026-12-27", "city": "vienna", "title": "Пратер и Шёнбрунн", "items": [
-      { "id": "i2701", "time": "11:00", "approx": true, "type": "event", "title": "Шёнбрунн и ярмарка", "city": "vienna",
+      { "id": "i2701", "time": "09:10", "type": "important", "title": "Открылась регистрация Eurowings", "seg": "vie-cgn",
+        "hints": [{ "k": "checkin" }], "details": "Заодно написать Meta про чемоданы до 15:00 и коды." },
+      { "id": "i2702", "time": "11:00", "approx": true, "type": "event", "title": "Шёнбрунн и ярмарка", "city": "vienna",
         "place": { "name": "Schloss Schönbrunn", "lat": 48.1849, "lng": 16.3122 } },
-      { "id": "i2702", "time": "15:30", "approx": true, "type": "event", "title": "Пратер: поезд-призрак 🎡", "city": "vienna",
+      { "id": "i2703", "time": "15:30", "approx": true, "type": "event", "title": "Пратер: поезд-призрак 🎡", "city": "vienna",
         "place": { "name": "Wiener Prater", "lat": 48.2166, "lng": 16.3958 } },
-      { "id": "i2703", "time": "18:30", "approx": true, "type": "event", "title": "Ярмарка у Ратуши", "city": "vienna",
-        "place": { "name": "Christkindlmarkt Rathausplatz", "lat": 48.2108, "lng": 16.3576 } }
+      { "id": "i2704", "time": "20:30", "approx": true, "type": "event", "title": "Концерт Моцарта и Штрауса (по желанию)", "city": "vienna", "tbd": true,
+        "details": "Оранжерея Шёнбрунна, 27 или 29.12, обычно 20:30. [решить]" }
     ]},
     { "date": "2026-12-28", "city": "vienna", "title": "Братислава на день", "items": [
       { "id": "i2801", "time": "10:00", "approx": true, "type": "train", "title": "Поезд Вена → Братислава", "seg": "vie-bts" },
@@ -338,85 +397,106 @@
     ]},
     { "date": "2026-12-29", "city": "vienna", "title": "Спокойный день", "items": [
       { "id": "i2901", "time": "11:00", "approx": true, "type": "event", "title": "Спокойный день в Вене", "city": "vienna" },
-      { "id": "i2902", "opt": 0, "time": "18:30", "approx": true, "type": "hotel", "title": "Вариант А: выезд из отеля, вещи с собой", "city": "vienna",
-        "details": "Только если едем ночным поездом." },
-      { "id": "i2903", "opt": 0, "time": "20:04", "type": "train", "title": "Вариант А: ночной поезд Вена → Кёльн", "seg": "vie-cgn", "tbd": true,
-        "details": "20:04 → 06:32. Решаем." }
+      { "id": "i2902", "time": "20:00", "approx": true, "type": "luggage", "title": "Собраться и рано лечь", "details": "Будильник на 6:15." }
     ]},
-    { "date": "2026-12-30", "city": "cologne", "title": "Кёльн и Дюссельдорф", "items": [
-      { "id": "i3001", "opt": 0, "time": "06:32", "type": "train", "title": "Вариант А: прибытие в Кёльн", "seg": "vie-cgn", "tbd": true },
-      { "id": "i3002", "opt": 1, "time": "08:05", "type": "flight", "title": "Вариант Б: Ryanair Вена → Кёльн", "seg": "vie-cgn", "tbd": true,
-        "details": "08:05 → 09:45. Ручная кладь маленькая.", "hints": [{ "k": "bag-drop" }] },
-      { "id": "i3003", "time": "10:30", "approx": true, "type": "hotel", "title": "Кёльн: оставить вещи / заселение", "city": "cologne",
-        "hints": [{ "k": "reception", "t": "Если номер не готов — вещи на ресепшен" }] },
-      { "id": "i3004", "time": "17:00", "approx": true, "type": "train", "title": "Поезд Кёльн → Дюссельдорф", "seg": "cgn-dus" },
-      { "id": "i3005", "time": "17:30", "approx": true, "type": "event", "title": "Дюссельдорф: последний день ярмарок 🎄", "city": "dusseldorf",
+    { "date": "2026-12-30", "city": "cologne", "title": "Вена → Кёльн, вечером Дюссельдорф", "items": [
+      { "id": "i3001", "time": "07:00", "type": "hotel", "title": "Выезд из Habyt → аэропорт", "city": "vienna",
+        "details": "S7 или Railjet от Praterstern (20–25 мин) или такси. В аэропорту к 07:40.",
+        "place": { "name": "Wien Praterstern", "lat": 48.2186, "lng": 16.3920 } },
+      { "id": "i3002", "time": "09:10", "type": "flight", "title": "Eurowings EW 753 Вена → Кёльн", "seg": "vie-cgn",
+        "hints": [{ "k": "bag-drop" }] },
+      { "id": "i3003", "time": "10:40", "type": "luggage", "title": "Прилёт CGN — куда деть чемоданы до 15:00", "city": "cologne",
+        "hints": [{ "k": "bag-pick" }], "details": "Заранее спросить у Meta в чате." },
+      { "id": "i3004", "time": "11:25", "type": "important", "title": "Открылась регистрация Pegasus домой", "seg": "fly-out", "hints": [{ "k": "checkin" }] },
+      { "id": "i3005", "time": "15:00", "type": "hotel", "title": "Заселение в Meta Hotel", "city": "cologne",
+        "details": "Ресепшена нет: коды доступа придут около 13:30.",
+        "place": { "name": "Meta Hotel", "q": "Alteburger Str. 303, 50968 Köln" } },
+      { "id": "i3006", "time": "17:30", "approx": true, "type": "train", "title": "Поезд Кёльн → Дюссельдорф", "seg": "cgn-dus" },
+      { "id": "i3007", "time": "18:00", "approx": true, "type": "event", "title": "Дюссельдорф: последний день ярмарок 🎄", "city": "dusseldorf",
         "place": { "name": "Weihnachtsmarkt Düsseldorf Altstadt", "lat": 51.2257, "lng": 6.7727 } },
-      { "id": "i3006", "time": "21:30", "approx": true, "type": "train", "title": "Поезд Дюссельдорф → Кёльн", "seg": "dus-cgn" }
+      { "id": "i3008", "time": "21:30", "approx": true, "type": "train", "title": "Поезд Дюссельдорф → Кёльн", "seg": "dus-cgn" }
     ]},
     { "date": "2026-12-31", "city": "cologne", "title": "Новый год", "items": [
-      { "id": "i3101", "time": "14:00", "approx": true, "type": "important", "title": "Купить продукты на 1 января", "details": "01.01 магазины закрыты." },
-      { "id": "i3102", "time": "23:30", "approx": true, "type": "event", "title": "Салют над Рейном 🎆", "city": "cologne",
+      { "id": "i3101", "time": "14:00", "approx": true, "type": "important", "title": "Купить продукты на 1 января", "details": "01.01 всё закрыто." },
+      { "id": "i3102", "time": "19:15", "approx": true, "type": "event", "title": "Новогодний кораблик по Рейну (по желанию)", "city": "cologne", "tbd": true,
+        "details": "MS RheinCargo: посадка 19:15, музыка, буфет, вид на салют. Или рейсы KD с ужином. [решить]" },
+      { "id": "i3103", "time": "23:30", "approx": true, "type": "event", "title": "Салют над Рейном 🎆", "city": "cologne",
         "place": { "name": "Rheinufer Köln", "lat": 50.9414, "lng": 6.9655 } }
     ]},
     { "date": "2027-01-01", "city": "cologne", "title": "Отдых", "items": [
-      { "id": "i0101", "time": "12:00", "approx": true, "type": "event", "title": "Отдых. Город закрыт" }
+      { "id": "i0101", "time": "12:00", "approx": true, "type": "event", "title": "Отдых, ванна. Город закрыт", "details": "Парк тоже закрыт 1.01." }
     ]},
     { "date": "2027-01-02", "city": "cologne", "title": "Свободный день", "items": [
-      { "id": "i0201", "time": "13:00", "approx": true, "type": "food", "title": "Роллы" },
-      { "id": "i0202", "time": "16:00", "approx": true, "type": "event", "title": "Каток Heinzels Wintermärchen ⛸️", "city": "cologne",
-        "place": { "name": "Heinzels Wintermärchen", "lat": 50.9363, "lng": 6.9614 }, "details": "Проверить даты работы в январе." }
+      { "id": "i0201", "time": "11:00", "approx": true, "type": "important", "title": "Попросить у Meta свежие полотенца", "details": "Через чат Booking." },
+      { "id": "i0202", "time": "13:00", "approx": true, "type": "food", "title": "Роллы" },
+      { "id": "i0203", "time": "16:00", "approx": true, "type": "event", "title": "Каток Heinzels Wintermärchen ⛸️", "city": "cologne",
+        "place": { "name": "Heinzels Wintermärchen", "lat": 50.9363, "lng": 6.9614 }, "details": "До 10.01, 11:00–22:00." }
     ]},
     { "date": "2027-01-03", "city": "cologne", "title": "Свободный день", "items": [
-      { "id": "i0301", "time": "13:00", "approx": true, "type": "event", "title": "Прогулка по Рейну", "city": "cologne" }
+      { "id": "i0301", "time": "12:00", "approx": true, "type": "event", "title": "Термы Claudius или Рейн", "city": "cologne",
+        "place": { "name": "Claudius Therme", "q": "Claudius Therme, Sachsenbergstraße 1, Köln" } },
+      { "id": "i0302", "time": "20:00", "approx": true, "type": "luggage", "title": "Собрать вещи", "details": "Завтра выезд до 11:00." }
     ]},
     { "date": "2027-01-04", "city": "phantasialand", "title": "Фантазиаленд", "items": [
-      { "id": "i0401", "time": "09:00", "approx": true, "type": "hotel", "title": "Выезд из отеля в Кёльне", "city": "cologne" },
-      { "id": "i0402", "time": "10:00", "approx": true, "type": "train", "title": "Кёльн → Брюль → парк", "seg": "cgn-phl" },
+      { "id": "i0401", "time": "09:30", "approx": true, "type": "hotel", "title": "Выезд из Meta Hotel (до 11:00)", "city": "cologne" },
+      { "id": "i0402", "time": "10:00", "approx": true, "type": "train", "title": "Кёльн → Брюль → парк", "seg": "cgn-phl",
+        "hints": [{ "k": "warn", "t": "Приехать пораньше: слоты на ужин и завтрак — на чек-ине" }] },
       { "id": "i0403", "time": "11:00", "approx": true, "type": "hotel", "title": "Заселение в отель парка", "city": "phantasialand",
         "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Живём в отеле Фантазиаленда 🎁" } },
-      { "id": "i0404", "time": "12:00", "approx": true, "type": "event", "title": "Парк: Wintertraum, огни, шоу на льду 🎢", "city": "phantasialand",
-        "details": "Часы работы — [уточнить]." }
+      { "id": "i0404", "time": "11:30", "approx": true, "type": "event", "title": "Парк: с утра — на главные аттракционы 🎢", "city": "phantasialand",
+        "details": "Пока нет очередей. Часы работы уточнить на phantasialand.de за неделю." },
+      { "id": "i0405", "time": "19:00", "approx": true, "type": "food", "title": "Ужин и ночная прогулка", "city": "phantasialand",
+        "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Вечерний сюрприз 🎁" } }
     ]},
     { "date": "2027-01-05", "city": "phantasialand", "title": "Фантазиаленд", "items": [
-      { "id": "i0501", "time": "11:00", "approx": true, "type": "event", "title": "Maus au Chocolat и Mystery Castle", "city": "phantasialand" },
-      { "id": "i0502", "time": "17:00", "approx": true, "type": "event", "title": "Wintertraum: огни и шоу на льду", "city": "phantasialand" }
+      { "id": "i0501", "time": "08:00", "approx": true, "type": "food", "title": "Завтрак", "city": "phantasialand",
+        "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Завтрак 🎁" } },
+      { "id": "i0502", "time": "10:00", "approx": true, "type": "event", "title": "Парк: Maus au Chocolat, Mystery Castle, Wintertraum", "city": "phantasialand" },
+      { "id": "i0503", "time": "15:00", "approx": true, "type": "hotel", "title": "Переезд во второй отель парка", "city": "phantasialand",
+        "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Сюрприз продолжается 🎁" } }
     ]},
     { "date": "2027-01-06", "city": "phantasialand", "title": "Домой", "items": [
-      { "id": "i0601", "time": "07:45", "approx": true, "type": "hotel", "title": "Выезд из отеля парка", "city": "phantasialand" },
-      { "id": "i0602", "time": "08:15", "approx": true, "type": "train", "title": "В аэропорт Кёльн/Бонн", "seg": "phl-cgn" },
-      { "id": "i0603", "time": "11:25", "type": "flight", "title": "Рейс Кёльн → Стамбул", "seg": "fly-out",
-        "hints": [{ "k": "bag-drop" }, { "k": "checkin" }] }
+      { "id": "i0601", "time": "07:00", "type": "food", "title": "Завтрак и выезд", "city": "phantasialand",
+        "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Завтрак и выезд 🎁" } },
+      { "id": "i0602", "time": "08:15", "type": "train", "title": "Такси в аэропорт CGN, терминал 2", "seg": "phl-cgn" },
+      { "id": "i0603", "time": "11:25", "type": "flight", "title": "Pegasus PC1012 Кёльн → Стамбул", "seg": "fly-out",
+        "hints": [{ "k": "bag-drop" }] },
+      { "id": "i0604", "time": "20:30", "tz": "+03:00", "tzName": "Стамбул", "type": "flight", "title": "Pegasus PC702 Стамбул → Бишкек", "seg": "fly-home",
+        "details": "Прилёт 7.01 в 04:25 по Бишкеку." },
+      { "id": "i0605", "time": "12:00", "type": "important", "title": "Как Аня едет домой — решить", "tbd": true, "details": "[решить]" }
     ]}
   ],
 
   "reminders": [
-    { "id": "r-wallet", "at": "2026-12-16T19:00", "title": "Посадочные — в Wallet, PDF — в «Файлы»", "details": "Продублировать посадочные талоны в Apple Wallet / Google Wallet. PDF билетов сохранить копией в «Файлы»." },
-    { "id": "r-dt-dec", "at": "2026-12-15T10:00", "title": "Купить Deutschland Ticket на декабрь", "details": "Нужен до 18.12. Это подписка — проверить условия продления на январь." },
-    { "id": "r-dt-jan", "at": "2026-12-29T10:00", "title": "Deutschland Ticket на январь", "details": "Купить или проверить продление до 01.01." },
-    { "id": "r-dt-cancel", "at": "2027-01-07T12:00", "title": "Отменить подписку Deutschland Ticket", "details": "Обычно отмена до 10-го числа — иначе спишут за февраль. Проверить у своего продавца." },
-    { "id": "r-xmas-table", "at": "2026-11-20T12:00", "tbd": true, "title": "Забронировать столик на ужин в Сочельник", "details": "Прага, 24.12 вечером. Дату напоминания вписать." },
-    { "id": "r-decide-vie-cgn", "at": "2026-11-25T12:00", "tbd": true, "title": "Решить переезд Вена → Кёльн", "details": "Ночной поезд 29.12 или Ryanair 30.12. Дедлайн вписать." },
-    { "id": "r-phl-closed", "at": "2026-12-10T10:00", "title": "Фантазиаленд: закрыт 24.12, 25.12, 01.01", "details": "31.12 работает только до 18:00. Наши дни 04–05.01 — открыто." },
-    { "id": "r-phl-cancel", "at": "2026-12-21T09:00", "title": "Сегодня последний день бесплатной отмены отеля в Фантазиаленде",
+    { "id": "r-dinner-boat", "at": "2026-11-24T19:00+06:00", "title": "Забронировать: ужин 24.12 в Праге, новогодний кораблик, концерт в Вене",
+      "details": "Ужин в Сочельник — срочно. Кораблик MS RheinCargo / KD. Концерт в оранжерее Шёнбрунна." },
+    { "id": "r-numa-1", "at": "2026-12-07T10:00+06:00", "title": "Отменить запасную бронь Numa в Праге", "details": "Бесплатно до 16.12." },
+    { "id": "r-checkins", "at": "2026-12-11T09:00+06:00", "title": "Регистрации и билеты",
+      "details": "Регистрация Pegasus (открыта с 05:40). Онлайн-регистрация Hunger Wall, Habyt и отелей парка (Quick Check-In). Код Eurowings и багаж в заказе wowtickets. Билет Берлин → Прага от Ани." },
+    { "id": "r-numa-2", "at": "2026-12-15T10:00+06:00", "title": "Numa: завтра последний день бесплатной отмены", "details": "Проверить, что запасная бронь отменена." },
+    { "id": "r-wallet", "at": "2026-12-16T09:00+06:00", "title": "Распечатать посадочные Pegasus, всё скачать в телефон",
+      "details": "Посадочные — распечатать и в Wallet. Все билеты и QR — в «Файлы» и в приложение. Распечатать подтверждение первого отеля парка (без него не пустят на парковку)." },
+    { "id": "r-phl-wishes", "at": "2026-12-16T10:00+06:00", "title": "Пожелания в бронях парка; оплата и залог Meta",
+      "details": "Проверить пожелания в Explorers' Logbook и Travel Planner. Meta: как платить и залог €200 (~23.12)." },
+    { "id": "r-hw-cancel", "at": "2026-12-19T10:00", "title": "Hunger Wall: последний день бесплатной отмены", "details": "Если всё в силе — ничего не делать." },
+    { "id": "r-prague-train", "at": "2026-12-21T10:00", "title": "Сегодня поезд в Прагу 19:28; код двери Hunger Wall", "details": "Билет и QR — у Ани. Код двери — в карточке «Прага: такси до Hunger Wall»." },
+    { "id": "r-phl-cancel-1", "at": "2026-12-21T12:00", "title": "Отель парка №1: бесплатная отмена до 18:00",
       "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Секретное напоминание 🎁" } },
-    { "id": "r-checkin-in", "rel": { "seg": "fly-in", "field": "dep", "min": -1440 }, "title": "Онлайн-регистрация на рейс в Берлин", "details": "Открывается за 24 ч до вылета." },
-    { "id": "r-airport-in", "rel": { "seg": "fly-in", "field": "dep", "min": -180 }, "title": "Выезд в аэропорт (рейс в Берлин)", "details": "За 3 ч до вылета." },
-    { "id": "r-out-rostock", "at": "2026-12-21T08:00", "title": "Выезд из отеля в Ростоке", "details": "Проверить номер, зарядки, документы." },
-    { "id": "r-go-ros-ber", "rel": { "seg": "ros-ber", "field": "dep", "min": -75 }, "title": "Выходим на вокзал: Росток → Берлин" },
-    { "id": "r-go-ber-dre", "rel": { "seg": "ber-dre", "field": "dep", "min": -75 }, "title": "Выходим на вокзал: Берлин → Дрезден" },
-    { "id": "r-out-dresden", "at": "2026-12-23T09:00", "title": "Выезд из отеля в Дрездене — вещи на ресепшен", "details": "Оставить чемоданы на ресепшене до поезда ~17:00." },
-    { "id": "r-go-dre-pra", "rel": { "seg": "dre-pra", "field": "dep", "min": -90 }, "title": "Забрать вещи и на вокзал: Дрезден → Прага" },
-    { "id": "r-ghost", "at": "2026-12-23T18:00", "title": "Сегодня вечером тур по призракам 👻", "details": "Проверить время и место встречи." },
-    { "id": "r-out-prague", "at": "2026-12-26T08:30", "title": "Выезд из отеля в Праге" },
-    { "id": "r-go-pra-vie", "rel": { "seg": "pra-vie", "field": "dep", "min": -75 }, "title": "Выходим на вокзал: Прага → Вена" },
-    { "id": "r-out-vienna", "at": "2026-12-29T09:00", "title": "Вена: выезд из отеля", "details": "Ночной поезд — выезд 29.12; Ryanair — 30.12 рано утром." },
-    { "id": "r-go-vie-cgn", "rel": { "seg": "vie-cgn", "field": "dep", "min": -90 }, "title": "Выходим: Вена → Кёльн" },
-    { "id": "r-dus", "at": "2026-12-30T10:00", "title": "Сегодня последний день ярмарок в Дюссельдорфе 🎄" },
-    { "id": "r-food-jan1", "at": "2026-12-31T11:00", "title": "Купить продукты — 01.01 всё закрыто" },
-    { "id": "r-out-cologne", "at": "2027-01-04T08:00", "title": "Выезд из отеля в Кёльне" },
-    { "id": "r-checkin-out", "rel": { "seg": "fly-out", "field": "dep", "min": -1440 }, "title": "Онлайн-регистрация на рейс через Стамбул", "details": "Открывается за 24 ч до вылета 06.01 11:25." },
-    { "id": "r-out-phl", "at": "2027-01-06T07:00", "title": "Выезд из отеля парка, проверить номер" },
-    { "id": "r-airport-out", "rel": { "seg": "fly-out", "field": "dep", "min": -180 }, "title": "Выезд в аэропорт Кёльн/Бонн", "details": "За 3 ч до вылета." }
+    { "id": "r-phl-cancel-2", "at": "2026-12-22T09:00", "title": "Отель парка №2: последний день бесплатной отмены (около 22.12)",
+      "secret": { "revealAt": "2027-01-04T00:00", "placeholder": "Секретное напоминание 🎁" } },
+    { "id": "r-sova", "at": "2026-12-22T11:00", "title": "Magická sova сегодня в 18:30; залог Meta", "details": "Slezská 981/57, Praha 3. Залог Meta €200 — перевести." },
+    { "id": "r-groceries-24", "at": "2026-12-23T11:00", "title": "Купить продукты на 24–25.12", "details": "24.12 город закрывается около 16:00." },
+    { "id": "r-regiojet", "at": "2026-12-25T18:00", "title": "Завтра RegioJet в 09:05", "details": "Проверить вокзал в приложении RegioJet, собрать вещи." },
+    { "id": "r-meta-cancel", "at": "2026-12-26T20:00", "title": "Meta: сегодня до 23:59 бесплатная отмена", "details": "С 27.12 — €200." },
+    { "id": "r-eurowings", "at": "2026-12-27T10:00", "title": "Регистрация Eurowings; написать Meta про чемоданы и коды" },
+    { "id": "r-flight-vie", "at": "2026-12-29T19:00", "title": "Завтра вылет в 09:10, выезд в 07:00", "details": "Будильник на 6:15." },
+    { "id": "r-go-vie", "rel": { "seg": "vie-cgn", "field": "dep", "min": -130 }, "title": "Выходим в аэропорт VIE" },
+    { "id": "r-dus", "at": "2026-12-30T12:00", "title": "Сегодня последний день ярмарок в Дюссельдорфе 🎄" },
+    { "id": "r-pegasus-home", "at": "2026-12-31T11:00", "title": "Регистрация Pegasus домой; продукты на 1.01", "details": "Регистрация открылась 30.12 в 11:25." },
+    { "id": "r-phl-closed", "at": "2026-12-10T10:00+06:00", "title": "Фантазиаленд: закрыт 24.12, 25.12, 01.01", "details": "31.12 работает до 18:00. Наши дни 04–05.01 — открыто." },
+    { "id": "r-meta-towels", "at": "2027-01-02T11:00", "title": "Полотенца в Meta, такси на 6.01, подтверждение отеля парка, дорога в парк" },
+    { "id": "r-out-cologne", "at": "2027-01-04T08:30", "title": "Выезд из Meta до 11:00 — в парк пораньше" },
+    { "id": "r-home-eve", "at": "2027-01-05T18:00", "title": "Завтра домой: завтрак в 7:00, такси 08:15, рейс 11:25" },
+    { "id": "r-airport-out", "rel": { "seg": "fly-out", "field": "dep", "min": -190 }, "title": "Такси в аэропорт CGN, терминал 2" }
   ]
 }

@@ -111,7 +111,7 @@ export function trip() {
 const invalidate = () => (cache = null);
 
 // ---------- Время пунктов ----------
-export const itemTs = (it, date) => (it.time ? tripTs(`${date || it._date}T${it.time}`) : null);
+export const itemTs = (it, date) => (it.time ? tripTs(`${date || it._date}T${it.time}${it.tz || ''}`) : null);
 export function reminderTs(r) {
   if (r.at) return tripTs(r.at);
   if (r.rel) {

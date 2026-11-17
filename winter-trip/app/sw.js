@@ -1,6 +1,6 @@
 // Сгенерировано tools/gen-sw.mjs — не редактировать вручную.
 // Service worker: кэширует ВСЁ приложение при установке, дальше работает без сети.
-const VERSION = '76190bac4608';
+const VERSION = 'ab69b1715c99';
 const CACHE = 'winter-trip-' + VERSION;
 const ASSETS = ["./",
   "css/app.css",

@@ -3,10 +3,11 @@ import { h, platform } from './util.js';
 import { S } from './model.js';
 
 export const NAVS = {
-  google: { name: 'Google Maps', icon: '🗺️', url: (p) => `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}` },
-  organic: { name: 'Organic Maps', icon: '🍃', url: (p) => `om://map?v=1&ll=${p.lat},${p.lng}&n=${encodeURIComponent(p.name || '')}` },
-  apple: { name: 'Apple Maps', icon: '🍎', url: (p) => `maps://?ll=${p.lat},${p.lng}&q=${encodeURIComponent(p.name || 'Точка')}`, only: 'ios' },
-  geo: { name: 'Выбрать приложение', icon: '📍', url: (p) => `geo:${p.lat},${p.lng}?q=${p.lat},${p.lng}(${encodeURIComponent(p.name || '')})`, only: 'android' },
+  // p = {lat, lng, name} — по координатам; или {q, name} — поиск по адресу (работает и офлайн в скачанных картах)
+  google: { name: 'Google Maps', icon: '🗺️', url: (p) => `https://www.google.com/maps/search/?api=1&query=${p.q ? encodeURIComponent(p.q) : `${p.lat},${p.lng}`}` },
+  organic: { name: 'Organic Maps', icon: '🍃', url: (p) => (p.q ? `om://search?query=${encodeURIComponent(p.q)}` : `om://map?v=1&ll=${p.lat},${p.lng}&n=${encodeURIComponent(p.name || '')}`) },
+  apple: { name: 'Apple Maps', icon: '🍎', url: (p) => (p.q ? `maps://?q=${encodeURIComponent(p.q)}` : `maps://?ll=${p.lat},${p.lng}&q=${encodeURIComponent(p.name || 'Точка')}`), only: 'ios' },
+  geo: { name: 'Выбрать приложение', icon: '📍', url: (p) => (p.q ? `geo:0,0?q=${encodeURIComponent(p.q)}` : `geo:${p.lat},${p.lng}?q=${p.lat},${p.lng}(${encodeURIComponent(p.name || '')})`), only: 'android' },
 };
 
 export function defaultNav() {
@@ -25,7 +26,7 @@ export function openNav(key, p) {
 
 /** Блок кнопок: большая — навигатор по умолчанию, маленькие — остальные. */
 export function navButtons(p, { compact = false } = {}) {
-  if (p == null || p.lat == null || p.lng == null) return null;
+  if (p == null || ((p.lat == null || p.lng == null) && !p.q)) return null;
   const def = defaultNav();
   const others = availableNavs().filter(([k]) => k !== def);
   return h('div.nav-buttons' + (compact ? '.compact' : ''),
