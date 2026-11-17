@@ -99,6 +99,7 @@ export function renderTimeline(root) {
               tbd && h('span.tag.tbd', 'уточнить'),
               optOut && h('span.tag', 'не выбран'),
               docsN ? h('span.tag.doc', `📎 ${docsN}`) : null,
+              it.tzName && h('span.tag', '🕐 ' + it.tzName),
               raw._local && h('span.tag.local', 'изменено')))));
       return el;
     });

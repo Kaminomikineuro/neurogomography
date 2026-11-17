@@ -53,6 +53,7 @@ export function hintsFor(it) {
 export const hintChips = (list) => list.length ? h('div.hints', list.map((x) => h('span.hint' + (x.live ? '.live' : ''), `${x.icon} ${x.text}`))) : null;
 
 const val = (v) => (v == null || v === '' ? null : v);
+const infoKv = (list) => (list || []).map((x) => kv(x.k, x.v));
 const kv = (k, v, cls = '') => (val(v) ? h('div.kv' + cls, h('span.k', k), h('span.v' + (isTbd(String(v)) ? '.tbd' : ''), v)) : null);
 
 function secretNotice(e) {
@@ -148,7 +149,7 @@ function itemView(id, close) {
     h('div.detail-head',
       h('div.detail-icon', type.icon),
       h('div',
-        h('div.detail-when', `${weekday(date)}, ${dayMonth(date)}`, it.time ? ` · ${it.approx ? '≈ ' : ''}${it.time}` : ' · время уточнить',
+        h('div.detail-when', `${weekday(date)}, ${dayMonth(date)}`, it.time ? ` · ${it.approx ? '≈ ' : ''}${it.time}${it.tzName ? ' (' + it.tzName + ')' : ''}` : ' · время уточнить',
           ts && !checked ? h('span.muted', ` · ${fmtRelative(ts)}`) : null),
         h('h2.detail-title' + (checked ? '.done' : ''), it.title))),
     it._masked ? secretNotice(raw) : [
@@ -179,7 +180,7 @@ function segSummary(s, docs) {
       h('div.seg-dur', dur || ''),
       h('div', h('div.big-time', s.arr ? timeOf(s.arr) : '—'), h('small.muted', s.arr ? ddmm(s.arr.slice(0, 10)) : 'прибытие'))),
     s.approx && h('div.muted.small.center', '≈ время примерное, уточнить по билету'),
-    h('div.kv-list', kv('Поезд / рейс', s.number), kv('Вагон', s.coach), kv('Место', s.seat), kv('Платформа', s.platform)),
+    h('div.kv-list', kv('Поезд / рейс', s.number), kv('Бронь', s.ref), kv('Вагон', s.coach), kv('Место', s.seat), kv('Платформа', s.platform)),
     s.options && segOptions(s),
     docs && docs.length ? [primaryTicketButton(docs, 'Открыть билет'), docRows(docs)] : h('button.btn', { onclick: () => attachTo('seg', s.id, folderForType(s.mode)) }, '📎 Прикрепить билет'),
     h('button.link-row', { onclick: () => openSeg(s.id) }, 'Весь отрезок ›'));
@@ -221,7 +222,7 @@ function segView(id, close) {
           h('div.seg-dur', dur ? '⏱ ' + dur : ''),
           h('div', h('small.muted', 'Прибытие'), h('div.big-time', s.arr ? timeOf(s.arr) : '—'), h('small', s.arr ? ddmm(s.arr.slice(0, 10)) : ''))),
         s.approx && h('div.muted.small.center', '≈ время примерное')),
-      h('div.kv-list', kv('Поезд / рейс', s.number), kv('Перевозчик', s.carrier), kv('Вагон', s.coach), kv('Место', s.seat), kv('Платформа', s.platform), kv('Цена', s.price)),
+      h('div.kv-list', kv('Поезд / рейс', s.number), kv('Перевозчик', s.carrier), kv('Бронь', s.ref), kv('Вагон', s.coach), kv('Место', s.seat), kv('Платформа', s.platform), kv('Цена', s.price), infoKv(s.info)),
       s.options && h('div.section', h('h3', 'Варианты'), segOptions(s)),
       s.notes && h('p.detail-text' + (isTbd(s.notes) ? '.has-tbd' : ''), s.notes),
       h('div.section', h('h3', 'Билет'), primaryTicketButton(docs, 'Открыть билет'), docRows(docs),
@@ -246,7 +247,7 @@ export function cityView(id, close) {
   const docs = M.docsFor('city', id);
   const days = t.days.filter((d) => d.city === id || d.items.some((i) => i.city === id));
   const kindLabel = { stay: plural(c.nights || 0, 'ночь', 'ночи', 'ночей'), daytrip: 'на день', transit: 'проездом' }[c.kind] || '';
-  const hotelPt = hotel && hotel.lat ? { lat: hotel.lat, lng: hotel.lng, name: hotel.name } : null;
+  const hotelPt = hotel && hotel.lat ? { lat: hotel.lat, lng: hotel.lng, name: hotel.name } : hotel && hotel.addressLocal && !c._masked ? { q: hotel.addressLocal, name: hotel.name } : null;
   return h('div.detail.city-detail',
     h('div.city-hero',
       h('div.city-flag', c.flag || '📍'),
@@ -260,7 +261,7 @@ export function cityView(id, close) {
         h('div.hotel-name' + (isTbd(hotel.name) ? '.tbd' : ''), hotel.name || '—'),
         hotel.addressLocal && h('button.address-big', { onclick: () => showTaxi(c) }, h('span', hotel.addressLocal), h('small', '🚕 Показать таксисту')),
         hotel.address && h('div.muted', hotel.address),
-        h('div.kv-list', kv('Заселение', hotel.checkIn), kv('Выезд', hotel.checkOut)),
+        h('div.kv-list', kv('Заселение', hotel.checkIn), kv('Выезд', hotel.checkOut), kv('Бронь', hotel.ref), infoKv(hotel.info)),
         hotel.phone && h('a.btn', { href: 'tel:' + hotel.phone.replace(/[^+\d]/g, '') }, '📞 ' + hotel.phone),
         primaryTicketButton(docs, 'Открыть бронь'), docRows(docs),
         h('div.row-buttons',
@@ -273,7 +274,7 @@ export function cityView(id, close) {
     c.places && c.places.length ? h('div.section', h('h3', 'Ключевые места'),
       c.places.map((p) => h('div.place',
         h('div.place-head', h('span.place-ic', p.icon || '📍'), h('div', h('div', p.name), p.local && h('small.muted' + (isTbd(p.local) ? '.tbd' : ''), p.local), p.note && h('small.place-note', p.note))),
-        p.lat != null && navButtons(p, { compact: true })))) : null,
+        (p.lat != null || p.q) && navButtons(p, { compact: true })))) : null,
     days.length ? h('div.section', h('h3', 'План по дням'),
       days.map((d) => h('div.city-day',
         h('div.city-day-head', `${weekday(d.date)}, ${dayMonth(d.date)}`, d.title && h('span.muted', ' · ' + d.title)),

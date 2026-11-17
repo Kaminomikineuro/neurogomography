@@ -145,7 +145,8 @@ winter-trip/
   "segments": [{
     "id": "dre-pra", "mode": "train",        // train | nighttrain | flight | bus | taxi
     "from": "dresden", "to": "prague", "fromName": "Dresden Hbf", "toName": "Praha hl.n.",
-    "dep": "2026-12-23T17:00", "arr": "2026-12-23T19:20", "approx": true,
+    "dep": "2026-12-23T17:00", "arr": "2026-12-23T19:20", "approx": true,   // или "2026-12-18T05:40+06:00"
+    "ref": "", "info": [{ "k": "Отмена", "v": "…" }],   // бронь и доп. строки (личное — только через пакет)
     "number": "EC 179", "carrier": "", "coach": "254", "seat": "61", "platform": "",
     "status": "booked",                      // booked | todo | decide | option
     "options": [{ "label": "…", "dep": "…", "arr": "…", "price": "…" }],  // если ещё выбираем
@@ -154,7 +155,7 @@ winter-trip/
   "days": [{
     "date": "2026-12-23", "city": "prague", "title": "Дрезден → Прага",
     "items": [{
-      "id": "i2304", "time": "17:00", "approx": true,
+      "id": "i2304", "time": "17:00", "approx": true,     // "tz": "+06:00", "tzName": "Бишкек" — если время не европейское
       "type": "train",                       // flight | train | hotel | event | luggage | important | food | note
       "title": "Поезд Дрезден → Прага", "details": "…",
       "seg": "dre-pra",                      // привязка к отрезку (билет откроется отсюда)
